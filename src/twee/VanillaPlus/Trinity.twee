@@ -10,12 +10,16 @@
       Light catches in the incense. Glowing spheres crowd the high windows, their surfaces shifting through each other. Between them, you see the chamber door opening. You watch yourself enter, kneel and leave. The figures move together. Your knees ache against the cushion.
       <br><br>
       Something brushes your thoughts as it passes. <span class='gold'>A warmth you thought lost returns.</span> <span class='black'>The hollow within you stirs.</span> <span class='purple'>Unbidden desires crowd your mind.</span> You clutch your pendant. What you can see is only a small part of something much larger, and even that is too much.<<gstress>>
+      <br><br>
+      You remember the white incense, the earth rising around you, the darkness beyond the windows. You felt them in separate prayers. Now each memory answers another. You try to follow one, and find yourself listening to all of them.
     <<option 'CN'>>
       你继续祈祷。另一个声音跟着你念，始终比你快上几个字。你转过头，身旁的软垫却空着。<span class='deadwood-trinity'>你感觉到一种存在。</span>
       <br><br>
       熏香中透出微光。发亮的球体挤满高窗，球面不断穿过彼此。在它们之间，祈祷室的门开了。你看见自己进门、跪下，又起身离开。几个身影同时动着，你的膝盖却仍压在软垫上，隐隐发疼。
       <br><br>
       有东西经过，轻轻擦过你的思绪。<span class='gold'>早已失去的温暖重新涌来。</span><span class='black'>体内的空洞随之颤动。</span><span class='purple'>不请自来的欲念挤进脑海。</span>你攥住吊坠。眼前只是某种庞然大物的一小部分，你却已经承受不住。<<gstress>>
+      <br><br>
+      你想起变白的熏香，身边升起的土地，还有高窗外的黑暗。它们曾分别出现在不同的祈祷中。现在，一段记忆牵动另一段。你想沿着其中一道感觉追下去，却同时听见了所有声音。
   <</language>>
   <br><br>
 
@@ -24,6 +28,19 @@
   <br>
   <<lanLink ['Snap out of it', '摆脱这种感觉'] 'Deadwood Reblooms Trinity Snap'>><</lanLink>>
   <br>
+<</widget>>
+
+<<widget 'deadwood-trinity-journal'>>
+  <<if $VanillaPlus.divineTransformations.trinity>>
+    <h2 class='deadwood-trinity'><<lanSwitch 'Trinity' '三位一体'>></h2>
+    <ul class='journal'>
+      <li><<lanSwitch 'After the voices faded, the familiar warmth remained alongside the hollow and your desires. You have begun learning how they feel together.' '那些声音消退后，熟悉的温暖仍与空洞、欲念一同留了下来。你开始辨认它们共存时的感觉。'>></li>
+      <li><<lanSwitch 'The prayer chamber gave you an experience to remember. You still do not know what answered, or why.' '你记住了祈祷室里的经历，却还不知道回应你的是什么，又为何回应。'>></li>
+      <<if $Finance?.company?.ascension?.ascended>>
+        <li><<lanSwitch 'The wound from the tower feels different. Remembering which change came first may help you describe both experiences.' '塔楼留下的伤痕，是另一种感觉。记清变化的先后，也许能帮你说清这两段经历。'>></li>
+      <</if>>
+    </ul>
+  <</if>>
 <</widget>>
 
 :: Deadwood Reblooms Trinity Embrace
@@ -52,6 +69,8 @@
       <span class='gold'>The warmth lingers along your spine.</span> <span class='black'>You can still feel the hollow beneath it.</span> <span class='purple'>Your thoughts stray to things you would never say here.</span> You flinch, expecting the warmth to burn away. It stays.
       <br><br>
       The spheres slip out of sight. A wisp of incense curls past your face. You sit shaking on the cushion for a while, then try the first words of your prayer. This time, you hear only your own voice.
+      <br><br>
+      You loosen your grip on the pendant, then touch it again. The warmth stays. So does the hollow. Outside the chamber, footsteps pass the door. You listen until you can tell them apart from the echo of your prayer, and begin to rise.
       <<if _trinityUnlocked>>
         <br><br><i class='deadwood-trinity'>You have gained Trinity.</i>
       <</if>>
@@ -63,6 +82,8 @@
       <span class='gold'>温暖仍沿着脊背流淌。</span><span class='black'>你依然能感觉到下面的空洞。</span><span class='purple'>脑中闪过一些绝不能在这里说出口的念头。</span>你一阵紧张，以为那股温暖就要消失。它却留了下来。
       <br><br>
       球体移出了视野，一缕熏香从面前飘过。你在软垫上发着抖，过了好一会儿，才试着重新念出祈祷的开头。这次，你只听见自己的声音。
+      <br><br>
+      你松开吊坠，又伸手碰了碰。温暖还在，空洞也在。门外有人走过。你仔细听着，直到能将脚步声与祈祷的余音分开，才试着起身。
       <<if _trinityUnlocked>>
         <br><br><i class='deadwood-trinity'>你获得了“三位一体”。</i>
       <</if>>

@@ -62,7 +62,7 @@
 'deadwood-reblooms:VanillaPlus:traits:deviancy:name': 超越禁忌
 'deadwood-reblooms:VanillaPlus:traits:deviancy:text': 你可以拒绝格威岚的要求，但<span class="red">错过时限仍会受到惩罚</span>。诡异镜子苏醒时，你可以穿过触手平原，<span class="teal">在已经发现的镜子之间通行</span>。
 'deadwood-reblooms:VanillaPlus:traits:promiscuity:name': 欲望主宰
-'deadwood-reblooms:VanillaPlus:traits:promiscuity:text': <span class="lewd">你发起的性行为与请求必定成功</span>。
+'deadwood-reblooms:VanillaPlus:traits:promiscuity:text': 遭遇中，你发起的部分亲密动作与姿势请求<span class="lewd">必定通过技能检定</span>。部位占用、拘束、贞操装置与目标状态仍会限制可用动作。
 'deadwood-reblooms:VanillaPlus:traits:incorrigible:name': 全能
 'deadwood-reblooms:VanillaPlus:traits:incorrigible:text': 纯洁与淫荡在你身上同时抵达了极限。意志、体能、容貌、淫乱、暴露癖与异种癖<span class="teal">不会再降低</span>。
 'deadwood-reblooms:VanillaPlus:incorrigible:feat:title': 全能

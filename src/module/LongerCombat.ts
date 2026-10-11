@@ -34,14 +34,17 @@ class LongerCombat {
     return V.options.maplebirch.LongerCombat;
   }
 
-  private get climax(): 'ejaculation' | 'beastejaculation' | undefined {
+  private get climax(): { name: 'ejaculation' | 'beastejaculation'; short: boolean } | undefined {
     const title = maplebirch.passage.title;
     const finish = title.endsWith(' Finish') ? title : `${title} Finish`;
     const story = maplebirch.SugarCube.Story;
     if (!story.has(finish)) return undefined;
     const macro = V.enemytype === 'beast' ? 'beastejaculation' : 'ejaculation';
-    // 带 knot 等参数的专用结算仍交给剧情处理。
-    return new RegExp(`<<${macro}\\s*>>`).test(story.get(finish).text) ? macro : undefined;
+    // short 只缩短原版结算文本；knot 等改变流程的参数仍交给剧情处理。
+    const text = story.get(finish).text;
+    if (text.includes(`<<${macro}>>`)) return { name: macro, short: false };
+    if (text.includes(`<<${macro} "short">>`) || text.includes(`<<${macro} 'short'>>`)) return { name: macro, short: true };
+    return undefined;
   }
 
   private get canExtendCombat(): boolean {
@@ -55,12 +58,12 @@ class LongerCombat {
     this.lastLines.clear();
   }
 
-  private beastClimax(sWikifier: (text: string) => void): void {
+  private beastClimax(sWikifier: (text: string) => void, short: boolean): void {
     const index = V.active_enemy;
     const health = V.enemyhealth;
     const anger = V.enemyanger;
     const trust = V.enemytrust;
-    sWikifier('<<beastejaculation>>');
+    sWikifier(short ? '<<beastejaculation "short">>' : '<<beastejaculation>>');
     V.active_enemy = index;
     V.enemyhealth = health;
     V.enemyanger = anger;
@@ -172,9 +175,9 @@ class LongerCombat {
     return description + speech[0] + space + npc.pronouns.he + space + pause + space + speech[1];
   }
 
-  public ejaculation(sWikifier: (Text: string) => void): void {
+  public ejaculation(sWikifier: (Text: string) => void, short = false): void {
     // 原版宏已逐人处理声望、避孕套、受孕与玩家体液，整组只结算一次。
-    sWikifier('<<ejaculation>>');
+    sWikifier(short ? '<<ejaculation "short">>' : '<<ejaculation>>');
 
     let continued = false;
     maplebirch.lodash.times(V.enemynomax, (i: number) => {
@@ -313,11 +316,11 @@ class LongerCombat {
   get passageTitle(): string {
     const current = maplebirch.passage.title;
     const story = maplebirch.SugarCube.Story;
-    if (!current.endsWith(' Finish')) return story.has(current) && /<<actionsman\s*>>/.test(story.get(current).text) ? current : '';
+    if (!current.endsWith(' Finish')) return story.has(current) && story.get(current).text.includes('<<actionsman>>') ? current : '';
     const source = maplebirch.SugarCube.State.peek(1)?.title;
     if (!source || !story.has(source)) return '';
     const text = story.get(source).text;
-    return /<<actionsman\s*>>/.test(text) && text.includes(current) ? source : '';
+    return text.includes('<<actionsman>>') && text.includes(current) ? source : '';
   }
 
   public main(): DocumentFragment {
@@ -327,7 +330,8 @@ class LongerCombat {
     };
 
     const source = this.passageTitle;
-    if (!this.canExtendCombat || !source || V.enemyhealth <= 0 || V.enemyarousal < V.enemyarousalmax) return fragment;
+    const climax = this.climax;
+    if (!this.canExtendCombat || !source || !climax || V.enemyhealth <= 0 || V.enemyarousal < V.enemyarousalmax) return fragment;
 
     const options = this.options;
     if (Number(options.rounds || 0) === 0) this.lastLines.clear();
@@ -338,8 +342,8 @@ class LongerCombat {
       return fragment;
     }
 
-    if (this.climax === 'beastejaculation') this.beastClimax(sWikifier);
-    else this.ejaculation(sWikifier);
+    if (climax.name === 'beastejaculation') this.beastClimax(sWikifier, climax.short);
+    else this.ejaculation(sWikifier, climax.short);
 
     const current = this.options;
     current.rounds = Number(current.rounds || 0) + 1;

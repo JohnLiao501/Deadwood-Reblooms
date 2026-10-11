@@ -331,15 +331,15 @@ export default function (maplebirch: MaplebirchCore, colours: { school: Map<stri
 
     if (V.englishPlay === 'ongoing' && V.englishPlayDays === 0 && Time.hour >= 17 && Time.hour <= 20) return 'englishPlay';
 
-    // 周一礼拜
+    // 周日礼拜
     if (Time.weekDay === 1) return 'temple';
 
-    // 周日
+    // 周六
     if (Time.weekDay === 7) {
       if (V.adultshopopeningsydney === true && Time.hour < 21) return 'shop';
       return Time.hour >= 6 ? 'temple' : 'home';
     }
-    // 周六下午商店
+    // 周五下午商店
 
     if (Time.weekDay === 6 && Time.hour >= 16 && Time.hour <= 19) return V.adultshophelped === 1 ? 'temple' : 'shop';
 

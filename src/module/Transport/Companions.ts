@@ -6,6 +6,7 @@ export default class Companions {
   public constructor(private readonly transport: Transport) {}
 
   public get available(): string[] {
+    if (this.transport.taxi.active) return [];
     if (this.transport.state.commute) return this.transport.commute.active && this.transport.state.commute.boarded ? [this.transport.state.commute.npc] : [];
     const estate = this.transport.core.get('Finance')?.realEstate;
     const property = estate?.current;

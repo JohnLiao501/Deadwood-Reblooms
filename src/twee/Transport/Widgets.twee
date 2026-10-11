@@ -40,6 +40,12 @@
 
 <<widget 'deadwood-transport-entry'>>
   <<set _transport to maplebirch.get('Transport')>>
+  <<if _transport.taxi.fleet?.point is _transport.point and _transport.canApproach and $passage isnot 'Shopping Centre'>>
+    <br><<lanSwitch 'Taxi work' '出租车工作'>><br>
+    <<icon 'transport/taxi.png'>><<lanLink ['Continue your shift', '继续接单']>>
+      <<if maplebirch.get('Transport').taxi.resume()>><<goto 'Deadwood Transport Taxi Dispatch'>><</if>>
+    <</lanLink>><br>
+  <</if>>
   <<if _transport.ready and _transport.nearby.length and ((_transport.canApproach and $passage isnot 'Shopping Centre') or $passage is 'Deadwood Reblooms Property Garage')>>
     <<if !$passage.endsWith(' Street')>><br><</if>><<lanSwitch 'Available vehicles' '可使用载具'>><br>
     <<for _available_vehicle range _transport.nearby>>
@@ -68,6 +74,7 @@
 <</widget>>
 
 <<widget 'deadwood-transport-header'>>
+  <<deadwood-dynamicblock 'deadwood-transport-status'>>
   <<set _transport to maplebirch.get('Transport')>>
   <<if _transport.vehicle and _transport.model and _transport.nearby.includes(_transport.vehicle)>>
     <div class='characteristic-box-list deadwood-transport-status'>
@@ -78,6 +85,7 @@
       <</if>>
     </div>
   <</if>>
+  <</deadwood-dynamicblock>>
 <</widget>>
 
 <<widget 'deadwood-transport-skill'>>
@@ -86,6 +94,7 @@
 
 <<widget 'deadwood-transport-journal'>>
   <<set _transport to maplebirch.get('Transport')>>
+  <<deadwood-taxi-journal>>
   <<if _transport.state.vehicles.length>>
     <h3><<lanSwitch 'Vehicles' '载具'>></h3>
     <div class='deadwood-card-grid deadwood-transport-records'>
@@ -162,6 +171,13 @@
         <<option 'CN'>>
           你在柜台旁等着。一小时后，有人把你的载具运到了门前。
       <</language>>
+    <<case 'retrieved'>>
+      <<language>>
+        <<option 'EN'>>
+          The mechanic makes several calls. Three hours later, a recovery vehicle pulls in with your vehicle. Fresh scrapes mark it, but it is yours again.
+        <<option 'CN'>>
+          修理工打了几通电话。三小时后，救援车把你的载具运回门前。车上多了几道新的划痕，好在终于回到了你手里。
+      <</language>>
     <<case 'delivered'>>
       <<language>>
         <<option 'EN'>>
@@ -216,7 +232,7 @@
 <<widget 'deadwood-transport-vehicle-status'>>
   <<set _status_model to _args[0], _status_vehicle to _args[1]>>
   <<set _status_home to maplebirch.get('Finance')?.realEstate.properties.find(property => property.id === _status_vehicle.garage)>>
-  <span><<lanSwitch 'Parked at' '停放地点'>></span><span><<print _status_home ? lanSwitch(_status_home.name.EN, _status_home.name.CN) : maplebirch.get('Transport').catalog.name(_status_vehicle.point)>><<if _status_vehicle.garage>> <i><<lanSwitch '(garage)' '（车库）'>></i><</if>></span>
+  <span><<lanSwitch 'Parked at' '停放地点'>></span><span><<if _status_vehicle.stolen>><span class='red'><<lanSwitch 'Stolen' '失窃'>></span><<else>><<print _status_home ? lanSwitch(_status_home.name.EN, _status_home.name.CN) : maplebirch.get('Transport').catalog.name(_status_vehicle.point)>><<if _status_vehicle.garage>> <i><<lanSwitch '(garage)' '（车库）'>></i><</if>><</if>></span>
   <span><<lanSwitch 'Condition' '车况'>></span><span><<deadwood-transport-condition _status_vehicle>></span>
   <<if _status_model.tank gt 0>><span><<lanSwitch 'Fuel' '油量'>></span><span @class="_status_vehicle.fuel >= _status_model.tank / 4 ? 'blue' : 'red'"><<print _status_vehicle.fuel.toFixed(1)>> / <<print _status_model.tank>> L</span><</if>>
   <<if _status_vehicle.arrears gt 0>><span><<lanSwitch 'Unpaid upkeep' '保养欠费'>></span><span class='red'><<= formatMoney(_status_vehicle.arrears)>></span><</if>>

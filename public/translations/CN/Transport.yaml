@@ -87,3 +87,12 @@
 'deadwood-reblooms:transport:commute:home': '提议开车送回家'
 'deadwood-reblooms:transport:commute:temple': '提议开车送去神殿'
 'deadwood-reblooms:transport:commute:farm': '提议开车送艾利克斯回农场'
+# 出租车派单
+'deadwood-reblooms:transport:taxi:request:commuter': '上班乘客'
+'deadwood-reblooms:transport:taxi:request:homeward': '下班回家'
+'deadwood-reblooms:transport:taxi:request:shopping': '购物返程'
+'deadwood-reblooms:transport:taxi:request:hospital': '医院接客'
+'deadwood-reblooms:transport:taxi:request:seaside': '海滨游客'
+'deadwood-reblooms:transport:taxi:request:group': '同行乘客'
+'deadwood-reblooms:transport:taxi:request:pub': '夜间返程'
+'deadwood-reblooms:transport:taxi:request:appointment': '商务预约'

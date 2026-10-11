@@ -48,6 +48,12 @@
       <br>
       "You know what I bring," you say. "My part in the company. The work I've put behind it. I won't spend all of that to remain outside the door."
       <br><br>
+      Avery looks towards Remy, then back at you. "The company already needs you. I'd rather we both knew what we're working towards. You'll have a stake in what happens to it."
+      <br>
+      "And discretion," Remy says. "The names you hear here stay here. Your employees answer to you. I expect you to know what they're doing."
+      <br>
+      Harper watches the two of you. "If you're both received, I want to hear from both of you afterwards. Separately." <<nnpc_He 'Harper'>> glances at the stones. "I want to know what each of you remembers."
+      <br><br>
       "A place at the table isn't a pension," Remy says. "There'll be work. Things you won't put in the company minutes. You won't always like who benefits."
       Harper slips the purple box from <<nnpc_his 'Harper'>> coat. "You still lie beneath the skylight. They'll hold you in place. The knife still rests above your heart."
       <br><br>
@@ -78,6 +84,12 @@
       雷米打量着你。“那你带来了什么？”
       <br>
       “你知道我带来了什么。”你说。“公司里属于我的部分。为它做的那些事。我不会付出这些，最后还站在门外。”
+      <br><br>
+      艾弗里看向雷米，又望回你。“公司已经需要你了。我希望我们都知道，自己在为什么做事。它的前途，也会与你有关。”
+      <br>
+      “还有口风。”雷米说。“在这里听到的名字，留在这里。你的员工听你的安排，我希望你清楚他们在做什么。”
+      <br>
+      哈珀看着你们两人。“如果都得到接纳，之后我想分别听听你们的经历。”<<nnpc_he 'Harper'>>瞥向许愿石。“我想知道，你们各自记住了什么。”
       <br><br>
       “有个席位，不是让你来养老。”雷米说。“会有活干。有些事，不会写进公司会议记录。得利的人，也未必是你喜欢的。”
       哈珀从外套里取出紫色盒子。“你仍要躺在天窗下。他们会把你固定住，刀仍然要抵在你的心脏上方。”
@@ -248,6 +260,13 @@
       </li>
       <<if !_ascension_state.jordan_told>>
         <li><<lanSwitch 'You could ask Jordan about what happened to you, if you wish to disclose it.' '如果愿意说出这件事，可以向约旦询问自身的变化。'>></li>
+      <</if>>
+      <<if _ascension_state.audience is 'avery'>>
+        <li><<lanSwitch 'Avery expects you at the next company meeting. Your new place has made your plans a matter of shared interest.' '艾弗里仍等你参加下一次公司会议。你的新位置，也让你的打算牵涉到彼此的利益。'>></li>
+      <<elseif _ascension_state.audience is 'harper'>>
+        <li><<lanSwitch 'Harper asked you to keep track of the changes and speak to Harper again if they differ.' '哈珀让你留意身体的变化，有了不同的感觉再去找哈珀。'>></li>
+      <<elseif _ascension_state.audience is 'remy'>>
+        <li><<lanSwitch 'Remy is interested in what your business can supply. Any arrangement still needs its own terms.' '雷米在意你的企业能提供什么。具体的合作，仍要另谈条件。'>></li>
       <</if>>
     </ul>
   <<elseif _ascension_state.prepared_day gte 0 and !$avery_fate>>
@@ -468,6 +487,12 @@
         <br><br>
         "You should come in if the symptoms change," Harper says. "And don't invite it to look again just to see whether it will."
         The pen stops. "We have enough to observe for now."
+        <br><br>
+        You ask what Avery said. "I'd like your account first." The pen begins moving again. "Start with what you saw before you woke. Then what you felt."
+        <<if $VanillaPlus?.divineTransformations?.trinity>>
+          <br><br>
+          You mention the prayer chamber, the warmth and the hollow that remained together. Harper asks when that happened in relation to the tower. "Tell me which sensations were already there." <<nnpc_He 'Harper'>> waits while you put them in order. <span class='purple'>You have two experiences to describe, and no explanation that joins them.</span>
+        <</if>>
         <<if $Finance.industry.distribution.harper_site isnot null>>
           <br><br>
           You ask whether this changes the workshop arrangements. "The batch sheets go to your technician," Harper replies. "<span class='purple'>What happened upstairs isn't a production method.</span> If that wound changes, come to me yourself."
@@ -482,6 +507,17 @@
         "And when we disagree?"
         <br><br>
         "Then we disagree." Remy's voice hardens. "You aren't getting my land. Or my people. You want something from me, bring something I want."
+        <br><br>
+        You ask what <<nnpc_he 'Remy'>> wants. "A delivery that arrives when it's promised. A bill that matches it. Someone who can settle a problem before it becomes everyone else's." Paper rustles against the receiver. "Bring me quantities and dates. We'll discuss the price."
+        <<if maplebirch.get('Orchard')?.remy.farmConflict>>
+          <br><br>
+          You mention Alex. "I wondered when we'd get to that." Remy lets the silence lengthen. "Your new name doesn't settle that matter."
+        <</if>>
+        <<if maplebirch.get('Orchard')?.remy.state.romance>>
+          <br><br>
+          "Is this how you'll speak to me at the school?" you ask.
+          <<if C.npc.Remy.love gte 50>>"At the school, I'd rather have you beside me than on a telephone." <<nnpc_His 'Remy'>> voice softens, then firms again. "Bring your figures to the office. We'll have tea afterwards."<<else>>"Come when the lesson is over. I can make time for you then." <<nnpc_He 'Remy'>> pauses. "Have your figures ready first."<</if>>
+        <</if>>
         <br><br>
         A voice calls from the other end. Remy covers the receiver, speaks, then comes back.
         "Avery built upwards. You'd better find room to grow without standing on my feet."
@@ -552,6 +588,12 @@
         <br><br>
         “如果症状有变化，就来找我。”哈珀说。“还有，别为了试试它会不会回应，就再请它看过来。”
         笔声停了。“眼下，已经有足够的东西可以观察。”
+        <br><br>
+        你问，艾弗里说了些什么。“我想先听你的经历。”笔又动了起来。“从醒来前看见的东西开始，再说感觉。”
+        <<if $VanillaPlus?.divineTransformations?.trinity>>
+          <br><br>
+          你提起祈祷室，以及同时留在体内的温暖与空洞。哈珀问，那是在塔楼仪式之前，还是之后。“告诉我，哪些感觉早就有了。”<<nnpc_he 'Harper'>>等着你整理次序。<span class='purple'>你能说出两段经历，却还无法解释它们之间的联系。</span>
+        <</if>>
         <<if $Finance.industry.distribution.harper_site isnot null>>
           <br><br>
           你问，这是否会改变工厂的安排。“批次单交给你的技术员。”哈珀回答。“<span class='purple'>楼上发生的事，可不是一种生产方法。</span>那道伤口有变化，你自己来找我。”
@@ -566,6 +608,17 @@
         “要是我们意见不合呢？”
         <br><br>
         “那就不合。”雷米的声音冷了下来。“我的地不会给你，我的人也不会。想从我这里拿东西，就带点我想要的来。”
+        <br><br>
+        你问，<<nnpc_he 'Remy'>>想要什么。“货按约好的时间到，账单也对得上。出了问题，有人能在闹大之前处理。”听筒边传来翻纸声。“带上数量和日期。价钱，我们再谈。”
+        <<if maplebirch.get('Orchard')?.remy.farmConflict>>
+          <br><br>
+          你提起艾利克斯。“我就知道，你会说到这件事。”雷米让沉默多停了一会。“你的新名字，可没有了结这件事。”
+        <</if>>
+        <<if maplebirch.get('Orchard')?.remy.state.romance>>
+          <br><br>
+          “在学校里，你也会这么跟我说话吗？”你问。
+          <<if C.npc.Remy.love gte 50>>“在学校，我更想让你待在身边，隔着电话可不够。”<<nnpc_he 'Remy'>>的声音缓了下来，随后又认真起来。“把账带到办公室。之后，我们可以喝杯茶。”<<else>>“等课程结束再来。那时，我可以为你留点时间。”<<nnpc_he 'Remy'>>停了一下。“先把账准备好。”<</if>>
+        <</if>>
         <br><br>
         电话另一头有人喊话。雷米捂住听筒，说了几句，才回来。
         “艾弗里往天上盖。你最好也找点地方发展，别踩在我的脚上。”
@@ -598,6 +651,11 @@
     <br><br>
     Jordan pauses. "I won't promise what I don't know. I'll pray with you, if you wish."
     <<His>> hand stays on your shoulder a little longer. "And if there's pain in your chest, please let a doctor see you."
+    <<if $VanillaPlus?.divineTransformations?.trinity>>
+      <br><br>
+      You also describe the voices in the prayer chamber. "The warmth stayed," you say. "Even with everything else."
+      Jordan glances towards the prayer-room door. "You can tell me about that too. Take your time." <<He>> brings another cushion close and waits while you find somewhere to begin.
+    <</if>>
   <<option 'CN'>>
     你讲起塔楼、红光，以及那道谁也看不见的伤口。约旦一直听着。
     说起如今不同的感觉时，你把手按在心口上方。
@@ -615,5 +673,10 @@
     <br><br>
     约旦停了一下。“我不能为自己不清楚的事作保证。如果你愿意，我可以陪你祈祷。”
     <<His>>的手在你的肩上多留了一会。“还有，如果胸口疼，请让医生看看。”
+    <<if $VanillaPlus?.divineTransformations?.trinity>>
+      <br><br>
+      你也说起祈祷室里的声音。“温暖还在。”你说。“就算还有别的东西。”
+      约旦看向祈祷室的门。“那些也可以告诉我。慢慢说。”<<He>>把另一张软垫挪近，等着你想好从哪里讲起。
+    <</if>>
 <</language>><br><br>
 <<getouticon>><<lanLink ['Step away', '走开'] 'Temple'>><<endevent>><</lanLink>><br>

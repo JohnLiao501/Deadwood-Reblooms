@@ -42,7 +42,6 @@ declare global {
     isLoveInterest(name: string): boolean;
     isPossibleLoveInterest(name: string): boolean;
     getRobinLocation(): string | undefined;
-    weekPassed?: () => void;
     getKylarLocation(): { area: string; state: string };
     mapMove: ((destination: string) => void) & { deadwoodPublicWalk?: boolean };
     LZString: {

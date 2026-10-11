@@ -8,124 +8,127 @@
   <<deadwood-transport-return>>
 <<else>>
   <<icon `'transport/' + _transport.model.id + '.png'`>><b><<print maplebirch.t(_transport.model.name)>></b> — <<print _transport.catalog.name(_transport.point)>><br><br>
-  <<if (_transport.vehicle.arrears ?? 0) gt 0>>
-    <span class='red'><<lanSwitch 'Unpaid upkeep: ' '保养欠费：'>><<= formatMoney(_transport.vehicle.arrears)>></span><br>
-    <<if maplebirch.get('Finance')?.state.bank.opened and maplebirch.get('Finance').state.bank.balance gte _transport.vehicle.arrears>>
-      <<shopicon 'register'>><<lanLink ['Pay from your bank account', '从银行账户补缴']>>
-        <<if maplebirch.get('Transport').maintenance.pay()>><<updatesidebarmoney>><<run Dynamic.render('deadwood-transport-menu')>><</if>>
-      <</lanLink>><br>
-    <</if>><br>
-  <</if>>
-  <<if _transport.vehicle.condition lt _transport.repairs.terms.condition_limit>>
-    <<if _transport.repairs.amount gt 0>>
-      <<icon `'transport/' + _transport.repairs.kind + '-repair-kit.png'`>><<lanLink `lanSwitch('Make roadside repairs', '应急维修') + ' (0:' + _transport.repairs.terms[_transport.repairs.kind].minutes + ')'`>>
-        <<if maplebirch.get('Transport').repairs.use() and $passage is 'Deadwood Transport Menu'>>
-          <<goto 'Deadwood Transport Repair'>>
-        <</if>>
-      <</lanLink>> | <span class='green'><<lanSwitch 'Condition +' '车况 +'>><<print Math.floor(_transport.repairs.amount)>>%</span><br>
-    <<else>>
-      <i><<lanSwitch 'A repair kit and supplies would help you get moving again.' '备好维修工具和耗材，就能在途中应急修复。'>></i><br>
-    <</if>><br>
-  <</if>>
-  <<if _transport.companions.available.length and !$Transport.commute>>
-    <<lanSwitch 'Invite someone along' '邀请同住恋人同行'>><br>
-    <<for _passenger range _transport.companions.available>>
-      <<capture _passenger>>
-        <<socialiseicon 'ask'>><<lanLink `lanSwitch(_passenger, {Robin: '罗宾', Whitney: '惠特尼', Kylar: '凯拉尔', Sydney: '悉尼'}[_passenger])`>>
-          <<run maplebirch.get('Transport').companions.invite(_passenger)>><<run Dynamic.render('deadwood-transport-menu')>>
-        <</lanLink>><<if $Transport.passengers.includes(_passenger)>> <span class='green'><<lanSwitch '(coming along)' '（一同出发）'>></span><</if>><br>
-      <</capture>>
-    <</for>><br>
-  <</if>>
-  <<if _transport.garage>>
-    <<lanSwitch 'Occupied spaces of this type: ' '此类车位已占用：'>><<print _transport.garage.used>> / <<print _transport.garage.capacity>><br>
-    <<if _transport.vehicle.garage>>
-      <<icon `'transport/' + _transport.model.id + '.png'`>><<lanLink ['Move it out of the garage', '移出车库']>>
-        <<run maplebirch.get('Transport').park(false)>>
-        <<run Dynamic.render('deadwood-transport-menu')>>
-      <</lanLink>><br>
-    <<elseif _transport.garage.used lt _transport.garage.capacity>>
-      <<icon 'property/garage.png'>><<lanLink ['Put it in the garage', '存入车库']>>
-        <<run maplebirch.get('Transport').park(true)>>
-        <<run Dynamic.render('deadwood-transport-menu')>>
-      <</lanLink>><br>
-    <<else>>
-      <span class='purple'><<lanSwitch 'These spaces are full.' '此类车位已经停满了。'>></span><br>
-    <</if>><br>
-  <</if>>
-  <<if _transport.fuel.current>>
-    <<lanSwitch 'Stored fuel: ' '储备燃油：'>><span class='teal'><<print _transport.fuel.store.litres.toFixed(1)>> L</span><br>
-    <<if _transport.fuel.refill_amount gt 0>>
-      <<icon 'transport/fuel-can.png'>><<lanLink `lanSwitch('Refuel from a can', '用油桶补油') + ' (' + Math.floor(_transport.fuel.terms.refill_minutes / 60) + ':' + String(_transport.fuel.terms.refill_minutes % 60).padStart(2, '0') + ')'`>>
-        <<if maplebirch.get('Transport').fuel.refill() and $passage is 'Deadwood Transport Menu'>>
-          <<goto 'Deadwood Transport Menu'>>
-        <</if>>
-      <</lanLink>><br>
-    <</if>><br>
-  <</if>>
-  <<if !_transport.canDepart>>
-    <<if _transport.vehicle.condition lte 0>>
-      <span class='red'><<lanSwitch 'It needs repairs before you can use it.' '修好之前，它没法上路。'>></span>
-    <<elseif (_transport.vehicle.arrears ?? 0) gt 0>>
-      <span class='red'><<lanSwitch 'Pay the outstanding upkeep before setting off.' '补缴保养费用后才能上路。'>></span>
-    <<elseif _transport.vehicle.garage>>
-      <<lanSwitch 'It is parked in the garage.' '它停在车库里。'>>
-    <<elseif !_transport.qualified>>
-      <span class='purple'><<lanSwitch 'You need a licence for this vehicle.' '你需要相应的驾驶资格。'>></span>
-    <<elseif _transport.model.kind is 'motorcycle' and !$Transport.helmet>>
-      <span class='purple'><<lanSwitch 'You need a motorcycle helmet.' '你需要摩托车头盔。'>></span>
-    <<else>>
-      <span class='purple'><<lanSwitch 'You cannot use it in your current condition.' '你现在的状况不适合出行。'>></span>
-    <</if>><br><br>
-  <<else>>
-    <<if _transport.point.startsWith('forest:')>>
-      <<language>>
-        <<option 'EN'>>
-          Roots break through the path. You look for a way between the trees where the wheels can still pass.
-        <<option 'CN'>>
-          树根拱出了路面。你在树木间寻找仍能让车轮通过的小径。
-      <</language>><br><br>
-    <<elseif _transport.point.startsWith('moor:')>>
-      <<language>>
-        <<option 'EN'>>
-          Wheel ruts run through the heather. Beyond them, rocks and wet ground would force you to continue on foot.
-        <<option 'CN'>>
-          石楠间留下了几道车辙。再往前，岩石和湿地会挡住车轮，只能步行过去。
-      <</language>><br><br>
+  <<deadwood-taxi-menu>>
+  <<if !_transport.taxi.active>>
+    <<if (_transport.vehicle.arrears ?? 0) gt 0>>
+      <span class='red'><<lanSwitch 'Unpaid upkeep: ' '保养欠费：'>><<= formatMoney(_transport.vehicle.arrears)>></span><br>
+      <<if maplebirch.get('Finance')?.state.bank.opened and maplebirch.get('Finance').state.bank.balance gte _transport.vehicle.arrears>>
+        <<icon 'finance/bank-withdraw.png'>><<lanLink ['Pay from your bank account', '从银行账户补缴']>>
+          <<if maplebirch.get('Transport').maintenance.pay()>><<updatesidebarmoney>><<run Dynamic.render('deadwood-transport-menu')>><</if>>
+        <</lanLink>><br>
+      <</if>><br>
     <</if>>
-    <<if $Transport.commute>>
-      <<npc $Transport.commute.npc>><<person1>>
-      <<lanSwitch 'You agreed to give <<him>> a lift.' '你答应了送<<him>>一程。'>><br><br>
-    <</if>>
-    <<for _destination range _transport.destinations.filter(destination => !$Transport.commute || destination.id === $Transport.commute.to)>>
-      <<capture _destination>>
-        <<switch _destination.id.split(':')[0]>>
-          <<case 'farmland'>><<farmicon>>
-          <<case 'forest'>><<foresticon>>
-          <<case 'moor'>><<mooricon>>
-          <<case 'home'>><<homeicon>>
-          <<default>><<print '<<' + _destination.id + 'icon>>'>>
-        <</switch>>
-        <<if _destination.affordable>>
-          <<lanLink `_destination.name + ' (' + Math.floor(_destination.minutes / 60) + ':' + String(_destination.minutes % 60).padStart(2, '0') + ')'`>>
-            <<if maplebirch.get('Transport').startTrip(_destination.id)>>
-              <<goto 'Deadwood Transport Travel'>>
-            <</if>>
-          <</lanLink>>
-          <<if _destination.id.includes(':') and _transport.point.includes(':')>>
-            <i>
-              <<if Number(_destination.id.split(':')[1]) gt Number(_transport.point.split(':')[1])>>
-                <<lanSwitch '(further in)' '（向深处）'>>
-              <<else>>
-                <<lanSwitch '(towards the edge)' '（返回边缘）'>>
-              <</if>>
-            </i>
+    <<if _transport.vehicle.condition lt _transport.repairs.terms.condition_limit>>
+      <<if _transport.repairs.amount gt 0>>
+        <<icon `'transport/' + _transport.repairs.kind + '-repair-kit.png'`>><<lanLink `lanSwitch('Make roadside repairs', '应急维修') + ' (0:' + _transport.repairs.terms[_transport.repairs.kind].minutes + ')'`>>
+          <<if maplebirch.get('Transport').repairs.use() and $passage is 'Deadwood Transport Menu'>>
+            <<goto 'Deadwood Transport Repair'>>
           <</if>>
-        <<else>>
-          <span class='purple'><<print _destination.name>> — <<lanSwitch 'not enough fuel' '油量不足'>></span>
-        <</if>><br>
-      <</capture>>
-    <</for>><br>
+        <</lanLink>> | <span class='green'><<lanSwitch 'Condition +' '车况 +'>><<print Math.floor(_transport.repairs.amount)>>%</span><br>
+      <<else>>
+        <i><<lanSwitch 'A repair kit and supplies would help you get moving again.' '备好维修工具和耗材，就能在途中应急修复。'>></i><br>
+      <</if>><br>
+    <</if>>
+    <<if _transport.companions.available.length and !$Transport.commute>>
+      <<lanSwitch 'Invite someone along' '邀请同住恋人同行'>><br>
+      <<for _passenger range _transport.companions.available>>
+        <<capture _passenger>>
+          <<socialiseicon 'ask'>><<lanLink `lanSwitch(_passenger, {Robin: '罗宾', Whitney: '惠特尼', Kylar: '凯拉尔', Sydney: '悉尼'}[_passenger])`>>
+            <<run maplebirch.get('Transport').companions.invite(_passenger)>><<run Dynamic.render('deadwood-transport-menu')>>
+          <</lanLink>><<if $Transport.passengers.includes(_passenger)>> <span class='green'><<lanSwitch '(coming along)' '（一同出发）'>></span><</if>><br>
+        <</capture>>
+      <</for>><br>
+    <</if>>
+    <<if _transport.garage>>
+      <<lanSwitch 'Occupied spaces of this type: ' '此类车位已占用：'>><<print _transport.garage.used>> / <<print _transport.garage.capacity>><br>
+      <<if _transport.vehicle.garage>>
+        <<icon `'transport/' + _transport.model.id + '.png'`>><<lanLink ['Move it out of the garage', '移出车库']>>
+          <<run maplebirch.get('Transport').park(false)>>
+          <<run Dynamic.render('deadwood-transport-menu')>>
+        <</lanLink>><br>
+      <<elseif _transport.garage.used lt _transport.garage.capacity>>
+        <<icon 'property/garage.png'>><<lanLink ['Put it in the garage', '存入车库']>>
+          <<run maplebirch.get('Transport').park(true)>>
+          <<run Dynamic.render('deadwood-transport-menu')>>
+        <</lanLink>><br>
+      <<else>>
+        <span class='purple'><<lanSwitch 'These spaces are full.' '此类车位已经停满了。'>></span><br>
+      <</if>><br>
+    <</if>>
+    <<if _transport.fuel.current>>
+      <<lanSwitch 'Stored fuel: ' '储备燃油：'>><span class='teal'><<print _transport.fuel.store.litres.toFixed(1)>> L</span><br>
+      <<if _transport.fuel.refill_amount gt 0>>
+        <<icon 'transport/fuel-can.png'>><<lanLink `lanSwitch('Refuel from a can', '用油桶补油') + ' (' + Math.floor(_transport.fuel.terms.refill_minutes / 60) + ':' + String(_transport.fuel.terms.refill_minutes % 60).padStart(2, '0') + ')'`>>
+          <<if maplebirch.get('Transport').fuel.refill() and $passage is 'Deadwood Transport Menu'>>
+            <<goto 'Deadwood Transport Menu'>>
+          <</if>>
+        <</lanLink>><br>
+      <</if>><br>
+    <</if>>
+    <<if !_transport.canDepart>>
+      <<if _transport.vehicle.condition lte 0>>
+        <span class='red'><<lanSwitch 'It needs repairs before you can use it.' '修好之前，它没法上路。'>></span>
+      <<elseif (_transport.vehicle.arrears ?? 0) gt 0>>
+        <span class='red'><<lanSwitch 'Pay the outstanding upkeep before setting off.' '补缴保养费用后才能上路。'>></span>
+      <<elseif _transport.vehicle.garage>>
+        <<lanSwitch 'It is parked in the garage.' '它停在车库里。'>>
+      <<elseif !_transport.qualified>>
+        <span class='purple'><<lanSwitch 'You need a licence for this vehicle.' '你需要相应的驾驶资格。'>></span>
+      <<elseif _transport.model.kind is 'motorcycle' and !$Transport.helmet>>
+        <span class='purple'><<lanSwitch 'You need a motorcycle helmet.' '你需要摩托车头盔。'>></span>
+      <<else>>
+        <span class='purple'><<lanSwitch 'You cannot use it in your current condition.' '你现在的状况不适合出行。'>></span>
+      <</if>><br><br>
+    <<else>>
+      <<if _transport.point.startsWith('forest:')>>
+        <<language>>
+          <<option 'EN'>>
+            Roots break through the path. You look for a way between the trees where the wheels can still pass.
+          <<option 'CN'>>
+            树根拱出了路面。你在树木间寻找仍能让车轮通过的小径。
+        <</language>><br><br>
+      <<elseif _transport.point.startsWith('moor:')>>
+        <<language>>
+          <<option 'EN'>>
+            Wheel ruts run through the heather. Beyond them, rocks and wet ground would force you to continue on foot.
+          <<option 'CN'>>
+            石楠间留下了几道车辙。再往前，岩石和湿地会挡住车轮，只能步行过去。
+        <</language>><br><br>
+      <</if>>
+      <<if $Transport.commute>>
+        <<npc $Transport.commute.npc>><<person1>>
+        <<lanSwitch 'You agreed to give <<him>> a lift.' '你答应了送<<him>>一程。'>><br><br>
+      <</if>>
+      <<for _destination range _transport.destinations.filter(destination => !$Transport.commute || destination.id === $Transport.commute.to)>>
+        <<capture _destination>>
+          <<switch _destination.id.split(':')[0]>>
+            <<case 'farmland'>><<farmicon>>
+            <<case 'forest'>><<foresticon>>
+            <<case 'moor'>><<mooricon>>
+            <<case 'home'>><<homeicon>>
+            <<default>><<print '<<' + _destination.id + 'icon>>'>>
+          <</switch>>
+          <<if _destination.affordable>>
+            <<lanLink `_destination.name + ' (' + Math.floor(_destination.minutes / 60) + ':' + String(_destination.minutes % 60).padStart(2, '0') + ')'`>>
+              <<if maplebirch.get('Transport').startTrip(_destination.id)>>
+                <<goto 'Deadwood Transport Travel'>>
+              <</if>>
+            <</lanLink>>
+            <<if _destination.id.includes(':') and _transport.point.includes(':')>>
+              <i>
+                <<if Number(_destination.id.split(':')[1]) gt Number(_transport.point.split(':')[1])>>
+                  <<lanSwitch '(further in)' '（向深处）'>>
+                <<else>>
+                  <<lanSwitch '(towards the edge)' '（返回边缘）'>>
+                <</if>>
+              </i>
+            <</if>>
+          <<else>>
+            <span class='purple'><<print _destination.name>> — <<lanSwitch 'not enough fuel' '油量不足'>></span>
+          <</if>><br>
+        <</capture>>
+      <</for>><br>
+    <</if>>
   <</if>>
   <<deadwood-transport-return>>
 <</if>>
@@ -135,21 +138,32 @@
 
 :: Deadwood Transport Travel []
 <<nobr>>
+<<deadwood-dynamicblock 'deadwood-transport-travel'>>
 <<set _transport to maplebirch.get('Transport')>>
 <<if $Transport.trip and !$Transport.trip.settled>>
   <<run _transport.completeTrip()>>
+  <<if $passage is 'Deadwood Transport Travel'>><<run Dynamic.render('deadwood-transport-status')>><</if>>
 <</if>>
 <<if $passage is 'Deadwood Transport Travel'>>
-  <<if !$Transport.trip or !$Transport.trip.settled or $Transport.trip.interrupted>>
+  <<if _transport.events.combatPending or _transport.events.inCombat>>
+    <<icon 'alert.png'>><<lanLink ['Continue', '继续'] 'Deadwood Transport Road Fight'>><</lanLink>>
+  <<elseif _transport.events.atHazard>>
+    <<deadwood-transport-hazard>>
+  <<elseif !$Transport.trip or !$Transport.trip.settled or $Transport.trip.interrupted>>
+    <<deadwood-transport-hazard-result>>
     <<lanSwitch 'You cannot complete the journey.' '你没能完成这次行程。'>><br><br>
+    <<if _transport.taxi.active>>
+      <<icon 'transport/dispatch-radio.png'>><<lanLink ['Contact dispatch', '联系调度'] 'Deadwood Transport Taxi Dispatch'>><</lanLink>><br>
+    <</if>>
     <<getouticon>><<lanLink ['Return', '返回'] $Transport.return_passage>>
       <<set $Transport.trip to null>>
     <</lanLink>>
   <<else>>
+    <<deadwood-transport-hazard-result>>
     <<language>>
       <<option 'EN'>>
         <<if _transport.model.kind is 'bicycle'>>
-          You grip the handlebars and pedal away.
+          <<if $Transport.trip.event?.point>>You grip the handlebars and set off again.<<else>>You grip the handlebars and pedal away.<</if>>
           <<if $Transport.trip.to.startsWith('forest:')>>
             You duck under a low branch. The tyres bump over roots before finding a clear stretch of path.
           <<elseif $Transport.trip.to.startsWith('moor:')>>
@@ -162,14 +176,14 @@
             You keep close to the kerb, slowing where pedestrians cross.
           <</if>>
         <<elseif _transport.model.kind is 'motorcycle'>>
-          You fasten your helmet and start the engine.
+          <<if $Transport.trip.event?.point>>You check your helmet strap and pull away again.<<else>>You fasten your helmet and start the engine.<</if>>
           <<if $Transport.trip.to.startsWith('moor:')>>
             The tyres follow the ruts through the heather. You ease off the throttle where stones break through the track.
           <<else>>
             You pull into the road. The engine hums beneath you, rising as the traffic thins.
           <</if>>
         <<else>>
-          You buckle your seat belt and pull away from the kerb.
+          <<if $Transport.trip.event?.point>>You check the road and pull away again.<<else>>You buckle your seat belt and pull away from the kerb.<</if>>
           <<if $Transport.trip.to is 'farmland'>>
             You leave the houses behind. The road climbs between the trees before dropping towards the fields.
           <<elseif $Transport.trip.from is 'farmland'>>
@@ -187,7 +201,7 @@
         You stop at <<print _transport.catalog.name($Transport.trip.to)>> and leave your vehicle at the side.
       <<option 'CN'>>
         <<if _transport.model.kind is 'bicycle'>>
-          你握住车把，踩着脚踏板出发。
+          <<if $Transport.trip.event?.point>>你握紧车把，重新出发。<<else>>你握住车把，踩着脚踏板出发。<</if>>
           <<if $Transport.trip.to.startsWith('forest:')>>
             你低头躲过垂下的树枝。车轮颠过几段树根，才重新找到平整的小径。
           <<elseif $Transport.trip.to.startsWith('moor:')>>
@@ -200,14 +214,14 @@
             你贴着路边骑行，在行人过街时放慢速度。
           <</if>>
         <<elseif _transport.model.kind is 'motorcycle'>>
-          你扣好头盔，发动了车。
+          <<if $Transport.trip.event?.point>>你检查头盔的系带，重新上路。<<else>>你扣好头盔，发动了车。<</if>>
           <<if $Transport.trip.to.startsWith('moor:')>>
             轮胎压着石楠间的车辙前行。碰上露出地面的石块，你松开油门，慢慢绕过。
           <<else>>
             你驶入道路。发动机在身下嗡嗡作响，等车流稀疏下来，声音才逐渐变高。
           <</if>>
         <<else>>
-          你系上安全带，把车驶离路边。
+          <<if $Transport.trip.event?.point>>你看了看路面，重新驶上公路。<<else>>你系上安全带，把车驶离路边。<</if>>
           <<if $Transport.trip.to is 'farmland'>>
             房屋被甩在身后。公路穿过树林，爬上山丘，又向田野延伸。
           <<elseif $Transport.trip.from is 'farmland'>>
@@ -224,41 +238,46 @@
         <<deadwood-transport-road-scene>>
         到了<<print _transport.catalog.name($Transport.trip.to)>>，你停下车，把它留在路边。
     <</language>><br><br>
-    <<deadwood-transport-passenger-reaction>>
-    <<deadwood-transport-ride-arrival>>
-    <<deadwood-transport-roadside-event>>
-    <<if $Transport.trip.to.startsWith('forest:') and !$nextPassageCheck>>
-      <<if $stress gte $stressmax and !$possessed>><<passoutforest>>
-      <<elseif $foresthunt gte 10 and !$possessed>><<foresthunt>>
-      <<elseif _transport.forestRoad>><<deadwood-transport-ride-options>>
-      <<else>>
-        <<rng>>
-        <<if $rng gte 81>><<eventforestitem>>
-        <<elseif dangerEvent($forestmod)>>
-          <<if $forest lte 20>><<eventforestoutskirts>><<else>><<eventforest>><</if>>
-        <<else>><<deadwood-transport-ride-options>><</if>>
-      <</if>>
+    <<if $Transport.trip.taxi>>
+      <<deadwood-taxi-arrival>>
     <<else>>
-      <<if _transport.companions.canFoolAround>>
-        <<loveicon>><<lanLink ['Pull over somewhere quiet', '把车停到僻静处']>>
-          <<if maplebirch.get('Transport').companions.foolAround()>>
-            <<set $Transport.trip.pullstart to true>><<goto 'Deadwood Transport Pull Over'>>
-          <</if>>
-        <</lanLink>><<promiscuous2>><br>
+      <<deadwood-transport-passenger-reaction>>
+      <<deadwood-transport-ride-arrival>>
+      <<deadwood-transport-roadside-event>>
+      <<if $Transport.trip.to.startsWith('forest:') and !$nextPassageCheck>>
+        <<if $stress gte $stressmax and !$possessed>><<passoutforest>>
+        <<elseif $foresthunt gte 10 and !$possessed>><<foresthunt>>
+        <<elseif _transport.forestRoad>><<deadwood-transport-ride-options>>
+        <<else>>
+          <<rng>>
+          <<if $rng gte 81>><<eventforestitem>>
+          <<elseif dangerEvent($forestmod)>>
+            <<if $forest lte 20>><<eventforestoutskirts>><<else>><<eventforest>><</if>>
+          <<else>><<deadwood-transport-ride-options>><</if>>
+        <</if>>
+      <<else>>
+        <<if _transport.companions.canFoolAround>>
+          <<loveicon>><<lanLink ['Pull over somewhere quiet', '把车停到僻静处']>>
+            <<if maplebirch.get('Transport').companions.foolAround()>>
+              <<set $Transport.trip.pullstart to true>><<goto 'Deadwood Transport Pull Over'>>
+            <</if>>
+          <</lanLink>><<promiscuous2>><br>
+        <</if>>
+        <<if _transport.companions.canDate>>
+          <<icon `'transport/' + _transport.model.id + '.png'`>><<lanLink ['Spend some time together (0:20)', '一起逛逛 (0:20)']>>
+            <<if maplebirch.get('Transport').companions.date()>><<goto 'Deadwood Transport Date'>><</if>>
+          <</lanLink>><<lstress>><br>
+        <</if>>
+        <<getouticon>><<lanLink ['Continue', '继续'] _transport.arrival>>
+          <<if $Transport.trip.event>><<set $Transport.trip.event.resolved to true>><</if>>
+          <<if $Transport.trip.commute>><<endevent>><<set $eventskip to 1>><<set $Transport.avery_reply to null>><</if>>
+          <<set $phase to 0>>
+        <</lanLink>><br>
       <</if>>
-      <<if _transport.companions.canDate>>
-        <<icon `'transport/' + _transport.model.id + '.png'`>><<lanLink ['Spend some time together (0:20)', '一起逛逛 (0:20)']>>
-          <<if maplebirch.get('Transport').companions.date()>><<goto 'Deadwood Transport Date'>><</if>>
-        <</lanLink>><<lstress>><br>
-      <</if>>
-      <<getouticon>><<lanLink ['Continue', '继续'] _transport.arrival>>
-        <<if $Transport.trip.event>><<set $Transport.trip.event.resolved to true>><</if>>
-        <<if $Transport.trip.commute>><<endevent>><<set $eventskip to 1>><<set $Transport.avery_reply to null>><</if>>
-        <<set $phase to 0>>
-      <</lanLink>><br>
     <</if>>
   <</if>>
 <</if>>
+<</deadwood-dynamicblock>>
 <</nobr>>
 
 :: Deadwood Transport Repair []

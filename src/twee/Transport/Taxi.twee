@@ -1,0 +1,404 @@
+:: Deadwood Transport Taxi []
+<<nobr>>
+<<set _transport to maplebirch.get('Transport'), _taxi to _transport.taxi>>
+<<set $Transport.origin to 'harvest', $Transport.shop to 'motors', $location to 'deadwood_transport_motors', $bus to 'harvest', $outside to 0>>
+<<lanSwitch 'Taxi desk' '出租车柜台'>><br><br>
+<<deadwood-dynamicblock 'deadwood-taxi-desk'>>
+<<deadwood-taxi-notice>>
+<<if !_taxi.atDesk>>
+  <<lanSwitch 'The dispatch desk is closed. The sign gives its hours: 08:00–18:00.' '派车柜台已经关了。牌子写着营业时间：08:00–18:00。'>><br><br>
+<<else>>
+  <<language>>
+    <<option 'EN'>>
+      A radio crackles behind the desk. The dispatcher pins an address to a board, then slides a form towards you.
+      "Got a car? You keep four fifths of the fare. Use one of ours, and you keep a little over half. Tips are yours."
+      A row of keys hangs below the board. One tag bears the number of a four-door saloon outside.
+    <<option 'CN'>>
+      柜台后的无线电沙沙作响。调度员把一个地址钉到板上，随后向你推来一张表。
+      “有车？车费留给你八成。开我们的车，就分给你五成半。小费归你。”
+      板下挂着一排钥匙。其中一块牌子上的号码，和门外那辆四门轿车相同。
+  <</language>><br><br>
+  <<if !_taxi.state.registered>>
+    <<deadwood-card 'Driver registration' '司机登记'>>
+      <<language>>
+        <<option 'EN'>>
+          The dispatcher needs your ID and full car licence. Registration and the radio cost <<deadwood-transport-money _taxi.terms.registration>>.
+          The registration stays valid. You can collect a company car here or use your own saloon.
+        <<option 'CN'>>
+          调度员要核对你的身份证和正式汽车驾照。登记和无线电共需<<deadwood-transport-money _taxi.terms.registration>>。
+          登记长期有效。你可以在这里领营运车，也可以开自己的轿车接单。
+      <</language>><br>
+      <<if _taxi.canRegister>>
+        <<icon 'transport/driver-registration.png'>><<lanLink ['Register (0:15)', '登记 (0:15)']>>
+          <<if maplebirch.get('Transport').taxi.register() and $passage is 'Deadwood Transport Taxi'>>
+            <<updatesidebarmoney>><<run Dynamic.render('deadwood-taxi-desk')>>
+          <</if>>
+        <</lanLink>>
+      <<elseif $id lte 0 or !$Transport.school.motor_vehicle.licensed>>
+        <span class='purple'><<lanSwitch 'Bring your ID and full car licence.' '带上身份证，并取得正式汽车驾照。'>></span>
+      <<else>>
+        <span class='purple'><<lanSwitch 'You cannot complete the registration at present.' '你现在还办不了登记。'>></span>
+      <</if>>
+    <</deadwood-card>>
+  <<elseif _taxi.active>>
+    <<if (_taxi.fleet ?? _transport.state.vehicles.find(vehicle => vehicle.id === _taxi.state.shift.vehicle))?.point is 'harvest'>>
+      <<icon 'transport/taxi.png'>><<lanLink ['Continue your shift', '继续接单']>>
+        <<if maplebirch.get('Transport').taxi.resume()>><<goto 'Deadwood Transport Taxi Dispatch'>><</if>>
+      <</lanLink>><br>
+    <<else>>
+      <<lanSwitch 'Your car is still at ' '你的车还停在'>><<print _transport.catalog.name(_taxi.fleet?.point ?? _transport.state.vehicles.find(vehicle => vehicle.id === _taxi.state.shift.vehicle)?.point ?? 'harvest')>><<lanSwitch '. Return there to continue the shift.' '，回到那里就能继续接单。'>><br>
+    <</if>><br>
+  <<elseif !_taxi.eligible>>
+    <span class='purple'><<lanSwitch 'You are not in a fit state to drive. Come back when you can safely take passengers.' '你现在的状态不适合驾驶。等能安全载客时再来。'>></span><br><br>
+  <<else>>
+    <<deadwood-card 'Company car' '车行营运车'>>
+      <<icon 'transport/taxi.png'>><<language>>
+        <<option 'EN'>>
+          The four-door saloon has room for three passengers. The company supplies a full tank and covers its upkeep.
+          Your 55% share and tips are paid when you return the keys. Dispatch continues over the radio after the desk closes.
+        <<option 'CN'>>
+          四门轿车可以载三名乘客。车行备好满箱油，承担燃油和保养。
+          交还钥匙时结算五成半车费和小费。柜台关门后，无线电仍会派单。
+      <</language>><br>
+      <<icon 'transport/vehicle-keys.png'>><<lanLink ['Collect the keys', '领取钥匙']>>
+        <<if maplebirch.get('Transport').taxi.start('fleet')>><<goto 'Deadwood Transport Taxi Dispatch'>><</if>>
+      <</lanLink>>
+    <</deadwood-card>>
+    <<deadwood-card 'Your own car' '自备汽车'>>
+      <<language>>
+        <<option 'EN'>>
+          Bring a used, four-door or long-wheelbase saloon in good repair. You keep 80% of the fare and all tips, paid after each journey.
+          You pay for petrol and upkeep. A long-wheelbase saloon can also take executive bookings.
+        <<option 'CN'>>
+          把车况良好的二手轿车、四门轿车或长轴轿车开到这里。每程结束后，八成车费和全部小费立即结算。
+          燃油和保养由你承担。长轴轿车还能接商务预约单。
+      <</language>><br>
+      <<for _taxi_car range _taxi.cars>>
+        <<capture _taxi_car>>
+          <<set _taxi_model to _transport.catalog.models.find(model => model.id === _taxi_car.model)>>
+          <<icon `'transport/' + _taxi_model.id + '.png'`>><<lanLink `maplebirch.t(_taxi_model.name)`>>
+            <<if maplebirch.get('Transport').taxi.start('own', _taxi_car.id)>><<goto 'Deadwood Transport Taxi Dispatch'>><</if>>
+          <</lanLink>><br>
+        <</capture>>
+      <</for>>
+      <<if !_taxi.cars.length>><i><<lanSwitch 'Bring a suitable saloon to the forecourt. It needs at least 50% condition and paid upkeep.' '把合适的轿车开到门前。车况需要达到 50%，保养费用也需结清。'>></i><</if>>
+    <</deadwood-card>>
+  <</if>>
+<</if>>
+<br><<getouticon>><<lanLink ['Return', '返回'] 'Deadwood Transport Motors'>><</lanLink>><br>
+<</deadwood-dynamicblock>>
+<</nobr>>
+
+:: Deadwood Transport Taxi Dispatch []
+<<nobr>>
+<<set _transport to maplebirch.get('Transport'), _taxi to _transport.taxi>>
+<<if _taxi.active>>
+  <<set $location to 'town', $bus to $Transport.origin, $outside to 0>>
+<<else>>
+  <<set $location to 'town', $bus to $Transport.origin, $outside to 1>>
+<</if>>
+<<deadwood-dynamicblock 'deadwood-taxi-dispatch'>>
+<<deadwood-taxi-notice>>
+<<if !_taxi.active or !_taxi.available>>
+  <<lanSwitch 'You are not at your working vehicle.' '你现在不在营运车辆旁。'>><br><br>
+  <<getouticon>><<lanLink ['Return', '返回'] _transport.arrival>><</lanLink>><br>
+<<else>>
+  <<icon `'transport/' + _transport.model.id + '.png'`>><b><<print maplebirch.t(_transport.model.name)>></b> — <<print _transport.catalog.name(_transport.point)>><br>
+  <<lanSwitch 'Completed this shift: ' '本班完成：'>><span class='teal'><<print _taxi.state.shift.jobs>></span> |
+  <<lanSwitch `_taxi.state.shift.mode is 'fleet' ? 'Pay awaiting collection: ' : 'Earned this shift: '` `_taxi.state.shift.mode is 'fleet' ? '待结算收入：' : '本班收入：'`>><<deadwood-transport-money _taxi.state.shift.earned>><br><br>
+  <<language>>
+    <<option 'EN'>>
+      The radio calls out an address, then falls quiet. You check the road before reaching for it.
+      <<if Time.hour gte 20 or Time.hour lt 6>>Headlights pass over the dashboard. The night tariff is a quarter higher.<</if>>
+    <<option 'CN'>>
+      无线电报出一个地址，随后安静下来。你看了一眼路面，才伸手去拿话筒。
+      <<if Time.hour gte 20 or Time.hour lt 6>>车灯从仪表盘上扫过。夜间车费比白天高四分之一。<</if>>
+  <</language>><br><br>
+  <<if _taxi.state.job>>
+    <<if $Transport.trip?.interrupted>>
+      <span class='red'><<lanSwitch 'The journey was interrupted. Notify dispatch before taking another booking.' '行程中断了。接下一单之前，先向调度说明情况。'>></span><br>
+      <<deadwood-taxi-cancel>>
+    <<else>>
+      <<icon 'transport/taxi-booking.png'>><<lanLink ['Return to the current booking', '继续当前订单'] 'Deadwood Transport Taxi Pickup'>><</lanLink>><br>
+      <<deadwood-taxi-cancel>>
+    <</if>>
+  <<else>>
+    <<if _transport.canDepart>>
+      <<for _booking range _taxi.offers>>
+        <<capture _booking>>
+          <<deadwood-card `maplebirch.t('deadwood-reblooms:transport:taxi:request:' + _booking.kind)` `maplebirch.t('deadwood-reblooms:transport:taxi:request:' + _booking.kind)`>>
+            <<print '<<' + _booking.from + 'icon>>'>><<print _transport.catalog.name(_booking.from)>> → <<print _transport.catalog.name(_booking.to)>><br>
+            <<lanSwitch 'Passengers: ' '乘客：'>><<print _booking.people>> |
+            <<lanSwitch 'Fare: ' '车费：'>><<deadwood-transport-money _booking.fare>><br>
+            <<set _booking_quote to _taxi.quote(_booking)>>
+            <<lanSwitch 'Pickup and delivery: ' '接客与送达：'>><span class='blue'><<print Math.floor(_booking_quote.minutes / 60)>>:<<print String(_booking_quote.minutes % 60).padStart(2, '0')>></span> |
+            <<lanSwitch 'Fuel: ' '耗油：'>><span class='blue'><<print _booking_quote.fuel.toFixed(2)>> L</span><br>
+            <<lanSwitch 'Your fare share: ' '你的车费分成：'>><<deadwood-transport-money _booking_quote.income>><br>
+            <<if _taxi.canAccept(_booking.id)>>
+              <<icon 'transport/taxi-booking.png'>><<lanLink ['Accept', '接单']>>
+                <<if maplebirch.get('Transport').taxi.accept(_booking.id)>><<goto 'Deadwood Transport Taxi Pickup'>>
+                <<else>><<run Dynamic.render('deadwood-taxi-dispatch')>><</if>>
+              <</lanLink>>
+            <<else>>
+              <span class='purple'><<lanSwitch 'Refuel before accepting this journey.' '油量不足以完成接客和送达，先去补油。'>></span>
+            <</if>>
+          <</deadwood-card>>
+        <</capture>>
+      <</for>>
+      <<if !_taxi.offers.length>><i><<lanSwitch 'Listen for the next booking.' '等待下一条派车消息。'>></i><br><</if>>
+      <<icon 'transport/dispatch-radio.png'>><<lanLink ['Wait for bookings (0:05)', '等候派单 (0:05)']>>
+        <<if maplebirch.get('Transport').taxi.refresh() and $passage is 'Deadwood Transport Taxi Dispatch'>><<run Dynamic.render('deadwood-taxi-dispatch')>><</if>>
+      <</lanLink>><br>
+    <<else>>
+      <span class='purple'><<lanSwitch 'You cannot drive at present. End the shift or arrange to return the company car.' '你现在无法继续驾驶，可以结束接单，或请车行收回营运车。'>></span><br>
+    <</if>><br>
+    <<if _taxi.state.shift.mode is 'fleet' and (_transport.point isnot 'harvest' or _taxi.fleet.stolen)>>
+      <<if _transport.canDepart and _transport.destinations.some(route => route.id === 'harvest' and route.affordable)>>
+        <<harvesticon>><<lanLink ['Drive back to the dealership', '开回车行']>>
+          <<if maplebirch.get('Transport').startTrip('harvest', 'return')>><<goto 'Deadwood Transport Travel'>><</if>>
+        <</lanLink>><br>
+      <</if>>
+      <<icon 'transport/dispatch-radio.png'>><<lanLink `_taxi.fleet.stolen ? ['Report the theft and finish the shift (0:20)', '报告失窃并交班 (0:20)'] : ['Ask the company to collect the car (0:20)', '请车行收回营运车 (0:20)']`>>
+        <<if maplebirch.get('Transport').taxi.finish(true) and $passage is 'Deadwood Transport Taxi Dispatch'>>
+          <<updatesidebarmoney>><<run Dynamic.render('deadwood-taxi-dispatch')>>
+        <</if>>
+      <</lanLink>> | <i><<lanSwitch 'Up to £30 deducted from shift earnings' '从本班收入中扣除回收费用，最高 £30'>></i><br>
+    <<else>>
+      <<icon `_taxi.state.shift.mode is 'fleet' ? 'transport/vehicle-keys.png' : 'transport/fare-meter.png'`>><<lanLink `_taxi.state.shift.mode is 'fleet' ? ['Return the keys and collect your pay', '交还钥匙并结算'] : ['Finish taking bookings', '结束接单']`>>
+        <<if maplebirch.get('Transport').taxi.finish()>><<updatesidebarmoney>><<run Dynamic.render('deadwood-taxi-dispatch')>><</if>>
+      <</lanLink>><br>
+    <</if>>
+  <</if>>
+<</if>>
+<</deadwood-dynamicblock>>
+<</nobr>>
+
+:: Deadwood Transport Taxi Pickup []
+<<nobr>>
+<<set _transport to maplebirch.get('Transport'), _taxi to _transport.taxi>>
+<<deadwood-dynamicblock 'deadwood-taxi-pickup'>>
+<<set _job to _taxi.state.job>>
+<<if _job and _taxi.available>>
+  <<print '<<' + _job.to + 'icon>>'>><<lanSwitch 'Destination: ' '目的地：'>><<print _transport.catalog.name(_job.to)>> |
+  <<lanSwitch 'Fare: ' '车费：'>><<deadwood-transport-money _job.fare>><br><br>
+<</if>>
+<<if !_job or !_taxi.available>>
+  <<lanSwitch 'There is no passenger waiting for you here.' '这里没有你的乘客。'>><br><br>
+  <<getouticon>><<lanLink ['Return to dispatch', '返回派单'] 'Deadwood Transport Taxi Dispatch'>><</lanLink>><br>
+<<elseif _taxi.expired>>
+  <<lanSwitch 'The passenger has made other arrangements. Let dispatch know before taking another booking.' '乘客已经另作安排。接下一单之前，先通知调度。'>><br><br>
+  <<deadwood-taxi-cancel>>
+<<elseif _job.phase isnot 'payment' and !_transport.canDepart>>
+  <span class='purple'><<lanSwitch 'You cannot safely take the passenger any further. Notify dispatch.' '你现在无法安全地继续载客，先通知调度。'>></span><br><br>
+  <<deadwood-taxi-cancel>>
+<<elseif _job.phase is 'pickup'>>
+  <<lanSwitch 'The passenger is waiting at ' '乘客在'>><<print _transport.catalog.name(_job.from)>><<lanSwitch '.' '等车。'>><br><br>
+  <<deadwood-taxi-leg 'pickup'>>
+  <<deadwood-taxi-cancel>>
+<<elseif _job.phase is 'boarding'>>
+  <<if !_taxi.waiting>>
+    <<lanSwitch 'You find nobody at the agreed spot. Dispatch says the passenger has left.' '约好的地方没有人。调度说，乘客已经离开了。'>><br><br>
+    <<deadwood-taxi-cancel>>
+  <<else>>
+    <<run _taxi.passengerNPC()>>
+    <<language>>
+      <<option 'EN'>>
+        <<switch _job.kind>>
+          <<case 'hospital'>>Someone waits outside the hospital, holding a folded discharge letter. <<He>> checks the address with you before opening the door.
+          <<case 'commuter'>>A passenger checks the time beneath a shop awning. <<He>> puts a work bag on the back seat and repeats the address.
+          <<case 'homeward'>>A tired worker waves from the pavement. <<He>> lowers <<his>> bag to the floor and loosens <<his>> collar.
+          <<case 'shopping'>>Two shoppers stand beside several bags. One checks the registration on the dispatch slip, then waves the other over.
+          <<case 'group'>>Three people wave from the pavement, luggage gathered at their feet. You open the boot while they count the bags.
+          <<case 'seaside'>>Two visitors shake sand from their shoes before getting in. One holds a folded street map, with the destination circled.
+          <<case 'pub'>>Two people emerge from the doorway. One leans against the door frame while the other tries the rear handle twice.
+          <<case 'appointment'>>A neatly dressed passenger looks over the car before getting in. <<He>> places a closed folder beside <<him>>. "The address is on the booking."
+        <</switch>>
+        <<switch _job.event>>
+          <<case 'bags'>>There is enough room in the boot, though the bags need arranging.
+          <<case 'anxious'>>"Could you take the bends gently?" <<He>> asks, tightening <<his>> grip on the seat belt.
+          <<case 'talk'>>"Busy today?" <<He>> asks, looking towards you in the mirror.
+          <<case 'drunk'>>The smell of alcohol follows them into the car. "You'll get us home, won't you?" They laugh a little too loudly.
+          <<default>><<He>> sits back and looks out of the window.
+        <</switch>>
+      <<option 'CN'>>
+        <<switch _job.kind>>
+          <<case 'hospital'>>有人等在医院门外，手里攥着折起来的出院单。开门前，<<he>>又和你确认了一遍地址。
+          <<case 'commuter'>>乘客站在店铺雨棚下看时间。<<He>>把工作用的包放上后座，又重复了一遍地址。
+          <<case 'homeward'>>疲惫的工人在路边招手。<<He>>把包放到脚边，松了松领口。
+          <<case 'shopping'>>两名购物者守着几袋东西。其中一人核对派车单上的车牌，随后招呼另一个人过来。
+          <<case 'group'>>三个人在路边朝你招手，行李堆在脚边。你打开后备箱，他们挨个数了数袋子。
+          <<case 'seaside'>>两名游客先拍掉鞋上的沙子，再坐进车里。其中一人拿着折起来的街道图，目的地被圈了出来。
+          <<case 'pub'>>两个人从门口走出来。其中一个扶着门框，另一个拉了两次后门把手。
+          <<case 'appointment'>>衣着整齐的乘客先打量了你的车，才坐进后座。<<He>>把合上的文件夹放在身旁。“地址就在预约单上。”
+        <</switch>>
+        <<switch _job.event>>
+          <<case 'bags'>>后备箱放得下，不过得把袋子摆好。
+          <<case 'anxious'>>“转弯时能慢一点吗？”<<He>>问，握着安全带的手又紧了紧。
+          <<case 'talk'>>“今天生意怎么样？”<<He>>透过后视镜看向你。
+          <<case 'drunk'>>酒气跟着他们进了车。“会送我们回去的，对吧？”他们笑得有点大声。
+          <<default>><<He>>靠着座椅，望向车窗外。
+        <</switch>>
+    <</language>><br><br>
+    <<deadwood-taxi-board 'ordinary' 'Set off' '出发'>>
+    <<if _job.event is 'bags'>><<deadwood-taxi-board 'help' 'Help arrange the luggage' '帮忙安放行李'>> | <span class='teal'><<lanSwitch 'Housekeeping helps' '家务技能有助于整理'>></span><br>
+    <<elseif _job.event is 'anxious'>><<deadwood-taxi-board 'calm' 'Take the bends slowly' '放慢转弯速度'>> | <i><<lanSwitch 'Two extra minutes' '行程增加两分钟'>></i><br>
+    <<elseif _job.event is 'talk'>><<deadwood-taxi-board 'chat' 'Chat while waiting at the lights' '等红灯时聊几句'>><br>
+    <</if>>
+    <br><<deadwood-taxi-cancel>>
+  <</if>>
+<<elseif _job.phase is 'riding'>>
+  <<lanSwitch 'The passenger has boarded. Take the agreed route.' '乘客已经上车，按约定驶向目的地。'>><br><br>
+  <<deadwood-taxi-leg 'dropoff'>>
+  <<deadwood-taxi-cancel>>
+<<else>>
+  <<lanSwitch 'The passenger has reached the destination.' '乘客已经抵达目的地。'>><br><br>
+  <<icon 'transport/fare-meter.png'>><<lanLink ['Collect the fare', '结算车费'] 'Deadwood Transport Travel'>><</lanLink>><br>
+<</if>>
+<</deadwood-dynamicblock>>
+<</nobr>>
+
+:: Deadwood Transport Taxi Widgets [widget]
+
+<<widget 'deadwood-taxi-notice'>>
+  <<switch maplebirch.get('Transport').taxi.state.notice>>
+    <<case 'registered'>><<lanSwitch 'The dispatcher files your details and hands you a driver card.' '调度员收好你的资料，把司机证递给你。'>><br><br>
+    <<case 'cancelled'>><<lanSwitch 'You notify dispatch and release the booking. Another driver will be called.' '你向调度说明情况，取消了订单。调度会另找司机。'>><br><br>
+    <<case 'expired'>><<lanSwitch 'Dispatch crosses the booking off the board. The passenger has made other arrangements.' '调度划掉了订单。乘客已经另作安排。'>><br><br>
+    <<case 'recovered'>><<lanSwitch 'You wait beside the car until a company driver arrives. The collection charge is taken from your shift pay.' '你守在车旁，等车行的司机过来。回收费用从本班收入中扣除，剩下的钱结算给你。'>><br><br>
+    <<case 'reported'>><<lanSwitch 'You give dispatch the registration and the last place you saw the car. After checking the report, they settle your completed bookings and arrange the search themselves.' '你向调度报出车牌和最后见到车辆的位置。核实情况后，对方结算了你已经完成的订单，车辆由车行派人寻找。'>><br><br>
+    <<case 'ended'>><<lanSwitch 'You sign off over the radio. Dispatch reads back the number of completed journeys.' '你用无线电报了交班。调度念了一遍你完成的单数。'>><br><br>
+  <</switch>>
+  <<if ['ended', 'recovered'].includes(maplebirch.get('Transport').taxi.state.notice) and maplebirch.get('Transport').taxi.state.last_shift>>
+    <<set _shift_receipt to maplebirch.get('Transport').taxi.state.last_shift>>
+    <<lanSwitch 'Completed: ' '完成订单：'>><span class='teal'><<print _shift_receipt.jobs>></span> |
+    <<lanSwitch 'Shift pay: ' '本班实收：'>><<deadwood-transport-money _shift_receipt.net>>
+    <<if _shift_receipt.recovery gt 0>> |
+      <<lanSwitch 'Collection charge: ' '回收费用：'>><<deadwood-transport-money _shift_receipt.recovery>>
+    <</if>><br><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-taxi-leg'>>
+  <<set _leg to _args[0], _leg_transport to maplebirch.get('Transport')>>
+  <<set _leg_destination to _leg_transport.taxi.destination(_leg), _leg_route to _leg_transport.destinations.find(route => route.id === _leg_destination)>>
+  <<if _leg_route and _leg_route.affordable and _leg_transport.canDepart>>
+    <<capture _leg _leg_destination _leg_route>>
+      <<print '<<' + _leg_destination + 'icon>>'>><<lanLink `_leg_route.name + ' (' + Math.floor(_leg_route.minutes / 60) + ':' + String(_leg_route.minutes % 60).padStart(2, '0') + ')'`>>
+        <<if maplebirch.get('Transport').startTrip(_leg_destination, _leg)>><<goto 'Deadwood Transport Travel'>><</if>>
+      <</lanLink>><br>
+    <</capture>>
+  <<else>>
+    <span class='purple'><<lanSwitch 'You cannot complete this journey with the car in its present state.' '车辆或你的状态还不适合完成这程。'>></span><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-taxi-board'>>
+  <<set _board_service to _args[0], _board_label to lanSwitch(_args[1], _args[2])>>
+  <<capture _board_service>>
+    <<switch _board_service>>
+      <<case 'help'>><<icon 'clothes/luggage-plain.png'>>
+      <<case 'chat'>><<socialiseicon>>
+      <<default>><<icon `'transport/' + maplebirch.get('Transport').model.id + '.png'`>>
+    <</switch>><<lanLink _board_label>>
+      <<if maplebirch.get('Transport').taxi.board(_board_service)>>
+        <<if maplebirch.get('Transport').startTrip($Transport.taxi.job.to, 'dropoff')>><<goto 'Deadwood Transport Travel'>>
+        <<else>><<run Dynamic.render('deadwood-taxi-pickup')>><</if>>
+      <<elseif $passage is 'Deadwood Transport Taxi Pickup'>><<run Dynamic.render('deadwood-taxi-pickup')>>
+      <</if>>
+    <</lanLink>>
+  <</capture>>
+  <<if _board_service is 'ordinary'>><br><</if>>
+<</widget>>
+
+<<widget 'deadwood-taxi-cancel'>>
+  <<icon 'transport/dispatch-radio.png'>><<lanLink ['Notify dispatch and cancel', '通知调度取消订单']>>
+    <<if maplebirch.get('Transport').taxi.cancel()>><<goto 'Deadwood Transport Taxi Dispatch'>><</if>>
+  <</lanLink>><br>
+<</widget>>
+
+<<widget 'deadwood-taxi-arrival'>>
+  <<deadwood-dynamicblock 'deadwood-taxi-arrival'>>
+  <<set _taxi_arrival to maplebirch.get('Transport').taxi, _taxi_job to _taxi_arrival.state.job>>
+  <<if $Transport.trip.taxi is 'pickup'>>
+    <<icon 'transport/taxi-booking.png'>><<lanLink ['Meet the passenger', '接乘客上车'] 'Deadwood Transport Taxi Pickup'>><</lanLink>><br>
+  <<elseif $Transport.trip.taxi is 'return'>>
+    <<lanSwitch 'You park on the forecourt and turn off the engine. The key-return box is beside the workshop door.' '你把车停在门前，熄了火。交还钥匙的箱子就在车间门旁。'>><br><br>
+    <<icon 'transport/vehicle-keys.png'>><<lanLink ['Finish the shift', '交班结算'] 'Deadwood Transport Taxi Dispatch'>><</lanLink>><br>
+  <<elseif _taxi_job?.phase is 'payment'>>
+    <<run _taxi_arrival.passengerNPC()>>
+    <<language>>
+      <<option 'EN'>>
+        <<switch _taxi_job.event>>
+          <<case 'bags'>>You open the boot. The passengers count their bags before thanking you.
+          <<case 'anxious'>>The passenger releases the seat belt slowly. <<if _taxi_job.service is 'calm'>>"Thank you. That was much better."<</if>>
+          <<case 'talk'>>The passenger finishes the story as you pull up. "Well, good luck with the rest of your shift."
+          <<case 'drunk'>>They fumble with the door and laugh when it opens. One comes back to check the fare.
+          <<case 'dispute'>>The passenger puts a few notes on the seat. "That ought to do." It is less than the agreed fare. <<He>> already has one foot on the pavement.
+          <<default>>The passenger checks the address through the window, then reaches for <<his>> wallet.
+        <</switch>>
+      <<option 'CN'>>
+        <<switch _taxi_job.event>>
+          <<case 'bags'>>你打开后备箱。乘客数了数行李，才向你道谢。
+          <<case 'anxious'>>乘客慢慢松开安全带。<<if _taxi_job.service is 'calm'>>“谢谢，这样好多了。”<</if>>
+          <<case 'talk'>>车刚停好，乘客也讲完了那件事。“祝你接下来生意顺利。”
+          <<case 'drunk'>>他们摸了几下才打开车门，又笑了起来。其中一人回来问车费。
+          <<case 'dispute'>>乘客把几张钞票放在座椅上。“这些够了吧。”钱比约定的车费少，<<he>>已经一脚踩上了人行道。
+          <<default>>乘客透过车窗确认了地址，随后去拿钱包。
+        <</switch>>
+    <</language>><br><br>
+    <<icon 'transport/fare-meter.png'>><<lanLink `_taxi_job.event is 'dispute' ? ['Insist on the agreed fare (0:03)', '重申约好的车费 (0:03)'] : ['Collect the fare', '结算车费']`>>
+      <<if maplebirch.get('Transport').taxi.pay()>><<updatesidebarmoney>><<run Dynamic.render('deadwood-taxi-arrival')>><</if>>
+    <</lanLink>><<if _taxi_job.event is 'dispute'>> | <span class='teal'><<lanSwitch 'Skulduggery helps' '诡术有助于识破借口'>></span><</if>><br>
+    <<if _taxi_job.event is 'dispute'>>
+      <<icon 'pound.png'>><<lanLink ['Take the offered money', '收下对方给的钱']>>
+        <<if maplebirch.get('Transport').taxi.pay(true)>><<updatesidebarmoney>><<run Dynamic.render('deadwood-taxi-arrival')>><</if>>
+      <</lanLink>><br>
+    <</if>>
+  <<elseif _taxi_arrival.state.receipt>>
+    <<deadwood-card 'Journey earnings' '行程收入'>>
+      <div class='dr-finance-summary'>
+        <span><<lanSwitch 'Fare' '车费'>></span><span><<deadwood-transport-money _taxi_arrival.state.receipt.gross>></span>
+        <span><<lanSwitch 'Company share' '车行分成'>></span><span><<deadwood-transport-money _taxi_arrival.state.receipt.commission>></span>
+        <span><<lanSwitch 'Tip' '小费'>></span><span><<deadwood-transport-money _taxi_arrival.state.receipt.tip>></span>
+        <span><<lanSwitch 'Your earnings' '你的收入'>></span><span><<deadwood-transport-money _taxi_arrival.state.receipt.net>></span>
+      </div>
+      <<if _taxi_arrival.state.shift?.mode is 'fleet'>><i><<lanSwitch 'Added to your pay for this shift.' '已计入本班待结算收入。'>></i><</if>>
+      <<if _taxi_arrival.state.receipt.late>> <span class='purple'><<lanSwitch 'The passenger was kept waiting. There is no tip.' '乘客等得有些久，没有留下小费。'>></span><</if>>
+    <</deadwood-card>>
+    <<getouticon>><<lanLink ['Return to dispatch', '继续接单或交班'] 'Deadwood Transport Taxi Dispatch'>><</lanLink>><br>
+  <<else>>
+    <<getouticon>><<lanLink ['Return to dispatch', '返回派单'] 'Deadwood Transport Taxi Dispatch'>><</lanLink>><br>
+  <</if>>
+  <</deadwood-dynamicblock>>
+<</widget>>
+
+<<widget 'deadwood-taxi-menu'>>
+  <<set _menu_taxi to maplebirch.get('Transport').taxi>>
+  <<if _menu_taxi.active>>
+    <<icon 'transport/taxi.png'>><<lanLink ['Continue your taxi shift', '继续出租车工作']>>
+      <<if maplebirch.get('Transport').taxi.resume()>><<goto 'Deadwood Transport Taxi Dispatch'>><</if>>
+    <</lanLink>><br><br>
+  <<elseif _menu_taxi.state.registered and _menu_taxi.cars.some(car => car.id === $Transport.selected) and !$Transport.commute and !$Transport.passengers.length>>
+    <<icon 'transport/taxi-booking.png'>><<lanLink ['Take taxi bookings', '接出租车订单']>>
+      <<if maplebirch.get('Transport').taxi.start('own', $Transport.selected)>><<goto 'Deadwood Transport Taxi Dispatch'>><</if>>
+    <</lanLink>><br><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-taxi-journal'>>
+  <<set _journal_taxi to maplebirch.get('Transport').taxi>>
+  <<if _journal_taxi.state.registered>>
+    <<deadwood-card 'Taxi work' '出租车工作'>>
+      <div class='dr-finance-summary'>
+        <span><<lanSwitch 'Completed bookings' '已完成订单'>></span><span class='teal'><<print _journal_taxi.state.completed>></span>
+        <span><<lanSwitch 'Total pay received' '累计实收'>></span><span><<deadwood-transport-money _journal_taxi.state.earnings>></span>
+        <<if _journal_taxi.active>>
+          <span><<lanSwitch 'This shift' '本班车辆'>></span><span><<lanSwitch `_journal_taxi.state.shift.mode is 'fleet' ? 'Company car' : 'Own car'` `_journal_taxi.state.shift.mode is 'fleet' ? '车行营运车' : '自备汽车'`>></span>
+          <<if _journal_taxi.state.shift.mode is 'fleet'>>
+            <span><<lanSwitch 'Awaiting collection' '待结算收入'>></span><span><<deadwood-transport-money _journal_taxi.state.shift.earned>></span>
+          <</if>>
+        <</if>>
+      </div>
+    <</deadwood-card>>
+  <</if>>
+<</widget>>

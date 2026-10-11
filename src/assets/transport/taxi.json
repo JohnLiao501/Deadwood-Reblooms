@@ -1,0 +1,24 @@
+{
+  "registration": 7500,
+  "own_share": 0.8,
+  "fleet_share": 0.55,
+  "fleet_model": "saloon",
+  "base_fare": 800,
+  "distance_fare": 40,
+  "night_multiplier": 1.25,
+  "luxury_multiplier": 1.35,
+  "refresh_minutes": 5,
+  "offer_minutes": 45,
+  "recovery_cost": 3000,
+  "models": ["used_saloon", "saloon", "luxury_saloon"],
+  "requests": [
+    { "kind": "commuter", "from": ["domus", "danube", "barb"], "to": ["high", "elk", "nightingale"], "start": 6, "end": 11, "people": 1, "cargo": 5 },
+    { "kind": "homeward", "from": ["high", "elk", "nightingale"], "to": ["domus", "danube", "barb"], "start": 16, "end": 22, "people": 1, "cargo": 5 },
+    { "kind": "shopping", "from": ["high"], "to": ["domus", "danube", "oxford", "cliff"], "start": 8, "end": 21, "people": 2, "cargo": 20 },
+    { "kind": "hospital", "from": ["nightingale"], "to": ["domus", "oxford", "danube"], "start": 0, "end": 24, "people": 1, "cargo": 5 },
+    { "kind": "seaside", "from": ["starfish", "cliff"], "to": ["high", "mer", "harvest"], "start": 9, "end": 21, "people": 2, "cargo": 10 },
+    { "kind": "group", "from": ["starfish", "harvest"], "to": ["domus", "danube", "mer"], "start": 10, "end": 24, "people": 3, "cargo": 35 },
+    { "kind": "pub", "from": ["harvest", "connudatus"], "to": ["domus", "danube", "barb"], "start": 19, "end": 4, "people": 2, "cargo": 0 },
+    { "kind": "appointment", "from": ["high", "oxford"], "to": ["cliff", "mer", "danube"], "start": 9, "end": 19, "people": 1, "cargo": 10 }
+  ]
+}

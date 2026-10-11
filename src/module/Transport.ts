@@ -9,6 +9,7 @@ import Maintenance from './Transport/Maintenance';
 import Companions from './Transport/Companions';
 import Commute, { type AveryReply, type Ride } from './Transport/Commute';
 import TravelEvents, { type RoadsideEvent } from './Transport/TravelEvents';
+import Taxi, { type TaxiLeg, type TaxiState } from './Transport/Taxi';
 
 interface Journey {
   vehicle: number;
@@ -18,6 +19,7 @@ interface Journey {
   fuel: number;
   settled: boolean;
   interrupted: boolean;
+  progress?: number;
   passengers: string[];
   dated: boolean;
   /** 本次行程已在路边独处过。 */
@@ -27,6 +29,8 @@ interface Journey {
   commute?: Ride['kind'];
   scene?: number;
   event?: RoadsideEvent;
+  taxi?: TaxiLeg;
+  taxi_job?: number;
 }
 
 export interface TransportState {
@@ -47,9 +51,10 @@ export interface TransportState {
   commute: Ride | null;
   avery_reply: AveryReply | null;
   event_day: number;
+  taxi: TaxiState;
   school: typeof DrivingSchool.defaults;
   trip: Journey | null;
-  notice: 'bought' | 'repaired' | 'fuelled' | 'parked' | 'taken' | 'sold' | 'helmet' | 'recovered' | 'delivered' | 'refilled' | 'tools' | 'parts' | 'patched' | null;
+  notice: 'bought' | 'repaired' | 'fuelled' | 'parked' | 'taken' | 'sold' | 'helmet' | 'recovered' | 'retrieved' | 'delivered' | 'refilled' | 'tools' | 'parts' | 'patched' | null;
 }
 
 class Transport extends Module {
@@ -71,6 +76,7 @@ class Transport extends Module {
     commute: null,
     avery_reply: null,
     event_day: -1,
+    taxi: clone(Taxi.defaults),
     school: clone(DrivingSchool.defaults),
     trip: null,
     notice: null
@@ -84,6 +90,7 @@ class Transport extends Module {
   public readonly companions = new Companions(this);
   public readonly commute = new Commute(this);
   public readonly events = new TravelEvents(this);
+  public readonly taxi = new Taxi(this);
   public external_bicycle = false;
   private trail_menu = false;
 
@@ -97,6 +104,7 @@ class Transport extends Module {
     this.core.on(':passagestart', () => {
       V.Transport ??= clone(Transport.defaults);
       const title = this.core.passage.title;
+      this.events.enterPassage();
       this.commute.enterPassage();
       // 原版正文末尾会清空 eventskip，在入口保留普通探索菜单的判定。
       this.trail_menu =
@@ -192,7 +200,7 @@ class Transport extends Module {
   }
 
   public get availableAtShop(): boolean {
-    return !!this.vehicle && this.shopVehicles.includes(this.vehicle) && this.vehicle.point === this.shopPoint && this.vehicle.garage === null;
+    return !!this.vehicle && !this.vehicle.stolen && this.shopVehicles.includes(this.vehicle) && this.vehicle.point === this.shopPoint && this.vehicle.garage === null;
   }
 
   public get offer(): VehicleModel | null {
@@ -201,10 +209,20 @@ class Transport extends Module {
 
   public get nearby(): Vehicle[] {
     const property = this.core.get('Finance')?.realEstate.current;
-    return this.state.vehicles.filter(vehicle => {
+    const vehicles = this.state.vehicles.filter(vehicle => {
       const model = Catalog.models.find(model => model.id === vehicle.model);
-      return !!model && !(this.external_bicycle && model.kind === 'bicycle') && vehicle.point === this.point && (vehicle.garage === null || (this.atGarage && vehicle.garage === property?.id));
+      return (
+        !!model &&
+        !vehicle.stolen &&
+        (!this.taxi.active || vehicle.id === this.taxi.state.shift?.vehicle) &&
+        !(this.external_bicycle && model.kind === 'bicycle') &&
+        vehicle.point === this.point &&
+        (vehicle.garage === null || (this.atGarage && vehicle.garage === property?.id))
+      );
     });
+    const fleet = this.taxi.fleet;
+    if (fleet && !fleet.stolen && fleet.point === this.point && /^Deadwood Transport (?:Taxi|Travel|Road Fight)/.test(this.core.passage.title)) vehicles.push(fleet);
+    return vehicles;
   }
 
   public get atGarage(): boolean {
@@ -214,6 +232,7 @@ class Transport extends Module {
   }
 
   public get vehicle(): Vehicle | null {
+    if (this.state.selected === -1) return this.taxi.fleet;
     return this.state.vehicles.find(vehicle => vehicle.id === this.state.selected) ?? null;
   }
 
@@ -319,6 +338,7 @@ class Transport extends Module {
 
   public open(vehicle_id?: number): boolean {
     if (!this.ready || (!this.canApproach && !this.shopOpen && this.core.passage.title !== 'Deadwood Reblooms Property Garage')) return false;
+    if (this.taxi.active && (vehicle_id === undefined || vehicle_id !== this.taxi.state.shift?.vehicle)) return false;
     const vehicle = vehicle_id === undefined ? this.nearby[0] : this.nearby.find(vehicle => vehicle.id === vehicle_id);
     if (vehicle_id !== undefined && (!vehicle || this.core.passage.title === 'Shopping Centre' || this.shopOpen)) return false;
     const shop = this.shopOpen ? this.state.shop : null;
@@ -365,7 +385,7 @@ class Transport extends Module {
   }
 
   public get recoveryMinutes(): number {
-    return 60;
+    return this.vehicle?.stolen ? 180 : 60;
   }
 
   public get fuelCost(): number {
@@ -373,10 +393,10 @@ class Transport extends Module {
   }
 
   public get recoveryCost(): number {
-    if (!this.vehicle || !this.model || (this.vehicle.point === this.shopPoint && this.vehicle.garage === null)) return 0;
+    if (!this.vehicle || !this.model || (!this.vehicle.stolen && this.vehicle.point === this.shopPoint && this.vehicle.garage === null)) return 0;
     const [area, depth] = this.vehicle.point.split(':');
     const distance = Catalog.distance(this.shopPoint, this.vehicle.point) ?? (area === 'forest' ? 30 + Number(depth) * 2 : 165 + Number(depth) * 2);
-    return (this.model.kind === 'bicycle' ? 1500 : this.model.kind === 'motorcycle' ? 3500 : 10000) + distance * 50;
+    return (this.model.kind === 'bicycle' ? 1500 : this.model.kind === 'motorcycle' ? 3500 : 10000) + distance * 50 + (this.vehicle.stolen ? 5000 : 0);
   }
 
   public service(action: 'repair' | 'fuel' | 'sell' | 'helmet' | 'recover'): boolean {
@@ -399,17 +419,20 @@ class Transport extends Module {
     } else if (passage !== 'Deadwood Transport Sell' || !['bicycle', 'motorcycle', 'car'].includes(this.state.shop!) || model.outlet !== this.state.shop) return false;
     if (action === 'recover') {
       const cost = this.recoveryCost;
+      const minutes = this.recoveryMinutes;
       if (!cost || !this.canPay(cost)) return false;
       this.core.SugarCube.Wikifier.wikifyEval(`<<money -${cost} 'transport'>>`);
+      this.state.notice = vehicle.stolen ? 'retrieved' : 'recovered';
+      if (vehicle.stolen) vehicle.condition = Math.max(0, vehicle.condition - 8);
+      delete vehicle.stolen;
       vehicle.point = this.shopPoint;
       vehicle.garage = null;
-      this.state.notice = 'recovered';
-      this.core.SugarCube.Wikifier.wikifyEval(`<<pass ${this.recoveryMinutes}>>`);
+      this.core.SugarCube.Wikifier.wikifyEval(`<<pass ${minutes}>>`);
       return true;
     }
     if (!this.availableAtShop) return false;
     if (action === 'sell') {
-      if ((vehicle.arrears ?? 0) > 0) return false;
+      if ((vehicle.arrears ?? 0) > 0 || this.taxi.state.shift?.vehicle === vehicle.id) return false;
       this.core.SugarCube.Wikifier.wikifyEval(`<<money ${Math.floor((model.price * vehicle.condition) / 200)}>>`);
       this.state.vehicles = this.state.vehicles.filter(item => item.id !== vehicle.id);
       this.state.selected = null;
@@ -436,9 +459,15 @@ class Transport extends Module {
     return true;
   }
 
-  public startTrip(destination: string): boolean {
+  public startTrip(destination: string, taxi?: TaxiLeg): boolean {
     const route = this.destinations.find(route => route.id === destination);
-    if (this.core.passage.title !== 'Deadwood Transport Menu' || !this.canDepart || !route?.affordable || (this.state.trip && !this.state.trip.settled)) return false;
+    if (
+      (taxi ? !this.taxi.validLeg(taxi, destination) : this.core.passage.title !== 'Deadwood Transport Menu' || this.taxi.active) ||
+      !this.canDepart ||
+      !route?.affordable ||
+      (this.state.trip && !this.state.trip.settled)
+    )
+      return false;
     const commute = this.state.commute;
     if (commute && (!this.commute.active || !commute.boarded || destination !== commute.to)) return false;
     const passengers = this.state.passengers.filter(name => this.companions.available.includes(name)).slice(0, this.model!.seats);
@@ -447,7 +476,7 @@ class Transport extends Module {
       vehicle: this.vehicle!.id,
       from: this.point!,
       to: destination,
-      minutes: route.minutes,
+      minutes: route.minutes + (taxi === 'dropoff' && this.taxi.state.job?.service === 'calm' ? 2 : 0),
       fuel: route.fuel,
       settled: false,
       interrupted: false,
@@ -455,6 +484,8 @@ class Transport extends Module {
       dated: false,
       fooled: false,
       commute: commute?.kind,
+      taxi,
+      taxi_job: taxi ? this.taxi.state.job?.id : undefined,
       scene: this.core.get('DeadwoodReblooms')!.rand.int(2),
       event: this.events.roll(destination, route.minutes, !!commute)
     };
@@ -467,25 +498,44 @@ class Transport extends Module {
       this.core.passage.title !== 'Deadwood Transport Travel' ||
       !trip ||
       trip.settled ||
+      (trip.taxi && (!this.taxi.available || this.taxi.destination(trip.taxi) !== trip.to || (trip.taxi !== 'return' && trip.taxi_job !== this.taxi.state.job?.id))) ||
       (trip.commute && (!this.commute.active || !this.state.commute?.boarded || trip.to !== this.state.commute.to || !trip.passengers.includes(this.state.commute.npc))) ||
       !this.canDepart ||
       this.vehicle?.id !== trip.vehicle ||
-      this.point !== trip.from ||
-      !this.destinations.some(route => route.id === trip.to && route.affordable)
+      this.point !== (trip.event?.started ? trip.event.point : trip.from) ||
+      this.vehicle.fuel < Math.max(0, trip.fuel * (1 - (trip.progress ?? 0) / trip.minutes) - 0.01)
     )
       return false;
-    trip.settled = true;
+    if (this.events.pending && trip.event?.started) return false;
+    const pending = this.events.pending;
+    const progress = trip.progress ?? 0;
+    const minutes = pending ? Math.max(1, Math.floor(trip.minutes / 2)) : trip.minutes - progress;
+    trip.progress = progress + minutes;
+    if (pending) trip.event!.started = true;
+    else trip.settled = true;
     const vehicle = this.vehicle;
     const model = this.model!;
-    vehicle.fuel = Math.max(0, Math.round((vehicle.fuel - trip.fuel) * 100) / 100);
+    vehicle.fuel = Math.max(0, Math.round((vehicle.fuel - (trip.fuel * minutes) / trip.minutes) * 100) / 100);
     const trail = /^(?:forest|moor):/.test(trip.from) || /^(?:forest|moor):/.test(trip.to);
-    const wear = this.journeyWear(model, trip.minutes, trail && !this.forestRoad);
+    const wear = this.journeyWear(model, minutes, trail && !this.forestRoad);
     vehicle.condition = Math.max(0, Math.round((vehicle.condition - wear) * 1000) / 1000);
-    this.core.SugarCube.Wikifier.wikifyEval(`<<pass ${trip.minutes}>>`);
-    if (this.core.passage.title !== 'Deadwood Transport Travel' || !this.ready) {
+    this.core.SugarCube.Wikifier.wikifyEval(`<<pass ${minutes}>>`);
+    if (pending) {
+      vehicle.point = trip.event!.point!;
+      vehicle.garage = null;
+      this.state.origin = vehicle.point;
+      this.state.return_passage = Catalog.passage(vehicle.point);
+      V.bus = vehicle.point;
+      V.outside = 1;
+      V.location = vehicle.point === 'farmroad3' ? 'forest' : vehicle.point === 'farmroad6' ? 'farm' : /^farmroad[245]$/.test(vehicle.point) ? 'moor' : 'town';
+    }
+    if (this.core.passage.title !== 'Deadwood Transport Travel' || !this.ready || V.nextPassageCheck) {
       trip.interrupted = true;
+      trip.settled = true;
+      if (pending) this.events.stop();
       return false;
     }
+    if (pending) return false;
     const estate = this.core.get('Finance')?.realEstate;
     const home = trip.to.startsWith('home:') ? estate?.properties.find(property => property.id === trip.to.slice(5)) : null;
     vehicle.point = home ? (home.street === 'Office Lobby' ? 'high' : Catalog.point(home.street))! : trip.to;
@@ -523,6 +573,7 @@ class Transport extends Module {
     else this.state.driving = Math.min(1000, this.state.driving + Math.min(10, Math.ceil(trip.minutes / 5)));
     this.companions.affection(model.id === 'convertible');
     this.commute.arrive();
+    if (trip.taxi) this.taxi.arrive(trip.taxi);
     return true;
   }
 

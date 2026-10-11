@@ -42,7 +42,7 @@ function adaptRobin(core: MaplebirchCore): void {
     sync: {
       configurable: true,
       value: () => {
-        if (!V.RobinExpansion || C.npc.Robin?.init !== 1) return sync();
+        if (!V.RobinExpansion || C.npc.Robin?.init !== 1 || V.replayScene || V.statFreeze) return sync();
         const state = robin.state;
         const stand = runtime.ensureRobinStand();
         if (stand.fellBehind === 1 && state.self_rent) {
@@ -60,7 +60,7 @@ function adaptRobin(core: MaplebirchCore): void {
     settleWeek: {
       configurable: true,
       value: (nativeWeekPassed: () => void) => {
-        if (!V.RobinExpansion || C.npc.Robin?.init !== 1) return nativeWeekPassed();
+        if (!V.RobinExpansion || C.npc.Robin?.init !== 1 || V.replayScene || V.statFreeze) return nativeWeekPassed();
         (Reflect.get(robin, 'sync') as () => void)();
         const state = robin.state;
         state.week++;

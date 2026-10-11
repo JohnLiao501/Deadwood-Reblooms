@@ -214,7 +214,7 @@ class School {
 
   public get councilGuest(): SchoolStudent | null {
     if (!this.councilOpen || (Time.hour >= 9 && Time.hour !== 12 && Time.hour < 15)) return null;
-    const students = SCHOOL_STUDENT_ROSTER.filter(student => this.isStudentAvailable(student) && (Time.hour < 9 || !['Sydney', 'Whitney'].includes(student) || this.core.get('NPCSidebarPortrait')));
+    const students = SCHOOL_STUDENT_ROSTER.filter(student => this.isStudentAvailable(student));
     return students.length ? students[Time.days % students.length] : null;
   }
 
@@ -424,21 +424,19 @@ class School {
   private isStudentAvailable(student: SchoolStudent): boolean {
     const npc = C.npc?.[student];
     if (npc?.init !== 1 || ['prison', 'pillory', 'dungeon'].includes(npc.state)) return false;
-    // 立绘日程用于选择衣装，不能把受伤、留院或尚未到校的罗宾召到校门。
+    // 人物出勤由原版日程决定，与侧栏立绘开关无关。
     if (student === 'Robin') return !V.robinmissing && V.robin.timer.hurt === 0 && V.RobinExpansion?.asylum?.status !== 'admitted' && window.getRobinLocation() === 'school';
-    // late 仍可用于绘制悉尼的校服，但实际表示尚未起床。
-    if (student === 'Sydney' && (V.daily.sydney?.punish === 1 || V.sydneyLate === 1 || (V.sydney_location_override && V.replayScene))) return false;
-    if (this.core.get('NPCSidebarPortrait')) return SCHOOL_CAMPUS_LOCATIONS[student].includes(this.core.npc.Schedule.get(student).location ?? '');
-
-    // 侧栏可单独关闭。值勤目标仍须遵守原版晨间日程，不能仅凭 NPC 处于 active 状态就召到校门。
+    if (student === 'Sydney' && (V.daily.sydney?.punish === 1 || (V.sydney_location_override && V.replayScene))) return false;
     switch (student) {
       case 'Kylar':
         if (Time.schoolDay && Time.hour >= 7 && Time.hour < 9) return true;
         return SCHOOL_CAMPUS_LOCATIONS.Kylar.includes(window.getKylarLocation().area);
       case 'Sydney':
-        return true;
+        window.sydneySchedule?.();
+        // late 只表示晨间尚未到校，原版当天午后仍会正常到校。
+        return T.sydney_location !== 'late' && SCHOOL_CAMPUS_LOCATIONS.Sydney.includes(T.sydney_location ?? '');
       case 'Whitney':
-        return Time.schoolDay && Time.hour >= 7;
+        return Time.schoolDay && Time.hour >= 7 && Time.hour < 17;
     }
   }
 

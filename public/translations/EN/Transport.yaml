@@ -87,3 +87,12 @@
 'deadwood-reblooms:transport:commute:home': 'Offer a lift home'
 'deadwood-reblooms:transport:commute:temple': 'Offer a lift to the temple'
 'deadwood-reblooms:transport:commute:farm': 'Offer to drive Alex back to the farm'
+# Taxi bookings
+'deadwood-reblooms:transport:taxi:request:commuter': 'Going to work'
+'deadwood-reblooms:transport:taxi:request:homeward': 'Going home'
+'deadwood-reblooms:transport:taxi:request:shopping': 'Shopping bags'
+'deadwood-reblooms:transport:taxi:request:hospital': 'Hospital pickup'
+'deadwood-reblooms:transport:taxi:request:seaside': 'Seaside visitors'
+'deadwood-reblooms:transport:taxi:request:group': 'Travelling together'
+'deadwood-reblooms:transport:taxi:request:pub': 'Night pickup'
+'deadwood-reblooms:transport:taxi:request:appointment': 'Executive booking'

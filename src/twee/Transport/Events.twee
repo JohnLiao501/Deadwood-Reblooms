@@ -1,5 +1,237 @@
 :: Deadwood Transport Event Widgets [widget]
 
+<<widget 'deadwood-transport-hazard'>>
+  <<set _hazard to $Transport.trip.event, _road_events to maplebirch.get('Transport').events>>
+  <<set _road_bicycle to maplebirch.get('Transport').model.kind is 'bicycle'>>
+  <<if _hazard.kind is 'molestation'>><<run maplebirch.get('Transport').taxi.passengerNPC()>><</if>>
+  <<language>>
+    <<option 'EN'>>
+      You reach <<print maplebirch.get('Transport').catalog.name(_hazard.point)>>.
+      <<switch _hazard.kind>>
+        <<case 'roadblock'>>
+          Someone waves beside a vehicle stopped across part of the road. As you slow, another figure steps out behind it, watching your <<if _road_bicycle>>bicycle<<else>>vehicle<</if>> rather than the traffic.
+          "Stop there. <<if _road_bicycle>>Off the bike.<<else>>Hand over the keys.<</if>>"
+          There is still room to turn back. A narrow gap remains beside the stopped vehicle.
+        <<case 'traffic'>>
+          A lorry bears down behind you, its horn drowning out everything else. Its mirror swings close as it tries to squeeze past. Ahead, the road widens beside a gate.
+          <<if Weather.precipitation is 'rain' or Weather.isSnow>>The verge is slippery. A sudden turn could put you in the ditch.<</if>>
+        <<case 'load'>>
+          A van turns the bend ahead. Its back door swings open, spilling crates across your lane. The driver stops farther up the road and runs back. There is a gap between the crates, but little room to brake once you enter it.
+        <<case 'puncture'>>
+          <<icon 'transport/flat-tyre.png'>><<if _road_bicycle>>The rear tyre starts to drag. You stop and find a piece of wire embedded in it.<<else>>A tyre begins to thump. You pull over and find a screw sunk through the tread.<</if>>
+          <<if $Transport.trip.event.point.startsWith('farmroad')>>Beyond the hedge, the fields are empty. The next passing vehicle takes several minutes to appear.<</if>>
+        <<case 'molestation'>>
+          A hand slides between the front seats, brushing your side. You pull away, but it follows. In the mirror, the passenger meets your eyes and smiles. "Keep driving."
+          You slow down, looking for a place to pull over.
+      <</switch>>
+      <<if $Transport.trip.taxi is 'dropoff' and _hazard.kind isnot 'molestation'>>Your passenger falls quiet, waiting for you to decide what to do.
+      <<elseif $Transport.trip.passengers.length>>Your companion looks from the road to you.<</if>>
+    <<option 'CN'>>
+      你来到<<print maplebirch.get('Transport').catalog.name(_hazard.point)>>。
+      <<switch _hazard.kind>>
+        <<case 'roadblock'>>
+          一辆车横在部分路面上，旁边的人挥手示意。你刚减速，车后又走出一个人。对方盯着你的<<if _road_bicycle>>自行车<<else>>载具<</if>>，没有看往来的车流。
+          “停这儿。<<if _road_bicycle>>从车上下来。<<else>>把钥匙交出来。<</if>>”
+          后方还有掉头的空间。横着的车辆旁边，也留着一道狭窄的空隙。
+        <<case 'traffic'>>
+          一辆卡车从身后追上来，喇叭声盖过了别的声音。司机硬挤着超车，后视镜离你越来越近。前面一处大门旁，道路稍微宽了一些。
+          <<if Weather.precipitation is 'rain' or Weather.isSnow>>路肩很滑。猛地转向，可能会让你滑进沟里。<</if>>
+        <<case 'load'>>
+          前方一辆货车转过弯，后门突然敞开，几只货箱滚进你的车道。司机停在远处，跑了回来。箱子之间有一道空隙，但进去后就没多少刹车的余地了。
+        <<case 'puncture'>>
+          <<icon 'transport/flat-tyre.png'>><<if _road_bicycle>>后轮突然变得沉重。你停下车，发现一截铁丝扎进了轮胎。<<else>>轮胎开始一下一下地震动。你靠边停下，发现胎面上扎着一枚螺丝。<</if>>
+          <<if $Transport.trip.event.point.startsWith('farmroad')>>树篱外的田野空荡荡的。过了好几分钟，才有另一辆车经过。<</if>>
+        <<case 'molestation'>>
+          一只手从前座之间伸来，摸向你的腰侧。你往旁边避开，那只手却跟了过来。后视镜里，乘客对上你的目光，笑了一下。“继续开。”
+          你放慢车速，寻找能靠边停车的地方。
+      <</switch>>
+      <<if $Transport.trip.taxi is 'dropoff' and _hazard.kind isnot 'molestation'>>乘客安静下来，等着你决定怎么办。
+      <<elseif $Transport.trip.passengers.length>>同行的人看了看路面，又看向你。<</if>>
+  <</language>><br><br>
+  <<if _hazard.kind is 'molestation'>>
+    <<deadwood-transport-road-action 'warn'>>
+    <<if _road_events.can('eject')>><<deadwood-transport-road-action 'eject'>><</if>>
+    <<deadwood-transport-road-action 'fight'>>
+  <<elseif _hazard.kind is 'puncture'>>
+    <<if _road_events.can('fix')>>
+      <<deadwood-transport-road-action 'fix'>>
+    <</if>>
+    <<if _road_events.can('wait')>>
+      <<deadwood-transport-road-action 'wait'>>
+    <</if>>
+    <<deadwood-transport-road-action 'limp'>>
+    <<deadwood-transport-road-action 'walk'>>
+  <<else>>
+    <<deadwood-transport-road-action 'wait'>>
+    <<if _road_events.can('observe')>><<deadwood-transport-road-action 'observe'>><</if>>
+    <<if _road_events.can('force')>><<deadwood-transport-road-action 'force'>><</if>>
+    <<deadwood-transport-road-action 'escape'>>
+    <<if _hazard.kind is 'roadblock'>>
+      <<if _road_events.can('pay')>><<deadwood-transport-road-action 'pay'>><</if>>
+      <<deadwood-transport-road-action 'fight'>>
+      <<deadwood-transport-road-action 'yield'>>
+    <</if>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-transport-road-action'>>
+  <<set _road_action to _args[0], _road_kind to $Transport.trip.event.kind, _road_bike to maplebirch.get('Transport').model.kind is 'bicycle'>>
+  <<capture _road_action>>
+    <<switch _road_action>>
+      <<case 'wait'>>
+        <<icon `_road_kind is 'roadblock' ? 'transport/detour.png' : _road_kind is 'puncture' ? 'hitchhike-car.png' : 'bird-tower/watch.png'`>>
+        <<set _road_label to _road_kind is 'roadblock' ? ['Turn back and take another road (0:10)', '退回岔口绕路 (0:10)'] : _road_kind is 'load' ? ['Wait for the crates to be cleared (0:08)', '等货箱清走 (0:08)'] : _road_kind is 'puncture' ? ['Flag down help for the tyre (0:30)', '拦下过路车，请人修补轮胎 (0:30)'] : ['Give the lorry room (0:04)', '靠边让卡车过去 (0:04)']>>
+      <<case 'escape'>>
+        <<icon `'transport/' + maplebirch.get('Transport').model.id + '.png'`>>
+        <<set _road_label to _road_kind is 'roadblock' ? ['Make for the gap', '从空隙抢过去'] : ['Pass through before the road closes', '赶在道路被堵住前穿过去']>>
+      <<case 'observe'>>
+        <<icon 'transport/traffic-check.png'>><<set _road_label to ['Watch their movements and slip past (0:03)', '看清对方的动作，趁隙绕过去 (0:03)']>>
+      <<case 'force'>>
+        <<icon `_road_kind is 'load' ? 'cargo-stack.png' : 'give-hand.png'`>>
+        <<set _road_label to _road_kind is 'load' ? ['Move the crates aside (0:04)', '把货箱搬开 (0:04)'] : ['Shove the grabbing hand away (0:01)', '推开伸来的手，冲过去 (0:01)']>>
+      <<case 'pay'>>
+        <<icon 'pound.png'>>
+        <<set _road_label to ['Offer £50 for passage (0:02)', '交出 £50，让对方放行 (0:02)']>>
+      <<case 'yield'>>
+        <<icon `_road_bike ? 'transport/' + maplebirch.get('Transport').model.id + '.png' : 'transport/vehicle-keys.png'`>><<set _road_label to _road_bike ? ['Let them take the bicycle', '放弃自行车'] : ['Hand over the keys', '交出钥匙']>>
+      <<case 'fight'>>
+        <<icon 'alert.png'>><<set _road_label to _road_kind is 'molestation' ? ['Stop and resist', '停车反抗'] : ['Fight back', '反抗']>>
+      <<case 'warn'>>
+        <<socialiseicon 'ask'>><<set _road_label to ['Tell the passenger to stop (0:01)', '严词制止乘客 (0:01)']>>
+      <<case 'eject'>>
+        <<getouticon>><<set _road_label to ['Pull over and force the passenger out (0:03)', '靠边停车，把乘客赶下车 (0:03)']>>
+      <<case 'fix'>>
+        <<icon `'transport/' + (_road_bike ? 'bicycle' : 'motor') + '-repair-kit.png'`>>
+        <<set _road_label to _road_bike ? ['Patch the tyre with your tools (0:15)', '用工具修补轮胎 (0:15)'] : ['Repair the tyre with your tools (0:30)', '用工具修补轮胎 (0:30)']>>
+      <<case 'limp'>>
+        <<icon 'transport/flat-tyre.png'>>
+        <<set _road_label to ['Continue slowly (+0:15)', '慢慢挪到目的地 (+0:15)']>>
+      <<case 'walk'>>
+        <<getouticon>><<set _road_label to ['Leave the vehicle and continue on foot', '留下载具，改为步行']>>
+    <</switch>>
+    <<lanLink `_road_label`>>
+      <<if maplebirch.get('Transport').events.resolve(_road_action) and $passage is 'Deadwood Transport Travel'>>
+        <<if maplebirch.get('Transport').events.combatPending>>
+          <<goto 'Deadwood Transport Road Fight'>>
+        <<else>>
+          <<updatesidebarmoney>><<run Dynamic.render('deadwood-transport-travel')>>
+        <</if>>
+      <</if>>
+    <</lanLink>>
+    <<switch _road_action>>
+      <<case 'escape'>>
+        <<difficulty maplebirch.get('Transport').events.escapeChance>>
+        <<if _road_kind is 'roadblock'>> | <span class='red'><<lanSwitch 'Failure starts a fight' '失手会被拦下，进入战斗'>></span><<else>> | <span class='red'><<lanSwitch 'Risk of damage' '可能损伤车况'>></span><</if>>
+      <<case 'observe'>> | <span class='teal'><<lanSwitch 'Skulduggery' '诡术'>></span>
+      <<case 'force'>> | <span class='teal'><<lanSwitch 'Physique' '体格'>></span><<gtiredness>>
+      <<case 'fix'>> | <span class='teal'><<lanSwitch 'Repair supplies −1' '维修耗材 −1'>></span>
+      <<case 'limp'>> | <span class='red'><<lanSwitch 'Condition −6%' '车况 −6%'>></span>
+      <<case 'yield'>> | <span class='red'><<lanSwitch 'Lose the vehicle' '丢失载具'>></span>
+      <<case 'fight'>> | <span class='red'><<lanSwitch 'Combat' '战斗'>></span>
+      <<case 'warn'>>
+        <<difficulty maplebirch.get('Transport').events.boundaryChance>> | <span class='red'><<lanSwitch 'Refusal starts an encounter' '对方拒绝会进入遭遇战'>></span>
+      <<case 'eject'>> | <span class='teal'><<lanSwitch 'Physique' '体格'>></span> | <span class='red'><<lanSwitch 'Cancel the booking' '取消订单'>></span>
+      <<case 'wait'>>
+        <<if _road_kind is 'puncture'>> — <<deadwood-transport-money `_road_bike ? 2000 : 5000`>><</if>>
+    <</switch>><br>
+  <</capture>>
+<</widget>>
+
+<<widget 'deadwood-transport-hazard-result'>>
+  <<set _road_result to $Transport.trip?.event>>
+  <<if _road_result?.outcome and (!_road_result.combat or $passage is 'Deadwood Transport Road Fight Finish')>>
+    <<language>>
+      <<option 'EN'>>
+        <<switch _road_result.outcome>>
+          <<case 'wait'>>
+            <<if _road_result.kind is 'roadblock'>>You turn back before they can reach you, following a side road until it joins your route again. The delay costs you ten minutes.
+            <<elseif _road_result.kind is 'load'>>You wait while the driver hauls the crates off the road. When the lane clears, you set off again.
+            <<else>>You ease into the wider stretch and let the lorry pass. Its horn fades ahead of you.<</if>>
+          <<case 'escape'>>You keep your eyes on the gap and judge the distance. You pass through before it closes, leaving the obstruction behind you.
+          <<case 'scraped'>>You misjudge the gap. <<if maplebirch.get('Transport').model.kind is 'motor_vehicle'>>Metal scrapes against your bodywork.<<else>>You skid against the verge, catching yourself painfully before the vehicle can topple.<</if>> You stop to check the damage.
+          <<case 'observe'>>A glance at the figure behind the vehicle tells you where the trap closes. You wait for their attention to shift, then take the other side before they can reach it.
+          <<case 'force'>>
+            <<if _road_result.kind is 'load'>>You haul the crates clear one at a time. The driver catches up, breathless, and helps with the last one.
+            <<else>>You knock the hand away from your handlebars. The figure stumbles, giving you room to push off and leave.<</if>>
+          <<case 'paid'>>You hold out the notes. One of them counts the money while the other moves aside. You keep watching them until they fall behind you.
+          <<case 'defended'>>They can no longer keep you away from your vehicle. You pull free and reach it before either can stop you.
+          <<case 'rescued'>>Your alarm draws attention from the road. <<if _road_result.kind is 'molestation'>>The passenger lets go and scrambles out. You keep watching until the passenger is out of reach.<<else>>The two figures retreat behind their vehicle, then drive off. Yours is still where you left it.<</if>>
+          <<case 'warned'>>You tell the passenger to keep their hands to themselves. Your voice leaves no room for another joke. The hand withdraws. You watch the rear-view mirror until the journey ends.
+          <<case 'dismissed'>>You pull over and open the door. When the passenger tries to stay put, you take their arm and force them out. You lock the doors before reaching for the radio.
+          <<case 'repelled'>>The passenger backs away from you. You force them out of the car and lock the doors. The keys are still in the ignition; you take them out with an unsteady hand.
+          <<case 'assaulted'>>At last, the passenger releases you and gets out. You pull your clothes into place, then sit for a while with both hands gripping the wheel. The engine stays off. You reach for the radio to cancel the journey.
+          <<case 'stolen'>>
+            <<if _road_result.combat>>You cannot keep them away from your vehicle. <</if>>
+            <<if maplebirch.get('Transport').model.kind is 'bicycle'>>They wrench the bicycle from you and ride off.<<else>>One takes the keys while the other watches you. Your vehicle disappears around the bend.<</if>>
+            <<if $Transport.trip.passengers.length>>You and your companion are left beside the road.<</if>>
+            <<if $Transport.trip.taxi is 'dropoff'>>Your passenger gets out with you and asks dispatch for another car.<</if>>
+            <span class='red'>Your vehicle has been stolen.</span> The workshop may be able to trace it through its local contacts.
+          <<case 'fixed'>>You find the hole, prepare a patch and work it into place. You test the tyre before packing away the tools.
+          <<case 'collected'>>A passing driver stops to help. After a call to the workshop, someone arrives with tyre repair equipment. You pay once the tyre holds its pressure.
+          <<case 'limped'>>You crawl along, stopping whenever the wheel starts to wobble. Every bump travels through the damaged tyre and into the rim.
+          <<case 'walk'>>You leave the vehicle off the road and note the nearest landmark. You will have to come back for it, or arrange collection at the workshop.
+        <</switch>>
+        <<if $Transport.trip.taxi and $Transport.trip.interrupted>>Dispatch takes down your position and cancels the booking. <<if maplebirch.get('Transport').taxi.fleet?.stolen>>The dispatcher tells you to stay clear. The company will deal with its missing car.<</if>><</if>>
+      <<option 'CN'>>
+        <<switch _road_result.outcome>>
+          <<case 'wait'>>
+            <<if _road_result.kind is 'roadblock'>>你赶在对方靠近前退回岔口，沿支路绕回原来的方向。前后耽搁了十分钟。
+            <<elseif _road_result.kind is 'load'>>你等司机把货箱拖离路面。车道腾出来后，你才重新出发。
+            <<else>>你慢慢靠向较宽的路段，让卡车先过。喇叭声渐渐消失在前方。<</if>>
+          <<case 'escape'>>你盯着空隙，估好距离，赶在它被堵住之前穿了过去。障碍被留在了身后。
+          <<case 'scraped'>>你估错了距离。<<if maplebirch.get('Transport').model.kind is 'motor_vehicle'>>金属刮过车身，发出刺耳的声音。<<else>>车轮滑向路肩。你撑住身体，疼得倒吸一口气，好歹没让车翻倒。<</if>>你停下来检查损伤。
+          <<case 'observe'>>你瞥见车后那个人的动作，看清了对方打算在哪边围上来。等他们分神，你从另一侧绕过去，没给他们赶上的机会。
+          <<case 'force'>>
+            <<if _road_result.kind is 'load'>>你把货箱一只只搬离车道。司机气喘吁吁地赶来，和你一起挪开最后一只。
+            <<else>>你推开伸向车把的手。对方踉跄了一下，你趁机蹬地出发，冲出了包围。<</if>>
+          <<case 'paid'>>你递出钞票。一个人数钱，另一个让开了路。直到把他们甩在身后，你才移开视线。
+          <<case 'defended'>>他们已经拦不住你。你挣开束缚，赶在对方再次伸手前回到载具旁。
+          <<case 'rescued'>>警报引来了路上的注意。<<if _road_result.kind is 'molestation'>>乘客松开手，慌忙钻出车门。你一直盯着，直到对方走远。<<else>>那两个人退回横着的车后，很快开走了。你的载具还停在原处。<</if>>
+          <<case 'warned'>>你让乘客把手收回去。语气让对方没法再拿玩笑搪塞，那只手终于退开了。余下的行程里，你始终留意着后视镜。
+          <<case 'dismissed'>>你靠边停下，打开车门。乘客赖着不动，你就攥住对方的胳膊，把人赶了下去。关门落锁后，你才拿起无线电。
+          <<case 'repelled'>>乘客往后退去。你把对方赶出车外，锁好车门。钥匙还插在点火孔里，你伸手拔下，手指有些发抖。
+          <<case 'assaulted'>>乘客终于松开你，下了车。你拉好衣服，双手攥着方向盘，坐了好一会儿。发动机一直没开。你伸手拿起无线电，取消了这次行程。
+          <<case 'stolen'>>
+            <<if _road_result.combat>>你没能阻止他们靠近载具。<</if>>
+            <<if maplebirch.get('Transport').model.kind is 'bicycle'>>他们从你手里夺过自行车，骑着它跑了。<<else>>一个人拿走钥匙，另一个盯着你。你的载具消失在弯道后。<</if>>
+            <<if $Transport.trip.passengers.length>>你和同行的人被留在路旁。<</if>>
+            <<if $Transport.trip.taxi is 'dropoff'>>乘客和你一起下车，请调度另派一辆车。<</if>>
+            <span class='red'>载具被抢走了。</span>修车厂或许能通过当地的门路帮你找回来。
+          <<case 'fixed'>>你找到破口，处理好补片，把它压实。确认轮胎撑得住后，你才收起工具。
+          <<case 'collected'>>一名过路司机停下帮忙。联系修车厂后，有人带着修补轮胎的工具赶来。确认轮胎不再漏气，你付了钱。
+          <<case 'limped'>>你缓慢挪动，车轮开始摇晃就停一下。每次颠簸都透过坏轮胎，撞在轮圈上。
+          <<case 'walk'>>你把载具留在路外，记下附近的地标。之后得回来取，或者去修车厂请人运回。<</switch>>
+        <<if $Transport.trip.taxi and $Transport.trip.interrupted>>调度记下你的位置，取消了订单。<<if maplebirch.get('Transport').taxi.fleet?.stolen>>对方让你先顾好自己，丢失的营运车由车行处理。<</if>><</if>>
+    <</language>>
+    <<if _road_result.kind is 'roadblock' and $Transport.trip.interrupted and $Transport.trip.passengers.length>>
+      <<deadwood-transport-hazard-companion>>
+    <</if>><br><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-transport-hazard-companion'>>
+  <<set _hazard_npc to $Transport.trip.passengers[0]>>
+  <<npc _hazard_npc>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      <<switch _hazard_npc>>
+        <<case 'Robin'>> Robin keeps looking back. <<if C.npc.Robin.trauma gte 40>>"They're not following us?" <<He>> stays close to you.<<else>>"Are you hurt?" <<He>> checks your face before looking towards the road again.<</if>>
+        <<case 'Whitney'>> "Bastards," Whitney mutters, watching the bend. "Come on. We'll deal with the car later."
+        <<case 'Kylar'>> Kylar catches your sleeve. "You're okay?" <<His>> fingers tighten until you look at <<him>>.
+        <<case 'Sydney'>> Sydney takes a slow breath. "Let's get somewhere with people." <<He>> looks at you. "Stay with me."
+        <<case 'Alex'>> Alex checks the road behind you. "There's a field gate just ahead. Let's keep away from the bend."
+      <</switch>>
+    <<option 'CN'>>
+      <<switch _hazard_npc>>
+        <<case 'Robin'>> 罗宾不住地往后看。<<if C.npc.Robin.trauma gte 40>>“他们没跟上来吧？”<<He>>紧紧跟在你身旁。<<else>>“你受伤了吗？”<<He>>看了看你的脸，才又望向公路。<</if>>
+        <<case 'Whitney'>> “混蛋。”惠特尼盯着弯道，低声骂了一句。“走吧。车的事之后再说。”
+        <<case 'Kylar'>> 凯拉尔抓住你的袖口。“你没事吧？”直到你转头看<<him>>，<<his>>手指才稍微松开。
+        <<case 'Sydney'>> 悉尼慢慢呼出一口气。“先去有人的地方吧。”<<He>>看向你。“跟我待在一起。”
+        <<case 'Alex'>> 艾利克斯检查着身后的公路。“前面有个田地入口。先离开弯道附近。”
+      <</switch>>
+  <</language>>
+<</widget>>
+
 <<widget 'deadwood-transport-road-scene'>>
   <<set _road_scene to $Transport.trip.scene ?? 0>>
   <<language>>
@@ -94,7 +326,7 @@
             <<else>>你刚停下，路旁一个购物袋就裂开了。路人弯腰去追滚走的罐头，剩下的东西散了一地。<</if>>
         <</language>><br><br>
         <<if maplebirch.get('Transport').events.available>>
-          <<socialiseicon 'ask'>><<lanLink `_roadside.kind is 'breakdown' ? ['Help arrange repairs (0:05)', '帮忙联系修车厂 (0:05)'] : ['Help pick things up (0:02)', '帮忙捡起来 (0:02)']`>>
+          <<icon `_roadside.kind is 'breakdown' ? 'transport/service.png' : 'give-hand.png'`>><<lanLink `_roadside.kind is 'breakdown' ? ['Help arrange repairs (0:05)', '帮忙联系修车厂 (0:05)'] : ['Help pick things up (0:02)', '帮忙捡起来 (0:02)']`>>
             <<if maplebirch.get('Transport').events.help()>><<run Dynamic.render('deadwood-transport-roadside-event')>><</if>>
           <</lanLink>><<lstress>>
           <<if maplebirch.get('Transport').events.canUseTools>>

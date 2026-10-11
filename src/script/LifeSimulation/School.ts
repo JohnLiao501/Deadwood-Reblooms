@@ -101,6 +101,11 @@ export default function School(maplebirch: typeof window.maplebirch): void {
         }
       ],
       Hallways: [
+        {
+          srcmatchgroup: /(?<=<<if !\["early", "late", "earlynoschool", "latenoschool", "daynoschool"\]\.includes\(\$schoolstate\) and )\$exposed gte 1(?=>>)/,
+          applyafter: ' and !maplebirch.get("LifeSimulation").school.allowsNudity',
+          expected: 1
+        },
         // 在原版留堂条件上追加学生身份检查，其余限制照常保留。
         {
           srcmatchgroup: /\$detention gte 1(?= and \$daily\.school\.detentionAttended isnot 1)/g,
@@ -155,6 +160,13 @@ export default function School(maplebirch: typeof window.maplebirch): void {
       ]
     },
     widgetPassage: {
+      'Widgets School': [
+        {
+          srcmatchgroup: /(?<=<<widget "schoolperiod">>\s*<<if )\$exposed lte 0(?=>>)/,
+          applyafter: ' or maplebirch.get("LifeSimulation").school.allowsNudity',
+          expected: 1
+        }
+      ],
       'Widgets Changing Room': [
         // 四个正常离校链接共用此宏。拦截留堂时也只恢复一次。
         {

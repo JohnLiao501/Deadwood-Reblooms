@@ -1,0 +1,75 @@
+:: Deadwood Transport Road Fight []
+<<nobr>>
+<<set _road_events to maplebirch.get('Transport').events>>
+<<if _road_events.combatPending>>
+  <<set _cab_encounter to $Transport.trip.event.kind is 'molestation'>>
+  <<if _cab_encounter>><<run maplebirch.get('Transport').taxi.passengerNPC()>><</if>>
+  <<language>>
+    <<option 'EN'>>
+      <<if _cab_encounter>>
+        You pull over and switch off the engine. As you turn to push the hand away, the passenger grabs your wrist. <<He>> leans into the front seat, pressing you against the door.
+        <<if maplebirch.get('Transport').taxi.state.job.people gt 1>>The other passengers scramble out of the car.<</if>>
+      <<elseif $Transport.trip.event.caught>>
+        A hand catches you before you clear the gap. You brake hard. By the time you can get moving again, someone has dragged you away from the vehicle.
+      <<else>>
+        You stop, <<if maplebirch.get('Transport').model.kind is 'bicycle'>>keeping hold of the handlebars<<else>>keeping the keys in your hand<</if>>. "Move." The figure in front lunges for you while the other circles behind.
+      <</if>>
+      <<if !_cab_encounter>>You brace yourself against the edge of the road.
+      <<if $Transport.trip.taxi is 'dropoff'>>Your passenger scrambles back along the verge, out of reach of the two figures.
+      <<elseif $Transport.trip.passengers.length>>You shout for your companion to stay back. There is barely room between you and the two figures.<</if>>
+      <</if>>
+    <<option 'CN'>>
+      <<if _cab_encounter>>
+        你靠边停车，关掉发动机。刚转身去推那只手，乘客就攥住了你的手腕。<<He>>探进前座，把你挤向车门。
+        <<if maplebirch.get('Transport').taxi.state.job.people gt 1>>其余乘客慌忙下了车。<</if>>
+      <<elseif $Transport.trip.event.caught>>
+        你还没穿过空隙，一只手就伸了过来。你急忙刹车，还没来得及重新出发，就被人拖离了载具。
+      <<else>>
+        你停下，<<if maplebirch.get('Transport').model.kind is 'bicycle'>>握紧车把<<else>>把钥匙攥在手里<</if>>。“让开。”前面的人朝你扑来，另一个绕到了你身后。
+      <</if>>
+      <<if !_cab_encounter>>你站稳脚步，背后就是路沿。
+      <<if $Transport.trip.taxi is 'dropoff'>>乘客慌忙沿路肩往后退，躲开那两个人。
+      <<elseif $Transport.trip.passengers.length>>你喊同行的人先退开。你和那两个人之间，几乎没有容人挤过的空隙。<</if>>
+      <</if>>
+  <</language>><br><br>
+  <<run _road_events.beginCombat()>>
+<</if>>
+<<if _road_events.inCombat and $combat>>
+  <<effects>><<effectsman>><<alarmstate>><<man>><<stateman>>
+  <br><br><<actionsman>>
+  <<if _combatend or _road_events.combatComplete>>
+    <span id='next'><<lanLink ['Next', '继续'] 'Deadwood Transport Road Fight Finish'>><</lanLink>></span><<nexttext>>
+  <<else>>
+    <span id='next'><<lanLink ['Next', '继续'] 'Deadwood Transport Road Fight'>><</lanLink>></span><<nexttext>>
+  <</if>>
+<<else>>
+  <<getouticon>><<lanLink ['Continue', '继续'] 'Deadwood Transport Travel'>><</lanLink>>
+<</if>>
+<</nobr>>
+
+:: Deadwood Transport Road Fight Finish []
+<<nobr>>
+<<set _road_events to maplebirch.get('Transport').events>>
+<<if _road_events.inCombat and $combat>>
+  <<effects>>
+  <<if _road_events.combatComplete and $enemyarousal gte $enemyarousalmax>><<ejaculation "short">><</if>>
+  <<run _road_events.finishCombat()>>
+<</if>>
+<<if _road_events.inCombat>>
+  <span id='next'><<lanLink ['Next', '继续'] 'Deadwood Transport Road Fight'>><</lanLink>></span><<nexttext>>
+<<elseif $Transport.trip?.event?.combat is 'finished'>>
+  <<deadwood-transport-hazard-result>>
+  <<if $Transport.trip.interrupted>>
+    <<if maplebirch.get('Transport').taxi.active>>
+      <<icon 'transport/dispatch-radio.png'>><<lanLink ['Contact dispatch', '联系调度'] 'Deadwood Transport Taxi Dispatch'>><</lanLink>><br>
+    <</if>>
+    <<getouticon>><<lanLink ['Continue on foot', '步行离开'] $Transport.return_passage>>
+      <<set $Transport.trip to null>>
+    <</lanLink>>
+  <<else>>
+    <<icon `'transport/' + maplebirch.get('Transport').model.id + '.png'`>><<lanLink ['Continue the journey', '继续行程'] 'Deadwood Transport Travel'>><</lanLink>>
+  <</if>>
+<<else>>
+  <<getouticon>><<lanLink ['Return', '返回'] $Transport.return_passage>><</lanLink>>
+<</if>>
+<</nobr>>

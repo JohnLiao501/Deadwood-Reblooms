@@ -44,7 +44,7 @@ export default class Commute {
   }
 
   public get offer(): Ride | null {
-    if (!this.transport.ready || V.nextPassageCheck) return null;
+    if (this.transport.taxi.active || !this.transport.ready || V.nextPassageCheck) return null;
     const source = this.transport.core.passage.title;
     const plan = (npc: string, kind: Ride['kind'], from: string, to: string, arrival: string, walk: number): Ride | null =>
       this.healthy(npc) && this.transport.state.affection_days[npc + ':' + kind] !== Time.days ? { npc, kind, from, to, arrival, source, walk, day: Math.floor(Time.days), boarded: false } : null;
@@ -67,7 +67,8 @@ export default class Commute {
   }
 
   public vehicles(plan = this.offer): Vehicle[] {
-    if (!plan || V.drunk > 0 || V.drugged > 0 || V.stress >= V.stressmax || V.worn.feet.type.includes('shackle') || !this.transport.state.school.motor_vehicle.licensed) return [];
+    if (this.transport.taxi.active || !plan || V.drunk > 0 || V.drugged > 0 || V.stress >= V.stressmax || V.worn.feet.type.includes('shackle') || !this.transport.state.school.motor_vehicle.licensed)
+      return [];
     return this.transport.state.vehicles.filter(vehicle => {
       const model = Catalog.models.find(model => model.id === vehicle.model);
       const distance = Catalog.distance(plan.from, plan.to);

@@ -50,7 +50,7 @@ Kylar remembers the last response. Waiting or praising changes how they show the
 
 Manor sleep reads presence. Rain, monitor light and meteors can produce night-waking dialogue rather than guaranteed nightly events. Clothing, sleep and vanilla event states remain relevant.
 
-See VanillaPlus to invite Kylar into an owned home. High jealousy can block another resident, and past friendship with Sydney does not establish agreement to shared intimacy.
+See Finance to invite Kylar into an owned home. High jealousy can block another resident, and past friendship with Sydney does not establish agreement to shared intimacy.
 
 ### Troubleshooting
 

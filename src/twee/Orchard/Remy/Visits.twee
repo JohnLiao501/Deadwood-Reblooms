@@ -90,6 +90,8 @@
     <<option 'EN'>>
     <<if $Orchard.remy.dates is 1>>
       Remy asks why you wanted <<his>> company. <<if $speech_attitude is 'bratty'>>"Someone ought to make sure you take a break." "How considerate," <<he>> replies.<<elseif $speech_attitude is 'meek'>>You admit that you wanted to know <<him>> better. "Well. Here I am."<<else>>You say you were curious about what <<he>> does between lessons. "Usually, I prepare for the next one."<</if>> <<He>> checks the yard before returning <<his>> attention to you.
+    <<elseif $Orchard.remy.romance and C.npc.Remy.love gte 50 and $Orchard.remy.dates gte 5>>
+      "I moved a lesson earlier," <<he>> says. "We have a little longer today." <<He>> checks the courtyard as <<he>> speaks, then notices you watching. "You could try looking pleased."
     <<elseif $Orchard.remy.romance>>
       "You might have warned me you were coming." <<He>> pauses. "I could have cleared the afternoon." You ask if <<he>> really would have done. "Perhaps. You'll have to try asking." <<He>> looks pleased with <<himself>>.
     <<else>>
@@ -98,6 +100,8 @@
     <<option 'CN'>>
     <<if $Orchard.remy.dates is 1>>
       雷米问你，为什么想找<<him>>单独待一会儿。<<if $speech_attitude is 'bratty'>>“总得有人盯着你休息吧。”“真体贴。”<<He>>回答。<<elseif $speech_attitude is 'meek'>>你承认自己想多了解<<him>>一些。“好吧，我就在这里。”<<else>>你说自己好奇<<he>>课间都做些什么。“一般是准备下一节课。”<</if>> <<He>>看了眼庭院，又将注意力转回你身上。
+    <<elseif $Orchard.remy.romance and C.npc.Remy.love gte 50 and $Orchard.remy.dates gte 5>>
+      “有节课，我提前上了。”<<He>>说。“今天能多待一会儿。”<<He>>说话时还看了眼庭院，随后发现你正盯着<<him>>。“你可以试着表现得高兴一点。”
     <<elseif $Orchard.remy.romance>>
       “要过来，也该提前告诉我一声。”<<He>>停了一下。“说不定能空出整个下午。”你问<<he>>是不是真的愿意。“也许。你得先开口问问。”<<He>>似乎对这个回答很满意。
     <<else>>
@@ -125,6 +129,40 @@
                 雷米将腕口的手套拉紧。“你是为了这个才来的？”你说，你想知道。<<He>>看了你一会儿。“我给过艾利克斯不少机会，让<<nnpc_him 'Alex'>>想明白。”
                 <br><br>
                 你告诉<<him>>，自己还会继续帮农场的忙。“那么，你还有活等着做。”<<He>>转向从跑道上传来的呼声。<span class='purple'>刚才的亲近没有让<<he>>对艾利克斯改变态度。</span>
+            <</language>>
+          <</replace>>
+        <</lanLink>><br>
+      <</if>>
+      <<if $Orchard.remy.romance>>
+        <<lanLink ['Ask what makes Remy want your company', '问雷米为什么想让你陪着']>>
+          <<replace '#deadwood-remy-date-talk'>>
+            <<language>>
+              <<option 'EN'>>
+                "Must I account for that as well?" Remy asks. You wait. <<He>> rubs a thumb along <<his>> glove's seam.
+                <br><br>
+                "The school, the feed, someone asking what I can do for them. All day." <<He>> glances at you. "You stayed when the work was done. I wanted you to stay longer."
+                <<if C.npc.Remy.love gte 50 and $Orchard.remy.dates gte 5>>
+                  <<if _remy_indoors>><<He>> draws <<his>> chair nearer to yours.<<else>><<He>> slows <<his>> steps until your shoulder brushes <<his>>.<</if>> "I'd like a little of your time for myself."
+                <<else>>
+                  <<He>> looks back towards the yard. "I'm still getting used to it."
+                <</if>>
+                <<if maplebirch.get('Orchard').remy.farmConflict>>
+                  <br><br>
+                  "And if I go back to Alex afterwards?" you ask. The crease returns between <<his>> brows. "Then we'll have that argument again." <<He>> leaves the words there. You can hear the horses moving beyond the fence.
+                <</if>>
+              <<option 'CN'>>
+                “这个也要我报账吗？”雷米问。你等着。<<He>>用拇指擦过手套的接缝。
+                <br><br>
+                “学校，饲料，还有来问我能替他们做些什么的人。一整天都是。”<<He>>看了你一眼。“活干完了，你还愿意留下来。我想让你多待一会儿。”
+                <<if C.npc.Remy.love gte 50 and $Orchard.remy.dates gte 5>>
+                  <<if _remy_indoors>><<He>>将椅子向你挪近一点。<<else>><<He>>放慢脚步，让肩膀轻轻碰到你的肩膀。<</if>>“我想让你留点时间，专门陪我。”
+                <<else>>
+                  <<He>>又望向庭院。“我还在慢慢习惯。”
+                <</if>>
+                <<if maplebirch.get('Orchard').remy.farmConflict>>
+                  <br><br>
+                  “要是之后，我还要回艾利克斯那里呢？”你问。<<His>>眉间又皱了起来。“那我们还得为那件事争一回。”<<He>>没有继续说。围栏外传来马走动的声音。
+                <</if>>
             <</language>>
           <</replace>>
         <</lanLink>><br>

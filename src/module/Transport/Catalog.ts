@@ -34,6 +34,7 @@ export interface Vehicle {
   fuel: number;
   arrears?: number;
   upkeep_day?: number;
+  stolen?: boolean;
 }
 
 export default class Catalog {

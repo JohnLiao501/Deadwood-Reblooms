@@ -34,6 +34,7 @@
   <<icon 'transport/service.png'>><<lanLink ['Repairs and collection', '维修与取车'] 'Deadwood Transport Service'>>
     <<set $Transport.shop to 'garage', $Transport.notice to null>>
   <</lanLink>><br>
+  <<icon 'transport/taxi.png'>><<lanLink ['Taxi desk', '出租车柜台'] 'Deadwood Transport Taxi'>><</lanLink>><br>
   <br>
 <</if>>
 <<deadwood-transport-return>>
@@ -82,7 +83,9 @@
       <<capture _model _catalog_vehicle>>
         <<deadwood-transport-vehicle-card _model _catalog_vehicle>>
           <<if _catalog_vehicle>>
-            <<if _catalog_vehicle.point is _transport.shopPoint and !_catalog_vehicle.garage>>
+            <<if _catalog_vehicle.stolen>>
+              <span class='red'><<lanSwitch 'Stolen. Ask at the workshop about tracing it.' '已失窃。可到修车厂询问寻回。'>></span>
+            <<elseif _catalog_vehicle.point is _transport.shopPoint and !_catalog_vehicle.garage>>
               <<shopicon 'register'>><<lanLink ['Sell', '出售'] 'Deadwood Transport Sell'>>
                 <<set $Transport.selected to _catalog_vehicle.id, $Transport.notice to null>>
               <</lanLink>>
@@ -91,7 +94,7 @@
               <<print _transport.catalog.name(_catalog_vehicle.garage ? 'home:' + _catalog_vehicle.garage : _catalog_vehicle.point)>><<lanSwitch '.' '带到这里。'>></i>
             <</if>>
           <<else>>
-            <<shopicon 'register'>><<lanLink ['Take a closer look', '看车'] 'Deadwood Transport Buy'>>
+            <<icon `'transport/' + _model.id + '.png'`>><<lanLink ['Take a closer look', '看车'] 'Deadwood Transport Buy'>>
               <<set $Transport.offer to _model.id, $Transport.notice to null>>
             <</lanLink>>
           <</if>>
@@ -238,6 +241,9 @@
       <</if>>
   <</language>><br><br>
   <<deadwood-dynamicblock 'deadwood-transport-service'>>
+  <<if !_transport.shopOpen>>
+    <span class='purple'><<lanSwitch 'The mechanic shuts the workshop for the evening.' '修理工关上了车间，今天的营业时间已经结束了。'>></span><br><br>
+  <<else>>
   <<if _transport.shopVehicles.length>>
     <<for _owned range _transport.shopVehicles>>
       <<set _model to _transport.catalog.models.find(model => model.id === _owned.model)>>
@@ -245,7 +251,7 @@
         <<icon `'transport/' + _model.id + '.png'`>><<lanLink `maplebirch.t(_model.name)`>>
           <<set $Transport.selected to _owned.id, $Transport.notice to null>>
           <<run Dynamic.render('deadwood-transport-service-notice', 'deadwood-transport-service')>>
-        <</lanLink>> — <<print _transport.catalog.name(_owned.point)>>
+        <</lanLink>> — <<if _owned.stolen>><span class='red'><<lanSwitch 'Stolen' '失窃'>></span><<else>><<print _transport.catalog.name(_owned.point)>><</if>>
         <<if _owned.garage>><i><<lanSwitch '(in a garage)' '（车库内）'>></i><</if>><br>
       <</capture>>
     <</for>><br>
@@ -253,17 +259,24 @@
       <<icon `'transport/' + _transport.model.id + '.png'`>><<= maplebirch.t(_transport.model.name)>><br>
       <<lanSwitch 'Condition: ' '车况：'>><<deadwood-transport-condition _transport.vehicle>><br>
       <<if !_transport.availableAtShop and _transport.recoveryCost gt 0>>
-        <<language>>
+        <<if _transport.vehicle.stolen>>
+          <<language>>
+            <<option 'EN'>>
+              The mechanic asks where it happened and writes down a description. "I'll put the word out. Someone will know where it's been left." The tracing fee includes collection, but any damage will need a separate repair.
+            <<option 'CN'>>
+              修理工问清出事的位置，记下车辆的模样。“我找人打听。总有人知道车被丢在哪儿。”寻回费用包括运回车行，损伤还得另外修理。
+          <</language>><br>
+        <<else>><<language>>
           <<option 'EN'>>
             You give the vehicle's location to the person at the counter. They check the address and quote a collection fee.
           <<option 'CN'>>
             你告诉柜台后的人车停在哪里。对方确认了位置，报出取车的价钱。
-        <</language>><br>
+        <</language>><br><</if>>
         <<lanSwitch 'Collection fee: ' '取车费用：'>><<deadwood-transport-money _transport.recoveryCost>><br>
         <<if _transport.canPay(_transport.recoveryCost)>>
           <<icon 'transport/recovery.png'>><<lanLink `lanSwitch('Arrange collection', '请人取车') + ' (' + Math.floor(_transport.recoveryMinutes / 60) + ':' + String(_transport.recoveryMinutes % 60).padStart(2, '0') + ')'`>>
             <<if maplebirch.get('Transport').service('recover') and $passage is 'Deadwood Transport Service'>>
-              <<goto 'Deadwood Transport Service'>>
+              <<updatesidebarmoney>><<run Dynamic.render('deadwood-transport-service-notice', 'deadwood-transport-service')>>
             <</if>>
           <</lanLink>><br>
         <<else>>
@@ -275,7 +288,7 @@
           <<if _transport.canPay(_transport.repairCost)>>
             <<icon 'transport/service.png'>><<lanLink `lanSwitch('Repair', '维修') + ' (' + Math.floor(_transport.repairMinutes / 60) + ':' + String(_transport.repairMinutes % 60).padStart(2, '0') + ')'`>>
               <<if maplebirch.get('Transport').service('repair') and $passage is 'Deadwood Transport Service'>>
-                <<goto 'Deadwood Transport Service'>>
+                <<updatesidebarmoney>><<run Dynamic.render('deadwood-transport-service-notice', 'deadwood-transport-service')>>
               <</if>>
             <</lanLink>><br>
           <<else>>
@@ -292,6 +305,7 @@
   <<deadwood-transport-repair-shop 'bicycle' 'deadwood-transport-service-notice' 'deadwood-transport-service'>>
   <<if $Transport.shop is 'garage'>>
     <<deadwood-transport-repair-shop 'motor' 'deadwood-transport-service-notice' 'deadwood-transport-service'>>
+  <</if>>
   <</if>>
   <<if $Transport.shop is 'bicycle'>>
     <<getouticon>><<lanLink ['Return to the shop', '返回店里'] 'Deadwood Transport Dealer'>>
@@ -432,7 +446,7 @@
   <<if (_transport.vehicle.arrears ?? 0) gt 0>>
     <span class='red'><<lanSwitch 'Settle the unpaid upkeep before selling.' '出售前需结清保养欠费。'>></span><br>
     <<if maplebirch.get('Finance')?.state.bank.opened and maplebirch.get('Finance').state.bank.balance gte _transport.vehicle.arrears>>
-      <<shopicon 'register'>><<lanLink ['Pay from your bank account', '从银行账户补缴']>>
+      <<icon 'finance/bank-withdraw.png'>><<lanLink ['Pay from your bank account', '从银行账户补缴']>>
         <<if maplebirch.get('Transport').maintenance.pay()>><<updatesidebarmoney>><<run Dynamic.render('deadwood-transport-sell')>><</if>>
       <</lanLink>><br>
     <</if>>
