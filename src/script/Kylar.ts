@@ -7,7 +7,8 @@ export default function Kylar(maplebirch: typeof window.maplebirch): void {
     { widget: 'deadwood-reblooms-kylar-kitchen-link', passage: 'Manor Kitchen' },
     { widget: 'deadwood-reblooms-kylar-bathroom-link', passage: 'Manor Hall' },
     { widget: 'deadwood-reblooms-kylar-yard-link', passage: 'Manor Garden' },
-    { widget: 'deadwood-reblooms-kylar-sketch-link', passage: 'Kylar Park' }
+    { widget: 'deadwood-reblooms-kylar-sketch-link', passage: 'Kylar Park' },
+    { widget: 'deadwood-reblooms-kylar-pregnancy-link', passage: 'Manor Kylar Room' }
   );
 
   // 原版卧室只看时间决定凯拉尔是否在场，同住后要避开这个冲突。

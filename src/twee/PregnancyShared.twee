@@ -1,0 +1,295 @@
+:: Deadwood Pregnancy Widgets [widget nobr]
+<<widget 'deadwood-pregnancy-state'>>
+  <<set _pregnancy_name to _args[0]>>
+  <<set _pregnancy_record to getLabouringPregnancy(_pregnancy_name) ?? getActivePregnancies(_pregnancy_name)[0]>>
+  <<set _pregnancy_recent to $pregnancies.findLast(record => record.carrier === _pregnancy_name
+    && record.deliveredDate !== null && Time.date.timeStamp - record.deliveredDate < 7 * TimeConstants.secondsPerDay
+    && knowsPregnancy(record.pregnancyId, 'pc'))>>
+  <<set _pregnancy_known to !!_pregnancy_record and knowsPregnancy(_pregnancy_record.pregnancyId, 'pc')>>
+  <<set _pregnancy_aware to !!_pregnancy_record and knowsPregnancy(_pregnancy_record.pregnancyId, _pregnancy_name)>>
+  <<set _pregnancy_birth to npcPregnancyEnding(_pregnancy_name)>>
+  <<set _pregnancy_reveal to _pregnancy_record and !talkedAboutPregnancy(_pregnancy_name, 'pc', _pregnancy_record.pregnancyId)
+    and (_pregnancy_known or _pregnancy_aware or npcBellyVisible(_pregnancy_name))>>
+  <<if !_pregnancy_birth and !_pregnancy_reveal and !_pregnancy_known>>
+    <<set _pregnancy_record to _pregnancy_recent>>
+    <<set _pregnancy_known to !!_pregnancy_record>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-pregnancy-links'>>
+  <<set _pregnancy_name to _args[0]>>
+  <<set _pregnancy_prefix to _args[1]>>
+  <<if _args[2] and maplebirch.get(_pregnancy_name) and !$statFreeze and !$replayScene>>
+    <<deadwood-pregnancy-state _pregnancy_name>>
+    <<set _pregnancy_birth_passage to _pregnancy_prefix + ' Birth'>>
+    <<set _pregnancy_reveal_passage to _pregnancy_prefix + ' Pregnancy'>>
+    <<set _pregnancy_care_passage to _pregnancy_prefix + ' Pregnancy Care'>>
+    <<capture _pregnancy_name _pregnancy_record _pregnancy_birth_passage _pregnancy_reveal_passage _pregnancy_care_passage>>
+      <<if _pregnancy_birth>>
+        <<loveicon 'hug'>><<lanLink ['Help ' + _pregnancy_name + ' get to hospital', '陪' + maplebirch.auto(_pregnancy_name) + '去医院'] _pregnancy_birth_passage>>
+          <<set $deadwood_pregnancy to { npc: _pregnancy_name, id: _pregnancy_record.pregnancyId, return_passage: $passage, location: $location, choice: null }>>
+        <</lanLink>><br>
+      <<elseif _pregnancy_reveal>>
+        <<loveicon>><<lanLink ['Talk privately with ' + _pregnancy_name, '和' + maplebirch.auto(_pregnancy_name) + '单独谈谈'] _pregnancy_reveal_passage>>
+          <<set $deadwood_pregnancy to { npc: _pregnancy_name, id: _pregnancy_record.pregnancyId, return_passage: $passage, location: $location, choice: null }>>
+        <</lanLink>><br>
+      <<elseif _pregnancy_known>>
+        <<loveicon 'hug'>><<lanLink ['Spend some time with ' + _pregnancy_name, '陪' + maplebirch.auto(_pregnancy_name) + '待一会儿'] _pregnancy_care_passage>>
+          <<set $deadwood_pregnancy to { npc: _pregnancy_name, id: _pregnancy_record.pregnancyId, return_passage: $passage, location: $location, choice: null }>>
+        <</lanLink>><br>
+      <</if>>
+    <</capture>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-pregnancy-context'>>
+  <<set _pregnancy_name to _args[0]>>
+  <<deadwood-pregnancy-state _pregnancy_name>>
+  <<set _pregnancy_context to !!_pregnancy_record and !!maplebirch.get(_pregnancy_name) and !$statFreeze and !$replayScene and $deadwood_pregnancy?.npc is _pregnancy_name
+    and _pregnancy_record?.pregnancyId is $deadwood_pregnancy?.id
+    and ['active', 'rescued'].includes(C.npc[_pregnancy_name].state)
+    and (_pregnancy_name isnot 'Robin' or maplebirch.get('Robin').available)
+    and (_pregnancy_name isnot 'Sydney' or maplebirch.get('Sydney').available)>>
+<</widget>>
+
+<<widget 'deadwood-pregnancy-return'>>
+  <<if $deadwood_pregnancy?.npc is _args[0]>>
+    <<getouticon>><<lanLink ['Return', '返回'] $deadwood_pregnancy.return_passage>>
+      <<unset $deadwood_pregnancy>>
+    <</lanLink>>
+  <<else>>
+    <<getouticon>><<lanLink ['Leave', '离开'] 'Town'>><</lanLink>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-pregnancy-unavailable'>>
+  <<language>>
+    <<option 'EN'>>
+      This conversation is no longer available. You can speak again when you meet.
+    <<option 'CN'>>
+      现在没法继续这次谈话。下次见面时，你可以再问问。
+  <</language>><br><br>
+  <<deadwood-pregnancy-return _args[0]>>
+<</widget>>
+
+<<widget 'deadwood-pregnancy-parentage'>>
+  <<if knowsDonor(_pregnancy_record.pregnancyId, 'pc') and _pregnancy_record.donor is 'pc'>>
+    <span class='pink'><<language>>
+      <<option 'EN'>>
+        You already know that you are the other parent.
+      <<option 'CN'>>
+        你已经知道，自己就是孩子的另一位亲生父母。
+    <</language>></span><br><br>
+  <<elseif couldBeDonor(_pregnancy_record, 'pc')>>
+    <<language>>
+      <<option 'EN'>>
+        You could be the other parent. You do not know for certain yet.
+      <<option 'CN'>>
+        孩子的另一位亲生父母可能是你，但你还不能确定。
+    <</language>><br><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-pregnancy-care-action'>>
+  <<deadwood-pregnancy-context _args[0]>>
+  <<if _pregnancy_context and _pregnancy_known and !_pregnancy_birth>>
+    <<set $deadwood_pregnancy.choice to _args[1]>>
+    <<set $daily.deadwood_pregnancy to $daily.deadwood_pregnancy ?? {}>>
+    <<set $daily.deadwood_pregnancy[_pregnancy_record.pregnancyId] to $daily.deadwood_pregnancy[_pregnancy_record.pregnancyId] ?? []>>
+    <<set _pregnancy_done to $daily.deadwood_pregnancy[_pregnancy_record.pregnancyId]>>
+    <<if !_pregnancy_done.includes(_args[1])>>
+      <<if _pregnancy_done.length is 0>>
+        <<npcincr _pregnancy_name love 1>><<stress -3>>
+      <</if>>
+      <<run _pregnancy_done.push(_args[1])>>
+      <<pass _args[2]>>
+    <</if>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-pregnancy-answer-links'>>
+  <<capture _pregnancy_name>>
+    <<loveicon 'hug'>><<lanLink ['Tell them you are here to listen (0:05)', '告诉对方，你会认真听 (0:05)'] _args[0]>>
+      <<deadwood-pregnancy-context _pregnancy_name>>
+      <<if _pregnancy_context and _pregnancy_reveal and !_pregnancy_birth>>
+        <<setKnowsAboutPregnancy _pregnancy_name 'pc' _pregnancy_record.pregnancyId>>
+        <<setTalkedAboutPregnancy _pregnancy_name 'pc' _pregnancy_record.pregnancyId>>
+        <<deadwood-pregnancy-care-action _pregnancy_name 'comfort' 5>>
+      <</if>>
+    <</lanLink>><br>
+    <<socialiseicon 'ask'>><<lanLink ['Ask what needs doing first (0:05)', '问问眼下有什么需要帮忙的 (0:05)'] _args[0]>>
+      <<deadwood-pregnancy-context _pregnancy_name>>
+      <<if _pregnancy_context and _pregnancy_reveal and !_pregnancy_birth>>
+        <<setKnowsAboutPregnancy _pregnancy_name 'pc' _pregnancy_record.pregnancyId>>
+        <<setTalkedAboutPregnancy _pregnancy_name 'pc' _pregnancy_record.pregnancyId>>
+        <<deadwood-pregnancy-care-action _pregnancy_name 'practical' 5>>
+      <</if>>
+    <</lanLink>><br>
+  <</capture>>
+  <<deadwood-pregnancy-return _pregnancy_name>>
+<</widget>>
+
+<<widget 'deadwood-pregnancy-care-links'>>
+  <<set _pregnancy_care_passage to _args[0]>>
+  <<set _pregnancy_done to $daily.deadwood_pregnancy?.[_pregnancy_record.pregnancyId] ?? []>>
+  <<if _pregnancy_done.length gt 0>>
+    <span class='blue'><i><<language>>
+      <<option 'EN'>>
+        You have already spent time together today. You can continue, but affection and stress relief will not be awarded again.
+      <<option 'CN'>>
+        你们今天已经相处过了。仍可继续互动，但好感与减压不会重复结算。
+    <</language>></i></span><br><br>
+  <</if>>
+  <<if $passage is 'Deadwood Pregnancy After'>>
+    <<set _pregnancy_options to [
+      { choice: 'hospital_rest', minutes: 10, label: ['Sit quietly while they rest (0:10)', '安静陪着，让对方休息 (0:10)'] },
+      { choice: 'hospital_plan', minutes: 10, label: ['Ask the nurse about the next arrangements (0:10)', '向护士询问接下来的安排 (0:10)'] }
+      ]>>
+  <<else>>
+    <<set _pregnancy_practical to _pregnancy_record.deliveredDate is null
+      ? ['Help with the preparations (0:10)', '帮忙整理需要准备的东西 (0:10)']
+      : ['Help organise nursery visits (0:10)', '帮忙安排育儿室的探望 (0:10)']>>
+    <<set _pregnancy_options to [
+      { choice: 'comfort', minutes: 10, label: ['Sit together and listen (0:10)', '坐下来，听对方说说 (0:10)'] },
+      { choice: 'practical', minutes: 10, label: _pregnancy_practical }
+      ].concat(_args[1] ?? [])>>
+  <</if>>
+  <<for _pregnancy_action range _pregnancy_options>>
+    <<if !_pregnancy_done.includes(_pregnancy_action.choice)>>
+      <<capture _pregnancy_name _pregnancy_action _pregnancy_care_passage>>
+        <<switch _pregnancy_action.choice>>
+          <<case 'comfort'>><<loveicon 'hug'>>
+          <<case 'practical'>><<icon `_pregnancy_record.deliveredDate is null ? 'medicine/hospital-bag.png' : 'hospital.png'`>>
+          <<case 'hospital_rest'>><<icon 'hospital-bed.png'>>
+          <<case 'hospital_plan'>><<hospitalicon>>
+          <<default>><<socialiseicon>>
+        <</switch>><<lanLink _pregnancy_action.label _pregnancy_care_passage>>
+          <<deadwood-pregnancy-care-action _pregnancy_name _pregnancy_action.choice _pregnancy_action.minutes>>
+        <</lanLink>><<if _pregnancy_done.length is 0>><<glove>><<lstress>><</if>><br>
+      <</capture>>
+    <</if>>
+  <</for>>
+  <<if $passage is 'Deadwood Pregnancy After'>>
+    <<getouticon>><<lanLink ['Let them rest and leave the hospital', '让对方休息，离开医院'] 'Hospital'>><<unset $deadwood_pregnancy>><</lanLink>>
+  <<else>>
+    <<deadwood-pregnancy-return _pregnancy_name>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-pregnancy-hospital-link'>>
+  <span class='blue'><i><<language>>
+    <<option 'EN'>>
+      Hospital staff can help with the birth. You can choose names once the children arrive.
+    <<option 'CN'>>
+      医院的医护人员可以协助分娩。孩子出生后，你可以为他们取名。
+  <</language>></i></span><br><br>
+  <<capture _pregnancy_name>>
+    <<icon 'medicine/ambulance.png'>><<lanLink ['Call an ambulance and go along (0:20)', '叫救护车，并陪同前往 (0:20)'] 'Deadwood Pregnancy Hospital'>>
+      <<deadwood-pregnancy-context _pregnancy_name>>
+      <<if _pregnancy_context and _pregnancy_birth>>
+        <<set $deadwood_pregnancy.choice to null>>
+        <<setKnowsAboutPregnancy _pregnancy_name 'pc' _pregnancy_record.pregnancyId>>
+        <<setKnowsAboutPregnancy _pregnancy_name _pregnancy_name _pregnancy_record.pregnancyId>>
+        <<setTalkedAboutPregnancy _pregnancy_name 'pc' _pregnancy_record.pregnancyId>>
+        <<pass 20>>
+      <</if>>
+    <</lanLink>><br>
+  <</capture>>
+  <<deadwood-pregnancy-return _pregnancy_name>>
+<</widget>>
+
+<<widget 'deadwood-pregnancy-property-link'>>
+  <<set _pregnancy_companion to maplebirch.get('Finance')?.realEstate.currentCompanion>>
+  <<set _pregnancy_property to maplebirch.get('Finance')?.realEstate.current>>
+  <<if _pregnancy_companion and _pregnancy_property
+    and maplebirch.get('Finance').realEstate.residentsHome(_pregnancy_property.id).some(resident => resident.id === _pregnancy_companion.id)>>
+    <<switch _pregnancy_companion.id>>
+    <<case 'Robin'>>
+      <<set _pregnancy_present to maplebirch.get('Robin')?.available>>
+      <<deadwood-pregnancy-links 'Robin' 'Deadwood Robin' _pregnancy_present>>
+    <<case 'Kylar'>>
+      <<set _pregnancy_present to C.npc.Kylar.state is 'active'>>
+      <<deadwood-pregnancy-links 'Kylar' 'Deadwood Reblooms Kylar' _pregnancy_present>>
+    <<case 'Sydney'>>
+      <<set _pregnancy_present to maplebirch.get('Sydney')?.available>>
+      <<deadwood-pregnancy-links 'Sydney' 'Deadwood Reblooms Sydney' _pregnancy_present>>
+    <<case 'Whitney'>>
+      <<set _pregnancy_present to ['active', 'rescued'].includes(C.npc.Whitney.state)>>
+      <<deadwood-pregnancy-links 'Whitney' 'Deadwood Whitney' _pregnancy_present>>
+    <</switch>>
+  <</if>>
+<</widget>>
+
+:: Deadwood Pregnancy Hospital [nobr]
+<<set _pregnancy_name to $deadwood_pregnancy?.npc>>
+<<deadwood-pregnancy-context _pregnancy_name>>
+<<set $outside to 0>><<set $location to 'hospital'>><<effects>>
+<<if !_pregnancy_context or !_pregnancy_birth>>
+  <<language>>
+    <<option 'EN'>>
+      There is no birth waiting for you to take part in. If it happened while you were away, you can ask about it when you next meet.
+    <<option 'CN'>>
+      现在没有需要你陪同的分娩。如果孩子在你离开时已经出生，下次见面时，你可以问问近况。
+  <</language>><br><br>
+  <<getouticon>><<lanLink ['Leave the hospital', '离开医院'] 'Hospital'>><<unset $deadwood_pregnancy>><</lanLink>>
+<<else>>
+  <<npc _pregnancy_name>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      The ambulance crew hands over to the maternity staff. You wait until a nurse lets you take a chair beside the bed. <<He>> reaches for your hand as the nurse explains what happens next.
+    <<option 'CN'>>
+      救护人员把人交给产科医护。你等护士安排好，才搬了把椅子坐到床边。护士讲起接下来的步骤时，<<he>>朝你伸出手。
+  <</language>><br><br>
+  <<setKnowsAboutPregnancy _pregnancy_name 'pc' _pregnancy_record.pregnancyId>>
+  <<setKnowsAboutPregnancy _pregnancy_name _pregnancy_name _pregnancy_record.pregnancyId>>
+  <<setTalkedAboutPregnancy _pregnancy_name 'pc' _pregnancy_record.pregnancyId>>
+  <<birthUi _pregnancy_name 'hospital' 'home' 'Deadwood Pregnancy After' 180>>
+<</if>>
+
+:: Deadwood Pregnancy After [nobr]
+<<set _pregnancy_name to $deadwood_pregnancy?.npc>>
+<<set _birth_record to $pregnancies[$recentBirthId]>>
+<<set $outside to 0>><<set $location to 'hospital'>><<effects>>
+<<if !$statFreeze and !$replayScene and ['Robin', 'Kylar', 'Sydney', 'Whitney'].includes(_pregnancy_name)
+  and _birth_record?.carrier is _pregnancy_name and _birth_record.pregnancyId is $deadwood_pregnancy.id
+  and _birth_record.deliveredDate isnot null>>
+  <<npc _pregnancy_name>><<person1>>
+  <<set _pregnancy_record to _birth_record>>
+  <<set _children to getChildrenOf(_birth_record.pregnancyId)>>
+  <<if _children.some(child => childIsUnhatchedEgg(child))>>
+    <<language>>
+      <<option 'EN'>>
+        The nurse checks the eggs and settles them safely. They have not hatched yet.
+      <<option 'CN'>>
+        护士检查了尚未孵化的蛋，把它们安置妥当。
+    <</language>><br><br>
+  <<elseif _children.length gt 1>>
+    <<language>>
+      <<option 'EN'>>
+        The nurse checks each child in turn. More than one cot stands beside the bed.
+      <<option 'CN'>>
+        护士依次检查每个孩子。床边摆着不止一张婴儿床。
+    <</language>><br><br>
+  <</if>>
+  <<switch _pregnancy_name>>
+  <<case 'Robin'>><<deadwood-robin-pregnancy-after>>
+  <<case 'Kylar'>><<deadwood-kylar-pregnancy-after>>
+  <<case 'Sydney'>><<deadwood-sydney-pregnancy-after>>
+  <<case 'Whitney'>><<deadwood-whitney-pregnancy-after>>
+  <</switch>>
+  <span class='blue'><i><<language>>
+    <<option 'EN'>>
+      The children will be cared for in the orphanage nursery. You can visit there; care and fees follow the orphanage's usual arrangements.
+    <<option 'CN'>>
+      孩子将由孤儿院育儿室照料，你可以前去探望；照料与费用按孤儿院的既有规则处理。
+  <</language>></i></span><br><br>
+  <<deadwood-pregnancy-care-links 'Deadwood Pregnancy After'>>
+<<else>>
+  <<language>>
+    <<option 'EN'>>
+      This birth has already been dealt with.
+    <<option 'CN'>>
+      这次分娩已经处理完了。
+  <</language>><br><br>
+  <<getouticon>><<lanLink ['Leave the hospital', '离开医院'] 'Hospital'>><<unset $deadwood_pregnancy>><</lanLink>>
+<</if>>

@@ -1059,6 +1059,7 @@
 		<<set $Finance.real_estate.daily_evening.push(_eveningKey)>>
 		<<stress -2>><<lstress>><br>
 	<</if>>
+	<<deadwood-pregnancy-property-link>>
 	<<if maplebirch.get("Finance").realEstate.canIntimate(_companion.id, _property.id)>>
 		<<loveicon 'kiss'>>
 		<<lanLink ['Go to the bedroom for intimacy with your lover', '与恋人回卧室亲密'] 'Deadwood Reblooms Property Intimacy'>>

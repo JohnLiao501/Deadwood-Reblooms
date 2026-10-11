@@ -255,6 +255,7 @@
     <</lanLink>><<glove>><br>
   <</if>>
 <</if>>
+<<deadwood-reblooms-sydney-pregnancy-link>>
 <<if _sydneyWorking>>
   <<wardrobeicon>><<lanLink ['Help Sydney sort the wardrobe (0:10)', '帮悉尼整理衣柜 (0:10)'] 'Deadwood Reblooms Sydney Dorm Wardrobe'>><<pass 10>><</lanLink>><br>
 <</if>>

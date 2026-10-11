@@ -103,7 +103,9 @@
 :: Deadwood Whitney Room []
 <<set $outside to 0>><<set $location to 'flats'>><<effects>>
 <<if $whitneyromance is 1 and ['active', 'rescued'].includes(C.npc.Whitney.state)>>
-  <<npc Whitney>><<person1>><<whitneyoptions>>
+  <<npc Whitney>><<person1>>
+  <<deadwood-whitney-pregnancy-link>>
+  <<whitneyoptions>>
 <<else>>
   <<lanSwitch 'Whitney has gone out.' '惠特尼已经出门了。'>><br><br>
   <<getouticon>><<lanLink ['Leave the flat', '离开公寓'] 'Barb Street'>><</lanLink>>

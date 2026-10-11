@@ -26,6 +26,11 @@ class Kylar extends Module {
     return this.atManor && state.stay_invited && state.bath_day === Time.days && state.bath_encounter && Time.hour >= 18 && Time.hour < 23;
   }
 
+  public override preInit(): void {
+    super.preInit();
+    this.core.npc.Pregnancy.add('Kylar', { canBePregnant: true });
+  }
+
   public openWardrobe(): void {
     const wardrobes = V.wardrobes as Record<string, Record<string, unknown>>;
     wardrobes.kylar_manor ??= {

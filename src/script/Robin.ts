@@ -72,7 +72,8 @@ export default function (maplebirch: typeof window.maplebirch): void {
     { widget: 'deadwood-robin-asylum-links', passage: 'Asylum' },
     { widget: 'deadwood-robin-tentacle-plains-link', passage: 'Tentacle Plains' },
     { widget: 'deadwood-robin-tutor-clue', passage: 'Orphanage' },
-    { widget: 'deadwood-robin-meteor-hall-link', passage: 'Orphanage' }
+    { widget: 'deadwood-robin-meteor-hall-link', passage: 'Orphanage' },
+    { widget: 'deadwood-robin-pregnancy-link', passage: 'Robin Options' }
   );
 
   maplebirch.tool.inject({

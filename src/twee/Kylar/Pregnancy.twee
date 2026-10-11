@@ -1,0 +1,220 @@
+:: Deadwood Reblooms Kylar Pregnancy Widgets [widget nobr]
+<<widget 'deadwood-reblooms-kylar-pregnancy-link'>>
+  <<set _pregnancy_present to maplebirch.get('Kylar')?.atManor>>
+  <<deadwood-pregnancy-links 'Kylar' 'Deadwood Reblooms Kylar' _pregnancy_present>>
+<</widget>>
+
+<<widget 'deadwood-kylar-pregnancy-after'>>
+  <<if $deadwood_pregnancy.choice is 'hospital_rest'>>
+    <<language>>
+      <<option 'EN'>>
+        Kylar keeps checking that your chair has not moved. "You can stay right there." <<His>> eyes close, open, and close again. Eventually <<he>> stops checking, although <<his>> head still turns towards you when someone enters the room. You stay quietly while <<he>> <span class='teal'>finally sleeps</span>.
+      <<option 'CN'>>
+        凯拉尔不停确认你的椅子有没有挪动。“就坐那里也行。”<<His>>眼睛闭上，又睁开，再慢慢闭上。后来，<<he>>终于不再反复看了，只是有人进屋时，头还会朝你这边偏。你安静地坐着，等<<he>><span class='teal'>终于睡着</span>。
+    <</language>><br><br>
+  <<elseif $deadwood_pregnancy.choice is 'hospital_plan'>>
+    <<language>>
+      <<option 'EN'>>
+        Kylar listens while the nurse explains the next arrangements, then asks how many people will be involved. <<He>> wants names, times, and reasons. You help <<him>> ask one question at a time. "I wasn't being difficult," <<he>> says when she leaves. "I just wanted to know."
+      <<option 'CN'>>
+        护士讲起接下来的安排，凯拉尔听完，又问会有多少人经手。谁、什么时候、为什么，<<he>>都想知道。你帮<<him>>把问题一个个问清楚。等护士走了，<<he>>才说：“不是故意找麻烦。就是想弄明白。”
+    <</language>><br><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        Kylar watches the nurse until she finishes checking the bed, then beckons you closer. "She said I should rest. You heard her." <<He>> pats the chair beside <<him>>. "You can rest there." A few moments later, <<he>> starts murmuring the names you chose, trying each one as though it still might not be real.
+      <<option 'CN'>>
+        凯拉尔一直盯着护士，直到她检查完床铺，才招手让你靠近。“她说我应该休息。你也听见了。”<<He>>拍了拍旁边的椅子。“你可以坐那儿休息。”没过多久，<<he>>又小声念起刚取好的名字，一个个试着叫，仿佛还不敢相信这是真的。
+    <</language>><br><br>
+    <<if C.npc.Kylar.jealousy gte 50>>
+      <<language>>
+        <<option 'EN'>>
+          "If anyone asks where you are, tell them you're here." <<He>> studies your face. "With me." Even now, <<he>> seems more interested in that answer than in closing <<his>> eyes.
+        <<option 'CN'>>
+          “有人问你在哪儿，就说在这里。”<<He>>仔细看着你的脸。“陪着我。”到了这时候，<<he>>似乎还是更想听见你的回答，而不是闭眼休息。
+      <</language>><br><br>
+    <</if>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-kylar-pregnancy-topic'>>
+  <<if $deadwood_pregnancy.choice is 'names'>>
+    <<if _pregnancy_record.deliveredDate isnot null>>
+      <<language>>
+        <<option 'EN'>>
+          Kylar has written the chosen names across a fresh page, surrounded by stars. "I was trying to get the letters right." One attempt has been rubbed out so thoroughly the paper is thin. <<He>> covers it when you notice. "The next one is better." <<He>> lets you see that one, waiting for your approval.
+        <<option 'CN'>>
+          凯拉尔把取好的名字写在新的一页上，周围画满星星。“想把字写好看些。”有一处擦得纸都快透了。你看过去，<<he>>立刻把它遮住。“下一张好些。”<<He>>把那张递过来，等着你点头。
+      <</language>><br><br>
+    <<else>>
+      <<language>>
+        <<option 'EN'>>
+          You ask how the names would sound when someone called them at school. Kylar eagerly starts reciting them, then falters halfway through the longest. "It has a nickname." You suggest writing that down as well. <<He>> does, although <<he>> leaves plenty of room for the full version. "You don't hate it, do you?"
+        <<option 'CN'>>
+          你问，那些名字在学校里叫起来会是什么样。凯拉尔兴冲冲地念了一遍，念到最长的那个，自己也卡了壳。“有简称的。”你提议把简称也写下来，<<he>>照做了，却仍给全名留了好大一块地方。“你没那么讨厌它吧？”
+      <</language>><br><br>
+    <</if>>
+  <<elseif $deadwood_pregnancy.choice is 'drawing'>>
+    <<language>>
+      <<option 'EN'>>
+        You offer to sit for a drawing. Kylar makes you move twice, then puts you back almost where you started. "The light was wrong." <<He>> spends more time watching you than looking at the page. When you ask to see the result, <<he>> holds it close to <<his>> chest. "Just the outline. I'll show you when it's good enough." <<His>> pencil starts moving again as soon as you settle back.
+      <<option 'CN'>>
+        你提议坐着让凯拉尔画一张。<<He>>让你换了两次位置，最后又挪回几乎原来的地方。“光线不对。”比起低头看纸，<<he>>更常盯着你看。你问能不能看看画，<<he>>便把它抱到胸前。“才画了轮廓。画好了再给你看。”你重新坐稳，<<his>>铅笔就又动了起来。
+    <</language>><br><br>
+  <</if>>
+<</widget>>
+
+:: Deadwood Reblooms Kylar Pregnancy [nobr]
+<<deadwood-pregnancy-context 'Kylar'>>
+<<if !_pregnancy_context or (!_pregnancy_reveal and !_pregnancy_birth)>>
+  <<deadwood-pregnancy-unavailable 'Kylar'>>
+<<elseif _pregnancy_birth>>
+  <<include 'Deadwood Reblooms Kylar Birth'>>
+<<else>>
+  <<set $outside to 0>><<set $location to $deadwood_pregnancy.location>><<effects>><<npc 'Kylar'>><<person1>>
+  <<setKnowsAboutPregnancy 'Kylar' 'pc' _pregnancy_record.pregnancyId>>
+  <<if !_pregnancy_aware>>
+    <<language>>
+      <<option 'EN'>>
+        You ask Kylar whether <<he>> has realised <<he>> is pregnant. <<He>> stares at you, then hurriedly counts something on <<his>> fingers. "Really? You think... really?" A smile breaks through <<his>> confusion. <<He>> starts reaching for a notebook before remembering to look back at you. "Stay. I need to write things down."
+      <<option 'CN'>>
+        你问凯拉尔，有没有发现自己怀孕了。<<He>>盯着你，又急急忙忙地掰起手指数日子。“真的？你觉得……真的？”困惑中突然露出一点笑意。<<He>>伸手去拿笔记本，才又想起看回你。“先别走。得记点东西。”
+    <</language>><br><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        Kylar snaps a notebook shut when you enter, then immediately opens it again. "I was going to tell you. I was!" <<He>> pushes a page towards you. Beneath a row of crossed-out dates is <span class="pink">pregnant</span>, underlined three times.
+      <<option 'CN'>>
+        你进来时，凯拉尔啪地合上笔记本，又立刻翻开。“我正要告诉你，真的！”<<He>>把一页纸推向你。一排划掉的日期下面，写着<span class="pink">怀孕了</span>，底下连划了三道线。
+    <</language>><br><br>
+  <</if>>
+  <<setKnowsAboutPregnancy 'Kylar' 'Kylar' _pregnancy_record.pregnancyId>>
+  <<if _pregnancy_aware and $pregnancies.filter(record => record.carrier === _pregnancy_name && record.deliveredDate !== null).length is 0>>
+    <<language>>
+      <<option 'EN'>>
+        "It's really happening." <<He>> says it softly, then again with a grin <<he>> cannot quite suppress. "I had a whole speech. A good one!" <<He>> taps the page, missing it twice. "Now I can't remember the beginning."
+      <<option 'CN'>>
+        “真的有了。”<<He>>先小声说了一遍，又忍着笑说了一遍。“我都准备好一大段话了。写得很好的！”<<He>>伸手点那页纸，点偏了两次。“现在连开头都想不起来。”
+    <</language>><br><br>
+  <<elseif $pregnancies.some(record => record.carrier === _pregnancy_name && record.deliveredDate !== null)>>
+    <<language>>
+      <<option 'EN'>>
+        "I kept the old names. The ones we didn't use." Kylar brings out another notebook before you have asked to see it. <<He>> has added little drawings in the margin, with arrows showing which ones are supposed to resemble you.
+      <<option 'CN'>>
+        “以前的名字我都留着。没用上的那些。”你还没开口，凯拉尔已经拿出另一本笔记。页边又添了些小画，还用箭头标出哪几个画的是你。
+    <</language>><br><br>
+  <</if>>
+  <<if C.npc.Kylar.jealousy gte 50>>
+    <<language>>
+      <<option 'EN'>>
+        "You'll have to come more often now." The words come out quickly, almost triumphantly. Then Kylar looks towards the door. "Unless someone else is keeping you busy? Who?" <<He>> presses the notebook to <<his>> chest. The smile has become a question <<he>> wants answered immediately.
+      <<option 'CN'>>
+        “这下你得常来了。”这句话说得很快，甚至有些得意。接着，凯拉尔又看向门口。“除非还有别人占着你的时间？谁？”<<He>>把笔记本抱在胸前。刚才的笑容，已经变成了一个非要马上得到答案的问题。
+    <</language>><br><br>
+  <<elseif !_pregnancy_aware>>
+    <<language>>
+      <<option 'EN'>>
+        Kylar opens a fresh page and writes a name you recognise from <<his>> favourite show. <<He>> looks at you, adds another, then starts crossing the second one out. "Unless you like that one better?" <<He>> leaves the pencil hovering over the page, waiting for you to choose.
+      <<option 'CN'>>
+        凯拉尔翻开新的一页，写下一个出自<<he>>爱看的动画的名字。<<He>>看你一眼，又添了一个，接着便想把第二个划掉。“还是，你更喜欢这个？”<<His>>铅笔悬在纸上，等着你选。
+    <</language>><br><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        Kylar turns to a page of names. You recognise several from <<his>> favourite shows; one has so many syllables it needs a second line. "You can cross some out. Not all of them." <<He>> guards that particular name with a finger. "That one sounds better when you say it."
+      <<option 'CN'>>
+        凯拉尔翻到写着名字的一页。有几个出自<<he>>爱看的动画，其中一个长得还得另起一行。“你可以划掉几个。不能全划掉。”<<He>>用手指护住那个格外长的名字。“这个念出来很好听的。”
+    <</language>><br><br>
+  <</if>>
+  <<deadwood-pregnancy-parentage>>
+  <<deadwood-pregnancy-answer-links 'Deadwood Reblooms Kylar Pregnancy Care'>>
+<</if>>
+
+:: Deadwood Reblooms Kylar Pregnancy Care [nobr]
+<<deadwood-pregnancy-context 'Kylar'>>
+<<if !_pregnancy_context or !_pregnancy_known>>
+  <<deadwood-pregnancy-unavailable 'Kylar'>>
+<<elseif _pregnancy_birth>>
+  <<include 'Deadwood Reblooms Kylar Birth'>>
+<<else>>
+  <<set $outside to 0>><<set $location to $deadwood_pregnancy.location>><<effects>><<npc 'Kylar'>><<person1>>
+  <<set _pregnancy_topics to [{ choice: 'names', minutes: 10, label: _pregnancy_record.deliveredDate is null
+    ? ["Talk through Kylar's favourite names (0:10)", '和凯拉尔聊聊喜欢的名字 (0:10)']
+    : ['Look at the names Kylar has written out (0:10)', '看看凯拉尔写下的名字 (0:10)'] }]>>
+  <<run statusCheck('Kylar')>>
+  <<if _kylarStatus.includes('Love')>>
+    <<run _pregnancy_topics.push({ choice: 'drawing', minutes: 15, label: ['Offer to sit for a drawing (0:15)', '提议坐着，让凯拉尔画一张 (0:15)'] })>>
+  <</if>>
+  <<if ['names', 'drawing'].includes($deadwood_pregnancy.choice)>>
+    <<deadwood-kylar-pregnancy-topic>>
+  <<elseif _pregnancy_record.deliveredDate isnot null>>
+    <<if $deadwood_pregnancy.choice is 'practical'>>
+      <<language>>
+        <<option 'EN'>>
+          Kylar tries to put your name beside every nursery visit. You point out that you have other things to do, and help <<him>> pick a time to ask you about instead. <<He>> rubs out one of the extra entries very slowly. "You'll tell me if you're coming, though? Before I get there?"
+        <<option 'CN'>>
+          凯拉尔想在每次育儿室探望旁都写上你的名字。你提醒<<him>>，自己还有别的事要做，帮<<him>>选了一个可以先问问你的时间。<<He>>慢吞吞地擦掉多填的一行。“不过，来不来你得告诉我。要在我过去之前告诉我。”
+      <</language>><br><br>
+    <<else>>
+      <<language>>
+        <<option 'EN'>>
+          Kylar shows you a drawing meant for the nursery. The likeness of you is much more detailed than the little figures beside it. "They should know what you look like," <<he>> explains. "In case you're late." <<He>> smooths a corner that has not been bent, waiting for you to admire it.
+        <<option 'CN'>>
+          凯拉尔拿给你看一幅准备放在育儿室的画。画里的你格外细致，旁边几个小人就简单多了。“总得让他们认得你。”<<he>>解释道。“万一你来晚了呢。”<<He>>把根本没折过的纸角抚平，等着你夸它。
+      <</language>><br><br>
+    <</if>>
+  <<elseif $deadwood_pregnancy.choice is 'comfort'>>
+    <<if C.npc.Kylar.jealousy gte 50>>
+      <<language>>
+        <<option 'EN'>>
+          Kylar wants to know who you saw before coming here. You bring the conversation back to <<him>>, without promising to spend every day at <<his>> side. <<He>> keeps watching your face, but eventually starts telling you which parts of the pregnancy frighten <<him>>. The notebook stays closed for once.
+        <<option 'CN'>>
+          凯拉尔想知道你来之前见了谁。你没有答应天天守在<<him>>身边，把话题带回了<<his>>身上。<<He>>还盯着你的脸，却终于说起怀孕这件事里有哪些让<<him>>害怕的地方。难得有一次，笔记本没有翻开。
+      <</language>><br><br>
+    <<else>>
+      <<language>>
+        <<option 'EN'>>
+          Kylar begins by telling you <<he>> is not worried, then asks three questions without taking a breath. You listen until <<he>> runs out. "I keep thinking about it," <<he>> admits. "Even when I'm trying to watch something." <<He>> starts describing a tiny costume from <<his>> favourite show, becoming more animated with every detail.
+        <<option 'CN'>>
+          凯拉尔先说自己一点也不担心，接着一口气问了三个问题。你听着，等<<he>>全问完。“老是想着这件事。”<<he>>承认道。“看动画也忍不住想。”<<He>>又说起一套照着喜欢的角色做的小衣服，越讲越起劲。
+      <</language>><br><br>
+    <</if>>
+  <<elseif $deadwood_pregnancy.choice is 'practical'>>
+    <<language>>
+      <<option 'EN'>>
+        Kylar has packed two notebooks and a plush toy before remembering any spare clothes. "It's for company. If you're not there." You find room for the clothes without throwing the toy out. <<He>> checks what you have moved, then adds the hospital number to the front of the notebook instead of between the lists of names.
+      <<option 'CN'>>
+        凯拉尔先装了两本笔记和一个毛绒玩偶，才想起还没放换洗衣服。“拿来陪我的。你不在的时候。”你没把玩偶扔出去，腾了些地方放衣服。<<He>>检查了一遍你挪过的东西，又把医院电话抄到笔记最前面，没有继续夹在一页页名字中间。
+    <</language>><br><br>
+  <<elseif npcPregnancyProgress('Kylar') gte 0.8>>
+    <<language>>
+      <<option 'EN'>>
+        A packed bag stands by the door. Kylar checks its fastening, then checks whether you are still there. "It has everything. Except you. You are not something I can pack."
+      <<option 'CN'>>
+        门边放着一个收拾好的包。凯拉尔检查了搭扣，又看你还在不在。“东西全齐了。就差你。你又不能塞进包里。”
+    <</language>><br><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        Kylar turns a sketchbook face down as soon as you look at it. "Not finished." There is still a little drawing of you visible at the edge. <<He>> shifts over before you ask. "You can stay while I finish it. It helps if you're here."
+      <<option 'CN'>>
+        你一看过去，凯拉尔就把画本扣了起来。“还没画完。”边角仍露出一个画着你的小人。你还没问，<<he>>已经往旁边挪了挪。“你可以陪我画完。有你在，会好画些。”
+    <</language>><br><br>
+  <</if>>
+  <<deadwood-pregnancy-care-links 'Deadwood Reblooms Kylar Pregnancy Care' _pregnancy_topics>>
+<</if>>
+
+:: Deadwood Reblooms Kylar Birth [nobr]
+<<deadwood-pregnancy-context 'Kylar'>>
+<<if !_pregnancy_context or !_pregnancy_birth>>
+  <<deadwood-pregnancy-unavailable 'Kylar'>>
+<<else>>
+  <<set $outside to 0>><<set $location to $deadwood_pregnancy.location>><<effects>><<npc 'Kylar'>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      Kylar reaches for the packed bag, fumbles the handle, and looks at you. "Not without you." <<He>> tries to pick it up again, then has to sit down. You bring the phone within reach. "Tell them you are coming too," <<he>> says.
+    <<option 'CN'>>
+      凯拉尔去拿收拾好的包，没抓稳提手，又转头看向你。“你也得来。”<<He>>再试着拎包，却不得不先坐下。你把手机拿到<<his>>手边。“告诉他们，你也去。”<<he>>说。
+  <</language>><br><br>
+  <<deadwood-pregnancy-hospital-link>>
+<</if>>

@@ -1,0 +1,237 @@
+:: Deadwood Whitney Pregnancy Widgets [widget nobr]
+<<widget 'deadwood-whitney-pregnancy-link'>>
+  <<set _pregnancy_present to ($whitneyromance is 1 and ['active', 'rescued'].includes(C.npc.Whitney.state))>>
+  <<deadwood-pregnancy-links 'Whitney' 'Deadwood Whitney' _pregnancy_present>>
+<</widget>>
+
+<<widget 'deadwood-whitney-pregnancy-after'>>
+  <<if $deadwood_pregnancy.choice is 'hospital_rest'>>
+    <<language>>
+      <<option 'EN'>>
+        Whitney complains that you are watching <<him>> sleep. You turn your chair slightly, and <<he>> complains about that too. "Didn't say you had to stare at the wall." The next remark never comes. You stay quietly while <<he>> sleeps, waking only long enough to check that you have not gone.
+      <<option 'CN'>>
+        惠特尼抱怨你盯着<<him>>睡觉。你稍稍转了转椅子，<<he>>又有话说。“也没让你面壁啊。”下一句却迟迟没来。你安静地陪着<<him>>睡，<<he>>偶尔醒一下，只为确认你还没走。
+    <</language>><br><br>
+  <<elseif $deadwood_pregnancy.choice is 'hospital_plan'>>
+    <<language>>
+      <<option 'EN'>>
+        Whitney lets you ask the nurse about the next arrangements, then interrupts with a question of <<his>> own. <<He>> pays close attention to the answer. "What? You hadn't asked that bit." When she leaves, <<he>> takes the written instructions and folds them into <<his>> pocket. "I'll keep these. You'd only lose them."
+      <<option 'CN'>>
+        你向护士询问接下来的安排，惠特尼听着，又插进一个自己的问题。答复时，<<he>>听得格外认真。“干什么？你又没问到这儿。”等护士走了，<<he>>把写下来的说明折好，塞进口袋。“我拿着。给你还得弄丢。”
+    <</language>><br><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        Whitney has a complaint about the pillow, the lights, and the nurse who told <<him>> to rest. <<He>> makes none of them loudly. When you move your chair, <<he>> catches your sleeve. "You got somewhere better to be?" <<He>> lets go to pull the blanket higher, then looks at the empty chair again.
+      <<option 'CN'>>
+        惠特尼嫌枕头不舒服、灯太亮，还抱怨护士让<<him>>休息。每句都说得很轻。你挪动椅子时，<<he>>拉了一下你的袖子。“有更好的地方要去？”<<He>>松开手，把毛毯拉高了些，又看向那张空椅子。
+    <</language>><br><br>
+    <<if C.npc.Whitney.dom gte 20>>
+      <<language>>
+        <<option 'EN'>>
+          "And don't go telling everyone I needed looking after." <<He>> tips <<his>> chin towards you. "You were just keeping me company. Got it?" <<His>> eyes close before <<he>> can check your answer.
+        <<option 'CN'>>
+          “也别出去跟人说，我非得有人照顾。”<<He>>朝你抬抬下巴。“就是过来陪陪我。懂了？”还没来得及确认你的回答，<<his>>眼睛就已经闭上了。
+      <</language>><br><br>
+    <<else>>
+      <<language>>
+        <<option 'EN'>>
+          "Wasn't the worst company," <<he>> mutters. You look over, but <<he>> is already staring at the ceiling. "Don't make me say it again."
+        <<option 'CN'>>
+          “陪得还行。”<<he>>嘟囔着。你看过去，<<he>>已经转而盯着天花板。“别让我再说一遍。”
+      <</language>><br><br>
+    <</if>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-whitney-pregnancy-topic'>>
+  <<if $deadwood_pregnancy.choice is 'privacy'>>
+    <<language>>
+      <<option 'EN'>>
+        You offer to keep the news to yourself. Whitney looks at you for a moment before answering. "Good. Don't need a crowd giving me advice." You ask what <<he>> wants you to say if someone asks. <<He>> thinks about it rather than answering straight away.
+      <<option 'CN'>>
+        你说，不会出去把这件事到处讲。惠特尼看了你一会儿，才接话。“行。用不着一群人跑来指点。”你问，要是真有人来问，<<he>>想让你怎么说。<<He>>想了想，没有马上回答。
+    <</language>><br><br>
+    <<if C.npc.Whitney.dom gte 20>>
+      <<language>>
+        <<option 'EN'>>
+          "Tell them to mind their own business." <<He>> points at you. "And don't make it sound like I'm hiding." <<He>> leans back, apparently satisfied with the distinction.
+        <<option 'CN'>>
+          “让他们少管闲事。”<<He>>指了指你。“也别说得像我躲着人。”<<He>>靠回去，似乎终于把两者的区别讲明白了。
+      <</language>><br><br>
+    <<else>>
+      <<language>>
+        <<option 'EN'>>
+          "I'll tell them when I feel like it." <<He>> looks away. "Just don't let them hear it from everyone except me." When <<he>> looks back, <<he>> has stopped waiting for you to turn it into a joke.
+        <<option 'CN'>>
+          “想说的时候，我自己会说。”<<He>>移开目光。“别弄到最后，我还没开口，他们已经从别人那儿听遍了。”再看回来时，<<he>>已经不再等着你拿这事开玩笑。
+      <</language>><br><br>
+    <</if>>
+    <<if _pregnancy_record.deliveredDate is null and npcBellyVisible('Whitney')>>
+      <span class='blue'><<language>>
+        <<option 'EN'>>
+          You can keep your word. You cannot stop people noticing for themselves.
+        <<option 'CN'>>
+          你可以守口如瓶，却挡不住别人自己看出来。
+      <</language>></span><br><br>
+    <</if>>
+  <<elseif $deadwood_pregnancy.choice is 'quiet'>>
+    <<language>>
+      <<option 'EN'>>
+        You ask if Whitney would rather have some company without any more questions. "Finally, a sensible question." <<He>> finds a video on <<his>> phone and holds it where you can both see. Before long, <<he>> is arguing with someone on the screen as if they could hear <<him>>. You point out the best bit just before <<he>> misses it. "I saw that." <<He>> replays it anyway, <span class='teal'>leaning closer so neither of you has to strain to hear</span>.
+      <<option 'CN'>>
+        你问惠特尼，要不要就陪着坐会儿，先不追着问了。“总算问了句像样的。”<<He>>在手机上找了段视频，拿到你们都看得见的位置。没多久，<<he>>就开始跟屏幕里的人抬杠，仿佛对方真能听见。最好笑的一段快被<<he>>错过，你及时指出来。“看见了。”<<He>>却又重放了一遍，<span class='teal'>靠近些，让你们都不用费力去听</span>。
+    <</language>><br><br>
+  <</if>>
+<</widget>>
+
+:: Deadwood Whitney Pregnancy [nobr]
+<<deadwood-pregnancy-context 'Whitney'>>
+<<if !_pregnancy_context or (!_pregnancy_reveal and !_pregnancy_birth)>>
+  <<deadwood-pregnancy-unavailable 'Whitney'>>
+<<elseif _pregnancy_birth>>
+  <<include 'Deadwood Whitney Birth'>>
+<<else>>
+  <<set $outside to 0>><<set $location to $deadwood_pregnancy.location>><<effects>><<npc 'Whitney'>><<person1>>
+  <<setKnowsAboutPregnancy 'Whitney' 'pc' _pregnancy_record.pregnancyId>>
+  <<if !_pregnancy_aware>>
+    <<language>>
+      <<option 'EN'>>
+        You ask Whitney whether <<he>> has noticed the pregnancy. <<He>> stares at you, then takes <<his>> phone out and starts checking dates. "Hang on." <<His>> thumb stops moving. <<He>> puts the phone down very deliberately. "Keep your voice down. I can hear you fine."
+      <<option 'CN'>>
+        你问惠特尼，有没有发现怀孕的事。<<He>>盯着你，又拿出手机开始核对日期。“等下。”<<His>>拇指停住了。<<He>>刻意地慢慢放下手机。“小点声。又不是听不见。”
+    <</language>><br><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        Whitney turns <<his>> phone over, though nobody has called. "You got something to say?" <<He>> catches your look and holds it, then shoves the phone into <<his>> pocket. "Yeah. <span class="pink">Pregnant</span>. Keep your voice down." <<He>> watches for the reaction <<he>> pretended not to want.
+      <<option 'CN'>>
+        没人打电话，惠特尼却把手机翻来覆去。“你有话要说？”<<He>>撞上你的目光，盯了一会儿，又把手机塞进口袋。“对，<span class="pink">怀孕了</span>。小点声。”嘴上装作不在意，<<he>>却一直等着看你的反应。
+    <</language>><br><br>
+  <</if>>
+  <<setKnowsAboutPregnancy 'Whitney' 'Whitney' _pregnancy_record.pregnancyId>>
+  <<if _pregnancy_aware and $pregnancies.filter(record => record.carrier === _pregnancy_name && record.deliveredDate !== null).length is 0>>
+    <<language>>
+      <<option 'EN'>>
+        "Don't give me that look. I know what it means." <<He>> starts to fold <<his>> arms, then changes <<his>> mind and hooks a thumb into <<his>> pocket instead. "I'm telling you. You could at least say something."
+      <<option 'CN'>>
+        “别用那种眼神看我。又不是不知道怎么回事。”<<He>>想抱起胳膊，又改成把拇指钩在口袋边。“都告诉你了。你好歹说句话啊。”
+    <</language>><br><br>
+  <<elseif $pregnancies.some(record => record.carrier === _pregnancy_name && record.deliveredDate !== null)>>
+    <<language>>
+      <<option 'EN'>>
+        "Before you start: I remember last time." <<He>> points a finger at you. "Doesn't mean you get to fuss twice as much." A corner of <<his>> mouth lifts. "Some of it was all right. Don't get carried away."
+      <<option 'CN'>>
+        “先说好：上次的事我记得。”<<He>>伸手指着你。“也不代表你这次就能加倍啰嗦。”<<His>>一边嘴角抬了抬。“有些还行。别太得意。”
+    <</language>><br><br>
+  <</if>>
+  <<if C.npc.Whitney.dom gte 20>>
+    <<language>>
+      <<option 'EN'>>
+        "And this stays in here until I say otherwise." <<He>> jerks <<his>> chin at the door. "If someone wants gossip, they can get it somewhere else." <<His>> eyes stay on you, waiting for an answer.
+      <<option 'CN'>>
+        “我没开口之前，这事就留在这屋里。”<<He>>朝门口抬了抬下巴。“谁想听闲话，让他们去别处找。”<<His>>目光一直停在你身上，等你回答。
+    <</language>><br><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        Whitney glances at the place beside <<him>>. "You can sit down. Unless you were planning on standing there all night." <<He>> moves out of your way before you answer. "And don't start looking sorry for me."
+      <<option 'CN'>>
+        惠特尼看了一眼身旁的位置。“坐啊。还是打算站一晚上？”你还没回答，<<he>>已经往旁边挪了挪。“也别摆出那种可怜我的脸。”
+    <</language>><br><br>
+  <</if>>
+  <<deadwood-pregnancy-parentage>>
+  <<deadwood-pregnancy-answer-links 'Deadwood Whitney Pregnancy Care'>>
+<</if>>
+
+:: Deadwood Whitney Pregnancy Care [nobr]
+<<deadwood-pregnancy-context 'Whitney'>>
+<<if !_pregnancy_context or !_pregnancy_known>>
+  <<deadwood-pregnancy-unavailable 'Whitney'>>
+<<elseif _pregnancy_birth>>
+  <<include 'Deadwood Whitney Birth'>>
+<<else>>
+  <<set $outside to 0>><<set $location to $deadwood_pregnancy.location>><<effects>><<npc 'Whitney'>><<person1>>
+  <<set _pregnancy_topics to [
+    { choice: 'privacy', minutes: 10, label: ['Offer to keep the news private (0:10)', '答应不把这件事到处讲 (0:10)'] },
+    { choice: 'quiet', minutes: 15, label: ['Keep Whitney company without more questions (0:15)', '陪惠特尼歇会儿，先不问了 (0:15)'] }
+    ]>>
+  <<if ['privacy', 'quiet'].includes($deadwood_pregnancy.choice)>>
+    <<deadwood-whitney-pregnancy-topic>>
+  <<elseif _pregnancy_record.deliveredDate isnot null>>
+    <<if $deadwood_pregnancy.choice is 'practical'>>
+      <<language>>
+        <<option 'EN'>>
+          Whitney rattles off the nursery's visiting times while you write them down. "I know when it opens. You're the one who wanted a note." <<He>> leans over to correct a number, then taps a time <<he>> would like to go. "That one. You can come, if you're not busy being a nuisance somewhere else."
+        <<option 'CN'>>
+          你记着，惠特尼把育儿室的探望时间一口气报完。“我知道什么时候开门。要写下来的是你。”<<He>>凑过来改了个数字，又点点一个想去的时间。“就这个。要是没忙着在别处招人烦，你也能来。”
+      <</language>><br><br>
+    <<else>>
+      <<language>>
+        <<option 'EN'>>
+          Whitney tells you <<he>> was only passing the nursery. Then <<he>> complains about a noisy door, a squeaking cot, and someone who took too long finding a blanket. It sounds like a longer visit than <<he>> meant to admit. "What?" <<He>> catches your expression. "You going to make a thing of that too?"
+        <<option 'CN'>>
+          惠特尼说自己只是路过育儿室。接着，<<he>>抱怨门太响、婴儿床吱呀作响，还有人找条毛毯就找了半天。听起来，待得可比<<he>>肯承认的久。“干什么？”<<He>>捕捉到你的表情。“这也要拿来说？”
+      <</language>><br><br>
+    <</if>>
+  <<elseif $deadwood_pregnancy.choice is 'comfort'>>
+    <<language>>
+      <<option 'EN'>>
+        You sit beside Whitney without turning it into an interrogation. <<He>> makes a joke about your solemn face, then falls quiet when you do not take the bait. After a while, <<he>> nudges your knee with <<his>> own. "You don't have to look that serious. I'm still here." The next complaint is about something ordinary, and comes more easily.
+      <<option 'CN'>>
+        你在惠特尼身旁坐下，没有把谈话变成盘问。<<He>>先拿你的严肃表情开玩笑，见你不接招，又安静下来。过了一会儿，<<he>>用膝盖碰了碰你的。“不用摆那张脸。我还好好坐这儿呢。”下一句抱怨终于回到了平常的琐事上，说得也顺了些。
+    <</language>><br><br>
+  <<elseif $deadwood_pregnancy.choice is 'practical'>>
+    <<language>>
+      <<option 'EN'>>
+        Whitney objects to the word <i>plan</i>, then has an opinion on every item in it. <<He>> insists <<he>> can carry the bag, but gives in when you ask what would happen if <<he>> needed both hands free. "Fine. Carry it. Don't lose it." <<He>> checks that the hospital number is saved in <<his>> phone before putting it away.
+      <<option 'CN'>>
+        惠特尼一听<i>计划</i>就不乐意，可每一项，<<he>>都有话要说。<<He>>坚持包能自己拎，你问要是两只手都得空着怎么办，<<he>>才松口。“行。你拎。别弄丢了。”<<He>>又确认了一遍手机里存着医院电话，才把它收起来。
+    <</language>><br><br>
+  <<elseif npcPregnancyProgress('Whitney') gte 0.8>>
+    <<language>>
+      <<option 'EN'>>
+        Whitney scowls at a bag left within reach. "It's there because it's convenient. Not because I'm nervous." <<He>> makes room for you, then asks whether your phone is charged. "In case I need it. Don't start smiling."
+      <<option 'CN'>>
+        惠特尼瞪着手边的包。“放这儿是方便。不是紧张。”<<He>>给你腾出位置，又问你手机还有没有电。“万一得用呢。别笑。”
+    <</language>><br><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        Whitney is struggling with the wrapper on a piece of gum. An unopened packet of cigarettes lies beside <<him>>. "Don't start. I've heard enough about it." <<He>> finally tears the wrapper and flicks it away. "You visiting or inspecting?" There is room beside <<him>>, although <<he>> has not offered it yet.
+      <<option 'CN'>>
+        惠特尼正跟一片口香糖的包装较劲，旁边放着一包没拆的烟。“别说了。听得够多了。”<<He>>终于撕开包装，把它弹到一旁。“来陪人，还是来检查？”<<His>>身旁有空位，只是还没开口让你坐。
+    <</language>><br><br>
+  <</if>>
+  <<deadwood-pregnancy-care-links 'Deadwood Whitney Pregnancy Care' _pregnancy_topics>>
+<</if>>
+
+:: Deadwood Whitney Birth [nobr]
+<<deadwood-pregnancy-context 'Whitney'>>
+<<if !_pregnancy_context or !_pregnancy_birth>>
+  <<deadwood-pregnancy-unavailable 'Whitney'>>
+<<else>>
+  <<set $outside to 0>><<set $location to $deadwood_pregnancy.location>><<effects>><<npc 'Whitney'>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      Whitney stops talking and braces a hand against the seat. "Phone." <<He>> nods towards it, then adds, "Hospital. Now." When you bring it over, <<he>> looks past your shoulder at the door. <<His>> usual impatience returns for a moment. "Bag, too. Don't stand there." Then <<he>> looks back at you.
+    <<option 'CN'>>
+      惠特尼突然不说话了，伸手撑住座位。“手机。”<<He>>朝那边点头，接着说：“医院。现在。”你把手机拿过来时，<<he>>越过你的肩膀看向门口，又露出惯常的不耐烦。“还有包。别杵着。”接着，<<he>>又看向你。
+  <</language>><br><br>
+  <<if C.npc.Whitney.dom gte 20>>
+    <<language>>
+      <<option 'EN'>>
+        "You're coming." <<He>> pauses to breathe, then repeats it more quietly. "Aren't you?"
+      <<option 'CN'>>
+        “你也来。”<<He>>停下来调整呼吸，又放低声音说了一遍。“对吧？”
+    <</language>><br><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        "If you want to come..." <<He>> looks annoyed at having begun the sentence. "Just get the bag, will you?"
+      <<option 'CN'>>
+        “要是你也想来……”<<He>>像是连自己都嫌这句话别扭。“先把包拿上，行不行？”
+    <</language>><br><br>
+  <</if>>
+  <<deadwood-pregnancy-hospital-link>>
+<</if>>

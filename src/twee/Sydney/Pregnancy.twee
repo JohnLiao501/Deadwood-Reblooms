@@ -1,0 +1,259 @@
+:: Deadwood Reblooms Sydney Pregnancy Widgets [widget nobr]
+<<widget 'deadwood-reblooms-sydney-pregnancy-link'>>
+  <<sydneySchedule>>
+  <<set _pregnancy_present to (maplebirch.get('Sydney')?.available and _dormAccess and $SydneyExpansion.dormInvited and (_sydneyWorking or _sydneyResting))>>
+  <<deadwood-pregnancy-links 'Sydney' 'Deadwood Reblooms Sydney' _pregnancy_present>>
+<</widget>>
+
+<<widget 'deadwood-sydney-pregnancy-after'>>
+  <<run statusCheck('Sydney')>>
+  <<if $deadwood_pregnancy.choice is 'hospital_rest'>>
+    <<language>>
+      <<option 'EN'>>
+        Sydney tries to reach for a book, then leaves <<his>> hand on the blanket instead. "Just until I can concentrate." You stay quietly as <<his>> eyes close. When a trolley rattles past the door, <<he>> wakes enough to notice you are still there and gives you a <span class='teal'>small, grateful smile</span>.
+      <<option 'CN'>>
+        悉尼想伸手拿书，最后却把手留在毛毯上。“先歇到能集中精神吧。”你安静地陪着，<<his>>眼睛渐渐闭上。门外有推车经过，<<he>>稍稍醒了些，发现你还在，便<span class='teal'>感激地笑了一下</span>。
+    <</language>><br><br>
+  <<elseif $deadwood_pregnancy.choice is 'hospital_plan'>>
+    <<language>>
+      <<option 'EN'>>
+        Sydney wants to ask the nurse everything at once. You help <<him>> start with what happens before leaving the hospital. <<He>> listens carefully and asks her to repeat one part. "I don't want to remember what I expected to hear instead of what you said." <<He>> writes the answer beside the question, rather than adding it to the pile of books.
+      <<option 'CN'>>
+        悉尼想把所有问题一口气问完。你帮<<him>>先从离开医院前要做的事开始。<<He>>认真听了，又请护士重复了一处。“不想最后记住的是自己以为会听见的话，而不是你真正说的。”<<He>>把答复写在问题旁，没有又往那堆书里塞。
+    <</language>><br><br>
+  <<elseif _sydneyStatus.includes('corrupt')>>
+    <<language>>
+      <<option 'EN'>>
+        "I should have brought something less sensible to read." Sydney eyes the books in the bedside bag, then leaves them untouched. "Or no books at all." <<He>> asks you to move the chair closer. "You are better company. Don't let that go to your head."
+      <<option 'CN'>>
+        “该带本不那么正经的书来的。”悉尼看了看床边包里的书，却一本也没拿。“或者干脆不带。”<<He>>让你把椅子挪近。“还是你陪着有意思。可别太得意。”
+    <</language>><br><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        Sydney quietly repeats the names you chose. "I thought I would have something more eloquent to say." <<He>> smiles at you, then bows <<his>> head for a moment. When <<he>> looks up again, <<his>> voice is steadier. "Thank you for staying."
+      <<option 'CN'>>
+        悉尼小声念了一遍刚取好的名字。“还以为自己能说点更像样的话呢。”<<He>>朝你笑笑，低下头，静静停了一会儿。再抬起头时，<<his>>声音稳了些。“谢谢你一直陪着。”
+    <</language>><br><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-sydney-pregnancy-topic'>>
+  <<if $deadwood_pregnancy.choice is 'story'>>
+    <<language>>
+      <<option 'EN'>>
+        You ask Sydney to choose something that is not a guidebook. <<He>> finds a short story and starts reading aloud. At first <<he>> gives every character the same careful voice; then a particularly foolish one gets a voice so unlike <<his>> own that you both laugh.
+      <<option 'CN'>>
+        你请悉尼挑一本不是指南的书。<<He>>找了个短故事，开始读给你听。起初，每个角色都是同样认真的声音；后来，一个格外傻气的角色被<<he>>读得腔调全变，你们都笑出了声。
+    <</language>><br><br>
+    <<if _sydneyStatus.includes('corrupt')>>
+      <<language>>
+        <<option 'EN'>>
+          "That one sounds like you," <<he>> says, smiling over the book. "You can read the next bit and prove me wrong." <<He>> holds the page where you can see it, clearly hoping you will try the voice as well.
+        <<option 'CN'>>
+          “这个倒像你。”<<he>>从书后露出笑脸。“下一段你来读，证明我说错了啊。”<<He>>把书放到你看得见的地方，显然还等着你也学一遍那个腔调。
+      <</language>><br><br>
+    <<else>>
+      <<language>>
+        <<option 'EN'>>
+          Sydney looks embarrassed at the interruption, then begins the next paragraph with a smile still in <<his>> voice. "Perhaps I should practise. For reading aloud later." <<He>> does not rush to the end this time.
+        <<option 'CN'>>
+          悉尼被打断，先有些不好意思，再读下一段时，声音里却仍带着笑。“也许该练练。以后读给人听的时候能用上。”这一次，<<he>>没有急着读到结尾。
+      <</language>><br><br>
+    <</if>>
+  <<elseif $deadwood_pregnancy.choice is 'family'>>
+    <<if knowsPregnancy(_pregnancy_record.pregnancyId, 'Sirris')>>
+      <<language>>
+        <<option 'EN'>>
+          "<<nnpc_Mum 'Sirris'>> knows," Sydney says. "That doesn't mean I've worked out how to answer every question." You ask which ones <<he>> actually wants help with. <<He>> picks two, then adds a third. "I can manage the rest. I think."
+        <<option 'CN'>>
+          “<<nnpc_Mum 'Sirris'>>知道了。”悉尼说。“可也不是每个问题都想好该怎么回答了。”你问，究竟有哪些想让你帮着说说。<<He>>挑了两个，又补上第三个。“余下的应该能自己应付。我想。”
+      <</language>><br><br>
+    <<else>>
+      <<language>>
+        <<option 'EN'>>
+          Sydney practises how <<he>> might tell <<nnpc_Mum 'Sirris'>>. The first attempt is so formal it sounds like a library notice. You ask what <<he>> would say without the speech. <<He>> looks down at the notes, then puts them aside. "I'd like some help." After a pause, <<he>> adds, "That is much shorter."
+        <<option 'CN'>>
+          悉尼试着练习怎么跟<<nnpc_Mum 'Sirris'>>开口。第一遍郑重得像图书馆通知。你问，不照着那段话，<<he>>最想说什么。<<He>>低头看看笔记，又把它放到一边。“我想找人帮帮忙。”停了一会儿，<<he>>又说：“这样短多了。”
+      <</language>><br><br>
+    <</if>>
+  <</if>>
+<</widget>>
+
+:: Deadwood Reblooms Sydney Pregnancy [nobr]
+<<deadwood-pregnancy-context 'Sydney'>>
+<<if !_pregnancy_context or (!_pregnancy_reveal and !_pregnancy_birth)>>
+  <<deadwood-pregnancy-unavailable 'Sydney'>>
+<<elseif _pregnancy_birth>>
+  <<include 'Deadwood Reblooms Sydney Birth'>>
+<<else>>
+  <<set $outside to 0>><<set $location to $deadwood_pregnancy.location>><<effects>><<npc 'Sydney'>><<person1>>
+  <<setKnowsAboutPregnancy 'Sydney' 'pc' _pregnancy_record.pregnancyId>>
+  <<if !_pregnancy_aware>>
+    <<language>>
+      <<option 'EN'>>
+        You ask Sydney whether <<he>> has realised <<he>> is pregnant. <<He>> looks from you to the book, as if the answer might be written on the open page. "I thought I was just tired." <<He>> closes it carefully. "Could we speak quietly? I need a moment to think."
+      <<option 'CN'>>
+        你问悉尼，有没有发现自己怀孕了。<<He>>看看你，又看看书，像是答案会写在摊开的那一页上。“还以为只是累了。”<<He>>小心地把书合上。“能小声说吗？得先想一想。”
+    <</language>><br><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        Sydney closes the book without marking the page. <<He>> notices, slips a finger between the leaves, then gives up on it. "Could we speak quietly? I am <span class="pink">pregnant</span>."
+      <<option 'CN'>>
+        悉尼合上书，却忘了夹书签。<<He>>察觉到，伸根手指夹进书页，又放弃了。“能小声谈谈吗？我<span class="pink">怀孕了</span>。”
+    <</language>><br><br>
+  <</if>>
+  <<setKnowsAboutPregnancy 'Sydney' 'Sydney' _pregnancy_record.pregnancyId>>
+  <<if _pregnancy_aware and $pregnancies.filter(record => record.carrier === _pregnancy_name && record.deliveredDate !== null).length is 0>>
+    <<language>>
+      <<option 'EN'>>
+        "I went looking for a book that would tell me what to do first. Then I found three that disagreed." <<He>> gives you an uncertain smile. "So I thought I had better talk to someone who would answer back."
+      <<option 'CN'>>
+        “想找本书，看看该先做什么。结果找到了三本，说法还不一样。”<<He>>朝你不太确定地笑了笑。“所以，还是找个能跟我说话的人吧。”
+    <</language>><br><br>
+  <<elseif $pregnancies.some(record => record.carrier === _pregnancy_name && record.deliveredDate !== null)>>
+    <<language>>
+      <<option 'EN'>>
+        "I remember thinking I would feel prepared next time." Sydney shakes <<his>> head, smiling a little. "I think I have just found different things to worry about."
+      <<option 'CN'>>
+        “我以前还想，下次就该有准备了。”悉尼摇摇头，露出一点笑容。“现在看来，只是换了些担心的事。”
+    <</language>><br><br>
+  <</if>>
+  <<run statusCheck('Sydney')>>
+  <<if _sydneyStatus.includes('corrupt') and !_pregnancy_aware>>
+    <<language>>
+      <<option 'EN'>>
+        "You get to be the one explaining things for once." Sydney gives a startled little laugh. "You got there before I did." <<He>> draws your chair closer. "Give me a moment. I'm allowed to be surprised too."
+      <<option 'CN'>>
+        “这回倒轮到你给我讲了。”悉尼有点发怔地笑了一声。“让你抢先了。”<<He>>把你的椅子拉近。“先给我一点时间。我也可以吃惊一下吧。”
+    <</language>><br><br>
+  <<elseif _sydneyStatus.includes('corrupt')>>
+    <<language>>
+      <<option 'EN'>>
+        "I would have preferred to tell you before you guessed." <<He>> draws your chair closer, then glances towards the door. "People will have opinions. They always do." <<His>> mouth curves into a small smile. "They can wait. I wanted to see your face first."
+      <<option 'CN'>>
+        “我更想自己告诉你，而不是等你猜出来。”<<He>>把你的椅子拉近，又瞥了一眼门口。“别人肯定有话要说。一直都这样。”<<His>>嘴角露出一点笑意。“让他们等着吧。我想先看看你的反应。”
+    <</language>><br><br>
+  <<elseif _sydneyStatus.includes('pure')>>
+    <<language>>
+      <<option 'EN'>>
+        Sydney rests <<his>> hands together. "I still want to pray. I do not want people thinking I have stopped caring about any of it." <<He>> hesitates. "I just don't know how to begin explaining. Not yet." <<His>> gaze returns to you. "Could we begin here?"
+      <<option 'CN'>>
+        悉尼把双手叠在一起。“我还是想祈祷。不想让别人以为，我已经什么都不在意了。”<<He>>迟疑了一下。“只是还不知道该怎么解释。从哪儿开始都没想好。”<<His>>目光重新落到你身上。“能先在这里，跟你说说吗？”
+    <</language>><br><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        "I'm trying to work out what I should say, and what I actually want to say." Sydney rubs the edge of the closed book. "Perhaps I ought to work out the second one before trying the first."
+      <<option 'CN'>>
+        “还在想，自己该说什么，又想说什么。”悉尼摩挲着合起的书页边缘。“也许该先想明白后者，再考虑前者。”
+    <</language>><br><br>
+  <</if>>
+  <<if $sydneySeen.includes('parent') and !knowsPregnancy(_pregnancy_record.pregnancyId, 'Sirris')>>
+    <<language>>
+      <<option 'EN'>>
+        "And I need to tell <<nnpc_Mum 'Sirris'>>." Sydney briefly covers <<his>> face. "I can already imagine how long that conversation will be." <<He>> peeks at you between <<his>> fingers. "If I practise the first sentence, will you promise not to laugh?"
+      <<option 'CN'>>
+        “还得跟<<nnpc_Mum 'Sirris'>>说。”悉尼短暂地捂住脸。“都能想象那得谈多久了。”<<He>>从指缝间看向你。“要是我先练练第一句话，你能不笑吗？”
+    <</language>><br><br>
+  <</if>>
+  <<deadwood-pregnancy-parentage>>
+  <<deadwood-pregnancy-answer-links 'Deadwood Reblooms Sydney Pregnancy Care'>>
+<</if>>
+
+:: Deadwood Reblooms Sydney Pregnancy Care [nobr]
+<<deadwood-pregnancy-context 'Sydney'>>
+<<if !_pregnancy_context or !_pregnancy_known>>
+  <<deadwood-pregnancy-unavailable 'Sydney'>>
+<<elseif _pregnancy_birth>>
+  <<include 'Deadwood Reblooms Sydney Birth'>>
+<<else>>
+  <<set $outside to 0>><<set $location to $deadwood_pregnancy.location>><<effects>><<npc 'Sydney'>><<person1>>
+  <<run statusCheck('Sydney')>>
+  <<set _pregnancy_topics to [{ choice: 'story', minutes: 15, label: ['Read a short story together (0:15)', '一起读个短故事 (0:15)'] }]>>
+  <<if $sydneySeen.includes('parent')>>
+    <<run _pregnancy_topics.push({ choice: 'family', minutes: 10, label: knowsPregnancy(_pregnancy_record.pregnancyId, 'Sirris')
+      ? ["Talk about Sirris's questions (0:10)", '聊聊西里斯问起的事 (0:10)']
+      : ['Talk about telling Sirris (0:10)', '聊聊怎么跟西里斯说 (0:10)'] })>>
+  <</if>>
+  <<if ['story', 'family'].includes($deadwood_pregnancy.choice)>>
+    <<deadwood-sydney-pregnancy-topic>>
+  <<elseif _pregnancy_record.deliveredDate isnot null>>
+    <<if $deadwood_pregnancy.choice is 'practical'>>
+      <<language>>
+        <<option 'EN'>>
+          Sydney starts writing down the nursery's arrangements from memory, then pauses over a detail. "I'd better ask, rather than pretend I know." You help <<him>> separate the questions from the answers. The result is much shorter than the chapter <<he>> had brought to show you.
+        <<option 'CN'>>
+          悉尼开始凭记忆写育儿室的安排，却在一个细节上停了笔。“还是问问吧，不能装作知道。”你帮<<him>>把待问的问题和已有的答复分开。整理出来的内容，比<<he>>原本想给你看的那章书短多了。
+      <</language>><br><br>
+    <<else>>
+      <<language>>
+        <<option 'EN'>>
+          Sydney tells you about a nursery visit, carefully distinguishing what the carers said from what <<he>> has read. "I thought I would be less nervous with a book to hand." <<He>> smiles. "They managed perfectly well without consulting it. I'm beginning to think I can, too."
+        <<option 'CN'>>
+          悉尼说起去育儿室的事，认真分清哪些是照料人员说的，哪些是书上读来的。“我还以为手边有书，就能少紧张一点。”<<He>>笑了笑。“他们不翻书也照料得很好。现在觉得，我也许也能做到。”
+      <</language>><br><br>
+    <</if>>
+  <<elseif $deadwood_pregnancy.choice is 'comfort'>>
+    <<if _sydneyStatus.includes('corrupt')>>
+      <<language>>
+        <<option 'EN'>>
+          Sydney begins with a joke about the books, then admits <<he>> has been reading the same paragraph all evening. You listen without pretending a joke has answered everything. <<He>> nudges your foot with <<his>> own. "There. That was the difficult bit. Admitting I was worried, I mean."
+        <<option 'CN'>>
+          悉尼先拿那些书开了个玩笑，才承认自己一晚上都在读同一段。你听着，没有把玩笑当成所有问题的答案。<<He>>用脚轻轻碰了碰你的。“好了。最难的部分说出来了。我是说，承认自己有点担心。”
+      <</language>><br><br>
+    <<elseif _sydneyStatus.includes('pure')>>
+      <<language>>
+        <<option 'EN'>>
+          Sydney tries to explain everything in the right order, losing track whenever <<he>> comes to the temple. You give <<him>> time. "I can be grateful and frightened at once, can't I?" <<He>> folds <<his>> hands, then relaxes them. "I think I needed to say that aloud."
+        <<option 'CN'>>
+          悉尼想按顺序把事情说清楚，可每次说到神殿，就又乱了思路。你给<<him>>留了些时间。“可以一边感激，一边又害怕吧？”<<He>>把双手合起来，又慢慢放松。“我想，就是需要亲口说一遍。”
+      <</language>><br><br>
+    <<else>>
+      <<language>>
+        <<option 'EN'>>
+          Sydney starts explaining <<his>> worries as if they belong to someone in a book. You wait until <<he>> puts the book down. "I don't know what I want everyone to think of me," <<he>> admits. "I know I want to talk to you, though." This time <<he>> begins with <<his>> own words.
+        <<option 'CN'>>
+          悉尼说起担忧，像是在讲书中别人的事。你等着，直到<<he>>把书放下。“不知道想让别人怎么看我。”<<he>>承认道。“不过，知道自己想跟你说。”这一次，<<he>>终于从自己的话开始讲。
+      <</language>><br><br>
+    <</if>>
+  <<elseif $deadwood_pregnancy.choice is 'practical'>>
+    <<language>>
+      <<option 'EN'>>
+        Sydney is reluctant to leave anyone else with the library's heavy boxes. You ask whether every returned book needs <<his>> personal supervision. <<He>> starts to say yes, then catches your expression. "The dates do need checking." You leave that on the list and make room for a hospital appointment. "One thing at a time, then."
+      <<option 'CN'>>
+        悉尼不太愿意把图书馆那些沉重的书箱留给别人。你问，是不是每本归还的书都得由<<him>>亲自看着。<<He>>刚想说是，又看见你的表情。“日期确实得核对。”你们把这一项留下，也给医院检查腾了位置。“那就一件一件来吧。”
+    <</language>><br><br>
+  <<elseif npcPregnancyProgress('Sydney') gte 0.8>>
+    <<language>>
+      <<option 'EN'>>
+        Sydney has copied the hospital number onto the first page of <<his>> notes. <<His>> bag is ready, although <<he>> keeps taking books out and putting them back. "One should be enough. In case I have to wait." There are still three inside when <<he>> closes it.
+      <<option 'CN'>>
+        悉尼把医院电话抄在笔记第一页。包已经收拾好了，<<he>>却还在把书拿出来、又放回去。“一本就够。万一得等呢。”等<<he>>合上包，里面还是留了三本。
+    <</language>><br><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        Sydney shifts a stack of books from the spare chair. "These are meant to answer questions. They keep giving me new ones." <<He>> saves a place for you beside <<him>>.
+      <<option 'CN'>>
+        悉尼把空椅子上的一摞书挪开。“本来是想找答案的，结果又多了一堆问题。”<<He>>在身旁给你留了个位置。
+    <</language>><br><br>
+  <</if>>
+  <<deadwood-pregnancy-care-links 'Deadwood Reblooms Sydney Pregnancy Care' _pregnancy_topics>>
+<</if>>
+
+:: Deadwood Reblooms Sydney Birth [nobr]
+<<deadwood-pregnancy-context 'Sydney'>>
+<<if !_pregnancy_context or !_pregnancy_birth>>
+  <<deadwood-pregnancy-unavailable 'Sydney'>>
+<<else>>
+  <<set $outside to 0>><<set $location to $deadwood_pregnancy.location>><<effects>><<npc 'Sydney'>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      Sydney puts the notes down and braces <<himself>> against the table. "The number is on the first page." <<He>> speaks carefully, pausing to breathe. "I think we should use it now. Will you come with me?"
+    <<option 'CN'>>
+      悉尼放下笔记，扶住桌沿。“电话在第一页。”<<He>>说得很小心，停下来调整呼吸。“我想，现在该打了。你能陪我去吗？”
+  <</language>><br><br>
+  <<deadwood-pregnancy-hospital-link>>
+<</if>>

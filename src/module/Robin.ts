@@ -227,6 +227,7 @@ class Robin extends Module implements RobinFacade {
   public preInit(): void {
     super.preInit();
     Achievements.add(this.core, 'Robin');
+    this.core.npc.Pregnancy.add('Robin', { canBePregnant: true });
     this.core.on(':passagestart', () => this.sync(), 'Robin Expansion');
     this.core.dynamic.regTimeEvent('onDay', ':deadwood-reblooms-robin-asylum-daily', {
       action: () => {

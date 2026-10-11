@@ -12,6 +12,13 @@ class Whitney extends Module {
   public override preInit(): void {
     super.preInit();
     Achievements.add(this.core, 'Whitney');
+    this.core.npc.Pregnancy.add('Whitney', { canBePregnant: true });
+  }
+}
+
+declare module '@scml-dol-maplebirch/types' {
+  interface Extensions {
+    readonly Whitney: Whitney;
   }
 }
 
