@@ -1,4 +1,4 @@
-:: Deadwood Remy Business []
+:: Deadwood Remy Business
 <<effects>>
 <<set $_remy to maplebirch.get('Orchard')?.remy>>
 <<set $_finance to maplebirch.get('Finance')>>

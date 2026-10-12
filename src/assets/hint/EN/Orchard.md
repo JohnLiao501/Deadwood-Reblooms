@@ -178,6 +178,16 @@ Remy relationships and captivity dialogue are part of Orchard. Opening orchard l
 
 The framework places Remy among important NPCs on the social page, retaining vanilla records and affection. Explicit confirmation still controls romance eligibility. School visits and captivity do not select a love interest for you.
 
+Social descriptions distinguish acquaintance, courtship, a relationship, closeness and a breakup, using Remy's affection, dominance and lust. Captivity takes precedence over the riding school's relationship description.
+
+### Remy: attachment at the farm
+
+Call after Remy following a vanilla cell visit. Once daily, asking for five more minutes adds twenty attachment, one affection and two obedience. Accepting vanilla petting does not automatically add attachment. Asking to leave or challenging your agreement removes twenty attachment until the trait has been acquired.
+
+At fifty attachment, sixty vanilla obedience and twenty-five affection, you can say you want to stay with Remy. Confirming that you want to be together grants **Stockholm Syndrome: Remy** and unlocks romance eligibility. PC can also develop this attachment after establishing a relationship at the school. The trait reads, "Being good makes Remy kinder to you."
+
+The trait remains after leaving the farm, with separate school and social descriptions. Explicitly ending the relationship clears the trait and attachment, and removes Remy from selected love interests. Locks, labour, escape and vanilla farm events retain their usual behaviour.
+
 ### Business and the farm conflict
 
 **Discuss your other business** reads completed orders for Robin's drinks shop, an outstanding orchard-purpose bank loan and settled ordinary shares in Remy's estate. Topics require the relevant experience. Leveraged positions and unsettled shares do not qualify as holdings. PC chooses to disclose these details; Remy does not know their orders or debts beforehand.

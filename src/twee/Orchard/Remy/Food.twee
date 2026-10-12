@@ -48,7 +48,7 @@
 <</if>>
 <<deadwood-remy-return>>
 
-:: Deadwood Remy Food Widgets [widget nobr]
+:: Deadwood Remy Food Widgets [widget]
 <<widget 'deadwood-remy-food-response'>>
   <<set _remyFood to _args[0]>><<set _remy to maplebirch.get('Orchard')?.remy>>
   <<npc Remy>><<person1>>

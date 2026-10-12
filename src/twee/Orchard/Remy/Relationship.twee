@@ -1,4 +1,4 @@
-:: Deadwood Remy Courtship []
+:: Deadwood Remy Courtship
 <<effects>>
 <<if maplebirch.get('Orchard')?.remy.canCourt>>
   <<npc Remy>><<person1>>
@@ -66,7 +66,7 @@
 <</if>>
 <<deadwood-remy-return>>
 
-:: Deadwood Remy Promise []
+:: Deadwood Remy Promise
 <<effects>>
 <<if maplebirch.get('Orchard')?.remy.act('romance')>>
   <<npc Remy>><<person1>>

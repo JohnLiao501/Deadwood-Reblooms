@@ -20,6 +20,8 @@ class Remy {
     dates: 0,
     romance: false,
     ended: false,
+    stockholm: 0,
+    syndrome: false,
     last_meeting_day: -1,
     last_daily_day: -1,
     last_gift_type: '',
@@ -30,6 +32,8 @@ class Remy {
     last_talk_day: -1,
     last_gift_day: -1,
     last_date_day: -1,
+    last_intimacy_day: -1,
+    intimacy_site: '',
     pregnancy: {
       records: {} as Record<number, RemyPregnancyConversation>,
       id: -1,
@@ -60,6 +64,18 @@ class Remy {
 
   public get captive(): boolean {
     return this.ready && this.orchard.core.passage.title === 'Livestock Cell Remy' && !!V.livestock && !V.gag;
+  }
+
+  public get confined(): boolean {
+    return V.location === 'farm' && this.orchard.core.passage.title.startsWith('Livestock ');
+  }
+
+  public get hasBond(): boolean {
+    return this.state.romance || this.state.ended || this.state.syndrome || this.state.visits > 0 || this.state.stockholm > 0;
+  }
+
+  public get canBond(): boolean {
+    return this.captive && this.canTalk && !this.state.syndrome && this.state.stockholm >= 50 && V.livestock.obey >= 60 && C.npc.Remy.love >= 25;
   }
 
   public get farmConflict(): boolean {
@@ -186,6 +202,41 @@ class Remy {
     return this.available && !this.inLabour && !window.pcAreArmsBound('both') && !this.state.romance && this.state.visits >= 5 && this.state.dates >= 2 && C.npc.Remy.love >= 30;
   }
 
+  /** 单独相处里留出的那段空档。只在当天的约会场景内出现，另需交往确认与足够的相处次数。 */
+  public get canIntimate(): boolean {
+    return (
+      this.available &&
+      !this.inLabour &&
+      !window.pcAreArmsBound('both') &&
+      this.state.romance &&
+      this.state.dates >= 3 &&
+      C.npc.Remy.love >= 40 &&
+      C.npc.Remy.lust >= 40 &&
+      this.state.last_date_day === Time.days &&
+      this.state.last_intimacy_day !== Time.days &&
+      Time.hour + 1 < V.closinghour
+    );
+  }
+
+  /** 场景地点跟随本次单独相处：室内是办公室，室外是围栏后的马厩一侧。 */
+  public startIntimacy(): boolean {
+    if (this.orchard.core.passage.title !== 'Deadwood Remy Date' || !this.canIntimate) return false;
+    this.state.last_intimacy_day = Time.days;
+    this.state.intimacy_site = this.state.date_kind;
+    return true;
+  }
+
+  public get canFarmIntimacy(): boolean {
+    return this.captive && !this.inLabour && !window.pcAreArmsBound('both') && this.state.last_intimacy_day !== Time.days && (V.livestock?.obey ?? 0) >= 40 && C.npc.Remy.lust >= 40;
+  }
+
+  public startFarmIntimacy(): boolean {
+    if (this.orchard.core.passage.title !== 'Livestock Cell Remy' || !this.canFarmIntimacy) return false;
+    this.state.last_intimacy_day = Time.days;
+    this.state.intimacy_site = 'barn';
+    return true;
+  }
+
   public act(action: 'talk' | 'confront' | 'gift' | 'date' | 'romance' | 'break'): boolean {
     const passage = this.orchard.core.passage.title;
     if (action === 'break') {
@@ -194,6 +245,8 @@ class Remy {
       this.orchard.core.SugarCube.Wikifier.wikifyEval('<<loveInterestRemove "Remy">>');
       this.state.romance = false;
       this.state.ended = true;
+      this.state.syndrome = false;
+      this.state.stockholm = 0;
       return true;
     }
     if (!this.available) return false;

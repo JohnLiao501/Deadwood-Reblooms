@@ -11,7 +11,7 @@
   <br><br><<getouticon>><<lanLink ['Return to the courtyard', '返回庭院'] 'Riding School'>><<endevent>><</lanLink>><br>
 <</widget>>
 
-:: Deadwood Remy Conversation []
+:: Deadwood Remy Conversation
 <<set $_remy to maplebirch.get('Orchard')?.remy>>
 <<effects>>
 <<if $_remy?.available>>
@@ -25,9 +25,9 @@
   <<if $remySeen.includes('livestock')>>
     <<language>>
       <<option 'EN'>>
-        A latch clicks behind you. You turn before you can help it. Remy is holding the paddock gate for a pupil; the courtyard entrance remains open. <<His>> polite smile tells you little. <span class='purple'>You keep the entrance in sight.</span>
+        A latch clicks behind you. You turn before you can help it. Remy is holding the paddock gate for a pupil; the courtyard entrance remains open. <<if $Orchard.remy.syndrome>><span class='red'>You remember <<his>> hand reaching through the bars, and wish <<he>> would come closer.</span><<else>><<His>> polite smile tells you little. <span class='purple'>You keep the entrance in sight.</span><</if>>
       <<option 'CN'>>
-        身后传来门闩的咔嗒声。你不由得回过头。雷米只是替学员扶住牧场的门，庭院入口仍开着。<<His>>客气的笑容透露不出什么。<span class='purple'>你留意着入口的位置。</span>
+        身后传来门闩的咔嗒声。你不由得回过头。雷米只是替学员扶住牧场的门，庭院入口仍开着。<<if $Orchard.remy.syndrome>><span class='red'>你想起<<he>>伸过栏杆的手，盼着<<he>>再走近一点。</span><<else>><<His>>客气的笑容透露不出什么。<span class='purple'>你留意着入口的位置。</span><</if>>
     <</language>><br><br>
   <</if>>
   <<deadwood-remy-arrival>>
@@ -63,6 +63,7 @@
     <</language>><br><br>
   <</if>>
   <<deadwood-remy-pregnancy-links>>
+  <<deadwood-partner-medicine-links 'Remy'>>
   <<if $_remy.canTalk>>
     <<socialiseicon 'ask'>><<lanLink ['Ask about the riding school', '聊聊骑术学校'] 'Deadwood Remy Talk'>><</lanLink>><br>
   <<else>>

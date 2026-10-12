@@ -1,4 +1,4 @@
-:: Deadwood Remy Pregnancy Widgets [widget nobr]
+:: Deadwood Remy Pregnancy Widgets [widget]
 <<widget 'deadwood-remy-pregnancy-context'>>
   <<set _remyPregnancy to maplebirch.get('Orchard')?.remy>>
   <<set _remyPregnancyPresent to !!_remyPregnancy and (_remyPregnancy.available or _remyPregnancy.captive) and !$statFreeze and !$replayScene and $combat isnot 1>>
@@ -110,7 +110,11 @@
   <<for _remyAction range _remyTopics>>
     <<if !_remyEntry.topics.includes(_remyAction)>>
       <<capture _remyAction>>
-        <<socialiseicon 'ask'>><<lanLink `({ sample: ['Ask for a paternity test sample (0:10)', '询问是否愿意提供鉴定样本 (0:10)'], comfort: ['Sit together (0:10)', '一起坐一会儿 (0:10)'], arrangements: ['Discuss the arrangements (0:10)', '商量接下来的安排 (0:10)'], boundaries: ['Say what you want to decide yourself (0:10)', '说清哪些事要由你自己决定 (0:10)'], names: ['Talk about names (0:10)', '聊聊名字 (0:10)'], children: ['Ask about caring for the children (0:10)', '聊聊照料孩子 (0:10)'] })[_remyAction]`>>
+        <<if _remyAction is 'sample'>>
+          <<icon 'medicine/paternity-sample.png'>>
+        <<else>>
+          <<socialiseicon 'ask'>>
+        <</if>><<lanLink `({ sample: ['Ask for a paternity test sample (0:10)', '询问是否愿意提供鉴定样本 (0:10)'], comfort: ['Sit together (0:10)', '一起坐一会儿 (0:10)'], arrangements: ['Discuss the arrangements (0:10)', '商量接下来的安排 (0:10)'], boundaries: ['Say what you want to decide yourself (0:10)', '说清哪些事要由你自己决定 (0:10)'], names: ['Talk about names (0:10)', '聊聊名字 (0:10)'], children: ['Ask about caring for the children (0:10)', '聊聊照料孩子 (0:10)'] })[_remyAction]`>>
           <<deadwood-remy-pregnancy-context>>
           <<if _remyContext>>
             <<deadwood-remy-pregnancy-action _remyAction>>
@@ -529,7 +533,7 @@
       医护人员已经接手。下次见到雷米时，你可以问问近况。
   <</language>>
   <br><br>
-  <<getouticon>><<lanLink ['Leave', '离开'] 'Hospital'>><</lanLink>>
+  <<getouticon>><<lanLink ['Leave', '离开'] 'Hospital Foyer'>><</lanLink>>
 <</if>>
 
 :: Deadwood Remy Pregnancy After [nobr]
@@ -552,7 +556,7 @@
   <</language>>
   <br><br>
 <</if>>
-<<getouticon>><<lanLink ['Let Remy rest and leave', '让雷米休息，离开'] 'Hospital'>><</lanLink>>
+<<getouticon>><<lanLink ['Let Remy rest and leave', '让雷米休息，离开'] 'Hospital Foyer'>><</lanLink>>
 
 
 :: Deadwood Remy Paternity Result [nobr]

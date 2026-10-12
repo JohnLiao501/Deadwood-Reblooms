@@ -1,0 +1,78 @@
+:: Deadwood Remy Bond Widgets [widget]
+
+<<widget 'deadwood-remy-bond'>>
+  <<if !maplebirch.get('Orchard')?.remy.captive or !maplebirch.get('Orchard').remy.canTalk>><<exit>><</if>>
+  <<lanLink ['Ask Remy to stay a little longer (0:05)', '请雷米再陪你一会儿 (0:05)']>>
+    <<if maplebirch.get('Orchard')?.remy.captive and maplebirch.get('Orchard').remy.canTalk>>
+      <<set $Orchard.remy.last_talk_day to Time.days>>
+      <<if !$Orchard.remy.syndrome>><<set $Orchard.remy.stockholm to Math.min(100, $Orchard.remy.stockholm + 20)>><</if>>
+      <<replace '#deadwood-remy-cell-talk'>>
+        <<language>>
+          <<option 'EN'>>
+            You ask Remy not to go yet. <<He>> glances down the barn, then returns to your gate. "Missing me already?" A gloved hand rests on the rail. You move closer to it.
+            <br><br>
+            <<if $Orchard.remy.syndrome>>"That's better." <<He>> strokes your hair through the bars. You close your eyes, listening to <<his>> voice instead of the movement further down the barn.<<elseif $Orchard.remy.stockholm gte 50>>You have begun listening for those footsteps. When <<he>> stops by your gate, the barn feels less cold. Perhaps <<he>> would stay longer if you were good.<<else>>Remy asks whether you have been behaving. You answer before looking at the keys. <<He>> stays until a farmhand calls for <<him>>.<</if>>
+          <<option 'CN'>>
+            你请雷米先别走。<<He>>朝谷仓深处看了一眼，又走回你的栏门。“已经想我了？”戴着手套的手搭在横栏上。你往那只手旁挪近了一点。
+            <br><br>
+            <<if $Orchard.remy.syndrome>>“这就对了。”<<He>>隔着栏杆摸了摸你的头发。你闭上眼，听着<<his>>的声音，将谷仓深处的动静放到一旁。<<elseif $Orchard.remy.stockholm gte 50>>你已经开始留意那串脚步声。<<He>>停在栏门旁时，谷仓似乎没那么冷了。也许再乖一点，<<he>>就会多留一会儿。<<else>>雷米问你有没有好好听话。你先回答，才看向那串钥匙。<<He>>留了一会儿，直到工人叫<<him>>过去。<</if>>
+        <</language>>
+        <<npcincr Remy love 1>><<livestock_obey 2>><<stress -3>><<pass 5>>
+        <br><br><<glove 'Remy'>><<gobey>><<lstress>><<if !$Orchard.remy.syndrome>><<gstockholm>><</if>>
+      <</replace>>
+    <</if>>
+  <</lanLink>><br>
+  <<if maplebirch.get('Orchard').remy.canBond>>
+    <<lanLink ['Tell Remy you want to stay with <<nnpc_him "Remy">>', '告诉雷米，你想留在<<nnpc_his "Remy">>身边']>>
+      <<replace '#deadwood-remy-cell-talk'>>
+        <<language>>
+          <<option 'EN'>>
+            "Here?" Remy rests a hand on the gate. "You won't go running off, then?" You look at the hand before answering.
+          <<option 'CN'>>
+            “留在这里？”雷米将手搭在栏门上。“不会再跑了，是吗？”你看着那只手，尚未回答。
+        <</language>><br><br>
+        <<lanLink ['Say you want to be with Remy', '说你想和雷米在一起']>>
+          <<if maplebirch.get('Orchard')?.remy.canBond>>
+            <<set $Orchard.remy.last_talk_day to Time.days>>
+            <<set $Orchard.remy.syndrome to true>><<set $Orchard.remy.romance to true>><<set $Orchard.remy.ended to false>>
+            <<replace '#deadwood-remy-cell-talk'>>
+              <<language>>
+                <<option 'EN'>>
+                  You tell <<him>> you want to be together. Remy reaches between the bars and cups your cheek. "Good <<girl>>. I knew you'd come around." <<His>> thumb brushes your skin. The gate remains shut, but you lean into <<his>> hand.
+                  <br><br>
+                  <span class='red'><i>Being good makes Remy kinder to you.</i><br>You have gained the "<<= maplebirch.t('deadwood-reblooms:remy:trait:stockholm:name')>>" trait.</span>
+                <<option 'CN'>>
+                  你告诉<<him>>，你想和<<him>>在一起。雷米把手伸过栏杆，托住你的脸颊。“乖<<girl>>，我就知道你会想通的。”<<His>>拇指轻轻擦过你的皮肤。栏门仍关着，你却向<<his>>手掌靠了过去。
+                  <br><br>
+                  <span class='red'><i>只要乖乖听话，雷米就会对你好。</i><br>你获得了“<<= maplebirch.t('deadwood-reblooms:remy:trait:stockholm:name')>>”特质。</span>
+              <</language>>
+              <br><br>
+              <<language>>
+                <<option 'EN'>>
+                  Remy is now available as a love interest in your attitudes.
+                <<option 'CN'>>
+                  你现在可以在态度中将雷米选为恋爱对象。
+              <</language>>
+            <</replace>>
+          <</if>>
+        <</lanLink>><br>
+        <<lanLink ['Ask to leave instead', '改口要求离开']>>
+          <<if maplebirch.get('Orchard')?.remy.captive and maplebirch.get('Orchard').remy.canTalk>>
+            <<set $Orchard.remy.last_talk_day to Time.days>><<set $Orchard.remy.stockholm to Math.max(0, $Orchard.remy.stockholm - 20)>>
+            <<replace '#deadwood-remy-cell-talk'>>
+              <<language>>
+                <<option 'EN'>>
+                  "Then open the gate," you say. Remy withdraws <<his>> hand. "That isn't what I asked." <<He>> leaves you with the sound of the lock.<br><br><span class='blue'>You still want to leave.</span>
+                <<option 'CN'>>
+                  “那就打开栏门。”你说。雷米收回手。“我问的可不是这个。”<<He>>离开了，只留下锁扣的响声。<br><br><span class='blue'>你仍想离开这里。</span>
+              <</language>><br><br><<lstockholm>>
+            <</replace>>
+          <</if>>
+        <</lanLink>><br>
+        <<lanLink ['Leave it unsaid', '暂时不说']>>
+          <<replace '#deadwood-remy-cell-talk'>><<deadwood-remy-cell-menu>><</replace>>
+        <</lanLink>>
+      <</replace>>
+    <</lanLink>><br>
+  <</if>>
+<</widget>>

@@ -1,10 +1,12 @@
 // ./src/script/Orchard.ts
 
 import OrchardView from './Orchard/View';
+import Remy from './Orchard/Remy';
 import { species, type OrchardSpecies } from '../module/Orchard/Species';
 import type { MacroDefinition } from 'twine-sugarcube';
 
 export default function Orchard(maplebirch: typeof window.maplebirch): void {
+  Remy(maplebirch);
   maplebirch.tool.addTo('BeforeLinkZone', { widget: 'deadwood-remy-school-link', passage: 'Riding School' }, { widget: 'deadwood-remy-captivity', passage: 'Livestock Cell Remy' });
   maplebirch.tool.addTo(
     'BeforeLinkZone',

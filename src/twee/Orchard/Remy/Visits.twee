@@ -1,4 +1,4 @@
-:: Deadwood Remy Date []
+:: Deadwood Remy Date
 <<effects>>
 <<if maplebirch.get('Orchard')?.remy.act('date')>>
   <<set _remy_indoors to $Orchard.remy.date_kind is 'tea' or ['rain', 'snow'].includes(Weather.precipitation) or Time.season is 'winter'>>
@@ -155,6 +155,12 @@
             <</language>>
           <</replace>>
         <</lanLink>><br>
+        <<if maplebirch.get('Orchard').remy.canIntimate>>
+          <<loveicon 'hug'>><<lanLink ['Take the rest of the afternoon for yourselves', '把剩下的下午留给你们两个人'] 'Deadwood Remy Intimacy'>>
+            <<if !maplebirch.get('Orchard').remy.startIntimacy()>><<set $Orchard.remy.intimacy_site to 'tea'>><</if>>
+            <<set $sexstart to 1>>
+          <</lanLink>><<promiscuous2>><br>
+        <</if>>
       <</if>>
     </div>
   <</capture>>
@@ -167,3 +173,168 @@
   <</language>>
 <</if>>
 <<deadwood-remy-return>>
+
+:: Deadwood Remy Intimacy
+<!-- 与雷米的亲密场景。沿用原版合意战斗流程：sexstart → consensual → maninit → effectsman/man/stateman → actionsman。
+     不带 nobr 标签：那会把整段正文压成一行，中文的换行会变成多余空格。
+     门锁、登记簿、手套留在原地当道具——他关门不是为了避人，是为了不被打断。 -->
+<<set _remy to maplebirch.get('Orchard')?.remy>>
+<<set _remy_indoors to $Orchard.remy.intimacy_site isnot 'walk' and $Orchard.remy.intimacy_site isnot 'picnic'>>
+<<if !maplebirch.get('Orchard')?.remy.canIntimate or $Orchard.remy.last_intimacy_day isnot Time.days>>
+  <<set $sexstart to 0>>
+  <<getouticon>><<lanLink ['Return to the courtyard', '返回庭院'] 'Riding School'>><<endevent>><</lanLink>>
+<<else>>
+  <<if $sexstart is 1>>
+    <<set $sexstart to 0>>
+    <<npc Remy>><<person1>><<run statusCheck('Remy')>>
+    <<consensual>><<set $consensual to 1>><<neutral 1>>
+    <<if _remy_indoors and $exposed lt 2>><<strip>><</if>>
+    <<maninit>><<set $enemytrust += 500>><<set $enemyarousalmax to 600>>
+    <<npcexpose>><<npckiss>>
+    <<if _remy_indoors>>
+      <!-- 室内：办公室里那点没收拾完的工作，全部变成这半小时的道具。 -->
+      <<language>>
+        <<option 'EN'>>
+          Remy turns the key and leaves it hanging in the lock, so that anyone who tries the handle will hear it rattle and think better of knocking. <<His>> glove comes off first — laid flat on the register, fingers still curled, the way <<he>> leaves it when <<he>> intends to pick it straight back up.
+          <br><br>
+          <span class='lewd'>"I have moved the two o'clock lesson," <<he>> says, close enough that you feel it against your ear. "Do not make me regret the trouble."</span> <<He>> does not wait for an answer. One hand finds the small of your back and keeps you against the desk while the other works your clothes loose with the unhurried competence of someone who has undressed a great many people and has never once been rushed about it.
+          <br><br>
+          <span class='lewd'>The register ends up under your hips. <<He>> notices, and does not care.</span>
+        <<option 'CN'>>
+          雷米把钥匙转了一圈，就那么挂在锁孔里——谁要是伸手来拧，锁芯会先响一声，人也会自己走开。<<He>>先摘手套，平放在登记簿上，手指还保持着握持的形状，就像随时要拿起来接着用。
+          <br><br>
+          <span class='lewd'>"两点的课我挪走了。"<<he>>说，近得让这句话贴在你耳朵上。"别让我白费这个工夫。"</span> <<He>>不等你回答。一只手按住你后腰，把你抵在桌沿，另一只手解你的衣服——不紧不慢，是替许多人脱过衣服、并且从来没为任何一次赶过时间的人才会有的手法。
+          <br><br>
+          <span class='lewd'>最后登记簿垫在了你身下。<<He>>看见了，也不打算管。</span>
+      <</language>>
+    <<else>>
+      <!-- 室外：围栏挡得住视线，挡不住声音。 -->
+      <<language>>
+        <<option 'EN'>>
+          Remy walks you along the fence until the stable wall is between you and the track. <<He>> checks the angle once, unhurried, the way <<he>> checks a gate — then his belt is open before <<he>> has finished the thought, and the ring of keys on it knocks against <<his>> thigh.
+          <br><br>
+          <span class='lewd'>"I do not do this outdoors." <<His>> voice has no conviction in it at all. <<He>> backs you against the boards and gets a hand under your thigh, lifting until you have nowhere to put your weight but <<him>>.</span> Somewhere past the wall, an instructor is counting strides. Remy listens to the count, all the way to the end, before <<he>> lets <<himself>> stop listening altogether.
+        <<option 'CN'>>
+          雷米陪你沿着围栏走，直到马厩墙正好隔在你们和跑道之间。<<He>>看了一眼角度——不慌不忙，像在检查一道门闩——然后扣子就先开了，腰上那串钥匙磕在<<his>>大腿上。
+          <br><br>
+          <span class='lewd'>"我不在外面做这种事。"<<he>>说，这句话里没有一点底气。<<He>>把你抵在木板墙上，一只手兜住你大腿往上托，托到你除了<<him>>身上再没处放重心。</span> 墙那头有教练在数节拍。雷米把那串数字听到头，才让自己不再听。
+      <</language>>
+    <</if>><br><br>
+    <<promiscuous2>><<kissvirginitywarning>><<NPCvirginitywarning 'Remy' 'kiss'>><br><br>
+  <</if>>
+  <<set $enemyanger to 0>>
+  <<effects>><<effectsman>><<man>><<stateman>>
+  <!-- 回合中途的插入描写。只在自己这一侧、且战斗未结束时出现。 -->
+  <<if $enemyarousal gt 0 and $enemyarousal lt $enemyarousalmax and !_combatend and $consensual is 1>>
+    <<if _remy_indoors>>
+      <<language>>
+        <<option 'EN'>>
+          <<set _heat to $enemyarousal / $enemyarousalmax>>
+          <<if _heat lt 0.34>>
+            The desk creaks under the pair of you. Remy glances at the door, decides the lock will hold, and goes back to what <<he>> was doing.
+          <<elseif _heat lt 0.67>>
+            <<He>> has stopped looking at the door. One of <<his>> hands is flat on the register, holding it still; the other has not left your waist since <<he>> started.
+          <<else>>
+            <span class='lewd'>"Say my name," <<he>> says, and it comes out less like an order than either of you expected.</span>
+          <</if>>
+        <<option 'CN'>>
+          <<if _heat lt 0.34>>
+            桌子在两个人的分量底下叫了一声。雷米看了眼门，判断那锁撑得住，才回到手头的事上。
+          <<elseif _heat lt 0.67>>
+            <<He>>已经不看门了。一只手平按在登记簿上把它压稳，另一只手从开始到现在就没离开过你的腰。
+          <<else>>
+            <span class='lewd'>"叫我的名字。"<<he>>说。这句话说出来，比你们俩谁预想的都更不像命令。</span>
+          <</if>>
+      <</language>>
+    <<else>>
+      <<language>>
+        <<option 'EN'>>
+          <<if _heat lt 0.34>>
+            The boards catch at your clothes. Remy works <<his>> forearm under you so the wood stops taking the weight.
+          <<elseif _heat lt 0.67>>
+            <span class='lewd'><<His>> keys have gone still. <<He>> is not thinking about the lesson, the register, or the count past the wall.</span>
+          <<else>>
+            <span class='lewd'>"Quiet," <<he>> says, right against your throat, and makes absolutely no effort to help you manage it.</span>
+          <</if>>
+        <<option 'CN'>>
+          <<if _heat lt 0.34>>
+            木板挂着你的衣服。雷米把前臂垫到你背后，不让木头接着受那个力。
+          <<elseif _heat lt 0.67>>
+            <span class='lewd'><<His>>钥匙不响了。<<He>>没在想课、没在想登记簿，也没在想墙那头数到哪了。</span>
+          <<else>>
+            <span class='lewd'>"别出声。"<<he>>贴着你喉咙说——并且一点也没打算帮你做到。</span>
+          <</if>>
+      <</language>>
+    <</if>>
+    <br><br>
+  <</if>>
+  <<actionsman>>
+  <<if _combatend or $consensual isnot 1>>
+    <span id='next'><<lanLink ['Next', '继续'] 'Deadwood Remy Intimacy Finish'>><</lanLink>></span><<nexttext>>
+  <<else>>
+    <span id='next'><<lanLink ['Next', '继续'] 'Deadwood Remy Intimacy'>><</lanLink>></span><<nexttext>>
+  <</if>>
+<</if>>
+:: Deadwood Remy Intimacy Finish
+<<set _remy to maplebirch.get('Orchard')?.remy>>
+<<set _remy_indoors to $Orchard.remy.intimacy_site isnot 'walk' and $Orchard.remy.intimacy_site isnot 'picnic'>>
+<<effects>><<person1>>
+<<if $enemyarousal gte $enemyarousalmax>>
+  <<ejaculation>><<npcincr Remy lust -20>>
+  <<if _remy_indoors>>
+    <<language>>
+      <<option 'EN'>>
+        Remy braces a hand on the desk and stays there until <<his>> breathing comes back down. The register has slid half off the edge; <<he>> pushes it flat with two fingers, then leaves <<his>> hand on it.
+        <br><br>
+        <span class='lewd'>Up close, with <<his>> collar open and <<his>> hair out of place, <<he>> looks a great deal less like a man who runs a school.</span> "The two o'clock lesson is in twenty minutes," <<he>> says, and it is not a complaint. <<He>> finds <<his>> glove on the desk and does not put it on yet.
+      <<option 'CN'>>
+        雷米一只手撑在桌上，直到呼吸平下来才动。登记簿已经滑出去一半，<<he>>用两根手指把它按平，手就没再拿开。
+        <br><br>
+        <span class='lewd'>就这么近看，领口敞着、头发也乱了，<<he>>一点也不像那个管着一所学校的人。</span>“两点的课在二十分钟后。”<<he>>说——不是抱怨。<<He>>在桌上找到手套，却没有立刻戴上。
+    <</language>>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        Remy leans back against the stable wall with <<his>> head tipped up, one hand still resting on your hip. Past the fence a pupil is being told to shorten their reins. <<He>> listens to the whole correction, and only then trusts <<his>> voice.
+        <br><br>
+        <span class='lewd'>"Get dressed before someone walks around the corner," <<he>> says. <<He>> starts doing the same, and misses the first buckle twice.</span>
+      <<option 'CN'>>
+        雷米靠着马厩墙仰起头，一只手还搭在你胯上。围栏那头有人在纠正学员的缰绳。<<He>>把那句纠正听完，才敢开口。
+        <br><br>
+        <span class='lewd'>“趁还没人绕过来，把衣服穿好。”<<he>>说，自己也动了手。第一个扣子扣了两次才上。</span>
+    <</language>>
+  <</if>>
+<<elseif $enemyhealth lte 0>>
+  <<language>>
+    <<option 'EN'>>
+      You bring it to a stop. Remy takes <<his>> hands off you at once, and does not ask why.
+      <br><br>
+      "All right." <<He>> fastens <<his>> belt and looks at the door rather than at you. <span class='blue'><<He>> is not going to ask twice.</span> "You can go, or you can sit. I have work either way."
+      <br><br>
+      <span class='lewd'>Something in <<his>> jaw says <<he>> would rather you stayed. <<He>> does not say it.</span>
+    <<option 'CN'>>
+      你叫停了。雷米立刻把手从你身上移开，没有问为什么。
+      <br><br>
+      “可以。”<<He>>系好腰带，看向门口而不是你。<span class='blue'><<he>>不会问第二遍。</span>“要走就走，要坐就坐。反正我都有活等着。”
+      <br><br>
+      <span class='lewd'><<his>>下颌绷着，像是有句话想说。<<He>>没说。</span>
+  <</language>>
+<<else>>
+  <<language>>
+    <<option 'EN'>>
+      Remy steps back first, and straightens <<his>> collar with the same motion <<he>> uses on pupils who have gone wrong — brisk, finished, no room to argue with it.
+      <br><br>
+      "Not today, then." <<He>> returns the register to <<his>> side of the desk, squaring it against the edge. A beat. "You are still welcome on Saturday."
+      <br><br>
+      <span class='lewd'><<He>> does not look up while <<he>> says it. That is the closest either of you gets to the subject.</span>
+    <<option 'CN'>>
+      雷米先退开，顺手理了理衣领——动作和纠正学员时一模一样：利落、完事、没有辩驳的余地。
+      <br><br>
+      “那今天就到这儿。”<<He>>把登记簿推回桌子自己那一侧，拿桌沿对齐。停了一下。“周六还是欢迎你来。”
+      <br><br>
+      <span class='lewd'>说这句话的时候<<he>>没有抬头。这是你们俩离那个话题最近的一次。</span>
+  <</language>>
+<</if>>
+<br><br>
+<<clotheson>><<endcombat>>
+<<getouticon>><<lanLink ['Return to the courtyard', '返回庭院'] 'Riding School'>><<endevent>><</lanLink>>

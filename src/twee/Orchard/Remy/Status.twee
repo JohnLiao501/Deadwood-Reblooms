@@ -1,0 +1,92 @@
+:: Deadwood Remy Status Widgets [widget]
+
+<<widget 'Remyrelationshiptext'>>
+  <<set $_remy to maplebirch.get('Orchard')?.remy>>
+  <<language>>
+    <<option 'EN'>>
+      <<print ' '>>
+      <<if $_remy.confined>>
+        <<if $_remy.state.syndrome>>
+          <<if C.npc.Remy.love gte 50>>
+            considers you <<if C.npc.Remy.dom gte 25>><span class='red'>the favourite of the herd</span><<else>><span class='purple'>a favourite who still needs taming</span><</if>>.
+          <<else>>
+            expects you to <span class='purple'>be good for <<nnpc_him 'Remy'>></span>.
+          <</if>>
+        <<elseif $_remy.state.romance>>
+          still considers you <span class='red'>livestock</span>, despite your relationship.
+        <<elseif $_remy.state.stockholm gt 0>>
+          is <span class='pink'>pleased that you seek <<nnpc_his 'Remy'>> attention</span>.
+        <<else>>
+          expects you to <span class='purple'>learn your place</span>.
+        <</if>>
+      <<elseif $_remy.state.syndrome>>
+        <<if C.npc.Remy.love gte 50>>
+          expects you to <span class='lewd'>come back to <<nnpc_him 'Remy'>></span>.
+        <<else>>
+          is <span class='purple'>sure you will come around</span>.
+        <</if>>
+      <<elseif $_remy.state.romance>>
+        <<if C.npc.Remy.love lte $npclovelow>>
+          has <span class='purple'>little patience for you</span>.
+        <<elseif C.npc.Remy.lust gte 50>>
+          wants to <span class='lewd'>keep you all to <<nnpc_himself 'Remy'>></span>.
+        <<elseif $_remy.stage is 'close'>>
+          <<if C.npc.Remy.dom gte 25>><span class='lewd'>treasures you</span><<else>><span class='lewd'>longs for your company</span><</if>>.
+        <<else>>
+          <span class='pink'>looks forward to seeing you</span>.
+        <</if>>
+      <<elseif $_remy.state.ended>>
+        keeps you <span class='blue'>at a distance</span> since your breakup.
+      <<elseif C.npc.Remy.love lte $npclovelow>>
+        has <span class='purple'>little patience for you</span>.
+      <<elseif $_remy.stage is 'courting'>>
+        has <span class='pink'>taken a personal interest in you</span>.
+      <<elseif $_remy.stage is 'familiar'>>
+        <span class='teal'>enjoys your visits</span>.
+      <<else>>
+        recognises you from the riding school.
+      <</if>>
+    <<option 'CN'>>
+      <<if $_remy.confined>>
+        <<if $_remy.state.syndrome>>
+          <<if C.npc.Remy.love gte 50>>
+            把你当作<<if C.npc.Remy.dom gte 25>><span class='red'>畜群中的宠儿</span><<else>><span class='purple'>仍需驯服的宠儿</span><</if>>。
+          <<else>>
+            希望你<span class='purple'>乖乖听<<nnpc_his 'Remy'>>的话</span>。
+          <</if>>
+        <<elseif $_remy.state.romance>>
+          仍把你当作<span class='red'>牲畜</span>，即使你们已经交往。
+        <<elseif $_remy.state.stockholm gt 0>>
+          对你<span class='pink'>主动寻求<<nnpc_his 'Remy'>>关注</span>感到满意。
+        <<else>>
+          希望你<span class='purple'>认清自己的位置</span>。
+        <</if>>
+      <<elseif $_remy.state.syndrome>>
+        <<if C.npc.Remy.love gte 50>>
+          期待你<span class='lewd'>回到<<nnpc_his 'Remy'>>身边</span>。
+        <<else>>
+          <span class='purple'>确信你迟早会想通</span>。
+        <</if>>
+      <<elseif $_remy.state.romance>>
+        <<if C.npc.Remy.love lte $npclovelow>>
+          对你<span class='purple'>没什么耐心</span>。
+        <<elseif C.npc.Remy.lust gte 50>>
+          想要<span class='lewd'>独占你</span>。
+        <<elseif $_remy.stage is 'close'>>
+          <<if C.npc.Remy.dom gte 25>><span class='lewd'>珍爱着你</span><<else>><span class='lewd'>渴望你的陪伴</span><</if>>。
+        <<else>>
+          <span class='pink'>盼着与你见面</span>。
+        <</if>>
+      <<elseif $_remy.state.ended>>
+        在分手后与你<span class='blue'>保持距离</span>。
+      <<elseif C.npc.Remy.love lte $npclovelow>>
+        对你<span class='purple'>没什么耐心</span>。
+      <<elseif $_remy.stage is 'courting'>>
+        对你产生了<span class='pink'>私下相处的兴趣</span>。
+      <<elseif $_remy.stage is 'familiar'>>
+        <span class='teal'>喜欢你的来访</span>。
+      <<else>>
+        认得你这位骑术学校的访客。
+      <</if>>
+  <</language>>
+<</widget>>
