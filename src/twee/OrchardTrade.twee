@@ -48,7 +48,7 @@
 <<set _orchardKeep to {}>>
 <<for _fruit range _orchard.stock>>
   <<capture _fruit>>
-    <br><<foodstufficon _fruit.type>><b><<print setup.foodstuff[_fruit.type].name>></b> × <<= _fruit.amount>><br>
+    <br><<foodstufficon _fruit.type>><b><<= _fruit.type is 'blood_lemon' ? lanSwitch('Blood lemon', '血柠') : lanSwitch(_orchard.species[_fruit.type].name[0], _orchard.species[_fruit.type].name[1])>></b> × <<= _fruit.amount>><br>
     <<set _display_label to $foodstuff[_fruit.type].marketStall is false ? ['Display at the market stall', '在集市摆出'] : ['Keep off the market stall', '不在集市摆出']>>
     <<lanLink _display_label>>
       <<set _orchard to maplebirch.get('Orchard')>>

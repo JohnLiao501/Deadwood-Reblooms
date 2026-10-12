@@ -501,9 +501,9 @@
         <span class='blue'>
         <<language>>
           <<option 'EN'>>
-            You have Remy's sample. The test costs £5,000.
+            You have Remy's sample. The test costs <<printmoney 500000>>.
           <<option 'CN'>>
-            你带着雷米的样本，鉴定需要 £5,000。
+            你带着雷米的样本，鉴定需要 <<printmoney 500000>>。
         <</language>>
         </span><br>
       <</if>>
@@ -511,7 +511,7 @@
   <</for>>
 <</widget>>
 
-:: Deadwood Remy Pregnancy Hospital [nobr]
+:: Deadwood Remy Pregnancy Hospital
 <<set $outside to 0>><<set $location to 'hospital'>><<effects>>
 <<set _remyBirth to $pregnancies[$Orchard?.remy?.pregnancy.id]>>
 <<if maplebirch.get('Orchard') and !$statFreeze and !$replayScene and $combat isnot 1 and C.npc.Remy.init is 1 and C.npc.Remy.state is 'active'
@@ -536,7 +536,7 @@
   <<getouticon>><<lanLink ['Leave', '离开'] 'Hospital Foyer'>><</lanLink>>
 <</if>>
 
-:: Deadwood Remy Pregnancy After [nobr]
+:: Deadwood Remy Pregnancy After
 <<set $outside to 0>><<set $location to 'hospital'>><<effects>>
 <<set _remyBirth to $pregnancies[$recentBirthId]>>
 <<if maplebirch.get('Orchard') and !$statFreeze and !$replayScene and _remyBirth?.carrier is 'Remy' and _remyBirth.pregnancyId is $Orchard.remy.pregnancy.id and _remyBirth.deliveredDate isnot null>>
@@ -558,8 +558,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Let Remy rest and leave', '让雷米休息，离开'] 'Hospital Foyer'>><</lanLink>>
 
-
-:: Deadwood Remy Paternity Result [nobr]
+:: Deadwood Remy Paternity Result
 <<set $outside to 0>><<set $location to 'hospital'>><<effects>>
 <<set _remyTestResult to $pregnancies[$Orchard?.remy?.pregnancy.testId]>>
 <<if maplebirch.get('Orchard') and !$statFreeze and !$replayScene and ['pc', 'Remy'].includes(_remyTestResult?.carrier) and $Orchard.remy.pregnancy.records[_remyTestResult.pregnancyId]?.tested>>

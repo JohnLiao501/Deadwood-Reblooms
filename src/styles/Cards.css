@@ -38,11 +38,6 @@
   margin: 0;
 }
 
-/* 普通段落的源文件换行会生成换行元素，不占用卡片网格的位置。 */
-.deadwood-card-grid > br {
-  display: none;
-}
-
 .deadwood-transport-records .deadwood-card-title {
   color: var(--100);
 }

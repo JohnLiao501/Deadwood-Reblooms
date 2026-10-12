@@ -426,7 +426,7 @@
   <<set $wear_outfit to 'none'>>
 <</widget>>
 
-:: Deadwood Reblooms Property Office [nobr]
+:: Deadwood Reblooms Property Office
 <<set $outside to 0>><<set $location to 'financial_centre'>><<effects>>
 <<deadwood-reblooms-adrian-greeting 'financial_centre_property'>>
 <<if !maplebirch.get('Finance').realEstate.mortgage.terms.available_terms.includes($Finance.real_estate.mortgage_term)>>
@@ -500,7 +500,7 @@
         <br>
         <<set _upkeep to maplebirch.get("Finance").realEstate.maintenanceCost(_property.id)>>
         <<if maplebirch.get('Finance').realEstate.collateralLimit(_property.id) gt 0>>
-          <<lanLink ['Borrow against this property', '以这处房产抵押借款'] 'Deadwood Reblooms Property Collateral'>><<set $Finance.real_estate.collateral_property to _property.id>><</lanLink>><br>
+          <<icon 'property/collateral.png'>><<lanLink ['Borrow against this property', '以这处房产抵押借款'] 'Deadwood Reblooms Property Collateral'>><<set $Finance.real_estate.collateral_property to _property.id>><</lanLink>><br>
         <</if>>
         <div class='dr-finance-summary'>
           <span><<lanSwitch 'Condition' '房屋状况'>></span><span><<= _management.condition>>/100</span>
@@ -828,7 +828,7 @@
   </div>
 <</widget>>
 
-:: Deadwood Reblooms Property Home [nobr]
+:: Deadwood Reblooms Property Home
 <<set _property to maplebirch.get("Finance").realEstate.current>>
 <<if !_property || !maplebirch.get("Finance").realEstate.owns(_property.id) || maplebirch.get("Finance").realEstate.managementFor(_property.id).rented>>
   <<lanLink ["Return to High Street", "返回商业街"] 'High Street'>><</lanLink>>
@@ -997,7 +997,7 @@
 <<effects>><<npc Sydney>><<person1>>
 <<deadwood-reblooms-property-invitation 'Sydney' 'Science Lesson' 'Deadwood Reblooms Property Invite Sydney Science'>>
 
-:: Deadwood Reblooms Property Evening Together [nobr]
+:: Deadwood Reblooms Property Evening Together
 <<set _property to maplebirch.get("Finance").realEstate.current>>
 <<set _companion to maplebirch.get("Finance").realEstate.currentCompanion>>
 <<if !_property || !_companion>>
@@ -1155,7 +1155,7 @@
   <</if>>
 <</if>>
 
-:: Deadwood Reblooms Mortgage Bailey [nobr]
+:: Deadwood Reblooms Mortgage Bailey
 <<set _loan to $Finance.real_estate.mortgage>>
 <<if !_loan || _loan.stage isnot 'notice' || !_loan.bailey_pending>>
   <<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>
@@ -1174,7 +1174,7 @@
   <<lanLink ['Refuse to pay', '拒绝缴款'] 'Deadwood Reblooms Property Office'>><<run maplebirch.get("Finance").realEstate.mortgage.refuseBailey()>><</lanLink>><br>
 <</if>>
 
-:: Deadwood Reblooms Mortgage Fight [nobr]
+:: Deadwood Reblooms Mortgage Fight
 <<if $fightstart is 1>>
   <<set $fightstart to 0>><<neutral 1>><<maninit>><<set $enemyanger += 200>><<npcidlegenitals>>
   <<language>>
@@ -1194,7 +1194,7 @@
   <span id='next'><<lanLink ["Next","继续"] 'Deadwood Reblooms Mortgage Fight'>><</lanLink>></span><<nexttext>>
 <</if>>
 
-:: Deadwood Reblooms Mortgage Fight Finish [nobr]
+:: Deadwood Reblooms Mortgage Fight Finish
 <<effects>>
 <<if $enemyarousal gte $enemyarousalmax or $enemyhealth lte 0>>
   <<run maplebirch.get("Finance").realEstate.mortgage.fightBailey(true)>>
@@ -1216,7 +1216,7 @@
 <<endcombat>><br><br>
 <<lanLink ["Continue","继续"] 'Deadwood Reblooms Property Office'>><</lanLink>>
 
-:: Deadwood Reblooms Property Bed [nobr]
+:: Deadwood Reblooms Property Bed
 <<set _bedProperty to maplebirch.get("Finance").realEstate.current>>
 <<if !_bedProperty || !maplebirch.get("Finance").realEstate.owns(_bedProperty.id) || maplebirch.get("Finance").realEstate.managementFor(_bedProperty.id).rented>>
   <<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>

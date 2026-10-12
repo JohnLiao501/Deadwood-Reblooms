@@ -317,9 +317,9 @@
       <</if>>
       <<language>>
         <<option 'EN'>>
-          Preferred accounts unlock after <span class='blue'>7 days</span> with a peak net balance of <span class='blue'>£5,000</span>. Premier accounts unlock after <span class='blue'>30 days</span> at <span class='blue'>£25,000</span>. Missed card or loan payments <span class='red'>pause upgrades</span>.
+          Preferred accounts unlock after <span class='blue'>7 days</span> with a peak net balance of <span class='gold'>£5,000</span>. Premier accounts unlock after <span class='blue'>30 days</span> at <span class='gold'>£25,000</span>. Missed card or loan payments <span class='red'>pause upgrades</span>.
         <<option 'CN'>>
-          开户满 <span class='blue'>7 天</span>且净余额峰值达到 <span class='blue'>£5,000</span>可升级为优选账户。满 <span class='blue'>30 天</span>且达到 <span class='blue'>£25,000</span>可升级为尊享账户。信用卡或贷款逾期会<span class='red'>暂停升级</span>。
+          开户满 <span class='blue'>7 天</span>且净余额峰值达到 <span class='gold'>£5,000</span>可升级为优选账户。满 <span class='blue'>30 天</span>且达到 <span class='gold'>£25,000</span>可升级为尊享账户。信用卡或贷款逾期会<span class='red'>暂停升级</span>。
       <</language>><br>
       <<lanSwitch 'Bank balances earn ' '银行存款每周计息'>><span class='blue'><<= (maplebirch.get('Finance').terms.depositWeeklyRate * 100).toFixed(2)>>%</span><<lanSwitch ' interest each week.' '。'>>
       <<deadwood-card 'Account transactions' '账户存取'>>
@@ -386,9 +386,9 @@
         <</if>>
         <<language>>
           <<option 'EN'>>
-            Cash advances add a <span class='gold'><<= (maplebirch.get('Finance').terms.creditAdvancePercent)>>% fee</span>. Debt accrues <span class='gold'><<= (maplebirch.get('Finance').terms.creditWeeklyRate * 100).toFixed(2)>>% interest</span> each week. A <span class='blue'>10% minimum payment</span>, or £10 if greater, is collected every 7 days. A missed payment adds a <<deadwood-reblooms-finance-money 1000>> late fee and <span class='red'>suspends further advances</span>.
+            Cash advances add a <span class='gold'><<= (maplebirch.get('Finance').terms.creditAdvancePercent)>>% fee</span>. Debt accrues <span class='gold'><<= (maplebirch.get('Finance').terms.creditWeeklyRate * 100).toFixed(2)>>% interest</span> each week. A <span class='blue'>10% minimum payment</span>, or <<printmoney 1000>> if greater, is collected every 7 days. A missed payment adds a <<deadwood-reblooms-finance-money 1000>> late fee and <span class='red'>suspends further advances</span>.
           <<option 'CN'>>
-            信用卡取现收取 <span class='gold'><<= maplebirch.get('Finance').terms.creditAdvancePercent>>% 手续费</span>，欠款每周计息 <span class='gold'><<= (maplebirch.get('Finance').terms.creditWeeklyRate * 100).toFixed(2)>>%</span>。每 7 天自动扣除欠款的 <span class='blue'>10%</span>，若低于 £10 则按 £10 扣除。扣款不足会加收 <<deadwood-reblooms-finance-money 1000>> 滞纳金，并<span class='red'>暂停继续取现</span>。
+            信用卡取现收取 <span class='gold'><<= maplebirch.get('Finance').terms.creditAdvancePercent>>% 手续费</span>，欠款每周计息 <span class='gold'><<= (maplebirch.get('Finance').terms.creditWeeklyRate * 100).toFixed(2)>>%</span>。每 7 天自动扣除欠款的 <span class='blue'>10%</span>，若低于 <<printmoney 1000>> 则按 <<printmoney 1000>> 扣除。扣款不足会加收 <<deadwood-reblooms-finance-money 1000>> 滞纳金，并<span class='red'>暂停继续取现</span>。
         <</language>>
         <<deadwood-card 'Credit transactions' '信用卡业务'>>
           <<lanSwitch 'Available credit, including advance fees: ' '可用额度（含取现手续费）：'>><<deadwood-reblooms-finance-money `Math.max(0, _financeLimits.credit - $Finance.bank.credit_debt)`>><br>
@@ -433,9 +433,9 @@
       <<set _financeLimits to maplebirch.get("Finance").accountLimits>>
       <<language>>
         <<option 'EN'>>
-          Scheduled payments are taken weekly from your bank balance. A missed payment adds <span class='red'>£5 or 2% of the unpaid instalment</span>, whichever is greater. After the due date, the <span class='red'>weekly rate doubles</span>.
+          Scheduled payments are taken weekly from your bank balance. A missed payment adds <span class='red'><<printmoney 500>> or 2% of the unpaid instalment</span>, whichever is greater. After the due date, the <span class='red'>weekly rate doubles</span>.
         <<option 'CN'>>
-          计划还款每周从银行余额扣除。漏还时加收 <span class='red'>£5 或未付当期金额的 2%</span>，取较高者。到期后<span class='red'>周利率翻倍</span>。
+          计划还款每周从银行余额扣除。漏还时加收 <span class='red'><<printmoney 500>> 或未付当期金额的 2%</span>，取较高者。到期后<span class='red'>周利率翻倍</span>。
       <</language>><br>
       <<lanSwitch '7-day bridge loan' '7 天周转贷款'>>：<<= (maplebirch.get("Finance").loanProducts[0].weeklyRate * 100).toFixed(3)>>% / <<lanSwitch 'week' '周'>><br>
       <<lanSwitch '14-day short-term loan' '14 天短期贷款'>>：<<= (maplebirch.get("Finance").loanProducts[1].weeklyRate * 100).toFixed(3)>>% / <<lanSwitch 'week' '周'>><br>
@@ -451,9 +451,9 @@
           <label><<lanSwitch 'Amount (£)' '金额（£）'>>：<<textbox '_financeLoanAmount' _financeLoanAmount>></label><br>
           <label><<lanSwitch 'Loan type' '贷款类型'>>：
           <<lanListbox '_financeLoanTerm' autoselect>>
-            <<option '7-day bridge loan' 7>>
-            <<option '14-day short-term loan' 14>>
-            <<option '30-day personal loan' 30>>
+            <<option ['7-day bridge loan', '7 天周转贷款'] 7>>
+            <<option ['14-day short-term loan', '14 天短期贷款'] 14>>
+            <<option ['30-day personal loan', '30 天个人贷款'] 30>>
           <</lanListbox>>
           </label>
         </div>

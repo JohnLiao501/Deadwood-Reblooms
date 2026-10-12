@@ -169,6 +169,7 @@ const defaults: OrchardState = {
 };
 
 class Orchard extends Module {
+  public readonly species = species;
   public readonly remy = new Remy(this);
   public readonly staff = new Staff(this);
   /** 只用于下一次界面的操作回执，不参与存档或生长结算。 */

@@ -6,7 +6,7 @@
   <<if _medicines?.stock.length and _medicines.nearby.includes(_name)>>
     <div @id="'deadwood-medicine-' + setup.NPCNameList.indexOf(_name)">
       <<capture _name>>
-        <<lanLink ['Discuss the tablets with ' + _name, '和' + maplebirch.auto(_name) + '谈谈药片']>>
+        <<icon 'medicine/tablet-information.png'>><<lanLink ['Discuss the tablets with ' + _name, '和' + maplebirch.auto(_name) + '谈谈药片']>>
           <<replace `'#deadwood-medicine-' + setup.NPCNameList.indexOf(_name)`>><<deadwood-partner-medicine-menu _name>><</replace>>
         <</lanLink>>
       <</capture>>
@@ -18,27 +18,36 @@
   <<set _name to _args[0]>>
   <<set _medicines to maplebirch.get('LifeSimulation')?.partner_medicine>>
   <<if !_medicines?.nearby.includes(_name)>><<exit>><</if>>
-  <<if !_medicines.willing(_name)>>
+  <<if $LifeSimulation.partner_medicine.doses[_name]?.day is Time.days>>
+    <span class='blue'><<lanSwitch 'They have already taken a tablet today. You can ask again tomorrow.' '对方今天已经服过一粒药片，明天再询问吧。'>></span><br>
+  <<elseif npcIsPregnant(_name)>>
+    <span class='blue'><<lanSwitch 'They are not taking these tablets while pregnant.' '怀孕期间，对方暂不服用这些药片。'>></span><br>
+  <<elseif !_medicines.willing(_name)>>
     <<deadwood-partner-medicine-reply _name false>>
   <<else>>
     <<deadwood-partner-medicine-reply _name true>>
     <<set _available to _medicines.stock.filter(dose => _medicines.canTake(_name, dose.part, dose.direction))>>
     <<if !_available.length>>
-      <<lanSwitch 'There is no suitable dose to offer right now.' '眼下没有适合递给对方的剂量。'>><br>
+      <<if !_medicines.stock.length>>
+        <<lanSwitch 'You have no suitable tablets left.' '你手里已经没有可用的药片了。'>>
+      <<else>>
+        <<lanSwitch 'None of the tablets you have suit their current body.' '你现有的药片不适合对方目前的身体状况。'>>
+      <</if>><br>
+
     <</if>>
     <<for _dose range _available>>
       <<set _part to _dose.part>><<set _direction to _dose.direction>>
       <<set _labels to {
-        'breast growth': ['Offer breast growth tablets', '询问是否服用丰胸药'],
-        'breast reduction': ['Offer breast reduction tablets', '询问是否服用缩胸药'],
-        'penis growth': ['Offer penis growth tablets', '询问是否服用阴茎增长药'],
-        'penis reduction': ['Offer penis reduction tablets', '询问是否服用阴茎缩小药'],
-        'bottom growth': ['Offer bottom growth tablets', '询问是否服用丰臀药'],
-        'bottom reduction': ['Offer bottom reduction tablets', '询问是否服用缩臀药']
+        'breast growth': ['Offer breast growth tablets (0:05)', '询问是否服用丰胸药 (0:05)'],
+        'breast reduction': ['Offer breast reduction tablets (0:05)', '询问是否服用缩胸药 (0:05)'],
+        'penis growth': ['Offer penis growth tablets (0:05)', '询问是否服用阴茎增长药 (0:05)'],
+        'penis reduction': ['Offer penis reduction tablets (0:05)', '询问是否服用阴茎缩小药 (0:05)'],
+        'bottom growth': ['Offer bottom growth tablets (0:05)', '询问是否服用丰臀药 (0:05)'],
+        'bottom reduction': ['Offer bottom reduction tablets (0:05)', '询问是否服用缩臀药 (0:05)']
       }>>
       <<if _medicines.canTake(_name, _part, _direction)>>
         <<capture _name _part _direction>>
-          <<lanLink _labels[_dose.id]>>
+          <<pillicon `_part + (_direction === 'growth' ? 'Enlarge' : 'Reduce')`>><<lanLink _labels[_dose.id]>>
             <<set _medicine_result to maplebirch.get('LifeSimulation').partner_medicine.give(_name, _part, _direction)>>
             <<replace `'#deadwood-medicine-' + setup.NPCNameList.indexOf(_name)`>>
               <<if _medicine_result is 'refused'>>
@@ -52,6 +61,7 @@
                     你把一粒药片连同包装递过去。<<print maplebirch.auto(_name)>>听完你的说明后，接过药片，就着水服下。
                     <<if _medicine_result is 'changed'>><span class='purple'>逐渐积累的变化已经显现。</span><</if>>
                 <</language>><br>
+                <<deadwood-partner-medicine-taken _name>>
               <</if>>
             <</replace>>
             <<if _medicine_result isnot 'refused'>><<pass 5>><<updatesidebarimg>><</if>>
@@ -103,6 +113,34 @@
           雷米伸手示意你递过包装。<<if _agreed>>“先看标签。该怎么用，由我决定。”<<else>>“这由我决定。收起来。”<</if>>
         <<default>>
           <<if _agreed>><<print maplebirch.auto(_name)>>听你说明了药片的作用，表示愿意尝试一剂。<<else>><<print maplebirch.auto(_name)>>拒绝了。你把药收起来。<</if>>
+      <</switch>>
+  <</language>><br>
+<</widget>>
+
+<!-- 服药后的简短反应，不重复菜单中的说明与同意过程。 -->
+<<widget 'deadwood-partner-medicine-taken'>>
+  <<language>>
+    <<option 'EN'>>
+      <<switch _args[0]>>
+        <<case 'Robin'>>Robin checks the packet once more before giving it back. "We'll see how it goes. No rushing, okay?"
+        <<case 'Kylar'>>Kylar folds the empty foil between nervous fingers. "Y-you'll stay a minute, won't you?"
+        <<case 'Whitney'>>Whitney hands the packet back with a smirk. "Don't start fussing. I'll tell you if I want another."
+        <<case 'Sydney'>>Sydney sets the glass down and checks the date on the packet. "That's enough for today."
+        <<case 'Alex'>>Alex drains the water and sets the glass aside. "Right. Still got work to do."
+        <<case 'Avery'>>Avery returns the packet to your hand. "I shall let you know what I think of your suggestion."
+        <<case 'Remy'>>Remy reads the label again before returning it. "I'll decide when to take the next one."
+        <<default>><<print _args[0]>> returns the packaging to you.
+      <</switch>>
+    <<option 'CN'>>
+      <<switch _args[0]>>
+        <<case 'Robin'>>罗宾又看了一遍包装，才递还给你。“先看看怎么样。别着急，好吗？”
+        <<case 'Kylar'>>凯拉尔紧张地折着空铝箔。“你、你再陪我一会儿，好不好？”
+        <<case 'Whitney'>>惠特尼带着坏笑把包装递回来。“别大惊小怪。想再吃的时候，我会告诉你。”
+        <<case 'Sydney'>>悉尼放下杯子，核对了包装上的日期。“今天就到这里。”
+        <<case 'Alex'>>艾利克斯喝完水，将杯子放到一边。“好了。还有活要干。”
+        <<case 'Avery'>>艾弗里把包装放回你手里。“你的提议怎么样，我会告诉你。”
+        <<case 'Remy'>>雷米又读了一遍标签，才把包装还给你。“下一粒什么时候吃，由我决定。”
+        <<default>><<print maplebirch.auto(_args[0])>>把包装还给你。
       <</switch>>
   <</language>><br>
 <</widget>>

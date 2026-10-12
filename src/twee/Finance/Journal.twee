@@ -52,66 +52,76 @@
       <<if $Finance.newspaper.report>>
         <li><<deadwood-finance-paper-summary>></li>
       <</if>>
-      <<for _finance_property range maplebirch.get("Finance").realEstate.properties>>
-        <<capture _finance_property>>
-          <<if maplebirch.get("Finance").realEstate.owns(_finance_property.id)>>
-            <<set _finance_property_state to maplebirch.get("Finance").realEstate.managementFor(_finance_property.id)>>
-            <<set _finance_property_upkeep to maplebirch.get("Finance").realEstate.maintenanceCost(_finance_property.id)>>
-            <li>
-              <span class='gold'><<= lanSwitch(_finance_property.name.EN, _finance_property.name.CN)>></span>
-              <<lanSwitch ': ' '：'>>
-              <<if _finance_property_state.rented>>
-                <<set _finance_property_rent to maplebirch.get("Finance").realEstate.weeklyRent(_finance_property.id)>>
-                <<lanSwitch 'Rented out, weekly rent: ' '已出租，每周租金：'>>
-                <<deadwood-reblooms-finance-money _finance_property_rent>>
-              <<elseif _finance_property_state.auction_day isnot null>>
-                <span class='blue'><<lanSwitch 'Auction closes on day ' '拍卖于第 '>>
-                <<= _finance_property_state.auction_day>><<lanSwitch '.' ' 天结束。'>></span>
-              <<else>>
-                <span class='green'><<lanSwitch 'Your home' '你的住所'>></span>
-              <</if>>
-              <br><<lanSwitch 'Weekly upkeep: ' '每周维护费：'>>
-              <<deadwood-reblooms-finance-money _finance_property_upkeep>>
-              <<lanSwitch ', next settlement: ' '，下次结算：'>>
-              <<deadwood-reblooms-finance-date _finance_property_state.next_settlement_day>><<lanSwitch '.' '。'>>
-              <br><<lanSwitch 'Condition: ' '房屋状况：'>><<= _finance_property_state.condition>>/100
-              <<if _finance_property_state.lease_end_day isnot null>>
-                <span class='blue'><<lanSwitch ' Tenant leaves on day ' ' 租客将在第 '>>
-                <<= _finance_property_state.lease_end_day>><<lanSwitch '.' ' 天退租。'>></span>
-              <</if>>
-              <<if _finance_mortgage?.property_id is _finance_property.id>>
-                <br><<lanSwitch 'Mortgage balance: ' '房贷余额：'>><<deadwood-reblooms-finance-money _finance_mortgage.outstanding>>
-                · <<lanSwitch 'Weekly interest: ' '周利率：'>><span class='gold'><<= (_finance_mortgage.weekly_rate * 100).toFixed(2)>>%</span>
-                <br><<lanSwitch 'Next instalment: ' '下次应还：'>><<deadwood-reblooms-finance-money _finance_mortgage.weekly_payment>>
-                · <<deadwood-reblooms-finance-date _finance_mortgage.next_payment_day>>
-                <br><<lanSwitch 'Final payment: ' '贷款到期：'>><<deadwood-reblooms-finance-date _finance_mortgage.maturity_day>>
-                <<if _finance_mortgage.arrears gt 0>>
-                  <br><span class='red'><<lanSwitch 'Overdue: ' '逾期款：'>></span><<deadwood-reblooms-finance-money _finance_mortgage.arrears 'red'>>
-                <</if>>
-                <<if _finance_mortgage.stage is 'notice'>>
-                  <br><span class='red'><<lanSwitch 'The bank has issued a payment notice.' '银行已发出催缴通知。'>></span>
-                  <<if _finance_mortgage.bailey_pending>><<lanSwitch ' Bailey is waiting outside the financial centre.' ' 贝利正在金融中心门外等你。'>><</if>>
-                <<elseif _finance_mortgage.stage is 'frozen'>>
-                  <br><span class='red'><<lanSwitch 'The property is frozen. Foreclosure auction: ' '房产已冻结，强制拍卖日期：'>></span><<deadwood-reblooms-finance-date `_finance_mortgage.frozen_day + maplebirch.get('Finance').realEstate.mortgage.terms.auction_after_freeze_days`>>
-                <</if>>
-              <</if>>
-            </li>
-          <</if>>
-        <</capture>>
-      <</for>>
-      <<if $Finance.real_estate.last_auction>>
-        <<set _finance_auction to $Finance.real_estate.last_auction>>
-        <<set _finance_auction_property to maplebirch.get("Finance").realEstate.properties.find(item => item.id === _finance_auction.property_id)>>
-        <<if _finance_auction_property>>
-          <li>
-            <<lanSwitch 'Last auction: ' '最近一次拍卖：'>>
-            <span class='gold'><<= lanSwitch(_finance_auction_property.name.EN, _finance_auction_property.name.CN)>></span><br>
-            <<lanSwitch 'Proceeds returned to bank: ' '返还银行账户：'>>
-            <<deadwood-reblooms-finance-money _finance_auction.surplus>>
-          </li>
-        <</if>>
-      <</if>>
     </ul>
+    <<if Object.values($Finance.real_estate.owned).some(Boolean) or $Finance.real_estate.last_auction>>
+      <details id='deadwood-finance-property-details'>
+        <summary><<lanSwitch 'Property details and repayment notices' '房产明细与还款提醒'>></summary>
+        <ul class='journal'>
+          <<for _finance_property range maplebirch.get("Finance").realEstate.properties>>
+            <<capture _finance_property>>
+              <<if maplebirch.get("Finance").realEstate.owns(_finance_property.id)>>
+                <<set _finance_property_state to maplebirch.get("Finance").realEstate.managementFor(_finance_property.id)>>
+                <<set _finance_property_upkeep to maplebirch.get("Finance").realEstate.maintenanceCost(_finance_property.id)>>
+                <li>
+                  <span class='gold'><<= lanSwitch(_finance_property.name.EN, _finance_property.name.CN)>></span>
+                  <<lanSwitch ': ' '：'>>
+                  <<if _finance_property_state.rented>>
+                    <<set _finance_property_rent to maplebirch.get("Finance").realEstate.weeklyRent(_finance_property.id)>>
+                    <<lanSwitch 'Rented out, weekly rent: ' '已出租，每周租金：'>>
+                    <<deadwood-reblooms-finance-money _finance_property_rent>>
+                  <<elseif _finance_property_state.auction_day isnot null>>
+                    <span class='blue'><<lanSwitch 'Auction closes on day ' '拍卖于第 '>>
+                    <<= _finance_property_state.auction_day>><<lanSwitch '.' ' 天结束。'>></span>
+                  <<else>>
+                    <span class='green'><<lanSwitch 'Your home' '你的住所'>></span>
+                  <</if>>
+                  <br><<lanSwitch 'Weekly upkeep: ' '每周维护费：'>>
+                  <<deadwood-reblooms-finance-money _finance_property_upkeep>>
+                  <<lanSwitch ', next settlement: ' '，下次结算：'>>
+                  <<deadwood-reblooms-finance-date _finance_property_state.next_settlement_day>><<lanSwitch '.' '。'>>
+                  <br><<lanSwitch 'Condition: ' '房屋状况：'>><<= _finance_property_state.condition>>/100
+                  <<if _finance_property_state.lease_end_day isnot null>>
+                    <span class='blue'><<lanSwitch ' Tenant leaves on day ' ' 租客将在第 '>>
+                    <<= _finance_property_state.lease_end_day>><<lanSwitch '.' ' 天退租。'>></span>
+                  <</if>>
+                  <<if _finance_mortgage?.property_id is _finance_property.id>>
+                    <br><<lanSwitch 'Mortgage balance: ' '房贷余额：'>><<deadwood-reblooms-finance-money _finance_mortgage.outstanding>>
+                    · <<lanSwitch 'Weekly interest: ' '周利率：'>><span class='gold'><<= (_finance_mortgage.weekly_rate * 100).toFixed(2)>>%</span>
+                    <br><<lanSwitch 'Next instalment: ' '下次应还：'>><<deadwood-reblooms-finance-money _finance_mortgage.weekly_payment>>
+                    · <<deadwood-reblooms-finance-date _finance_mortgage.next_payment_day>>
+                    <br><<lanSwitch 'Final payment: ' '贷款到期：'>><<deadwood-reblooms-finance-date _finance_mortgage.maturity_day>>
+                    <<if _finance_mortgage.arrears gt 0>>
+                      <br><span class='red'><<lanSwitch 'Overdue: ' '逾期款：'>></span><<deadwood-reblooms-finance-money _finance_mortgage.arrears 'red'>>
+                    <</if>>
+                    <<if _finance_mortgage.stage is 'notice'>>
+                      <br><span class='red'><<lanSwitch 'The bank has issued a payment notice.' '银行已发出催缴通知。'>></span>
+                      <<if _finance_mortgage.bailey_pending>><<lanSwitch ' Bailey is waiting outside the financial centre.' ' 贝利正在金融中心门外等你。'>><</if>>
+                    <<elseif _finance_mortgage.stage is 'frozen'>>
+                      <br><span class='red'><<lanSwitch 'The property is frozen. Foreclosure auction: ' '房产已冻结，强制拍卖日期：'>></span><<deadwood-reblooms-finance-date `_finance_mortgage.frozen_day + maplebirch.get('Finance').realEstate.mortgage.terms.auction_after_freeze_days`>>
+                    <</if>>
+                  <</if>>
+                </li>
+              <</if>>
+            <</capture>>
+          <</for>>
+          <<if $Finance.real_estate.last_auction>>
+            <<set _finance_auction to $Finance.real_estate.last_auction>>
+            <<set _finance_auction_property to maplebirch.get("Finance").realEstate.properties.find(item => item.id === _finance_auction.property_id)>>
+            <<if _finance_auction_property>>
+              <li>
+                <<lanSwitch 'Last auction: ' '最近一次拍卖：'>>
+                <span class='gold'><<= lanSwitch(_finance_auction_property.name.EN, _finance_auction_property.name.CN)>></span><br>
+                <<lanSwitch 'Proceeds returned to bank: ' '返还银行账户：'>>
+                <<deadwood-reblooms-finance-money _finance_auction.surplus>>
+              </li>
+            <</if>>
+          <</if>>
+        </ul>
+      </details>
+      <<done>>
+        <<run document.getElementById('deadwood-finance-property-details').open = !!($Finance.real_estate.mortgage && ($Finance.real_estate.mortgage.arrears > 0 || ['notice', 'frozen'].includes($Finance.real_estate.mortgage.stage)))>>
+      <</done>>
+    <</if>>
     <hr>
   <</if>>
 <</widget>>

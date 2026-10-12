@@ -1,4 +1,4 @@
-:: Deadwood Orchard Farm Contract [nobr]
+:: Deadwood Orchard Farm Contract
 <<set $outside to 1>><<set $location to 'alex_farm'>><<farm_work_update>><<effects>>
 <<if $stress gte $stressmax>>
   <<passoutfarmroad>><<exit>>
@@ -43,9 +43,18 @@
   <</if>>
   <<if $_orchard.canContract and $_orchard.contractFruit.length>>
     <<set _contractFruit to $_orchard.contractFruit[0]>><<set _contractAmount to $_orchard.contractQuantities[0]>>
-    <<set _contractOptions to {}>>
-    <<for $_type range $_orchard.contractFruit>><<set _contractOptions[setup.foodstuff[$_type].name] to $_type>><</for>>
-    <label><<lanSwitch 'Fruit: ' '水果：'>><<listbox '_contractFruit' autoselect>><<optionsfrom _contractOptions>><</listbox>></label><br>
+    <label><<lanSwitch 'Fruit: ' '水果：'>>
+      <<language>>
+        <<option 'EN'>>
+          <<set _contractOptions to {}>>
+          <<for $_type range $_orchard.contractFruit>><<set _contractOptions[$_type is 'blood_lemon' ? 'Blood lemon' : $_orchard.species[$_type].name[0]] to $_type>><</for>>
+          <<listbox '_contractFruit' autoselect>><<optionsfrom _contractOptions>><</listbox>>
+        <<option 'CN'>>
+          <<set _contractOptions to {}>>
+          <<for $_type range $_orchard.contractFruit>><<set _contractOptions[$_type is 'blood_lemon' ? '血柠' : $_orchard.species[$_type].name[1]] to $_type>><</for>>
+          <<listbox '_contractFruit' autoselect>><<optionsfrom _contractOptions>><</listbox>>
+      <</language>>
+    </label><br>
     <label><<lanSwitch 'Quantity: ' '数量：'>><<listbox '_contractAmount' autoselect>><<optionsfrom $_orchard.contractQuantities>><</listbox>></label><br>
     <<language>>
       <<option 'EN'>>

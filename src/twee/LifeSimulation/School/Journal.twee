@@ -52,9 +52,9 @@
       <<else>>
         <<language>>
           <<option 'EN'>>
-            With <span class='gold'>top grades in all four subjects</span>, ask <span class='blue'>Leighton</span> about arranging your own attendance. This permission is separate from a council appointment.
+            With <span class='gold'>top grades in all four subjects</span>, ask <span class='blue'>Leighton</span> about arranging your own attendance. You also need Leighton's approval, or enough leverage to demand it. This permission is separate from a council appointment.
           <<option 'CN'>>
-            四科都达到<span class='gold'>最高档</span>后，可以找<span class='blue'>礼顿</span>申请自行安排上课。免听许可与学生会职务分别办理。
+            四科都达到<span class='gold'>最高档</span>后，可以找<span class='blue'>礼顿</span>申请自行安排上课。还需要获得礼顿的认可，或掌握足以要求礼顿批准的把柄。免听许可与学生会职务分别办理。
         <</language>>
       <</if>>
     </li>

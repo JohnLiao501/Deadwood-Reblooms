@@ -56,7 +56,7 @@
   <</language>><br><br>
 <</widget>>
 
-:: Deadwood Reblooms Life Simulation Slot Machine [nobr]
+:: Deadwood Reblooms Life Simulation Slot Machine
 <<set $outside to 0>><<set $location to 'arcade'>><<effects>>
 <<if maplebirch.get('LifeSimulation')>>
   <<language>>
@@ -69,7 +69,7 @@
   <<if !maplebirch.get('LifeSimulation').casino.slots.available>>
     <span class='red'><<lanSwitch 'You cannot play right now. Return to the arcade.' '你现在无法游玩。返回游戏厅吧。'>></span><br>
   <<elseif $money lt 500>>
-    <span class='blue'><<lanSwitch 'You need £5 to play.' '你需要 £5 才能游玩。'>></span><br>
+    <span class='blue'><<lanSwitch 'You need <<printmoney 500>> to play.' '你需要 <<printmoney 500>> 才能游玩。'>></span><br>
   <</if>>
   <<deadwood-slot-rules>>
 <</if>>

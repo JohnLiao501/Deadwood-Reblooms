@@ -274,7 +274,7 @@
   <</for>><br>
 <</widget>>
 
-:: Deadwood Reblooms Factory [nobr]
+:: Deadwood Reblooms Factory
 <<set $outside to 1>><<set $location to 'deadwood_factory'>><<effects>>
 <<set _factory to maplebirch.get('Finance').industry>><<set _factory_state to _factory.state>>
 <<language>>
@@ -377,7 +377,7 @@
 <</if>><br>
 <<elkicon>><<lanLink ['Return to Elk Street (0:02)', '返回麋鹿街 (0:02)'] 'Elk Street'>><<pass 2>><</lanLink>><br>
 
-:: Deadwood Reblooms Factory Survey [nobr]
+:: Deadwood Reblooms Factory Survey
 <<set $outside to 0>><<set $location to 'deadwood_factory'>><<effects>>
 <<set _factory_state to maplebirch.get('Finance').industry.state>>
 <<if _factory_state.inspected>>
@@ -396,7 +396,7 @@
 <</if>>
 <<deadwood-industry-return>>
 
-:: Deadwood Reblooms Factory Purchase [nobr]
+:: Deadwood Reblooms Factory Purchase
 <<set $outside to 0>><<set $location to 'deadwood_factory'>><<effects>>
 <<set _factory to maplebirch.get('Finance').industry>><<set _factory_state to _factory.state>>
 <<if !_factory.available or !_factory.open or _factory_state.owned>><<deadwood-industry-return>><<exit>><</if>>
@@ -420,7 +420,7 @@
       原来的三名工人留下，交接需要三天。你还须承担<span class='red'><<deadwood-reblooms-finance-money _factory.terms.purchase.oldArrears>>欠薪</span>，清偿后才能开工。
   <</language>><br>
   <<deadwood-reblooms-finance-money _factory.purchasePrice.old>><br>
-  <<lanLink ['Buy the old workshop (0:30)', '收购旧厂 (0:30)'] 'Deadwood Reblooms Factory'>>
+  <<icon 'industry/workshop.png'>><<lanLink ['Buy the old workshop (0:30)', '收购旧厂 (0:30)'] 'Deadwood Reblooms Factory'>>
     <<set $Finance.industry.result to maplebirch.get('Finance').industry.acquire('old', _factory_line) ? 'ok' : 'failed'>><<if $Finance.industry.result is 'ok'>><<pass 30>><</if>>
   <</lanLink>>
 <</deadwood-card>>
@@ -432,14 +432,14 @@
       价格包含土地、施工和一条生产线，工期十四天。你还需要雇工，并准备周转金。
   <</language>><br>
   <<deadwood-reblooms-finance-money _factory.purchasePrice.new>><br>
-  <<lanLink ['Commission the new factory (0:30)', '签约建造新厂 (0:30)'] 'Deadwood Reblooms Factory'>>
+  <<icon 'industry/construction.png'>><<lanLink ['Commission the new factory (0:30)', '签约建造新厂 (0:30)'] 'Deadwood Reblooms Factory'>>
     <<set $Finance.industry.result to maplebirch.get('Finance').industry.acquire('new', _factory_line) ? 'ok' : 'failed'>><<if $Finance.industry.result is 'ok'>><<pass 30>><</if>>
   <</lanLink>>
 <</deadwood-card>>
 <<if !$Finance.bank.debit_card>><span class='blue'><<lanSwitch "You need a debit card and sufficient bank funds." "需要借记卡与足够的银行存款。">></span><br><</if>>
 <<deadwood-industry-return>>
 
-:: Deadwood Reblooms Factory Funds [nobr]
+:: Deadwood Reblooms Factory Funds
 <<deadwood-industry-header>>
 <<if !_factory.available or !_factory_state.owned>><<exit>><</if>>
 <<language>>
@@ -467,7 +467,7 @@
 <<icon 'finance/business-loan.png'>><<lanLink ['Ask the bank about a working-capital loan', '到银行申请经营贷款'] 'Deadwood Reblooms Business Loan'>><</lanLink>><br>
 <<deadwood-industry-return>>
 
-:: Deadwood Reblooms Factory Orders [nobr]
+:: Deadwood Reblooms Factory Orders
 <<deadwood-industry-header>>
 <<if !_factory.available or !_factory_state.owned>><<exit>><</if>>
 <<if _factory_state.order?.customer is 'RMY'>>
@@ -555,7 +555,7 @@
 <</if>>
 <<deadwood-industry-return>>
 
-:: Deadwood Reblooms Factory Cancel [nobr]
+:: Deadwood Reblooms Factory Cancel
 <<deadwood-industry-header>>
 <<if !_factory.foreman>><<deadwood-industry-return>><<exit>><</if>>
 <<language>>
@@ -570,15 +570,15 @@
 <</if>>
 <<lanLink ['Keep the job', '继续这笔订单'] 'Deadwood Reblooms Factory Orders'>><</lanLink>><br>
 
-:: Deadwood Reblooms Factory Management [nobr]
+:: Deadwood Reblooms Factory Management
 <<deadwood-industry-header>>
 <<if !_factory.available or !_factory_state.owned>><<exit>><</if>>
 <<if !_factory.open or !_factory.ready>><<deadwood-industry-return>><<exit>><</if>>
 <<language>>
   <<option 'EN'>>
-    Rowan has pencilled the shift plan beside the clock. "At least two people on the floor. One person can't run the machine and carry the load safely." <<He 'Rowan'>> points to the payroll. "£45 per worker, every day. If you want longer shifts, pay the extra. Letting someone go costs three days' wages."
+    Rowan has pencilled the shift plan beside the clock. "At least two people on the floor. One person can't run the machine and carry the load safely." <<He 'Rowan'>> points to the payroll. "<<printmoney 4500>> per worker, every day. If you want longer shifts, pay the extra. Letting someone go costs three days' wages."
   <<option 'CN'>>
-    罗文把铅笔写的班表贴在时钟旁。“车间至少两个人。一个人顾机器，又搬货，不安全。”<<He 'Rowan'>>指指工资表。“每人每天 £45。要加班，就付加班的钱。辞退一个人，要付三天工资。”
+    罗文把铅笔写的班表贴在时钟旁。“车间至少两个人。一个人顾机器，又搬货，不安全。”<<He 'Rowan'>>指指工资表。“每人每天 <<printmoney 4500>>。要加班，就付加班的钱。辞退一个人，要付三天工资。”
 <</language>><br><br>
 <<deadwood-industry-result>>
 <<set _factory_workers to _factory_state.workers>><<set _factory_rush to _factory_state.rush>><<set _factory_auto to _factory_state.automatic>>
@@ -603,9 +603,9 @@
     <label><<lanSwitch "Maximum order value £" "单笔订单金额上限 £">><<numberbox '_factory_limit' _factory_limit>></label><br>
     <<language>>
       <<option 'EN'>>
-        The shift manager keeps the reserve and three days' payroll before buying materials. Problems requiring your decision still stop the floor. Management costs £80 per day.
+        The shift manager keeps the reserve and three days' payroll before buying materials. Problems requiring your decision still stop the floor. Management costs <<printmoney 8000>> per day.
       <<option 'CN'>>
-        值班经理采购前会留出最低储备与三天工资、费用。需要你决定的问题仍会停工。代管每天另付 £80。
+        值班经理采购前会留出最低储备与三天工资、费用。需要你决定的问题仍会停工。代管每天另付 <<printmoney 8000>>。
     <</language>><br>
   <</if>>
   <<lanLink ['Agree the shift plan (0:15)', '确认排班 (0:15)'] 'Deadwood Reblooms Factory Management'>>
@@ -651,7 +651,7 @@
 <</deadwood-card>>
 <<deadwood-industry-return>>
 
-:: Deadwood Reblooms Factory Trouble [nobr]
+:: Deadwood Reblooms Factory Trouble
 <<deadwood-industry-header>>
 <<if !_factory.available or !_factory_state.owned>><<exit>><</if>>
 <<if !_factory.foreman>><<deadwood-industry-return>><<exit>><</if>>
@@ -752,7 +752,7 @@
 <</if>>
 <<deadwood-industry-return>>
 
-:: Deadwood Reblooms Factory Rowan [nobr]
+:: Deadwood Reblooms Factory Rowan
 <<set $outside to 0>><<set $location to 'deadwood_factory'>><<effects>>
 <<set _factory to maplebirch.get('Finance').industry>><<set _factory_state to _factory.state>>
 <<if !_factory.foreman>><<deadwood-industry-return>><<exit>><</if>>
@@ -807,7 +807,7 @@
 <</if>>
 <<deadwood-industry-return>>
 
-:: Deadwood Reblooms Factory Decision [nobr]
+:: Deadwood Reblooms Factory Decision
 <<set $outside to 0>><<set $location to 'deadwood_factory'>><<effects>>
 <<if $Finance.industry.result is 'ok' and $Finance.industry.decision>>
   <<language>>
@@ -840,7 +840,7 @@
 <</if>>
 <<deadwood-industry-return>>
 
-:: Deadwood Reblooms Factory Sale [nobr]
+:: Deadwood Reblooms Factory Sale
 <<deadwood-industry-header>>
 <<if !_factory.available or !_factory_state.owned>><<exit>><</if>>
 <<language>>

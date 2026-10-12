@@ -57,7 +57,7 @@
   <<deadwood-casino-balance>>
   <<lanSwitch 'Cash: ' '现金：'>><span class='gold'>£<<print Number(($money / 100).toFixed(2))>></span>
     <<if $_casino.bankAvailable>>
-      · <<lanSwitch 'Bank: ' '银行存款：'>><span class='teal'>£<<print Number(($Finance.bank.balance / 100).toFixed(2))>></span>
+      · <<lanSwitch 'Bank: ' '银行存款：'>><<printmoney $Finance.bank.balance>>
     <</if>>
   <br><br>
   <<set $_methods to {}>>
@@ -160,7 +160,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Life Simulation Casino [nobr]
+:: Deadwood Reblooms Life Simulation Casino
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<deadwood-dynamicblock 'deadwood-casino-room'>>
 <<set _casino to maplebirch.get('LifeSimulation').casino>>
@@ -271,7 +271,7 @@
 <<connudatusicon>><<lanLink ['Leave (0:02)', '离开 (0:02)'] 'Connudatus Street'>><<run maplebirch.get('LifeSimulation').casino.leave()>><<endevent>><<pass 2>><</lanLink>><br>
 <</deadwood-dynamicblock>>
 
-:: Deadwood Reblooms Casino Cashier [nobr]
+:: Deadwood Reblooms Casino Cashier
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<set _cashier to {amount: maplebirch.get('LifeSimulation').casino.options.exchanges[0], method: 'cash', amounts: {}}>>
 <<for _amount range maplebirch.get('LifeSimulation').casino.options.exchanges>>
@@ -287,7 +287,7 @@
 <div id='deadwood-casino-cashier-result' role='status'></div><br>
 <<getouticon>><<lanLink ['Return to the room', '返回赌馆'] 'Deadwood Reblooms Life Simulation Casino'>><</lanLink>><br>
 
-:: Deadwood Reblooms Life Simulation Holdem [nobr]
+:: Deadwood Reblooms Life Simulation Holdem
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<language>>
   <<option 'EN'>>
@@ -307,7 +307,7 @@
 <<icon 'casino/dealer.png'>><<lanLink ['Read the table rules', '查看牌桌规则'] 'Deadwood Reblooms Casino Holdem Rules'>><</lanLink>><br>
 <<getouticon>><<lanLink ['Return to the room', '返回赌馆'] 'Deadwood Reblooms Life Simulation Casino'>><</lanLink>><br>
 
-:: Deadwood Reblooms Life Simulation Three Card [nobr]
+:: Deadwood Reblooms Life Simulation Three Card
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<language>>
   <<option 'EN'>>
@@ -327,7 +327,7 @@
 <<icon 'casino/dealer.png'>><<lanLink ['Read the table rules', '查看牌桌规则'] 'Deadwood Reblooms Casino Three Card Rules'>><</lanLink>><br>
 <<getouticon>><<lanLink ['Leave the table', '离开牌桌'] 'Deadwood Reblooms Life Simulation Casino'>><<run maplebirch.get('LifeSimulation').casino.threeCard.leave()>><</lanLink>><br>
 
-:: Deadwood Reblooms Casino Holdem Rules [nobr]
+:: Deadwood Reblooms Casino Holdem Rules
 <<language>>
   <<option 'EN'>>
     The card on the table reads:<br><br>
@@ -346,7 +346,7 @@
 <</language>><br><br>
 <<getouticon>><<lanLink ['Return to the table', '返回牌桌'] 'Deadwood Reblooms Life Simulation Holdem'>><</lanLink>><br>
 
-:: Deadwood Reblooms Casino Three Card Rules [nobr]
+:: Deadwood Reblooms Casino Three Card Rules
 <<language>>
   <<option 'EN'>>
     The dealer points out this table's rules. "Three cards each. No jokers. Choose an ante from the listed amounts before the deal."<br><span class='gold'><<lanSwitch "Ante: " "底注：">></span><<deadwood-poker-stakes 'three'>><br><br>
@@ -363,7 +363,7 @@
 <</language>><br><br>
 <<getouticon>><<lanLink ['Return to the table', '返回牌桌'] 'Deadwood Reblooms Life Simulation Three Card'>><</lanLink>><br>
 
-:: Deadwood Reblooms Casino Slot Machine [nobr]
+:: Deadwood Reblooms Casino Slot Machine
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<language>>
   <<option 'EN'>>

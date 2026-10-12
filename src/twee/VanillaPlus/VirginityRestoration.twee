@@ -36,16 +36,16 @@
 <<if $phase is 'vaginal'>>
   <<language>>
     <<option 'EN'>>
-      "Hymen reconstruction is a simple operation," Harper says. "It costs £1000 and takes one hour."
+      "Hymen reconstruction is a simple operation," Harper says. "It costs <<printmoney 100000>> and takes one hour."
     <<option 'CN'>>
-      “处女膜修复是个简单的手术。”哈珀说，“费用是 £1000，需要一个小时。”
+      “处女膜修复是个简单的手术。”哈珀说，“费用是 <<printmoney 100000>>，需要一个小时。”
   <</language>>
 <<elseif $phase is 'penile'>>
   <<language>>
     <<option 'EN'>>
-      "I can restore your foreskin to its former condition," Harper says. "It costs £1000 and takes one hour."
+      "I can restore your foreskin to its former condition," Harper says. "It costs <<printmoney 100000>> and takes one hour."
     <<option 'CN'>>
-      “我可以让你的包皮恢复到原来的状态。”哈珀说，“费用是 £1000，需要一个小时。”
+      “我可以让你的包皮恢复到原来的状态。”哈珀说，“费用是 <<printmoney 100000>>，需要一个小时。”
   <</language>>
 <</if>>
 <br><br>

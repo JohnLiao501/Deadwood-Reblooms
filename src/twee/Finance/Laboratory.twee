@@ -194,7 +194,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Factory Laboratory [nobr]
+:: Deadwood Reblooms Factory Laboratory
 <<deadwood-industry-header>>
 <<set _lab to _factory.laboratory>><<set _lab_state to _lab.state>>
 <<if !_lab.unlocked or !_factory_state.owned>>
@@ -231,9 +231,9 @@
 <<if !_lab_state.installed>>
   <<language>>
     <<option 'EN'>>
-      The quotation covers a closed processing bench and packing equipment. Your existing <span class='blue'>packaging line</span> is required, together with <span class='blue'>one spare workshop bay</span>. Installation takes three days. A technician must be hired separately.<br><br>You can continue selling Alex's original phials to the compound for <span class='gold'>£1,000 each</span>. Processing consumes those phials, or known strange flowers, to make packs of pills. It does not create more original phials.
+      The quotation covers a closed processing bench and packing equipment. Your existing <span class='blue'>packaging line</span> is required, together with <span class='blue'>one spare workshop bay</span>. Installation takes three days. A technician must be hired separately.<br><br>You can continue selling Alex's original phials to the compound for <span class='gold'><<printmoney 100000>> each</span>. Processing consumes those phials, or known strange flowers, to make packs of pills. It does not create more original phials.
     <<option 'CN'>>
-      报价包括封闭工作台和分装设备。需要已有的<span class='blue'>包装产线</span>，以及<span class='blue'>一个空余的厂房间</span>。安装需三天，还得另聘技术员。<br><br>艾利克斯的原装药剂仍可按<span class='gold'>每瓶 £1,000</span>卖给大院。加工会消耗原装药剂，或已经认识的诡异的花，制成片剂包装；不会凭空增加原装药剂。
+      报价包括封闭工作台和分装设备。需要已有的<span class='blue'>包装产线</span>，以及<span class='blue'>一个空余的厂房间</span>。安装需三天，还得另聘技术员。<br><br>艾利克斯的原装药剂仍可按<span class='gold'>每瓶 <<printmoney 100000>></span>卖给大院。加工会消耗原装药剂，或已经认识的诡异的花，制成片剂包装；不会凭空增加原装药剂。
   <</language>>
   <br><br>
   <<deadwood-reblooms-finance-money _lab.terms.installation>><br>
@@ -247,9 +247,9 @@
 <<else>>
   <<language>>
     <<option 'EN'>>
-      The labels give a batch number and a date. At the shop, a pack of three aphrodisiac pills sells for <span class='gold'>£40</span>. Your buyers offer wholesale prices. Wages, processing, spoiled stock and unpaid invoices come out of the difference.
+      The labels give a batch number and a date. At the shop, a pack of three aphrodisiac pills sells for <span class='gold'><<printmoney 4000>></span>. Your buyers offer wholesale prices. Wages, processing, spoiled stock and unpaid invoices come out of the difference.
     <<option 'CN'>>
-      标签上写着批号和日期。成人商店的一包三片催情药售价<span class='gold'>£40</span>，买家给你的则是批发价。工资、加工、过期库存和收不回来的货款，都要从差价里扣。
+      标签上写着批号和日期。成人商店的一包三片催情药售价<span class='gold'><<printmoney 4000>></span>，买家给你的则是批发价。工资、加工、过期库存和收不回来的货款，都要从差价里扣。
   <</language>>
   <br><br>
   <<if $temple_rank is 'monk'>>
@@ -392,9 +392,9 @@
     <<else>>
       <<language>>
         <<option 'EN'>>
-          Material costs start at £420 per phial lot or £80 per flower lot. Each additional lot reduces the unit cost by 3%, to a maximum 25% discount. Wages and site bills are additional.
+          Material costs start at <<printmoney 42000>> per phial lot or <<printmoney 8000>> per flower lot. Each additional lot reduces the unit cost by 3%, to a maximum 25% discount. Wages and site bills are additional.
         <<option 'CN'>>
-          加工材料费每份药剂起价 £420，每份花料起价 £80。批次每增加一份，单位材料费降低 3%，最多减价 25%；工资和厂房费用另计。
+          加工材料费每份药剂起价 <<printmoney 42000>>，每份花料起价 <<printmoney 8000>>。批次每增加一份，单位材料费降低 3%，最多减价 25%；工资和厂房费用另计。
       <</language>>
       <br>
       <<icon 'industry/phials.png'>><<lanLink ['Process the phials (0:15)', '加工原装药剂 (0:15)'] 'Deadwood Reblooms Factory Laboratory'>>
@@ -569,7 +569,7 @@
 <</deadwood-dynamicblock>>
 <<deadwood-industry-return>>
 
-:: Deadwood Laboratory Farm [nobr]
+:: Deadwood Laboratory Farm
 <<set $outside to 0>><<set $location to 'farm'>><<effects>>
 <<set _lab to maplebirch.get('Finance')?.industry.laboratory>>
 <<if !_lab?.unlocked>>
@@ -611,7 +611,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Return to the lab', '返回实验室'] 'Farm Still'>><</lanLink>>
 
-:: Deadwood Remy Laboratory [nobr]
+:: Deadwood Remy Laboratory
 <<effects>><<deadwood-laboratory-client>>
 <<if !maplebirch.get('Orchard')?.remy.available or !_lab?.unlocked>>
   <<deadwood-remy-return>><<exit>>
@@ -669,7 +669,7 @@
 <</if>>
 <<deadwood-remy-return>>
 
-:: Deadwood Harper Laboratory [nobr]
+:: Deadwood Harper Laboratory
 <<set $outside to 0>><<set $location to 'hospital'>><<effects>>
 <<deadwood-laboratory-client>>
 <<if !_lab?.unlocked or !$harperSeen?.includes('hospital') or C.npc.Harper.state isnot 'active'>>
@@ -819,7 +819,7 @@
 <</if>>
 <br><<getouticon>><<lanLink ['Leave the office', '离开办公室'] 'Hospital Foyer'>><<clotheson>><<endevent>><</lanLink>>
 
-:: Deadwood Sirris Laboratory [nobr]
+:: Deadwood Sirris Laboratory
 <<set $outside to 0>><<set $location to 'adult_shop'>><<effects>>
 <<deadwood-laboratory-client>>
 <<if !_lab?.unlocked>>
@@ -876,7 +876,7 @@
 <</if>>
 <br><<getouticon>><<lanLink ['Return to the shop', '返回店铺'] 'Adult Shop'>><</lanLink>>
 
-:: Deadwood Sydney Laboratory [nobr]
+:: Deadwood Sydney Laboratory
 <<set $outside to 0>><<set $location to 'adult_shop'>><<effects>>
 <<deadwood-laboratory-client>>
 <<if !_lab?.unlocked>>

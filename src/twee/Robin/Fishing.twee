@@ -3,7 +3,7 @@
 <<if maplebirch.get('Robin').fishing.purchaseGrill()>>
   <<pass 30>>
   <<lanSwitch 'Robin checks the price against the next rent payment before buying a small portable grill. You help secure it behind the reinforced awning, clear of the drinks and spare cups. Robin marks the cooking utensils separately from the lemonade supplies.' '罗宾先核对下次的房租，再买下一台便携小烤架。你帮忙把它固定在加固的遮雨棚后侧，避开饮料和备用杯。罗宾把料理用具与柠檬水用具分开标记。'>>
-  <br><br><<lanSwitch 'Robin spends' '罗宾花'>> <span class='gold'>£30</span> <<lanSwitch 'on the equipment.' '添置设备。'>> <span class='teal'><<lanSwitch 'The stall can now prepare a small fish special.' '摊位现在可以少量供应烤鱼特选。'>></span>
+  <br><br><<lanSwitch 'Robin spends' '罗宾花'>> <span class='gold'><<printmoney 3000>></span> <<lanSwitch 'on the equipment.' '添置设备。'>> <span class='teal'><<lanSwitch 'The stall can now prepare a small fish special.' '摊位现在可以少量供应烤鱼特选。'>></span>
 <<else>>
   <span class='blue'><i><<lanSwitch 'Robin cannot buy the grill until the stall is ready and the next rent payment is covered.' '摊位准备好、下次房租也有着落后，罗宾才能买下烤架。'>></i></span>
 <</if>>
@@ -126,7 +126,7 @@
 <<if _fishing.serve(_fish, _amount, true)>>
   <<pass 30>>
   <<lanSwitch 'You prepare the fish together. Robin writes the price beside the day’s special, tells each customer what is in it, and stops taking orders when the small batch is gone.' '你们一起把鱼处理好。罗宾在今日特选旁写下价格，向每位顾客说明用料。这一小批卖完后，<<he>>就不再接单。'>>
-  <br><br><<lanSwitch 'The catch is gone from your bag. You receive' '鱼已从你的背包扣除。你收到'>> <span class='gold'>£<<print _share.toFixed(2)>></span><<lanSwitch '; Robin puts' '。罗宾把'>> <span class='gold'>£<<print _share.toFixed(2)>></span> <<lanSwitch 'in the business reserve. The extra £1 per portion pays for seasoning and fuel.' '记入营业储备金。每份多出的 £1 用于调料和燃料。'>>
+  <br><br><<lanSwitch 'The catch is gone from your bag. You receive' '鱼已从你的背包扣除。你收到'>> <span class='gold'>£<<print _share.toFixed(2)>></span><<lanSwitch '; Robin puts' '。罗宾把'>> <span class='gold'>£<<print _share.toFixed(2)>></span> <<lanSwitch 'in the business reserve. The extra <<printmoney 100>> per portion pays for seasoning and fuel.' '记入营业储备金。每份多出的 <<printmoney 100>> 用于调料和燃料。'>>
   <<npcincr Robin love 1>><<glove>>
 <<else>>
   <<lanSwitch 'The fish is unavailable, or today’s small batch is already sold out.' '鱼已不在背包里，或者今天的小批烤鱼已售完。'>>

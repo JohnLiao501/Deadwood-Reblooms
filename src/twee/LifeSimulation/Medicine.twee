@@ -97,9 +97,9 @@
   <<if _offer and !$daily.pharm.closed>>
     <<language>>
       <<option 'EN'>>
-        The nurse looks at the packet of <<= _offer.name[0].toLowerCase()>> you are holding. "£<<= _offer.price / 100>>, please."
+        The nurse looks at the packet of <<= _offer.name[0].toLowerCase()>> you are holding. "<<printmoney _offer.price>>, please."
     <<option 'CN'>>
-      护士看了看你拿着的那包<<= _offer.name[1]>>。“£<<= _offer.price / 100>>，谢谢。”
+      护士看了看你拿着的那包<<= _offer.name[1]>>。“<<printmoney _offer.price>>，谢谢。”
     <</language>><br><br>
     <<lanSwitch _offer.description[0] _offer.description[1]>><br>
     <<language>>

@@ -1,4 +1,4 @@
-:: Deadwood Transport School [nobr]
+:: Deadwood Transport School
 <<set $location to 'deadwood_transport_school', $bus to 'elk', $outside to 0, $Transport.shop to 'school'>>
 <<lanSwitch 'Driving school' '驾校'>><br><br>
 <<deadwood-dynamicblock 'deadwood-transport-school'>>
@@ -228,9 +228,9 @@
   <<if !$Transport.school.provisional.issued>>
     <<language>>
       <<option 'EN'>>
-        The application form asks for your name, address and ID number. A photograph and the £43 fee go in the same envelope.
+        The application form asks for your name, address and ID number. A photograph and the <<printmoney 4300>> fee go in the same envelope.
       <<option 'CN'>>
-        申请表要填姓名、住址和身份证号码。照片与 £43 手续费一起装进信封。
+        申请表要填姓名、住址和身份证号码。照片与 <<printmoney 4300>> 手续费一起装进信封。
     <</language>><br><br>
     <<if _school.canApply>>
       <<capture _school_revision>>
@@ -391,7 +391,7 @@
 
 <</deadwood-dynamicblock>>
 
-:: Deadwood Transport Road Test [nobr]
+:: Deadwood Transport Road Test
 <<set _school to maplebirch.get('Transport').school, _exam to $Transport.school.exam>>
 <<if _school.examActive and _exam>>
   <<set _exam_step to _exam.step, _variant to _exam.variants[_exam_step]>>
