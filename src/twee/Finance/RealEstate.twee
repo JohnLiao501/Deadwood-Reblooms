@@ -29,7 +29,7 @@
   <</if>>
 <</widget>>
 
-<!-- 住宅选择沿用原版街道图标，不为五处房产另造一套近似的房屋图标。 -->
+<!-- 离开住宅时沿用原版街道图标。 -->
 <<widget 'deadwood-reblooms-property-street-icon'>>
   <<switch _args[0]>>
     <<case 'domus'>><<domusicon>>
@@ -38,6 +38,19 @@
     <<case 'cliff'>><<clifficon>>
     <<case 'danube'>><<danubeicon>>
     <<case 'penthouse'>><<elkicon>>
+  <</switch>>
+<</widget>>
+
+<!-- 住宅入口与房源列表使用专用建筑图标；离开时仍使用街道图标。 -->
+<<widget 'deadwood-reblooms-property-icon'>>
+  <<switch _args[0]>>
+    <<case 'domus'>><<icon 'property/home-domus.png'>>
+    <<case 'barb'>><<icon 'property/home-barb.png'>>
+    <<case 'high'>><<icon 'property/home-high.png'>>
+    <<case 'cliff'>><<icon 'property/home-cliff.png'>>
+    <<case 'danube'>><<icon 'property/home-danube.png'>>
+    <<case 'penthouse'>><<icon 'property/home-penthouse.png'>>
+    <<default>><<homeicon>>
   <</switch>>
 <</widget>>
 
@@ -56,7 +69,7 @@
     and maplebirch.get("Finance").realEstate.owns(_property.id)
     and !maplebirch.get("Finance").realEstate.managementFor(_property.id).rented
     and !maplebirch.get("Finance").realEstate.isFrozen(_property.id)>>
-    <<deadwood-reblooms-property-street-icon _property.id>><<lanLink [_property.entry_label.EN, _property.entry_label.CN] 'Deadwood Reblooms Property Home'>><<run maplebirch.get("Finance").realEstate.visit(_property.id)>><<pass 2>><</lanLink>><br><br>
+    <<deadwood-reblooms-property-icon _property.id>><<lanLink [_property.entry_label.EN, _property.entry_label.CN] 'Deadwood Reblooms Property Home'>><<run maplebirch.get("Finance").realEstate.visit(_property.id)>><<pass 2>><</lanLink>><br><br>
   <</if>>
 <</widget>>
 
@@ -318,9 +331,9 @@
           and $_currentHome?.id isnot $_inviteProperty.id>>
           <<set $_occupants to maplebirch.get("Finance").realEstate.residentsAt($_inviteProperty.id).length>>
           <<if $_occupants gte $_inviteProperty.resident_capacity>>
-            <<deadwood-reblooms-property-street-icon $_inviteProperty.id>><span class='red'><<= lanSwitch($_inviteProperty.name.EN, $_inviteProperty.name.CN)>> · <<lanSwitch 'No room for another resident' '住不下更多人'>></span><br>
+            <<deadwood-reblooms-property-icon $_inviteProperty.id>><span class='red'><<= lanSwitch($_inviteProperty.name.EN, $_inviteProperty.name.CN)>> · <<lanSwitch 'No room for another resident' '住不下更多人'>></span><br>
           <<elseif !maplebirch.get("Finance").realEstate.canShareBed($_inviteProperty.id)>>
-            <<deadwood-reblooms-property-street-icon $_inviteProperty.id>><span class='red'><<= lanSwitch($_inviteProperty.name.EN, $_inviteProperty.name.CN)>> · <<lanSwitch 'Needs a double bed' '需要双人床'>></span><br>
+            <<deadwood-reblooms-property-icon $_inviteProperty.id>><span class='red'><<= lanSwitch($_inviteProperty.name.EN, $_inviteProperty.name.CN)>> · <<lanSwitch 'Needs a double bed' '需要双人床'>></span><br>
           <<else>>
             <<if $_occupants gt 0 and maplebirch.get("Finance").realEstate.householdRefusal([...maplebirch.get("Finance").realEstate.residentsAt($_inviteProperty.id).map(profile => profile.id), $_inviteName])>>
               <span class='red'><i><<language>>
@@ -333,7 +346,7 @@
             <<if $_occupants gt 0>>
               <span class='blue'><i><<lanSwitch 'Already living here: ' '这里已有同住者：'>><<= maplebirch.get("Finance").realEstate.residentsAt($_inviteProperty.id).map(profile => maplebirch.auto(profile.id)).join(lanSwitch(', ', '、'))>><<lanSwitch '. ' '。'>><<lanSwitch 'You explain this before offering the spare key.' '你先说明这一点，再提出交付备用钥匙。'>></i></span><br>
             <</if>>
-            <<deadwood-reblooms-property-street-icon $_inviteProperty.id>>
+            <<deadwood-reblooms-property-icon $_inviteProperty.id>>
             <<lanLink `[ $_inviteProperty.name.EN + ($_inLesson ? ' (0:01)' : ' (0:30)'), $_inviteProperty.name.CN + ($_inLesson ? ' (0:01)' : ' (0:30)') ]` $_invitePassage>>
               <<pass `$_inLesson ? 1 : 30`>>
               <<run maplebirch.get("Finance").realEstate.inviteResident($_inviteName, $_inviteProperty.id)>>
@@ -662,7 +675,7 @@
 <<for _property range maplebirch.get("Finance").realEstate.properties>>
   <<capture _property>>
     <<if maplebirch.get("Finance").realEstate.owns(_property.id)>>
-      <<deadwood-reblooms-property-street-icon _property.id>>
+      <<deadwood-reblooms-property-icon _property.id>>
       <<lanLink [_property.name.EN, _property.name.CN] 'Deadwood Reblooms Property Furniture Catalogue'>>
         <<set $Finance.real_estate.furniture_property to _property.id>>
         <<set $Finance.real_estate.furniture_category to 'bed'>>

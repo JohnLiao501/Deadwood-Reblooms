@@ -17,8 +17,8 @@ export default function RealEstate(maplebirch: typeof window.maplebirch): void {
         emissive: { image: 'emissive.png', condition: () => Weather.lightsOn, color: '#fbff86dd', size: 4, intensity: 0.8 },
         weather: {
           fogDistributionCurve: 1,
-          rainSplashEnabled: true,
-          fogEnabled: true,
+          rainSplashEnabled: property.id !== 'penthouse',
+          fogEnabled: property.id !== 'penthouse',
           groundBounds: { splashes: { top: 4, bottom: 0 }, fog: { top: 19, bottom: 0 } }
         }
       },

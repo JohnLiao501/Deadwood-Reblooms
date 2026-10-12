@@ -489,7 +489,6 @@
       CN: 修复过的木饰与擦亮的地板，让这座宅邸重新有了被悉心照料的样子。
 - id: penthouse
   tenure: company
-  location: avery_skyscraper
   street: Office Lobby
   street_name: { EN: Elk Street, CN: 麋鹿街 }
   outdoor_access: landing
