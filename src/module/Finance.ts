@@ -154,6 +154,7 @@ const MERCHANT_SOURCES = new Set([
   'furniture',
   'hairdressers',
   'lube',
+  'orchard',
   'petShop',
   'pharmacy',
   'pub',

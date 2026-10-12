@@ -90,6 +90,7 @@ export default class Company {
         factory.morale >= 20 &&
         factory.lines.includes('metalwork') &&
         !factory.order &&
+        !factory.laboratory.job &&
         !factory.issue &&
         factory.wage_arrears === 0 &&
         factory.overhead_arrears === 0

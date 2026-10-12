@@ -54,7 +54,7 @@ export interface FactoryState {
   delivered: number;
   defaults: number;
   laboratory: LaboratoryState;
-  report: { day: number; event: 'paid' | 'default' | 'late' | 'cancelled' | 'delivered' | 'resigned'; seen: boolean; amount: number; customer: string } | null;
+  report: { day: number; event: 'paid' | 'default' | 'late' | 'overdue' | 'cancelled' | 'delivered' | 'resigned'; seen: boolean; amount: number; customer: string } | null;
 }
 
 export interface IndustryState {
@@ -454,6 +454,12 @@ export default class Industry {
     for (const invoice of state.invoices.filter(item => item.pay_day <= current)) {
       const { order } = invoice;
       if (this.finance.company.settle(state, order)) continue;
+      if (order.customer === 'RDS' && !(this.finance.core.get('Robin')?.shop.spend(order.total / 100) ?? false)) {
+        invoice.pay_day = current + 7;
+        order.outcome = 'late';
+        state.report = { day: current, event: 'overdue', seen: false, amount: order.total, customer: order.customer };
+        continue;
+      }
       if (order.outcome === 'default') {
         state.defaults++;
         this.finance.core.SugarCube.Wikifier.wikifyEval('<<earnFeat "Deadwood Unpaid Invoice">>');
@@ -465,6 +471,8 @@ export default class Industry {
       state.report = { day: current, event: order.outcome, seen: false, amount: order.total, customer: order.customer };
     }
     state.invoices = state.invoices.filter(item => item.pay_day > current);
+    // 普通订单与加工间的到期货款都先到账，再支付今天的工资与厂房费用。
+    this.laboratory.advance(state, current, 0);
     const wages = Math.ceil(state.workers * terms.wage * (state.rush ? 1.5 : 1)) + (state.manager ? terms.managerWage : 0) + (state.laboratory.technician ? laboratoryTerms.technician_wage : 0);
     const paid = Math.min(state.cash, wages);
     state.cash -= paid;
@@ -483,10 +491,7 @@ export default class Industry {
     state.spent += overhead;
     state.overhead_arrears += bills - overhead;
     state.morale = Math.clamp(state.morale + (state.wage_arrears > 0 ? -5 : state.rush ? -2 : 1), 0, 100);
-    if (current < state.ready_day) {
-      this.laboratory.advance(state, current, 0);
-      return;
-    }
+    if (current < state.ready_day) return;
     const week = Math.floor(current / 7);
     if (state.offer_week !== week) {
       this.offers(state, current);
@@ -501,8 +506,7 @@ export default class Industry {
         state.pressure_day = current + terms.risks.cooldown;
       }
     }
-    const processing = !!state.laboratory.job || !!(state.laboratory.automatic && state.laboratory.raw[state.laboratory.automatic] > 0);
-    this.laboratory.advance(state, current, Securities.tradingDay(current) ? Industry.capacity(state) : 0);
+    const processing = this.laboratory.advance(state, current, Securities.tradingDay(current) ? Industry.capacity(state) : 0);
     if (!Securities.tradingDay(current) || Industry.capacity(state) === 0 || processing) return;
     if (state.automatic && state.manager && !state.order) {
       const order = state.offers

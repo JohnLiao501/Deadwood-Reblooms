@@ -94,17 +94,16 @@ export default class Staff {
 
   private charge(amount: number): boolean {
     const finance = this.orchard.core.get('Finance');
-    if (!(finance?.canPay(amount, 'farm') ?? V.money >= amount)) return false;
-    this.orchard.core.SugarCube.Wikifier.wikifyEval(`<<money -${amount} 'farm'>>`);
+    if (!(finance?.canPay(amount, 'orchard') ?? V.money >= amount)) return false;
+    this.orchard.core.SugarCube.Wikifier.wikifyEval(`<<money -${amount} 'orchard'>>`);
     this.state.spent += amount;
     return true;
   }
 
   /** 每天下午一次。原版先结算取液，不能倒填错过的外出并凭空补出原液。 */
-  public advance(): void {
-    if (!V.Orchard || !this.unlocked || V.statFreeze || V.replayScene || Time.hour < 16) return;
+  public advance(day = Math.floor(Time.days)): void {
+    if (!V.Orchard || !this.unlocked || V.statFreeze || V.replayScene || Time.hour < 16 || day !== Math.floor(Time.days)) return;
     const state = this.state;
-    const day = Math.floor(Time.days);
     if (state.last_day >= day) return;
     state.last_day = day;
     this.deliver(day);
@@ -192,6 +191,7 @@ export default class Staff {
     const factory = finance?.state.industry.factories[state.destination];
     if (!finance || !V.Finance.bank.debit_card || !factory?.owned || !factory.laboratory.installed || factory.ready_day > day) return;
     // 收货前结清此前厂房日期，不能把今天到的原液倒填进过去的自动生产。
+    finance.company.advance(day);
     finance.industry.advance(day);
     const amount = Math.clamp(Math.min(V.phials_stored ?? 0, finance.industry.laboratory.terms.maximum_batch - factory.laboratory.raw.phial), 0, 3);
     if (amount <= 0) return;

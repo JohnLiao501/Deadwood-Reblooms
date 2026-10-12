@@ -321,14 +321,18 @@ export default class Laboratory {
     }
   }
 
-  public advance(factory: FactoryState, day: number, capacity: number): void {
+  /** 返回当天是否实际占用了工人的产能，避免配置了自动加工却未开工时堵住普通订单。 */
+  public advance(factory: FactoryState, day: number, capacity: number): boolean {
     const state = factory.laboratory;
-    if (!state.installed) return;
+    if (!state.installed) return false;
     for (const invoice of state.invoices.filter(sale => sale.pay_day <= day)) {
-      if (invoice.outcome === 'default') factory.defaults++;
-      else {
+      if (invoice.outcome === 'default') {
+        factory.defaults++;
+        this.finance.core.SugarCube.Wikifier.wikifyEval('<<earnFeat "Deadwood Unpaid Invoice">>');
+      } else {
         factory.cash += invoice.total;
         factory.earned += invoice.total;
+        this.finance.core.SugarCube.Wikifier.wikifyEval('<<earnFeat "Deadwood First Factory Payment">>');
       }
       factory.report = {
         day,
@@ -359,20 +363,21 @@ export default class Laboratory {
       });
       if (this.trade.exclusive) state.offers = state.offers.filter(sale => sale.buyer === 'compound');
     }
-    if (capacity <= 0 || !state.technician || factory.issue || day < factory.ready_day || factory.order) return;
+    if (capacity <= 0 || !state.technician || factory.issue || day < factory.ready_day || factory.order) return false;
     if (!state.job && state.automatic && factory.manager) {
       const amount = Math.min(state.raw[state.automatic], terms.maximum_batch);
-      if (amount && factory.cash - this.cost(state.automatic, amount) >= factory.reserve) this.start(factory, state.automatic, amount);
+      if (amount && factory.cash - this.cost(state.automatic, amount) >= factory.reserve + this.industry.dailyCosts[factory.site] * 3) this.start(factory, state.automatic, amount);
     }
-    if (!state.job) return;
+    if (!state.job) return false;
     const supervised = this.trade.harper_site === factory.site && day < this.trade.harper_until && C.npc.Harper?.state === 'active';
     state.job.progress += capacity * (supervised ? terms.harper_capacity : 1);
-    if (state.job.progress < state.job.work) return;
+    if (state.job.progress < state.job.work) return true;
     const { ingredient, amount } = state.job;
     const failed = random(1, 100) <= (supervised ? terms.harper_failure : this.trade.inspected ? 5 : factory.rush ? 22 : 12);
     const units = Math.floor(amount * terms[`${ingredient}_yield`] * (failed ? random(35, 60) / 100 : random(supervised ? terms.harper_yield : 85, 100) / 100));
     state.batches.push({ units, expires_day: day + terms.shelf_days, taint: ingredient === 'phial' ? amount : 0 });
     state.job = null;
     state.result = failed ? 'loss' : 'finished';
+    return true;
   }
 }

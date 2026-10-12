@@ -304,8 +304,8 @@ class Orchard extends Module {
   /** 长单锁定单价，押金由玩家实际支付，不预支可反复领走的货款。 */
   public acceptContract(type: OrchardFruit, amount: number): boolean {
     const quote = this.contractQuote(type, amount);
-    if (!this.canContract || !this.contractFruit.includes(type) || !quote || V.money < quote.bond) return false;
-    this.core.SugarCube.Wikifier.wikifyEval(`<<money ${-quote.bond} 'farm'>>`);
+    if (!this.canContract || !this.contractFruit.includes(type) || !quote || !(this.core.get('Finance')?.canPay(quote.bond, 'orchard') ?? V.money >= quote.bond)) return false;
+    this.core.SugarCube.Wikifier.wikifyEval(`<<money ${-quote.bond} 'orchard'>>`);
     this.state.farm_contract = { type, amount, ...quote, deadline: Time.days + trade.contractDays, status: 'pending' };
     this.state.contract_day = Time.days;
     return true;
@@ -321,7 +321,7 @@ class Orchard extends Module {
     this.state.contracts_completed++;
     this.core.get('Finance')?.recognition.award('business', 'orchard-contract', 3);
     this.recordSale(contract.type, contract.amount, contract.price * contract.amount, 'farm');
-    this.core.SugarCube.Wikifier.wikifyEval(`<<money ${contract.bond} 'farm'>>`);
+    this.core.SugarCube.Wikifier.wikifyEval(`<<money ${contract.bond} 'orchard'>>`);
     this.core.SugarCube.Wikifier.wikifyEval('<<npcincr Alex love 2>>');
     return true;
   }
@@ -514,13 +514,28 @@ class Orchard extends Module {
   }
 
   public get canPayWorker(): boolean {
-    return this.available('farm') && this.state.worker.hired && !!V.per_npc?.deadwood_orchard_worker && V.money >= this.workerWage && this.state.worker.paid_until <= Time.date.timeStamp + 7 * 86400;
+    return (
+      this.available('farm') &&
+      this.canWork &&
+      this.state.worker.hired &&
+      !!V.per_npc?.deadwood_orchard_worker &&
+      (this.core.get('Finance')?.canPay(this.workerWage, 'orchard') ?? V.money >= this.workerWage) &&
+      this.state.worker.paid_until <= Time.date.timeStamp + 7 * 86400
+    );
   }
 
   public hire(): boolean {
-    if (this.core.passage.title !== 'Deadwood Reblooms Orchard Hire' || !this.available('farm') || !this.candidate || V.money < this.workerWage) return false;
+    if (
+      this.core.passage.title !== 'Deadwood Reblooms Orchard Hire' ||
+      !this.available('farm') ||
+      !this.canWork ||
+      !this.candidate ||
+      !(this.core.get('Finance')?.canPay(this.workerWage, 'orchard') ?? V.money >= this.workerWage)
+    )
+      return false;
     this.advance();
-    this.core.SugarCube.Wikifier.wikifyEval(`<<money -${this.workerWage} 'farm'>>`);
+    if (!this.candidate || !(this.core.get('Finance')?.canPay(this.workerWage, 'orchard') ?? V.money >= this.workerWage)) return false;
+    this.core.SugarCube.Wikifier.wikifyEval(`<<money -${this.workerWage} 'orchard'>>`);
     this.state.worker_expenses += this.workerWage;
     this.state.worker.hired = true;
     this.state.worker.quit_day = -1;
@@ -534,7 +549,7 @@ class Orchard extends Module {
     if (!this.canPayWorker) return false;
     this.advance();
     if (!this.canPayWorker) return false;
-    this.core.SugarCube.Wikifier.wikifyEval(`<<money -${this.workerWage} 'farm'>>`);
+    this.core.SugarCube.Wikifier.wikifyEval(`<<money -${this.workerWage} 'orchard'>>`);
     this.state.worker_expenses += this.workerWage;
     const worker = this.state.worker;
     if (worker.paid_until <= Time.date.timeStamp) worker.paid_from = Time.date.timeStamp;
@@ -610,8 +625,7 @@ class Orchard extends Module {
   /** 按午夜跨日逐天结算，不能用从开局时刻计算的 Time.days 代替日历日期。 */
   public advance(day = Math.floor(Time.days)): void {
     // 回忆与画中场景使用冻结的玩家状态，不能让这些场景的日期影响果园。
-    if (!V.Orchard || V.statFreeze || !Number.isInteger(day) || day < 0 || day > Math.floor(Time.days)) return;
-    this.staff.advance();
+    if (!V.Orchard || V.replayScene || V.statFreeze || !Number.isInteger(day) || day < 0 || day > Math.floor(Time.days)) return;
     const state = this.state;
     const current = Math.floor(Time.date.timeStamp / 86400);
     const today = current - (Math.floor(Time.days) - day);
@@ -658,6 +672,8 @@ class Orchard extends Module {
       state.farm_contract.status = 'failed';
       this.core.SugarCube.Wikifier.wikifyEval('<<npcincr Alex love -2>>');
     }
+    // 危险外出与原液配送只结算实际当天，不能在补算果树时提前推进工厂。
+    this.staff.advance(day);
     // 只应用当前已知的雨水，不捏造原版未保存的历史降雨。
     if (state.day !== current) return;
     for (const site of ['temple', 'farm'] as const) {

@@ -58,9 +58,9 @@
     <label><<lanSwitch 'Quantity: ' '数量：'>><<listbox '_contractAmount' autoselect>><<optionsfrom $_orchard.contractQuantities>><</listbox>></label><br>
     <<language>>
       <<option 'EN'>>
-        The agreed price is 85% of the market-stall price when you sign, fixed for the week. The cash deposit is 20% of the order. Fruit you marked to keep will not be taken.
+        The agreed price is 85% of the market-stall price when you sign, fixed for the week. The deposit is 20% of the order. Fruit you marked to keep will not be taken.
       <<option 'CN'>>
-        签单时按集市售价的八五折锁定单价，一周内不变。现金押金为货款的两成。你标记保留的水果不会用于交货。
+        签单时按集市售价的八五折锁定单价，一周内不变。押金为货款的两成。你标记保留的水果不会用于交货。
     <</language>><br>
     <<lanLink ['Check the quote', '核对报价']>>
       <<set $_quote to maplebirch.get('Orchard').contractQuote(_contractFruit, Number(_contractAmount))>>

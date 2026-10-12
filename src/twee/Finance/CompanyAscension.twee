@@ -473,6 +473,18 @@
           <br><br>
           Avery turns back to the report, keeping your chair beside the desk. "The next meeting still needs you prepared."
         <</if>>
+        <<if maplebirch.get('Finance').industry.owned.some(factory => factory.wage_arrears > 0)>>
+          <br><br>
+          You unfold a payroll sheet beside the report. Avery reads the unpaid column, then pushes it back towards you.
+          "Those people work for you. I won't have a late delivery explained to me with a name Remy gave you."
+          <<if C.npc.Avery.love gte 60 and !$Finance.company.avery.business_only>>
+            <<nnpc_His 'Avery'>> voice lowers. "Bring the accounts next time. We can look at them. That isn't an offer to pay them."
+          <</if>>
+        <<elseif $Finance.company.agreement and !maplebirch.get('Finance').company.partner>>
+          <br><br>
+          You ask about the supply agreement. Avery lays the signed copy between you.
+          "The conditions are still on the first page. Your place upstairs hasn't changed them. The orders already signed stand; the next one waits."
+        <</if>>
       <<case 'harper'>>
         The clerk closes the reception-room door after connecting your call.
         "Any change in sleep? Appetite?" Harper asks before you've finished saying hello.
@@ -573,6 +585,18 @@
           <</if>>
           <br><br>
           艾弗里重新翻开报告，仍把你的椅子留在桌旁。“下次会议，记得做足准备。”
+        <</if>>
+        <<if maplebirch.get('Finance').industry.owned.some(factory => factory.wage_arrears > 0)>>
+          <br><br>
+          你在报告旁展开工资单。艾弗里看过未付的那栏，把单子推回你面前。
+          “那些人替你干活。交货晚了，别拿雷米给你的名字来解释。”
+          <<if C.npc.Avery.love gte 60 and !$Finance.company.avery.business_only>>
+            <<nnpc_he 'Avery'>>压低声音。“下次把账带来，可以一起看看。我可没说要替你付。”
+          <</if>>
+        <<elseif $Finance.company.agreement and !maplebirch.get('Finance').company.partner>>
+          <br><br>
+          你问起供货协议。艾弗里把签过字的副本放到你们之间。
+          “条件还写在第一页。楼上那个位置没改动它们。已经签下的订单照做，下一笔先等着。”
         <</if>>
       <<case 'harper'>>
         接通电话后，职员替你关上接待室的门。

@@ -160,12 +160,14 @@
     <<if !_factory_report.seen and _factory.available and _factory.open>>
       <<set _factory_report.seen to true>>
       <<if _factory_report.event is 'default'>><<stress 12>><<trauma 4>>
-      <<elseif _factory_report.event is 'late'>><<stress 4>><</if>>
+      <<elseif ['late', 'overdue'].includes(_factory_report.event)>><<stress 4>><</if>>
     <</if>>
     <<language>>
       <<option 'EN'>>
         <<if _factory_report.event is 'delivered'>>The goods have left the yard. The invoice is for <<deadwood-reblooms-finance-money _factory_report.amount>>, <span class='blue'>the payment has not arrived yet</span>.
         <<elseif _factory_report.event is 'default'>>The buyer's promised transfer has not arrived. The debt-recovery agent has returned the file marked <span class='red'>unrecoverable</span>. An invoice for <<deadwood-reblooms-finance-money _factory_report.amount>> is written off.
+        <<elseif _factory_report.event is 'overdue'>>
+          Robin's drinks shop has not covered the invoice for <<deadwood-reblooms-finance-money _factory_report.amount>>. Rowan clips the delivery receipt to it. "They've asked for another week. That doesn't pay our crew." The money remains owed; nothing has reached the factory account.
         <<elseif _factory_report.event is 'resigned'>>
           <span class='red'>The crew has left after two weeks of unpaid wages.</span> The machines are idle; automatic production has stopped. The unpaid <<deadwood-reblooms-finance-money _factory_report.amount>> is still owed.
         <<elseif _factory_report.event is 'cancelled'>>You cancel the job. The supplier will not take back the cut material. The <<deadwood-reblooms-finance-money _factory_report.amount>> already spent remains a cost. The cancellation fee has also been paid.
@@ -174,6 +176,8 @@
       <<option 'CN'>>
         <<if _factory_report.event is 'delivered'>>货物已经离开院子。货款为<<deadwood-reblooms-finance-money _factory_report.amount>>，<span class='blue'>尚未到账</span>。
         <<elseif _factory_report.event is 'default'>>采购方承诺的转账没有到账。收账的人退回了档案，上面写着<span class='red'>无法追回</span>。<<deadwood-reblooms-finance-money _factory_report.amount>>的应收货款被记作坏账。
+        <<elseif _factory_report.event is 'overdue'>>
+          罗宾的饮品店尚未付足<<deadwood-reblooms-finance-money _factory_report.amount>>货款。罗文把收货回执夹在账单上。“那边想再缓一周。可我们的工人也得拿工资。”这笔钱仍记在应收账里，工厂账户尚未到账。
         <<elseif _factory_report.event is 'resigned'>>
           <span class='red'>欠薪持续两周，厂里的雇工已经离职。</span>机器停了，自动生产也已停止。欠下的<<deadwood-reblooms-finance-money _factory_report.amount>>仍需结清。
         <<elseif _factory_report.event is 'cancelled'>>你取消了订单。供货商不肯收回已经裁切的材料，先前投入的<<deadwood-reblooms-finance-money _factory_report.amount>>仍是成本，解约费也已支付。
@@ -202,6 +206,9 @@
           <</if>>
           <<if _factory_state.wage_arrears gt 0 or _factory_state.overhead_arrears gt 0>>
             <li><span class='red'><<lanSwitch "Unpaid wages and bills: " "欠薪与未付费用：">><<deadwood-reblooms-finance-money `_factory_state.wage_arrears + _factory_state.overhead_arrears`>></span></li>
+          <</if>>
+          <<if _factory_state.unpaid_days gt 0 and (_factory_state.workers gt 0 or _factory_state.manager or _factory_state.laboratory.technician)>>
+            <li class='red'><<lanSwitch 'Days without cleared wages: ' '欠薪已持续：'>><<= _factory_state.unpaid_days>><<lanSwitch ' / 14. The crew will resign if the arrears remain unpaid.' '／14 天。仍未结清时，雇工将离职。'>></li>
           <</if>>
           <<if _factory_state.issue>>
             <li><span class='red'><<lanSwitch "There is something waiting for your decision at the yard." "院子里有件事等你决定。">></span></li>
@@ -848,10 +855,12 @@
     The buyer offers <span class='red'>35% of the original purchase price</span> for the land and equipment, with the unpaid invoices included.
     Wages owed, site bills, three days' severance per worker and a 10% cancellation fee on the unfinished order are deducted first.
     An unresolved incident prevents the handover. If the proceeds do not cover the deductions, you must make up the difference before selling.
+    The buyer gives no separate payment for those invoices. A processing job, stored ingredients, finished packs or processing-room invoices must be dealt with before handover.
   <<option 'CN'>>
     买家愿意按<span class='red'>原购厂款的 35%</span>接手土地与设备，未收货款一并转让。
     欠薪、厂房费用、每名工人三天的遣散费，以及未完成订单 10% 的解约费，都会先扣除。
     事故未处理，不能交接。所得不足支付扣款，就得先把差额补齐。
+    买家不会为这些应收款另付钱。加工中的批次、原料、成品与加工间未收货款，须在交接前处理完。
 <</language>><br><br>
 <<lanSwitch "Proceeds after deductions: " "扣款后所得：">><<deadwood-reblooms-finance-money `_factory.saleProceeds`>><br>
 <<if _factory.open and !_factory_state.issue and _factory.saleProceeds gte 0>>

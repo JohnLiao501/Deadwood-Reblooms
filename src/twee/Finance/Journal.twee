@@ -2,11 +2,12 @@
 
 <!-- 账户账目与经营摘要集中在日志，柜台保留办理业务的报价与操作。 -->
 <<widget 'deadwood-reblooms-finance-journal'>>
-  <<if $Finance and ($Finance.bank.opened or $Finance.newspaper.report or $Finance.orphanage.offer isnot null or Object.values($Finance.real_estate.owned).some(Boolean) or $Finance.collection.amount gt 0 or $Finance.donations.receipts.length)>>
+  <<if $Finance and ($Finance.bank.opened or $Finance.company.name or maplebirch.get('Finance').industry.owned.length or maplebirch.get('Orchard')?.state.worker.hired or maplebirch.get('Orchard')?.staff.employed or $Finance.newspaper.report or $Finance.orphanage.offer isnot null or Object.values($Finance.real_estate.owned).some(Boolean) or $Finance.collection.amount gt 0 or $Finance.donations.receipts.length)>>
     <<set _finance_mortgage to maplebirch.get("Finance").realEstate.mortgage.current>>
     <h1 class='header gold bold'><<lanSwitch 'Finances' '财务'>></h1>
     <<deadwood-finance-risk-summary true>>
     <<deadwood-finance-account-statements>>
+    <<deadwood-finance-operations>>
     <<if $Finance.brokerage.opened>><<deadwood-finance-holdings>><</if>>
     <<if $Finance.brokerage.margin.history.length>><<deadwood-finance-closing-records>><</if>>
     <<if Object.values($Finance.real_estate.owned).some(Boolean)>><<deadwood-finance-property-accounts>><</if>>

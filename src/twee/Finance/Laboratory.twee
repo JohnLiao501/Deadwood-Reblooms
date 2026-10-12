@@ -422,9 +422,9 @@
       <</lanLink>><br>
       <<language>>
         <<option 'EN'>>
-          The manager uses only stored ingredients and leaves your working reserve intact. Delivery still needs your approval.
+          The manager uses only stored ingredients and leaves your working reserve plus three days' payroll and bills intact. Delivery still needs your approval.
         <<option 'CN'>>
-          经理只使用已入库原料，并保留你设定的周转底金。发货仍需你批准。
+          经理只使用已入库原料，并保留你设定的周转底金与三天工资、日常费用。发货仍需你批准。
       <</language>>
       <br>
     <</if>>

@@ -181,7 +181,7 @@
         <<updatesidebarmoney>>
         <<replace '#deadwood-orchard-worker'>><<deadwood-orchard-worker>><</replace>>
       <</lanLink>> (<<printmoney $_orchard.workerWage>>)<br>
-    <<elseif $money lt $_orchard.workerWage>>
+    <<elseif !(maplebirch.get('Finance')?.canPay($_orchard.workerWage, 'orchard') ?? $money gte $_orchard.workerWage)>>
       <span class='red'><<lanSwitch 'You cannot afford another week.' '你付不起下一周的薪资。'>></span> (<<printmoney $_orchard.workerWage>>)<br>
     <</if>>
     <<icon 'orchard/worker.png'>><<lanLink ['Dismiss your orchard worker', '辞退果园雇工'] 'Deadwood Reblooms Orchard Dismiss'>><</lanLink>><br>
@@ -436,7 +436,7 @@
     “干一周收<<printmoney $_worker_wage>>。先付钱，我每天早上过去。”
 <</language>>
 <<set $NPCList[0].name_known to 1>><<saveNPC 0 'deadwood_orchard_worker'>><br><br>
-<<if $money gte maplebirch.get('Orchard').workerWage>>
+<<if maplebirch.get('Finance')?.canPay($_worker_wage, 'orchard') ?? $money gte $_worker_wage>>
   <<icon 'orchard/worker.png'>><<lanLink ['Hire for a week', '雇用一周'] 'Pub'>>
     <<run maplebirch.get('Orchard').hire()>><<endevent>>
   <</lanLink>> (<<printmoney $_worker_wage>>)<br>
