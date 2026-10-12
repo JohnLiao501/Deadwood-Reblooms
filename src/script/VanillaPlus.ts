@@ -6,6 +6,7 @@ import DivineTransformations from './VanillaPlus/DivineTransformations';
 import Exhibitionism from './VanillaPlus/Exhibitionism';
 import HandGrip from './VanillaPlus/HandGrip';
 import NPCDoublePenetration from './VanillaPlus/NPCDoublePenetration';
+import PenisSize from './VanillaPlus/PenisSize';
 import Physique from './VanillaPlus/Physique';
 import Promiscuity from './VanillaPlus/Promiscuity';
 import Trinity from './VanillaPlus/Trinity';
@@ -28,6 +29,7 @@ export default function (maplebirch: typeof window.maplebirch) {
   Exhibitionism(maplebirch);
   HandGrip(maplebirch);
   NPCDoublePenetration(maplebirch);
+  PenisSize(maplebirch);
   Physique(maplebirch);
   Promiscuity(maplebirch);
   Willpower(maplebirch);

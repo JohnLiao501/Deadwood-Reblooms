@@ -2,6 +2,7 @@
 
 import type { MaplebirchCore } from '@scml-dol-maplebirch/types';
 import type Robin from '../module/Robin';
+import { npc_size_patch } from '../script/VanillaPlus/PenisSize';
 
 type Rule = [RegExp, string];
 type DoLXWindow = typeof window & {
@@ -101,6 +102,16 @@ function adaptRobin(core: MaplebirchCore): void {
 }
 
 export default function DoLX(core: MaplebirchCore): void {
+  core.once(':addon:preparePatch', () => {
+    const data = core.services.addonPlugin.SC2DataManager.getSC2DataInfoAfterPatch();
+    if (!data.scriptFileItems.getByNameWithOrWithoutPath('xchange.js')) return;
+    // DoLX 已有独立 NPC 第 5 档；仅移除本模组为原版补缺的三组规则。
+    for (const title of ['Widgets Effects Man', 'Widgets Combat Man-Combat', 'Widgets Ejaculation']) {
+      const rules = core.tool.zone.widgetPassage[title];
+      if (rules) core.tool.zone.widgetPassage[title] = rules.filter(rule => rule.srcmatchgroup?.source !== npc_size_patch.srcmatchgroup.source || rule.to !== npc_size_patch.to);
+    }
+  });
+
   core.once(':addon:beforePatch', () => {
     const manager = core.services.addonPlugin;
     const previous = manager.SC2DataManager.getSC2DataInfoAfterPatch();
@@ -160,6 +171,17 @@ export default function DoLX(core: MaplebirchCore): void {
         [/\n\t\tV\.physiquesize,\n\t\tNumber\(V\.AMCTraits\?\.physique\) \|\| 1/, `\n\t\t${max('physique', 'V.physiquesize')},\n\t\tNumber(V.AMCTraits?.physique) || 1`]
       ]
     };
+    if (core.get('VanillaPlus')) {
+      // DoLX 生成和还原身体时使用自己的绝对上限；只扩展 PC 的这一项。
+      rules['koztools.js'] = [
+        [/repairBounds\("penissizemin", "penissizemax", 0, 6\);/, 'repairBounds("penissizemin", "penissizemax", 0, 7);'],
+        [/penis: \{ absMax: 6,/, 'penis: { absMax: 7,']
+      ];
+      rules['save.js'] = [
+        [/(penissize(?:min|max):\s*\{\s*min: 0,\s*max:) 6/g, '$1 7'],
+        [/(penissize(?:min|max):\s*\{[\s\S]*?textMap:\s*\{)/g, '$& 7: lanSwitch("Gargantuan", "骇人"),']
+      ];
+    }
     for (const [name, replacements] of Object.entries(rules)) {
       const file = data.scriptFileItems.getByNameWithOrWithoutPath(name);
       if (!file) continue;
@@ -200,6 +222,16 @@ export default function DoLX(core: MaplebirchCore): void {
         ],
         'Widgets Difficulty': [[/\$attractiveness \+ \(_seductionSkill \* 5\)/g, '$& + maplebirch.get("VanillaPlus").beauty.seductionBonus']]
       } satisfies Record<string, Rule[]>);
+      passageRules['Widgets Settings'] = [
+        [
+          /"\$xchange\.bodyPenisSizeMin" "\$xchange\.bodyPenisSizeMax" \$xchange\.bodyPenisSizeMin \$xchange\.bodyPenisSizeMax 0 6 1/,
+          '"$xchange.bodyPenisSizeMin" "$xchange.bodyPenisSizeMax" $xchange.bodyPenisSizeMin $xchange.bodyPenisSizeMax 0 7 1'
+        ],
+        [
+          /<<rangeslider "\$xchange\.bodyPenisSizeMin" "\$xchange\.bodyPenisSizeMax" \$xchange\.bodyPenisSizeMin \$xchange\.bodyPenisSizeMax 0 7 1[\s\S]*?var name = \[[^\]\n]+\];/,
+          '$&name.push(lanSwitch("Gargantuan", "骇人"));'
+        ]
+      ];
     }
     if (core.get('MoreTransformations')) {
       (passageRules.Widgets ??= []).push(

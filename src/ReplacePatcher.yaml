@@ -166,3 +166,24 @@
   fileName: 'stat-changes.js'
   from: 'V.pain = Math.clamp(V.pain, minPain(), 200);'
   to: 'V.pain = Math.clamp(maplebirch.get("VanillaPlus")?.willpower.absorbPain(V.pain) ?? V.pain, minPain(), 200);'
+
+# 尺寸扩展：PC 新增第 7 档，NPC 新增第 5 档；沿用原版接受度及体液分类。
+- comment: 'PC 第七档沿用原版大尺寸不安。'
+  fileName: 'stat-changes.js'
+  from: "\t\t\t\tcase 6:\n\t\t\t\t\tinsecurity(\"penis_big\", amount);\n"
+  before: "\t\t\t\tcase 7:\n\t\t\t\t\tif (!maplebirch.get('VanillaPlus')) break;\n"
+
+- comment: 'PC 第七档沿用原版大尺寸接受度与特质。'
+  fileName: 'stat-changes.js'
+  from: "\t\t\t\tcase 6:\n\t\t\t\t\ttype = \"penis_big\";\n"
+  before: "\t\t\t\tcase 7:\n\t\t\t\t\tif (!maplebirch.get('VanillaPlus')) break;\n"
+
+- comment: 'PC 第七档围观反应使用独立条目，不额外结算不安。'
+  fileName: 'audience.js'
+  from: "\t\tcase \"penisSize6\":\n"
+  before: "\t\tcase \"penisSize7\":\n\t\t\tif (!maplebirch.get('VanillaPlus')) break;\n\t\t\treturn '<<deadwood-reblooms-size-seven-masturbation>>';\n"
+
+- comment: 'NPC 第五档沿用原版 large 体液分类，避免落入默认档。'
+  fileName: 'ingame.js'
+  from: 'function npcSemenMod(penisSize) {'
+  after: 'if (penisSize === 5 && maplebirch.get("VanillaPlus")) return "large";'

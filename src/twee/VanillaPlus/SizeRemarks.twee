@@ -1,0 +1,253 @@
+:: Deadwood Reblooms Size Remarks Widgets [widget]
+
+<<widget "deadwood-reblooms-size-seven-masturbation">>
+  <<language>>
+    <<option 'EN'>>
+      <<if $masturbationAudience gt 1>>
+        The chatter stops for a moment. "Well. That's a sight you don't forget," someone mutters.
+      <<else>>
+        The onlooker blinks, then lets out a low whistle. "I wasn't expecting that."
+      <</if>>
+    <<option 'CN'>>
+      <<if $masturbationAudience gt 1>>
+        围观的人忽然安静了一瞬。“这下算是忘不掉了。”有人低声嘀咕。
+      <<else>>
+        围观的人眨了眨眼，吹了声低低的口哨。“这可真没想到。”
+      <</if>>
+  <</language>>
+<</widget>>
+
+<<widget "deadwood-reblooms-size-seven-remarks">><<silently>>
+  <<language>>
+    <<option 'EN'>>
+      <<set _possibilities to [
+        "hold still, I want to watch it move,",
+        "let me look at it properly, just for a minute,",
+        "I am not the only one in here thinking about my mouth,",
+        "do not make me say what I would do with that,",
+        "both hands and it still would not be enough,",
+        "you would have to fold me in half, and I would let you,",
+        "someone in this room is going to follow you home,",
+        "it will not fit, and I want to try anyway,",
+        "if you put that in me I am not walking tomorrow,",
+        "tell me what you do with it. I want the details,",
+        "one night, that is all I am asking, just let me feel it,",
+        "put it in my mouth and do not be gentle,",
+        "I want to know what it feels like to be split open,",
+        "I would let you ruin me and thank you for it,",
+      ]>>
+    <<option 'CN'>>
+      <<set _possibilities to [
+        "别动，我想看它动一下，",
+        "让我好好看一会儿，就一会儿，",
+        "这里惦记着把嘴凑上去的可不止我一个，",
+        "别逼我说出我想拿它干什么，",
+        "两只手都不一定握得住，",
+        "你得把我整个折起来，而且我会由着你折，",
+        "今天这屋子里肯定有人要跟着你回去，",
+        "塞不进去的，可我还是想试，",
+        "你要是真把这东西塞进来，我明天就别想走路了，",
+        "说说你平时拿它怎么用，我要听细节，",
+        "就一晚，我只求一晚，让我感受一下，",
+        "塞进我嘴里吧，别客气，",
+        "我想知道被这东西劈开是什么感觉，",
+        "我情愿被你弄坏，还要谢谢你，",
+      ]>>
+  <</language>>
+<</silently>><</widget>>
+
+<<widget "deadwood-reblooms-size-seven-audience">>
+  <<language>>
+    <<option 'EN'>>
+      <<if playerChastity("cage")>>
+        <<if $rng gte 67>>
+          "<<pShes>> straining against that lock.<<if playerHasStrapon()>> With a strapon on top of it, no less.<</if>>"
+        <<elseif $rng gte 33>>
+          "Hold still. I want a long look before someone makes <<pher>> put it away."
+        <<else>>
+          "Locked up, and still the only thing in this room worth looking at."
+        <</if>>
+      <<else>>
+        <<if $rng gte 67>>
+          "Nobody in here is going to admit what they are thinking.<<if playerHasStrapon()>> Least of all with the strapon on.<</if>>"
+        <<elseif $rng gte 33>>
+          "I keep telling myself not to stare. Then I stare."
+        <<else>>
+          "Whatever <<pshe>> does with that, I want to hear about it."
+        <</if>>
+      <</if>>
+    <<option 'CN'>>
+      <<if playerChastity("cage")>>
+        <<if $rng gte 67>>
+          “<<pShes>>那把锁都快撑不住了。<<if playerHasStrapon()>>外面还套着一根假的，真是。<</if>>”
+        <<elseif $rng gte 33>>
+          “别动。趁还没人让他收起来，让我多看一会儿。”
+        <<else>>
+          “锁着也是这屋子里唯一值得看的东西。”
+        <</if>>
+      <<else>>
+        <<if $rng gte 67>>
+          “这屋子里没人敢承认自己在想什么。<<if playerHasStrapon()>>更别提他还戴着假的。<</if>>”
+        <<elseif $rng gte 33>>
+          “我一次次告诉自己别盯着看，然后就盯着看了。”
+        <<else>>
+          “他平时拿那东西怎么用，我想听。”
+        <</if>>
+      <</if>>
+  <</language>>
+  <<insecurity "penis_big" 1>><<ginsecurity "penis_big">>
+<</widget>>
+
+<<widget "deadwood-reblooms-size-seven-gwylan-ejaculation">>
+  <<language>>
+    <<option 'EN'>>
+      <<if $orgasmdown or $internalejac>>
+        <<He>> keeps working <<his>> throat around you and cannot find the rhythm
+      <<else>>
+        <<He>> forces <<his>> jaw open as far as it will go and still only takes the head
+      <</if>>
+      of your <<penis>>, throat clutching at nothing, spit running down <<his>> chin. <<He>> cannot hold you there even as <<he>> reaches climax, <<his>> own thighs shivering against the floor. Finally, <<he>> pulls off you with a final gasp
+    <<option 'CN'>>
+      <<if $orgasmdown or $internalejac>>
+        这一次<<he>>怎么咽都咽不下去，节奏全乱了
+      <<else>>
+        <<He>>把下颌张到极限，也只含进去一个头
+      <</if>>
+      你的<<penis>>，喉口空缩着，涎水顺着<<his>>下巴淌下来。连自己高潮时<<he>>都含不住你，两条大腿抵在地上直打颤。最后，<<he>>伴随着最后一声喘息把它吐了出来
+  <</language>>
+<</widget>>
+
+<<widget "deadwood-reblooms-size-seven-gwylan-speech">>
+  <<language>>
+    <<option 'EN'>>
+      <<He>> breathes in through <<his>> nose and pushes down — and stops halfway, eyes streaming, spit strung from <<his>> lips down to your shaft. <<He>> pulls off to cough, wipes <<his>> mouth with the back of <<his>> wrist, and goes back down anyway, working <<his>> throat until <<he>> has you wedged in as deep as <<his>> body allows, stretched so wide <<he>> cannot make a sound around you. <<He>> stays like that, swallowing against the head, until you finish. <<He>> comes up gasping, jaw aching, and opens <<his>> mouth to show you — empty. Every drop went down.
+    <<option 'CN'>>
+      <<He>>用鼻子吸了口气往下压——含到一半就停了，眼睛呛得全是水，涎水从嘴角一直连到你身上。<<He>>退出来咳了两声，用手背抹了把嘴，还是又下去了，一路磨着喉咙，直到把你嵌到身体能容的极限，被撑得一点声音都发不出来。<<He>>就这么含着，喉头一下一下地咽，直到你射完。<<He>>抽着气抬起来，下颌酸得合不拢，张开嘴给你看——里面是空的，一滴也没剩。
+  <</language>>
+<</widget>>
+
+<!-- 对应原版 Widgets Speech 里 Math.clamp 尺寸开关的尺寸 6 分支。
+     原版分三档敌人怒气（lte 20 / lte 100 / else），每档一句由 He 加 ?admires 起头的
+     台词，末尾接 penis_big 的不安结算。这里保持同一套三档结构和同一个动词模板，
+     把「大得离谱」再往上推一档。
+
+     PenisSize.ts 把该开关的 clamp 上限从 6 改到 7 并插入 case 7，
+     这个 widget 就是那个 case 要调用的。 -->
+<<widget "deadwood-reblooms-size-seven-speech">>
+  <<language>>
+    <<option 'EN'>>
+      <<if $enemyanger lte 20>>
+        <<He>> ?admires your newly-exposed <<genitals>>. "That is not a cock. That is a threat, and I am not backing off."
+      <<elseif $enemyanger lte 100>>
+        <<He>> ?admires your newly-exposed <<genitals>>. "I have never seen one that size. Not even close."
+      <<else>>
+        <<He>> stares at your newly-exposed <<genitals>>. "Put that near me and we will both regret it."
+      <</if>>
+      <<insecurity "penis_big" 1>><<ginsecurity "penis_big">>
+    <<option 'CN'>>
+      <<if $enemyanger lte 20>>
+        <<He>>盯着你刚露出来的<<genitals>>。“那不叫屌，那叫凶器——而且我不打算退。”
+      <<elseif $enemyanger lte 100>>
+        <<He>>盯着你刚露出来的<<genitals>>。“这尺寸我见都没见过，差得远。”
+      <<else>>
+        <<He>>盯着你刚露出来的<<genitals>>。“把这玩意儿凑过来，我们俩都得后悔。”
+      <</if>>
+      <<insecurity "penis_big" 1>><<ginsecurity "penis_big">>
+  <</language>>
+<</widget>><!-- 格威岚骑乘：原版尺寸 6 是「润滑之后再试，终于进去了」。尺寸 7 沿用同一条弧线，把过程拉长。 -->
+<<widget "deadwood-reblooms-size-seven-riding">>
+  <<language>>
+    <<option 'EN'>>
+      <<He>> takes the bottle in both hands and works the oil over you until <<his>> palms are slick, then lowers <<himself>> and slides off again. <<He>> tries a second time, jaw set, and a third, and on the third attempt <<he>> finally gets you seated — barely, the head and no more, <<his>> whole body trembling with the effort of holding it there.
+      <<He>> stays frozen above you, breathing hard through <<his>> nose, and when <<he>> finally speaks <<his>> voice is not steady. "I... knew I could take it."
+    <<option 'CN'>>
+      <<He>>两手捧起瓶子，把油从你头上一直抹到根部，掌心全滑了，然后沉下腰——又滑了出去。<<He>>咬着牙试第二次，第三次；到第三次才终于把你坐进去，只有头，再没多的，<<his>>整个身子都在抖。
+      <<He>>僵在你上面一动不动，用鼻子重重地喘；等<<he>>终于开口，声音一点都不稳。“我……我就知道我能受得住。”
+  <</language>>
+<</widget>>
+
+<!-- 后入：原版尺寸 6 是「第一次没进去，扯了扯牵引绳，第二次进去了」。尺寸 7 多失败一次。 -->
+<<widget "deadwood-reblooms-size-seven-doggy">>
+  <<language>>
+    <<option 'EN'>>
+      You cannot get in. Your <<penis>> skids across <<his>> skin and <<he>> winces, and <<he>> tugs the leash again, harder. Still nothing — <<he>> is too tight, you are too much. On the third pull <<his>> body finally gives, and even then only the head seats, <<his>> breath punched out of <<him>> in one long groan.
+      <<He>> stays like that a while, <<his>> forehead down on the floor, waiting for <<his>> own body to stop fighting it.
+    <<option 'CN'>>
+      你进不去。<<penis>>擦着<<his>>的皮肤滑开，<<he>>一缩，又把牵引绳扯了一下，比刚才更用力。还是不行——<<he>>太紧，你太大。扯到第三次，<<his>>身体总算让开一条路，可也只容得下头；<<his>>那口气被顶成了一声长长的呻吟。
+      <<He>>就这么停着，额头抵在地板上，等自己的身体不再跟它作对。
+  <</language>>
+<</widget>>
+
+<!-- 格威岚正面研磨：原版尺寸 6 是「至少不会不小心滑进去」这句贫嘴。尺寸 7 让这句撑不住。 -->
+<<widget "deadwood-reblooms-size-seven-grind">>
+  <<language>>
+    <<option 'EN'>>
+      <<He>> looks down at it, and whatever <<he>> was going to say does not come out. <<He>> presses <<his>> thighs together instead and works <<himself>> against the length of you, slow and deliberate, <<his>> eyes on the ceiling.
+      "At least I will not need to worry about it slipping in by accident," <<he>> manages at last, and it sounds like <<he>> is trying to convince <<himself>>.
+    <<option 'CN'>>
+      <<He>>低头看了一眼，本来要说的那句话没说出来。<<He>>改成把两条腿夹紧，贴着你的整根慢慢磨，动作很慢、很有数，眼睛盯着天花板。
+      “至少我不用担心它一不小心滑进去。”<<he>>最后还是挤出这么一句——听着像是在说服自己。
+  <</language>>
+<</widget>>
+
+<!-- 罗宾被插：原版尺寸 6 是「只进去一半多一点，罗宾问『就这些吗』」。
+     尺寸 7 把「还剩多少」写到明面上。 -->
+<<widget "deadwood-reblooms-size-seven-robin">>
+  <<language>>
+    <<option 'EN'>>
+      You cannot get even half of it into Robin. <<He>> looks down at the distance still left between you — long enough that <<he>> can see it — and the expression on <<his>> face is not fear.
+      "Is that — that is all that fits?" <<he>> asks, and then, before you can answer, <<he>> takes your hands and pulls. <<He>> pulls until <<he>> shakes with it, and it is still not enough.
+    <<option 'CN'>>
+      你连一半都送不进罗宾身体里。<<he>>低头看着你们之间还剩下的那段距离——长到<<he>>自己能看见——脸上的表情不是害怕。
+      “就、就只能进到这里吗？”<<he>>问，然后没等你回答就拉住你的手往回拽。<<He>>一直拽到整个人都在抖，还是不够。
+  <</language>>
+<</widget>>
+
+<!-- 垃圾桶旁比较：原版尺寸 6 是围观者说「他妈的是个怪物」。尺寸 7 让起哄停一拍。 -->
+<<widget "deadwood-reblooms-size-seven-trash">>
+  <<language>>
+    <<option 'EN'>>
+      The <<group>> go quiet. For a moment nobody laughs, and the <<trashSelect>><<person>> has to look twice.
+      "That is not a penis," <<he>> says at last, quieter than <<he>> meant to. "That is a problem."
+    <<option 'CN'>>
+      这伙人安静下来。有那么一瞬谁都没笑，那个<<trashSelect>><<person>>还看了第二眼。
+      “那不叫阴茎。”<<he>>最后说，声音比<<he>>自己想要的要轻。“那是个麻烦。”
+  <</language>>
+
+  <<set _notInsecure to $acceptance_penis_big gte 1000>>
+  <<set _insecurityType to "penis_big">>
+  <<set _penisEnvy to !_noFollowUp and $trashCompare.enviousPenisIds.length gte 1 and hasSexStat("deviancy", 4)>>
+<</widget>>
+
+<!-- 牧场体检：原版尺寸 6 是雷米说「这头大得离谱」，然后隔着笼子掂量重量。
+     尺寸 7 把「掂量」这一步写实。 -->
+<<widget "deadwood-reblooms-size-seven-livestock">>
+  <<language>>
+    <<option 'EN'>>
+      <<He>> gets both hands around it and cannot close them. <<He>> tries anyway, works <<his>> grip up the shaft, and gives up halfway with a short breath through <<his>> teeth.
+      "This one is beyond prodigious," <<he>> mutters, more to <<himself>> than to the room. <<garousal>><<arousal 900 "genitals">>
+      <<insecurity "penis_big" 1>><<ginsecurity "penis_big">>
+    <<option 'CN'>>
+      <<He>>两只手一起围上去，合不拢。<<He>>还是试着往上撸了一截，半路上就放弃了，齿缝里泄出一口气。
+      “这头已经不是离谱了。”<<he>>低声说，更像是说给<<he>>自己听。<<garousal>><<arousal 900 "genitals">>
+      <<insecurity "penis_big" 1>><<ginsecurity "penis_big">>
+  <</language>>
+<</widget>>
+
+
+<<widget "deadwood-reblooms-size-seven-change">>
+  <<if $penisgrowthmessage is 7>>
+    <span class="purple"><<lanSwitch 'Your penis has grown to a gargantuan size.' '你的阴茎长到了骇人的尺寸。'>></span><br>
+    <<unset $penisgrowthmessage>>
+  <</if>>
+  <<if $penisshrinkmessage is 6>>
+    <span class="purple">
+      <<if $worn.genitals.name is 'chastity parasite'>>
+        <<lanSwitch 'Your chastity parasite has shrunk, though it still hints at an enormous size.' '你的寄生贞操装置缩小了，但仍然显出宏伟的尺寸。'>>
+      <<else>>
+        <<lanSwitch 'Your penis has shrunk, though it remains enormous.' '你的阴茎缩小了，但仍然宏伟。'>>
+      <</if>>
+    </span><br>
+    <<unset $penisshrinkmessage>>
+  <</if>>
+<</widget>>

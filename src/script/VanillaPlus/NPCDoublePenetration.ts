@@ -233,13 +233,14 @@ export default function (maplebirch: typeof window.maplebirch) {
       npcDoubleSecondary: {
         srcfn: (options: any) => {
           const data = options.npcDouble;
+          if (!data) return '';
           return `${options.src}${data.orifice}/${data.secondary.sprite}-size${data.secondary.size}-dp.png`;
         },
         showfn: (options: any) => !!options.npcDouble,
         animationfn: (options: any) => options.animKeyPenis,
         filters: ['npcDoubleSecondary'],
-        desaturatefn: (options: any) => !!options.npcDouble.secondary.tintStrapon,
-        brightnessfn: (options: any) => (options.npcDouble.secondary.tintStrapon ? -0.25 : 0),
+        desaturatefn: (options: any) => !!options.npcDouble?.secondary.tintStrapon,
+        brightnessfn: (options: any) => (options.npcDouble?.secondary.tintStrapon ? -0.25 : 0),
         zfn: () => window.CombatRenderer.indices.xrayPenetrator2
       },
       playerCondom: {
@@ -255,6 +256,7 @@ export default function (maplebirch: typeof window.maplebirch) {
       npcDoubleSecondaryCondom: {
         srcfn: (options: any) => {
           const data = options.npcDouble;
+          if (!data) return '';
           return `${options.src}${data.orifice}/tentacle-size${data.secondary.size}-dp.png`;
         },
         showfn: (options: any) => !!options.npcDouble?.secondary.condom,
