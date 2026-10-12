@@ -1,0 +1,101 @@
+:: Deadwood Reblooms Casino Sic Bo Widgets [widget]
+<<widget 'deadwood-sic-bo-layout'>>
+  <<set $_diceGame to maplebirch.get('LifeSimulation').casino.sicBo>>
+  <<set $_diceNames to {small: ['Small (4–10)', '小（4–10）'], big: ['Big (11–17)', '大（11–17）'], odd: ['Odd', '单'], even: ['Even', '双'], single: ['Single number: ', '单点：'], total: ['Total: ', '总点数：'], triple: ['Triple ', '指定豹子 ']}>>
+  <<deadwood-casino-balance>>
+  <label><<lanSwitch 'Chip value: ' '每注金额：'>>
+    <<listbox '_diceAmount' autoselect>><<optionsfrom _diceAmounts>><</listbox>>
+  </label><br>
+  <p class='poker-summary'><<lanSwitch 'On the layout: ' '已选赌注：'>><<printmoney $_diceGame.stake>> · <<lanSwitch 'Limit per roll: ' '每局总额上限：'>><<printmoney $_diceGame.limit>></p>
+  <p class='poker-fee'><<lanSwitch 'Select a position to place the chosen stake; select it again to remove it. Chips are deducted when the dice are rolled.' '点击位置放置所选赌注，再次点击可撤回。开骰时扣除筹码。'>></p>
+  <div class='poker-table'>
+  <<for $_diceGroup range ['main', 'triple', 'total', 'single']>>
+    <section @class="'sic-bo-group sic-bo-' + $_diceGroup">
+      <p class='poker-summary'><<switch $_diceGroup>>
+        <<case 'main'>><<lanSwitch 'Big / small and odd / even' '大小与单双'>>
+        <<case 'single'>><<lanSwitch 'Single numbers' '单点'>>
+        <<case 'total'>><<lanSwitch 'Totals' '总点数'>>
+        <<case 'triple'>><<lanSwitch 'Triples' '豹子'>>
+      <</switch>></p>
+      <div class='sic-bo-bets'>
+      <<for $_diceBet range $_diceGame.bets>>
+        <<if ($_diceGroup is 'main' and ['small', 'big', 'odd', 'even'].includes($_diceBet.key)) or ($_diceGroup isnot 'main' and $_diceBet.key.split('_')[0] is $_diceGroup)>>
+          <<set $_diceParts to $_diceBet.key.split('_')>>
+          <<set $_diceLabel to $_diceBet.key is 'triple' ? ['Any triple', '任意豹子'] : ($_diceParts[0] is 'total' ? [$_diceParts[1], $_diceParts[1]] : $_diceParts[0] is 'triple' ? [$_diceParts[1] + ' × 3', $_diceParts[1] + ' × 3'] : $_diceNames[$_diceParts[0]].map(name => name + ($_diceParts[1] || '')))>>
+          <span @class="'sic-bo-bet' + ($_diceGame.state.bets[$_diceBet.key] ? ' selected' : '')">
+          <<if ['single', 'triple'].includes($_diceParts[0]) and $_diceParts[1]>>
+            <<icon ` 'casino/dice/' + $_diceParts[1] + '.png' `>>
+          <</if>>
+          <<capture $_diceBet>>
+            <<lanLink $_diceLabel>>
+              <<run maplebirch.get('LifeSimulation').casino.sicBo.place($_diceBet.key, _diceAmount)>>
+              <<replace '#deadwood-sic-bo-layout'>><<deadwood-sic-bo-layout>><</replace>>
+            <</lanLink>>
+          <</capture>>
+          <span class='poker-fee'><<if $_diceBet.key.startsWith('single_')>><<lanSwitch '1 / 2 / 3 to 1' '净赢 1 / 2 / 3 倍'>>
+          <<else>><<lanSwitch 'Pays ' '净赢 '>><<= $_diceBet.odds>><<lanSwitch ' to 1' ' 倍'>><</if>></span>
+          <<if $_diceGame.state.bets[$_diceBet.key]>><span class='gold'><<printmoney `$_diceGame.state.bets[$_diceBet.key]`>></span><</if>></span>
+        <</if>>
+      <</for>>
+      </div>
+    </section>
+  <</for>>
+  </div>
+  <div class='poker-controls'>
+  <<if $_diceGame.canRoll>>
+    <<lanLink ['Roll (0:01)', '开骰 (0:01)'] 'Deadwood Reblooms Casino Sic Bo'>>
+      <<if maplebirch.get('LifeSimulation').casino.sicBo.roll()>><<pass 1>><</if>>
+    <</lanLink>>
+  <<else>><span class='blue'><<lanSwitch 'Place bets you can cover before the dice are rolled.' '请先放置赌注，并确保筹码足以支付。'>></span><</if>>
+  <<if $_diceGame.stake gt 0>>
+    <<lanLink ['Clear the layout', '撤回全部赌注']>>
+      <<set $LifeSimulation.casino.sic_bo.bets to {}>>
+      <<replace '#deadwood-sic-bo-layout'>><<deadwood-sic-bo-layout>><</replace>>
+    <</lanLink>>
+  <</if>>
+  </div>
+<</widget>>
+
+:: Deadwood Reblooms Casino Sic Bo
+<<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
+<<set _diceGame to maplebirch.get('LifeSimulation').casino.sicBo>>
+<<set _diceAmount to maplebirch.get('LifeSimulation').casino.options.blackjack.bets[0]>><<set _diceAmounts to {}>>
+<<for _diceValue range maplebirch.get('LifeSimulation').casino.options.blackjack.bets>><<set _diceAmounts['£' + _diceValue / 100] to _diceValue>><</for>>
+<<language>>
+  <<option 'EN'>>
+    Three dice rattle beneath a covered bowl. The dealer holds a hand above the layout until the last guest pulls back their chips. "No more bets." Conversations break off as the cover rises. Nobody here has to wait for a turn to place a bet.
+  <<option 'CN'>>
+    三颗骰子在骰盅下碰撞作响。荷官把手悬在赌桌上方，直到最后一名客人收回拨弄筹码的手。“买定离手。”骰盅揭开时，交谈声戛然而止。在这张桌边，下注不必轮流等待。
+<</language>><br><br>
+<div id='deadwood-sic-bo'>
+  <<deadwood-sic-bo-stage>>
+  <div class='sic-bo-result' role='status'>
+  <<if _diceGame.state.dice.length>>
+  <<lanSwitch 'Last roll: ' '上局点数：'>><<= _diceGame.state.dice.join(' + ')>> = <<= _diceGame.state.dice.reduce((sum, value) => sum + value, 0)>><br>
+  <<lanSwitch 'Staked: ' '投入：'>><<printmoney _diceGame.state.stake>> · <<lanSwitch 'Returned, including stakes: ' '返还（含本金）：'>><<printmoney _diceGame.state.payout>><br>
+  <<if _diceGame.state.payout gt _diceGame.state.stake>>
+    <span class='green'><<lanSwitch 'Net win: ' '净赢：'>><<printmoney `_diceGame.state.payout - _diceGame.state.stake`>></span>
+  <<elseif _diceGame.state.payout lt _diceGame.state.stake>>
+    <span class='red'><<lanSwitch 'Net loss: ' '净亏：'>><<printmoney `_diceGame.state.stake - _diceGame.state.payout`>></span>
+  <<else>><span class='blue'><<lanSwitch 'Your stakes came back.' '取回了投入的筹码。'>></span><</if>><br><br>
+<</if>>
+  </div>
+  <div id='deadwood-sic-bo-layout'><<deadwood-sic-bo-layout>></div>
+</div><br>
+<<icon 'casino/dealer.png'>><<lanLink ['Read the table rules', '查看牌桌规则'] 'Deadwood Reblooms Casino Sic Bo Rules'>><</lanLink>><br>
+<<getouticon>><<lanLink ['Return to the room', '返回赌馆'] 'Deadwood Reblooms Life Simulation Casino'>>
+  <<set $LifeSimulation.casino.sic_bo.bets to {}>>
+<</lanLink>><br>
+
+:: Deadwood Reblooms Casino Sic Bo Rules
+<<lanSwitch 'Table rules and payouts' '本桌规则与赔率'>><br><br>
+  <<language>>
+    <<option 'EN'>>
+      Three six-sided dice. Small is 4–10; big is 11–17. <span class='gold'>Any triple loses big, small, odd and even bets.</span> A single-number bet pays 1, 2 or 3 times its stake for one, two or three matching dice. Totals pay for the exact sum; triples pay for three matching dice.<br><br>
+      The odds on the layout show net winnings. Each winning bet also returns its own stake. You may place several different bets; each is settled separately. No additional table fee is taken. Choosing a high-paying position does not make it more likely to win.
+    <<option 'CN'>>
+      使用三颗六面骰。4–10 点为小，11–17 点为大。<span class='gold'>任何豹子都会使大小、单双赌注输掉。</span>单点按出现一、二、三次，分别净赢投入的 1、2、3 倍。总点数必须与三颗骰子的合计完全相同；豹子则要求三颗骰子相同。<br><br>
+      桌上的赔率表示净赢倍数，中奖的赌注另退本金。可以同时押多个不同位置，各注分别结算，不另抽水。赔率高的位置并不会更容易中奖。
+  <</language>>
+<br><br>
+<<getouticon>><<lanLink ['Return to the table', '返回骰宝桌'] 'Deadwood Reblooms Casino Sic Bo'>><</lanLink>><br>

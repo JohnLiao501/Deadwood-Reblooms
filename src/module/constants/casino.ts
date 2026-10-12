@@ -7,10 +7,12 @@ export interface BlackjackOptions {
 
 export interface ThreeCardOptions {
   antes: readonly number[];
+  seats: readonly number[];
 }
 
 export interface HoldemOptions {
   buyIns: readonly number[];
+  seats: readonly number[];
   /** 买入金额与大盲的比值，小盲为大盲的一半。 */
   bigBlindDivisor: number;
 }
@@ -38,6 +40,6 @@ export const DEFAULT_CASINO_OPTIONS: CasinoOptions = {
   denominations: [1000000, 500000, 100000, 10000, 2500, 500, 100, 50, 10, 1],
   exchanges: [500, 5000, 50000, 250000, 500000, 1000000, 5000000, 10000000],
   blackjack: { bets: [1000, 5000, 25000, 50000, 100000, 500000, 1000000] },
-  threeCard: { antes: [1000, 5000, 10000, 100000, 500000] },
-  holdem: { buyIns: [50000, 250000, 500000, 2500000, 10000000], bigBlindDivisor: 50 }
+  threeCard: { antes: [1000, 5000, 10000, 100000, 500000], seats: [3, 6, 9] },
+  holdem: { buyIns: [50000, 250000, 500000, 2500000, 10000000], seats: [6, 9], bigBlindDivisor: 50 }
 };

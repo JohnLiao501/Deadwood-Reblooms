@@ -1,6 +1,7 @@
 // ./src/module/Finance/CompanyAvery.ts
 
 import type Company from './Company';
+import PrivateCards, { type PrivateCardsState } from './PrivateCards';
 
 export interface CompanyAveryState {
   talk_day: number;
@@ -18,6 +19,7 @@ export interface CompanyAveryState {
   questioned: boolean;
   decision: 'continue' | 'leave' | null;
   dream_seen: boolean;
+  cards: PrivateCardsState;
 }
 
 export default class CompanyAvery {
@@ -36,13 +38,31 @@ export default class CompanyAvery {
     invited: false,
     questioned: false,
     decision: null,
-    dream_seen: false
+    dream_seen: false,
+    cards: PrivateCards.defaults
   };
 
-  public constructor(private readonly company: Company) {}
+  public readonly cards: PrivateCards;
+
+  public constructor(private readonly company: Company) {
+    this.cards = new PrivateCards(company.finance);
+  }
 
   public preInit(): void {
     const core = this.company.finance.core;
+    // 只有 PC 明确阻止人身下注后才改变结算与离场；默认四条原版赢家路线仍照常运行。
+    core.dynamic.regStateEvent('gate', ':deadwood-private-cards-guest-finish', {
+      forceExit: true,
+      cond: () => this.cards.present && V.avery_cards?.finance_guest === true,
+      output: 'deadwood-private-cards-guest-finish',
+      extra: { passage: ['Avery Cards 9'] }
+    });
+    core.dynamic.regStateEvent('gate', ':deadwood-private-cards-bailey-guest', {
+      forceExit: true,
+      cond: () => !!V.Finance?.company && !V.replayScene && !V.statFreeze && !V.possessed && V.avery_cards?.finance_guest === true,
+      output: 'deadwood-private-cards-bailey-guest',
+      extra: { passage: ['Avery Cards Bailey 2'] }
+    });
     core.dynamic.regStateEvent('append', ':deadwood-company-avery-dream', {
       cond: () => !!V.Finance?.company && !V.replayScene && !V.statFreeze,
       action: () => {
@@ -55,7 +75,10 @@ export default class CompanyAvery {
       action: () => this.advanceDate()
     });
     core.on(':passagestart', () => {
-      if (V.Finance?.company) this.advanceDate();
+      if (!V.Finance?.company) return;
+      this.advanceDate();
+      // 原版继续控制酒类、最后一局及离场；支线中断只结清自带的筹码。
+      if (this.cards.session.active && !['Avery Cards 6', 'Deadwood Reblooms Company Cards'].includes(core.passage.title)) this.cards.close();
     });
   }
 
@@ -70,6 +93,22 @@ export default class CompanyAvery {
 
   public get canTalk(): boolean {
     return this.available && this.state.talk_day !== Math.floor(Time.days);
+  }
+
+  public get peer(): boolean {
+    return (
+      this.company.ascension.active ||
+      this.company.shareholders.director ||
+      this.company.shareholders.controller ||
+      this.company.partner ||
+      (this.company.state.name !== null && this.company.state.office) ||
+      this.company.finance.industry.owned.length > 0
+    );
+  }
+
+  /** 与拒绝侍酒共用身份标准；只计现金和可用存款，不把授信额度当作底气。 */
+  public get guest(): boolean {
+    return this.peer || this.company.finance.spendingMoney >= 5000000;
   }
 
   public get dateFree(): boolean {

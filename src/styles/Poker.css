@@ -1,59 +1,61 @@
 #deadwood-holdem,
 #deadwood-three-card,
-#deadwood-poker-watch {
+#deadwood-poker-watch,
+#deadwood-private-cards,
+#deadwood-sic-bo {
   max-width: 34rem;
   margin: 1rem 0;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-table {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-table {
   border: 2px solid #8c7753;
   padding: 12px;
   background: #19372e;
   box-shadow: inset 0 0 0 2px #10251f;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-summary {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-summary {
   margin: 0 0 1rem;
   color: #e1c786;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-seat {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-seat {
   margin-top: 1rem;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-seat strong {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-seat strong {
   color: #e1c786;
   font-weight: normal;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-seat-detail {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-seat-detail {
   margin: 0.2rem 0 0.5rem;
   font-size: 0.85em;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-cards {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-cards {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   min-height: 56px;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-cards img {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-cards img {
   display: block;
   width: 40px;
   height: 56px;
   max-width: none;
   image-rendering: pixelated;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-folded {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-folded {
   opacity: 0.6;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-hand-name {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-hand-name {
   color: #e1c786;
   font-size: 0.85em;
   margin: 0.3rem 0;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-controls {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-controls {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 0 1rem;
   margin: 1rem 0;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) button {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) button {
   min-height: 44px;
   max-width: 100%;
   padding: 0;
@@ -65,40 +67,217 @@
   text-align: left;
   white-space: normal;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) button:enabled:hover {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) button:enabled:hover {
   color: #a8d2ff;
   text-decoration: underline;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) button:disabled {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) button:disabled {
   color: #888;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) button:focus-visible {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) button:focus-visible {
   outline: 1px solid #77b9ff;
   outline-offset: 1px;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) button[aria-pressed='true'] {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) button[aria-pressed='true'] {
   color: gold;
   text-decoration: underline;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-raise {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-raise {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
   width: 100%;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-raise input {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-raise input {
   min-width: 0;
   width: 6rem;
   max-width: 100%;
   font: inherit;
   box-sizing: border-box;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-fee,
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-log {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-fee,
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-log {
   color: #aaa;
   font-size: 0.85em;
 }
-:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch) .poker-log p {
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-log p {
   margin: 0.25rem 0;
+}
+
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-table {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+  gap: 0.5rem 1rem;
+}
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-summary,
+:is(#deadwood-holdem, #deadwood-three-card, #deadwood-poker-watch, #deadwood-private-cards, #deadwood-sic-bo) .poker-board {
+  grid-column: 1 / -1;
+}
+.poker-folded .poker-cards[data-visible='false'] {
+  display: none;
+}
+.deadwood-dice {
+  display: flex;
+  gap: 0.4em;
+  font-size: 3rem;
+  color: #eee;
+}
+#deadwood-sic-bo .sic-bo-group {
+  grid-column: 1 / -1;
+}
+#deadwood-sic-bo .sic-bo-group .poker-summary {
+  margin: 0.4rem 0;
+}
+#deadwood-sic-bo .sic-bo-bets {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
+  gap: 0.5rem 1rem;
+}
+#deadwood-sic-bo .sic-bo-bet {
+  display: flex;
+  flex-direction: column;
+  padding: 0.2rem 0;
+}
+#deadwood-sic-bo .sic-bo-bet.selected .macro-link {
+  color: gold;
+}
+
+/* Sic Bo shares the card tables' felt and wood palette. */
+#deadwood-sic-bo .sic-bo-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 68px;
+  background: #19372e;
+  border: 2px solid #8c7753;
+  border-bottom: 0;
+  box-shadow: inset 0 0 0 2px #10251f;
+}
+#deadwood-sic-bo .sic-bo-tray {
+  display: flex;
+  gap: 8px;
+}
+#deadwood-sic-bo .sic-bo-piece {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+#deadwood-sic-bo .sic-bo-piece img {
+  image-rendering: pixelated;
+  width: 30px;
+  height: 30px;
+}
+#deadwood-sic-bo .sic-bo-cup img {
+  width: 48px;
+  height: 48px;
+}
+#deadwood-sic-bo .sic-bo-fallback {
+  display: none;
+  padding: 8px;
+  color: #eee3c7;
+  border: 1px solid #8c7753;
+}
+#deadwood-sic-bo .missing img {
+  display: none;
+}
+#deadwood-sic-bo .missing .sic-bo-fallback {
+  display: block;
+}
+#deadwood-sic-bo [data-reveal='pending'] .sic-bo-tray {
+  visibility: hidden;
+}
+#deadwood-sic-bo .sic-bo-result {
+  padding: 10px;
+  border: 1px solid #8c7753;
+  background: #10251f;
+}
+#deadwood-sic-bo .sic-bo-result:empty {
+  display: none;
+}
+#deadwood-sic-bo .poker-table {
+  display: block;
+  padding: 10px;
+}
+#deadwood-sic-bo .sic-bo-group + .sic-bo-group {
+  margin-top: 12px;
+}
+#deadwood-sic-bo .sic-bo-group .poker-summary {
+  color: #dec89d;
+  font-size: 0.9em;
+  margin: 0 0 5px;
+}
+#deadwood-sic-bo .sic-bo-bets {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 4px;
+}
+#deadwood-sic-bo .sic-bo-main .sic-bo-bets {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+#deadwood-sic-bo .sic-bo-total .sic-bo-bets,
+#deadwood-sic-bo .sic-bo-triple .sic-bo-bets {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+#deadwood-sic-bo .sic-bo-bet {
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  min-height: 68px;
+  text-align: center;
+  border: 1px solid #627565;
+  padding: 5px 2px;
+  background: #203f33;
+  font-size: 0.8em;
+  gap: 3px;
+}
+#deadwood-sic-bo .sic-bo-bet .macro-link {
+  display: block;
+  color: #e6dcc5;
+}
+#deadwood-sic-bo .sic-bo-bet .macro-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+#deadwood-sic-bo .sic-bo-bet:focus-within {
+  outline: 2px solid #eee3c7;
+  outline-offset: 1px;
+}
+#deadwood-sic-bo .sic-bo-bet:hover {
+  background: #2c5040;
+}
+#deadwood-sic-bo .sic-bo-bet.selected {
+  border-color: #e2bb62;
+  box-shadow: inset 0 0 0 1px #e2bb62;
+}
+#deadwood-sic-bo .sic-bo-bet .gold {
+  background: #473a24;
+  padding: 1px 3px;
+}
+#deadwood-sic-bo .sic-bo-bet .poker-fee {
+  font-size: 0.85em;
+}
+#deadwood-sic-bo .poker-controls {
+  border-top: 2px solid #8c7753;
+  padding: 10px 0;
+}
+@media (max-width: 480px) {
+  #deadwood-sic-bo .sic-bo-total .sic-bo-bets,
+  #deadwood-sic-bo .sic-bo-triple .sic-bo-bets {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  #deadwood-sic-bo .sic-bo-single .sic-bo-bets {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  #deadwood-sic-bo .sic-bo-stage {
+    gap: 12px;
+  }
+  #deadwood-sic-bo .sic-bo-tray {
+    gap: 6px;
+  }
+  #deadwood-sic-bo .sic-bo-tray img {
+    width: 30px;
+    height: 30px;
+  }
 }

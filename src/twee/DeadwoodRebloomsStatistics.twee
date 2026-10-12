@@ -106,7 +106,7 @@
       <<foldout false '_deadwoodCasinoAccounts'>>
         <span class='gold'><<lanSwitch "Gambling records" "赌馆输赢记录">></span>
         <<lanSwitch "Completed hands and spins: " "已结算牌局与转轮：">><span class='teal'><<= _casinoStats.rounds>></span><br>
-        <<lanSwitch "Blackjack / three-card poker / hold'em / slots: " "二十一点／炸金花／德州扑克／老虎机：">><span class='teal'><<= _casinoStats.games.blackjack ?? 0>> / <<= _casinoStats.games.three_card ?? 0>> / <<= _casinoStats.games.holdem ?? 0>> / <<= _casinoStats.games.slots ?? 0>></span><br>
+        <<lanSwitch "Blackjack / Zha Jin Hua / hold'em / slots / Sic Bo: " "二十一点／炸金花／德州扑克／老虎机／骰宝：">><span class='teal'><<= _casinoStats.games.blackjack ?? 0>> / <<= _casinoStats.games.three_card ?? 0>> / <<= _casinoStats.games.holdem ?? 0>> / <<= _casinoStats.games.slots ?? 0>> / <<= _casinoStats.games.sic_bo ?? 0>></span><br>
         <<lanSwitch "Total staked / total paid, including returned stakes: " "累计下注／累计派彩（含取回的赌注）：">><<printmoney _casinoStats.staked>> / <<printmoney _casinoStats.paid>><br>
         <<lanSwitch "Net profit / loss: " "累计净盈亏：">><span @class="_casinoStats.paid < _casinoStats.staked ? 'red' : 'green'"><<printmoney `_casinoStats.paid - _casinoStats.staked`>></span><br>
         <<lanSwitch "Largest net win / loss in a hand or spin: " "单局最大净赢／净亏：">><<printmoney _casinoStats.biggest_win>> / <<printmoney _casinoStats.biggest_loss>><br>

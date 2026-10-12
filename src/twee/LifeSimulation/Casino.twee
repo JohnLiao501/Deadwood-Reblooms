@@ -111,6 +111,7 @@
   <<if $_turn.mode is 'holdem'>>
     <<set $_game to maplebirch.get('LifeSimulation').casino.holdem>>
     <<switch $_turn.action>>
+      <<case 'seats'>><<set $_game.tableSize to $_turn.amount>>
       <<case 'join'>>
         <<set $_turn.accepted to $_game.join($_turn.amount)>>
         <<if $_turn.accepted>>
@@ -134,6 +135,7 @@
     <<switch $_turn.action>>
       <<case 'ante'>>
         <<set $_game.ante to $_turn.amount>>
+      <<case 'seats'>><<set $_game.tableSize to $_turn.amount>>
       <<case 'start'>>
         <<set $_turn.accepted to $_game.start()>>
         <<if $_turn.accepted>>
@@ -201,9 +203,9 @@
 <<else>>
   <<language>>
     <<option 'EN'>>
-      You enter the gambling room above the bar on Connudatus Street. The music downstairs is muffled here. Three card tables are covered in green cloth, with a slot machine against the far wall. A bouncer stands by the stairs, watching the guests. Behind a narrow counter, the cashier stacks chips in a tray.
+      You enter the gambling room above the bar on Connudatus Street. The music downstairs is muffled here. Card tables are covered in green cloth; a rattle of dice comes from the far end, beside a slot machine. A bouncer stands by the stairs, watching the guests. Behind a narrow counter, the cashier stacks chips in a tray.
     <<option 'CN'>>
-      你走进康努达塔斯街酒吧楼上的赌馆。楼下的音乐声在这里听不太清。三张牌桌铺着绿毡，远处墙边摆着一台老虎机。一名保安站在楼梯旁，观察着客人。狭窄的柜台后，收银员把筹码整齐地码进托盘。
+      你走进康努达塔斯街酒吧楼上的赌馆。楼下的音乐声在这里听不太清。牌桌铺着绿毡，远处的骰子桌上传来碰撞声，旁边摆着一台老虎机。一名保安站在楼梯旁，观察着客人。狭窄的柜台后，收银员把筹码整齐地码进托盘。
   <</language>><br><br>
   <<initnpc 'Marlow'>>
   <<if C.npc.Marlow.rage gt 0>>
@@ -248,11 +250,12 @@
   <<deadwood-casino-atmosphere>>
   <<deadwood-casino-balance>>
   <<icon 'casino/cashier.png'>><<lanLink ['Visit the cashier', '前往筹码柜台'] 'Deadwood Reblooms Casino Cashier'>><</lanLink>><br><br>
-  <<icon 'casino/poker-chips.png'>><<lanLink ["Texas hold'em table", '德州扑克牌桌'] 'Deadwood Reblooms Life Simulation Holdem'>><</lanLink>><br>
-  <<icon 'casino/three-card-poker.png'>><<lanLink ['Three-card poker table', '炸金花牌桌'] 'Deadwood Reblooms Life Simulation Three Card'>><</lanLink>><br>
+  <<icon 'casino/poker-chips.png'>><<lanLink ["Texas hold'em (6 / 9 seats)", '德州扑克（6 / 9 人桌）'] 'Deadwood Reblooms Life Simulation Holdem'>><</lanLink>><br>
+  <<icon 'casino/three-card-poker.png'>><<lanLink ['Zha Jin Hua (3 / 6 / 9 seats)', '炸金花（3 / 6 / 9 人桌）'] 'Deadwood Reblooms Life Simulation Three Card'>><</lanLink>><br>
   <<icon 'casino/blackjack.png'>><<lanLink ['Blackjack table', '二十一点牌桌'] 'Deadwood Reblooms Life Simulation Blackjack'>>
     <<run maplebirch.get('LifeSimulation').casino.blackjack.prepare('casino', null, 'Deadwood Reblooms Life Simulation Casino')>>
   <</lanLink>><br>
+  <<icon 'casino/sic-bo.png'>><<lanLink ['Sic Bo', '骰宝'] 'Deadwood Reblooms Casino Sic Bo'>><</lanLink>><br>
   <<icon 'casino/slot-machine.png'>><<lanLink ['Slot machine', '老虎机'] 'Deadwood Reblooms Casino Slot Machine'>><</lanLink>><br>
   <<icon 'casino/dealer.png'>><<lanLink ['Talk to Marlow', '与马洛交谈'] 'Deadwood Reblooms Casino Dealer'>><</lanLink>><br><br>
   <<icon 'casino/lounge.png'>><<lanLink ['Go to the lounge', '前往休息区'] 'Deadwood Reblooms Casino Lounge'>><</lanLink>><br><br>
@@ -331,14 +334,14 @@
 <<language>>
   <<option 'EN'>>
     The card on the table reads:<br><br>
-    "Choose your buy-in. The small and big blinds are shown in brackets."<br><<deadwood-poker-stakes 'holdem'>><br>"The button moves one seat after every hand. Both opponents bring their own chips. A player who runs out is replaced before the next hand."<br><br>
+    "Choose a six- or nine-seat table, then your buy-in. The small and big blinds are shown in brackets."<br><<deadwood-poker-stakes 'holdem'>><br>"The button moves one seat after every hand. Each opponent brings their own chips. A player who runs out is replaced before the next hand."<br><br>
     <b>Dealing and betting</b><br>"Each player receives two private cards. Bet before the flop, then after three community cards, the fourth card and the fifth. After the flop, the first active seat left of the button acts first. Check when nobody has bet, call to match, raise or fold. A raise must increase the current bet by at least the last full raise, and an opening bet must be at least the big blind."<br><br>
     <b>All-in and side pots</b><br>"You may go all-in with fewer chips. A short all-in cannot reopen raising for someone who has already acted, unless the increases faced together reach a full raise. An all-in player can only win pots funded by their own contribution. Excess, uncalled bets are returned. No money can be added during a hand."<br><br>
     <b>Hand rankings</b><br>"Use the best five of your two cards and the five community cards. From high to low: straight flush, four of a kind, full house, flush, straight, three of a kind, two pair, pair, high card. A2345 is the lowest straight. Suits do not break ties. Identical best hands split each eligible pot; odd pennies go clockwise from the button."<br><br>
     <b>Settlement and leaving</b><br>"The house takes five percent of contested pots, capped at three big blinds per hand. Uncalled money is not charged. Leaving during a hand folds your cards and returns your remaining chips to your casino balance. Take them to the counter to exchange them for cash or return them to your bank."
   <<option 'CN'>>
     桌上的说明牌写着：<br><br>
-    “选择买入金额，括号内依次为小盲与大盲。”<br><<deadwood-poker-stakes 'holdem'>><br>“每局结束，庄位顺时针移动一位。对手自带筹码，输光的人在下一局前换人入座。”<br><br>
+    “先选六人桌或九人桌，再选买入金额，括号内依次为小盲与大盲。”<br><<deadwood-poker-stakes 'holdem'>><br>“每局结束，庄位顺时针移动一位。对手自带筹码，输光的人在下一局前换人入座。”<br><br>
     <b>发牌与下注</b><br>“每人两张底牌。翻牌前下注，随后依次发三张公共牌、第四张和第五张，每次发牌后再下注。翻牌后，从庄位左边仍在牌局中的人开始行动。无人下注时可以过牌。有人下注时可以跟注、加注或弃牌。加注至少增加上次完整加注的数额，首次下注至少为大盲。”<br><br>
     <b>全下与边池</b><br>“筹码不足时可以全下。小额全下不会让已经行动过的人重新获得加注权，除非累计增加的数额达到一次完整加注。全下者只能争夺自己出资覆盖的底池。没人跟注的超额筹码退回，一局内不能追加买入。”<br><br>
     <b>牌型大小</b><br>“从自己的两张底牌与五张公共牌中选最强五张。由大到小：同花顺、四条、葫芦、同花、顺子、三条、两对、一对、高牌。A2345 是最小顺子，花色不分大小。最强手牌相同则平分各自有资格争夺的底池，分不尽的便士从庄位左侧起顺时针分配。”<br><br>
@@ -349,13 +352,13 @@
 :: Deadwood Reblooms Casino Three Card Rules
 <<language>>
   <<option 'EN'>>
-    The dealer points out this table's rules. "Three cards each. No jokers. Choose an ante from the listed amounts before the deal."<br><span class='gold'><<lanSwitch "Ante: " "底注：">></span><<deadwood-poker-stakes 'three'>><br><br>
+    The dealer points out this table's rules. "Three cards each. No jokers. Choose a three-, six- or nine-seat table and an ante before the deal."<br><span class='gold'><<lanSwitch "Ante: " "底注：">></span><<deadwood-poker-stakes 'three'>><br><br>
     <b>Betting</b><br>"You can play blind or look at your own cards for free. A seen hand pays twice the current blind stake. A raise doubles the blind stake, up to eight times the ante. You cannot borrow or go into debt. If you cannot pay, fold."<br><br>
     <b>Comparing and showing cards</b><br>"After looking, pay twice your usual call to compare with one opponent. The weaker hand folds. If the cards are identical, the person requesting the comparison loses. The other player's cards are shown only to you. If two players remain, play continues; after ten rounds, everyone still in shows and the strongest hand wins."<br><br>
     <b>Hand rankings</b><br>"Three of a kind beats straight flush, then flush, straight, pair and high card. AKQ is the highest straight, A23 the lowest. Suits do not break ties. <span class='gold'>An unsuited 235 beats any three of a kind.</span> Against other hands, it counts as high card. A suited 235 is just a flush. If several players show together, an unsuited 235 knocks out the three-of-a-kind hands first. We then compare the remaining hands as usual. Matching best hands split the winnings, with odd pennies assigned in seat order."<br><br>
     <b>Settlement and leaving</b><br>"Five percent is taken from the final pot, capped at three antes. The winnings include the winner's own stake and return to the casino chip balance. Leaving an unfinished hand gives up the chips already in the pot."
   <<option 'CN'>>
-    荷官指了指本桌的规则。“每人三张牌，不用鬼牌。发牌前选好底注。”<br><span class='gold'><<lanSwitch "Ante: " "底注：">></span><<deadwood-poker-stakes 'three'>><br><br>
+    荷官指了指本桌的规则。“每人三张牌，不用鬼牌。发牌前选择三人、六人或九人桌，再选好底注。”<br><span class='gold'><<lanSwitch "Ante: " "底注：">></span><<deadwood-poker-stakes 'three'>><br><br>
     <b>下注与加注</b><br>“可以暗牌下注，也可以免费查看自己的牌。看过牌的人支付当前暗牌注额的两倍。加注会把暗牌注额翻倍，最多为底注的八倍。不赊账，不借钱。付不起就弃牌。”<br><br>
     <b>比牌与摊牌</b><br>“看牌后，可以支付自己跟注金额的<span class='gold'>两倍</span>，与一名对手比牌。较弱的一方弃牌。牌型与点数完全相同，主动比牌者输。对手的牌只向你展示。若还剩两人则继续下注，十轮后仍未弃牌的人摊牌，最强者获胜。”<br><br>
     <b>牌型大小</b><br>“豹子大于顺金，其后依次为金花、顺子、对子、单张。AKQ 为最大顺子，A23 最小，花色不分大小。<span class='gold'>杂色 235 能吃任何豹子。</span>碰到其他牌，仍算普通单张。同花 235 只算金花。多人一起摊牌时，有杂色 235 就先淘汰豹子，剩下的人再按普通牌型比。最强牌相同则平分奖金，零头按座位顺序分配。”<br><br>

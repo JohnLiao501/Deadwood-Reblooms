@@ -16,6 +16,7 @@ export interface ThreeCardState {
   trick: CardTrickState;
   phase: 'ready' | 'player' | 'done';
   ante: number;
+  table_size: number;
   stake: number;
   rounds: number;
   seats: ThreeSeat[];
@@ -32,6 +33,7 @@ export const DEFAULT_THREE_CARD_STATE: ThreeCardState = {
   trick: clone(DEFAULT_CARD_TRICK_STATE),
   phase: 'ready',
   ante: DEFAULT_CASINO_OPTIONS.threeCard.antes[0],
+  table_size: 6,
   stake: DEFAULT_CASINO_OPTIONS.threeCard.antes[0],
   rounds: 0,
   seats: [],
@@ -51,6 +53,14 @@ class ThreeCard {
   ) {}
   public get antes(): readonly number[] {
     return this.options.antes;
+  }
+
+  public get tableSize(): number {
+    return this.state.table_size;
+  }
+
+  public set tableSize(size: number) {
+    if (this.state.phase !== 'player' && this.options.seats.includes(size)) Object.assign(this.state, clone(DEFAULT_THREE_CARD_STATE), { ante: this.ante, stake: this.ante, table_size: size });
   }
 
   public get funds(): number {
@@ -98,15 +108,24 @@ class ThreeCard {
   }
 
   public set ante(ante: number) {
-    if (this.state.phase !== 'player' && this.antes.includes(ante) && Number.isSafeInteger(ante) && ante > 0) Object.assign(this.state, clone(DEFAULT_THREE_CARD_STATE), { ante, stake: ante });
+    if (this.state.phase !== 'player' && this.antes.includes(ante) && Number.isSafeInteger(ante) && ante > 0)
+      Object.assign(this.state, clone(DEFAULT_THREE_CARD_STATE), { ante, stake: ante, table_size: this.tableSize });
   }
 
   public start(): boolean {
     if (!this.canStart) return false;
     const state = this.state,
       deck = window.shuffle(window.deck());
-    Object.assign(state, clone(DEFAULT_THREE_CARD_STATE), { phase: 'player', ante: state.ante, stake: state.ante, paid: false });
-    state.seats = ['player', this.core.get('LifeSimulation')!.casino.tableGuest ?? 'regular', 'visitor'].map(name => ({ name, cards: [], seen: false, folded: false, total: state.ante }));
+    const size = this.tableSize;
+    if (!this.options.seats.includes(size)) return false;
+    Object.assign(state, clone(DEFAULT_THREE_CARD_STATE), { phase: 'player', ante: state.ante, stake: state.ante, table_size: size, paid: false });
+    state.seats = Array.from({ length: size }, (_, index) => ({
+      name: index === 0 ? 'player' : index === 1 ? (this.core.get('LifeSimulation')!.casino.tableGuest ?? 'regular') : `guest_${index}`,
+      cards: [],
+      seen: false,
+      folded: false,
+      total: state.ante
+    }));
     for (let round = 0; round < 3; round++) for (const seat of state.seats) seat.cards.push(deck.shift()!);
     return true;
   }
@@ -130,7 +149,7 @@ class ThreeCard {
     if (!['call', 'raise', 'compare'].includes(action)) return -1;
     const cost = action === 'call' ? this.callCost : this.callCost * 2;
     if (this.funds < cost || (action === 'raise' && !this.canRaise)) return -1;
-    if (action === 'compare' && (!player.seen || ![1, 2].includes(target) || state.seats[target].folded)) return -1;
+    if (action === 'compare' && (!player.seen || !Number.isInteger(target) || target <= 0 || target >= state.seats.length || state.seats[target].folded)) return -1;
     player.total += cost;
     if (action === 'raise') state.stake *= 2;
     state.log.push({ seat: 0, action, amount: cost });
@@ -151,7 +170,7 @@ class ThreeCard {
   private opponents(): void {
     const state = this.state;
     state.rounds++;
-    for (let i = 1; i < 3; i++) {
+    for (let i = 1; i < state.seats.length; i++) {
       const seat = state.seats[i];
       if (seat.folded) continue;
       const distracted = state.trick.distracted === i;
@@ -164,13 +183,26 @@ class ThreeCard {
         state.log.push({ seat: i, action: 'fold', amount: 0 });
         continue;
       }
+      // 已看牌的客人也会主动比牌：按自己的牌决定是否挑战，先付注，再判定对手。
+      const targets = state.seats.flatMap((other, index) => (index !== i && !other.folded ? [index] : []));
+      if (!distracted && rank && state.rounds >= 2 && roll < 12 && targets.length) {
+        const target = targets[random(0, targets.length - 1)];
+        const cost = state.stake * 4;
+        seat.total += cost;
+        state.log.push({ seat: i, action: 'compare', amount: cost });
+        const wins = compareThreeCardHands(rank, threeCardRank(state.seats[target].cards)) > 0;
+        state.seats[wins ? target : i].folded = true;
+        if (target === 0) state.compared.push(i);
+        if (state.seats[0].folded || state.seats.filter(other => !other.folded).length === 1) break;
+        continue;
+      }
       const raise = !distracted && state.stake < state.ante * 8 && roll < (rank && rank[0] >= 2 ? 22 : 6);
       if (raise) state.stake *= 2;
       const cost = state.stake * (seat.seen ? 2 : 1);
       seat.total += cost;
       state.log.push({ seat: i, action: raise ? 'raise' : 'call', amount: cost });
     }
-    if (state.seats.filter(seat => !seat.folded).length === 1 || state.rounds >= 10) {
+    if (state.seats[0].folded || state.seats.filter(seat => !seat.folded).length === 1 || state.rounds >= 10) {
       state.showdown = state.rounds >= 10;
       this.finish();
     }
@@ -212,6 +244,7 @@ class ThreeCard {
       this.state.seats[0].folded = true;
       this.finish();
     }
+    this.collectPayout();
   }
 }
 

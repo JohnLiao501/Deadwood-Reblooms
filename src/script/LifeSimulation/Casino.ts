@@ -3,6 +3,7 @@
 import SlotMachine from './Casino/SlotMachine';
 import Blackjack from './Casino/Blackjack';
 import { holdemView, threeCardView } from './Casino/PokerView';
+import { sicBoView } from './Casino/SicBoView';
 import Marlow from './Casino/Marlow';
 
 export default function Casino(maplebirch: typeof window.maplebirch): void {
@@ -49,6 +50,11 @@ export default function Casino(maplebirch: typeof window.maplebirch): void {
   maplebirch.tool.macro.defineS('deadwood-three-card-table', () => {
     const game = maplebirch.get('LifeSimulation')?.casino.threeCard;
     if (game) return threeCardView(maplebirch, game);
+  });
+
+  maplebirch.tool.macro.defineS('deadwood-sic-bo-stage', () => {
+    const game = maplebirch.get('LifeSimulation')?.casino.sicBo;
+    if (game) return sicBoView(game);
   });
 
   Marlow(maplebirch);

@@ -18,6 +18,7 @@ export interface HoldemState {
   trick: CardTrickState;
   joined: boolean;
   buy_in: number;
+  table_size: number;
   button: number;
   phase: 'ready' | 'preflop' | 'flop' | 'turn' | 'river' | 'done';
   seats: HoldemSeat[];
@@ -36,6 +37,7 @@ export const DEFAULT_HOLDEM_STATE: HoldemState = {
   trick: clone(DEFAULT_CARD_TRICK_STATE),
   joined: false,
   buy_in: DEFAULT_CASINO_OPTIONS.holdem.buyIns[0],
+  table_size: DEFAULT_CASINO_OPTIONS.holdem.seats[0],
   button: 2,
   phase: 'ready',
   seats: [],
@@ -56,8 +58,33 @@ class Holdem {
   public constructor(
     private readonly core: typeof maplebirch,
     public readonly options: HoldemOptions = DEFAULT_CASINO_OPTIONS.holdem,
-    public readonly watching = false
+    private readonly watchMode = false
   ) {}
+
+  public get watching(): boolean {
+    return this.watchMode;
+  }
+
+  public get tableSize(): number {
+    return this.state.table_size;
+  }
+
+  public set tableSize(size: number) {
+    if (!this.state.joined && this.options.seats.includes(size)) this.state.table_size = size;
+  }
+
+  protected get names(): string[] {
+    const guest = this.core.get('LifeSimulation')!.casino.tableGuest ?? 'regular';
+    return Array.from({ length: this.tableSize }, (_, index) => (index === 0 ? (this.watching ? guest : 'player') : index === 1 ? (this.watching ? 'visitor' : guest) : `guest_${index}`));
+  }
+
+  protected get feeCap(): number {
+    return this.bigBlind * 3;
+  }
+
+  protected get refill(): boolean {
+    return true;
+  }
 
   public get buyIns(): readonly number[] {
     return this.options.buyIns;
@@ -116,7 +143,13 @@ class Holdem {
   }
 
   public get canDeal(): boolean {
-    return this.available && this.state.joined && !this.active && (this.player?.stack ?? 0) >= this.bigBlind;
+    return (
+      this.available &&
+      this.state.joined &&
+      !this.active &&
+      (this.refill || this.state.seats.filter(seat => seat.stack > 0).length >= 2) &&
+      (this.watching ? this.state.seats.some(seat => seat.stack >= this.bigBlind) : (this.player?.stack ?? 0) >= this.bigBlind)
+    );
   }
 
   public join(amount: number): boolean {
@@ -129,9 +162,10 @@ class Holdem {
       (!this.watching && this.funds < amount)
     )
       return false;
-    const casino = this.core.get('LifeSimulation')!.casino;
-    Object.assign(this.state, clone(DEFAULT_HOLDEM_STATE), { joined: true, buy_in: amount });
-    this.state.seats = (this.watching ? ['regular', 'visitor', 'guest'] : ['player', casino.tableGuest ?? 'regular', 'visitor']).map(name => ({
+    const names = this.names;
+    if (names.length < 2 || names.length > 10) return false;
+    Object.assign(this.state, clone(DEFAULT_HOLDEM_STATE), { joined: true, buy_in: amount, table_size: names.length, button: names.length - 1 });
+    this.state.seats = names.map(name => ({
       name,
       stack: amount,
       cards: [],
@@ -146,7 +180,7 @@ class Holdem {
   public deal(): boolean {
     if (!this.canDeal) return false;
     const state = this.state;
-    state.button = (state.button + 1) % 3;
+    const count = state.seats.length;
     state.deck = window.shuffle(window.deck());
     Object.assign(state, {
       board: [],
@@ -160,7 +194,7 @@ class Holdem {
       trick: clone(DEFAULT_CARD_TRICK_STATE)
     });
     state.seats.forEach((seat, index) => {
-      if (index === 1 && !this.watching) {
+      if (this.refill && index === 1 && !this.watching) {
         const name = this.core.get('LifeSimulation')!.casino.tableGuest ?? 'regular';
         if (seat.name !== name) {
           seat.name = name;
@@ -168,13 +202,22 @@ class Holdem {
         }
       }
       // 对手输光后由下一位客人带同档筹码入座，PC 必须自行兑回并重新买入。
-      if (index > 0 && seat.stack < this.bigBlind) seat.stack = state.buy_in;
-      Object.assign(seat, { cards: [], folded: false, street_bet: 0, total: 0, acted_at: null });
+      if (this.refill && index > 0 && seat.stack < this.bigBlind) seat.stack = state.buy_in;
+      Object.assign(seat, { cards: [], folded: seat.stack === 0, street_bet: 0, total: 0, acted_at: null });
     });
-    for (let round = 0; round < 2; round++) for (let offset = 1; offset <= 3; offset++) state.seats[(state.button + offset) % 3].cards.push(state.deck.shift()!);
-    this.put((state.button + 1) % 3, this.bigBlind / 2);
-    this.put((state.button + 2) % 3, this.bigBlind);
-    state.pending = this.order((state.button + 3) % 3);
+    state.button = this.order((state.button + 1) % count)[0];
+    for (let round = 0; round < 2; round++) {
+      for (let offset = 1; offset <= count; offset++) {
+        const seat = state.seats[(state.button + offset) % count];
+        if (!seat.folded) seat.cards.push(state.deck.shift()!);
+      }
+    }
+    // 单挑时庄位下小盲；多人桌从庄位下一位开始，不让输光的座位继续下盲注。
+    const small = state.seats.filter(seat => !seat.folded).length === 2 ? state.button : this.order((state.button + 1) % count)[0];
+    const big = this.order((small + 1) % count)[0];
+    this.put(small, this.bigBlind / 2);
+    this.put(big, this.bigBlind);
+    state.pending = this.order((big + 1) % count);
     this.advance();
     return true;
   }
@@ -186,7 +229,7 @@ class Holdem {
   }
 
   public next(): boolean {
-    if (!this.watching || !this.active || !this.state.pending.length || V.id <= 0 || V.location !== 'deadwood_casino' || V.combat === 1 || V.exposed > 0 || V.stress >= V.stressmax) return false;
+    if (!this.watching || !this.active || !this.state.pending.length || !this.available) return false;
     this.opponent(this.state.pending[0]);
     this.advance();
     return true;
@@ -198,7 +241,7 @@ class Holdem {
   }
 
   private order(first: number): number[] {
-    return [0, 1, 2].map(offset => (first + offset) % 3).filter(index => !this.state.seats[index].folded && this.state.seats[index].stack > 0);
+    return this.state.seats.map((_, offset) => (first + offset) % this.state.seats.length).filter(index => !this.state.seats[index].folded && this.state.seats[index].stack > 0);
   }
 
   private put(index: number, amount: number): number {
@@ -236,7 +279,7 @@ class Holdem {
           if (otherIndex !== index) other.acted_at = null;
         });
       }
-      state.pending = this.order((index + 1) % 3).filter(other => other !== index && (state.seats[other].acted_at === null || state.seats[other].street_bet < state.current_bet));
+      state.pending = this.order((index + 1) % state.seats.length).filter(other => other !== index && (state.seats[other].acted_at === null || state.seats[other].street_bet < state.current_bet));
     } else {
       if (!['fold', 'check', 'call'].includes(action)) return false;
       if (action === 'fold') seat.folded = true;
@@ -273,7 +316,7 @@ class Holdem {
         });
         state.current_bet = 0;
         state.last_raise = this.bigBlind;
-        state.pending = this.order((state.button + 1) % 3);
+        state.pending = this.order((state.button + 1) % state.seats.length);
         continue;
       }
       const index = state.pending[0];
@@ -312,10 +355,14 @@ class Holdem {
     if (!this.active) return;
     const state = this.state;
     const ranks = state.seats.map(seat => holdemRank([...seat.cards, ...state.board]));
-    const settlement = settlePots(state.seats, ranks, state.button, this.bigBlind * 3);
+    const settlement = settlePots(state.seats, ranks, state.button, this.feeCap);
     settlement.awards.forEach((award, index) => (state.seats[index].stack += award));
     Object.assign(state, { phase: 'done', pending: [], pots: settlement.pots, fee: settlement.fee, showdown });
-    if (!this.watching) this.core.get('LifeSimulation')?.casino.record('holdem', state.seats[0].total, settlement.awards[0], state.seats.some(seat => seat.name === 'Wren') ? 'Wren' : '');
+    if (!this.watching) this.record(state.seats[0].total, settlement.awards[0]);
+  }
+
+  protected record(stake: number, payout: number): void {
+    this.core.get('LifeSimulation')?.casino.record('holdem', stake, payout, this.state.seats.some(seat => seat.name === 'Wren') ? 'Wren' : '');
   }
 
   /** 离席视为弃牌，随后结清已买入的剩余筹码，关闭营业也可兑回。 */

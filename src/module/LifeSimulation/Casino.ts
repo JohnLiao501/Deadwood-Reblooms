@@ -4,6 +4,7 @@ import Blackjack, { DEFAULT_BLACKJACK_STATE, type BlackjackState } from './Casin
 import Holdem, { DEFAULT_HOLDEM_STATE, type HoldemState } from './Casino/Holdem';
 import ThreeCard, { DEFAULT_THREE_CARD_STATE, type ThreeCardState } from './Casino/ThreeCard';
 import SlotMachine, { type SlotMachineState } from './Casino/SlotMachine';
+import SicBo, { type SicBoState } from './Casino/SicBo';
 import { DEFAULT_CASINO_OPTIONS, type CasinoOptions, type CardTrickState } from '../constants/casino';
 
 export const casinoPassage = 'Deadwood Reblooms Life Simulation Casino';
@@ -13,6 +14,7 @@ export interface CasinoState {
   watch: HoldemState;
   three_card: ThreeCardState;
   slots: SlotMachineState;
+  sic_bo: SicBoState;
   chips: number;
   suspicion: number;
   cheating_caught: number;
@@ -60,6 +62,7 @@ export const DEFAULT_CASINO_STATE: CasinoState = {
   watch: clone(DEFAULT_HOLDEM_STATE),
   three_card: DEFAULT_THREE_CARD_STATE,
   slots: { reels: [0, 1, 2], payout: 0, played: false },
+  sic_bo: SicBo.defaults,
   chips: 0,
   suspicion: 0,
   cheating_caught: 0,
@@ -107,6 +110,7 @@ class Casino {
   public readonly watch: Holdem;
   public readonly threeCard: ThreeCard;
   public readonly slots = new SlotMachine();
+  public readonly sicBo = new SicBo(this);
 
   public constructor(
     private readonly core: typeof maplebirch,
@@ -347,6 +351,7 @@ class Casino {
 
   /** 离席结清牌桌，剩余筹码保留在账户中。 */
   public leave(): void {
+    this.state.sic_bo.bets = {};
     this.adjustChips(this.holdem.cashOut());
     this.threeCard.leave();
     this.adjustChips(this.threeCard.collectPayout());
@@ -369,7 +374,7 @@ class Casino {
   }
 
   /** 只在手牌或转轮真正结算时记账。买入、换筹码和取回本金不是赢利。 */
-  public record(game: 'blackjack' | 'holdem' | 'three_card' | 'slots', stake: number, payout: number, opponent = ''): void {
+  public record(game: 'blackjack' | 'holdem' | 'three_card' | 'slots' | 'sic_bo', stake: number, payout: number, opponent = '', venue: 'casino' | 'private' = 'casino'): void {
     if (!Number.isSafeInteger(stake) || !Number.isSafeInteger(payout) || stake < 0 || payout < 0) return;
     const stats = this.state.statistics;
     stats.rounds++;
@@ -379,6 +384,8 @@ class Casino {
     const profit = payout - stake;
     stats.biggest_win = Math.max(stats.biggest_win, profit);
     stats.biggest_loss = Math.max(stats.biggest_loss, -profit);
+    // 私人牌局计入输赢总账，不刷赌场当晚连胜与柜台奖励。
+    if (venue === 'private') return;
     if (stats.night !== this.night) {
       stats.night = this.night;
       stats.night_profit = 0;
@@ -387,7 +394,7 @@ class Casino {
     stats.night_profit += profit;
     stats.best_night_profit = Math.max(stats.best_night_profit, stats.night_profit);
     // 连胜只计算付过赌注的牌局，平局和输局中断，转轮不参与牌局连胜。
-    if (game !== 'slots' && stake > 0) {
+    if (!['slots', 'sic_bo'].includes(game) && stake > 0) {
       stats.win_streak = profit > 0 ? stats.win_streak + 1 : 0;
       stats.best_streak = Math.max(stats.best_streak, stats.win_streak);
     }

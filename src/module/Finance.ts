@@ -297,6 +297,12 @@ class Finance extends Module {
     return Finance.creditMinimumPayment(this.state.bank.credit_debt);
   }
 
+  /** 价格感受只看现金与可用存款，不把授信额度或未售出的资产当成花得出去的钱。 */
+  public get spendingMoney(): number {
+    const bank = this.state.bank;
+    return Finance.cashOnHand + (bank.opened && bank.debit_card ? bank.balance : 0);
+  }
+
   public get loanPayoff(): number {
     const bank = this.state.bank;
     if (bank.loan_debt <= 0) return 0;

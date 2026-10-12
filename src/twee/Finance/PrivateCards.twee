@@ -1,0 +1,282 @@
+:: Deadwood Reblooms Company Private Cards Widgets [widget]
+
+<!-- 原版服务选项保留；经营身份或可动用资金达到原版富裕档时，允许明确拒绝被当成侍者。 -->
+<<widget 'deadwood-private-cards-guest-link'>>
+  <<set $_finance to maplebirch.get('Finance')>>
+  <<if $_finance.company.avery.cards.present and $avery_cards and $_finance.company.avery.guest>>
+    <<if $passage is 'Avery Cards'>>
+      <<refuseicon>><<lanLink ['Say you came as a guest, not to serve drinks (0:05)', '表明自己是来做客的，不是来倒酒的 (0:05)'] 'Deadwood Reblooms Company Cards Drinks'>>
+        <<if !$avery_cards.finance_refused_drinks>>
+          <<set $avery_cards.finance_refused_drinks to true>>
+          <<set _privateGuestDrinks to {avery: 'whisky', bailey: 'vodka', leighton: 'gin', quinn: 'brandy'}>>
+          <<for _privateGuest, _privateGuestDrink range _privateGuestDrinks>>
+            <<set $avery_cards.drink[_privateGuest] to _privateGuestDrink>>
+            <<set $avery_cards.drink[_privateGuest + '_spit'] to 'f'>>
+            <<run $avery_cards_drinks_known.pushUnique(_privateGuest)>>
+            <<card_skill _privateGuest -10>>
+          <</for>>
+          <<pass 5>>
+        <</if>>
+      <</lanLink>><br>
+    <<elseif $passage is 'Avery Cards 4'>>
+      <<refuseicon>><<lanLink ['Decline to tidy the flat', '拒绝替贝利打扫公寓'] 'Deadwood Reblooms Company Cards Tidy'>><</lanLink>><br>
+    <</if>>
+  <</if>>
+<</widget>>
+
+<!-- 拒绝是一个明确选择。贝利缺钱的设定不变，不替 PC 自动支付跟注，也不重写原版赢家权重。 -->
+<<widget 'deadwood-private-cards-boundary-link'>>
+  <<if maplebirch.get('Finance').company.avery.cards.present and maplebirch.get('Finance').company.avery.guest and $avery_cards?.skill>>
+    <<refuseicon>><<lanLink ['Tell Bailey you are not a stake', '告诉贝利，自己不是赌注'] 'Deadwood Reblooms Company Cards Boundary'>>
+      <<if maplebirch.get('Finance').company.avery.cards.present and maplebirch.get('Finance').company.avery.guest>>
+        <<set $avery_cards.finance_guest to true>>
+      <</if>>
+    <</lanLink>><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-private-cards-guest-finish'>>
+  <<effects>>
+  <<earnFeat 'Backroom Deals'>>
+  <!-- 贝利已弃牌：沿用原版 skill 的排序与同分顺序，排除无资格争夺最后底池的贝利。 -->
+  <<set _lastCardNames to ['avery', 'leighton', 'quinn']>>
+  <<run _lastCardNames.sort((a, b) => $avery_cards.skill[b] - $avery_cards.skill[a])>>
+  <<set $cards_win to _lastCardNames[0] + '_cards_win'>>
+  <<language>>
+    <<option 'EN'>>
+      The cards are revealed. <<switch $cards_win>>
+        <<case 'avery_cards_win'>>Avery draws the money close, smiling without looking at Bailey.
+        <<case 'leighton_cards_win'>>Leighton opens the bag and gathers the notes. "Wonderful."
+        <<case 'quinn_cards_win'>>"Victory!" Quinn looks around the table, enjoying the silence that follows.
+      <</switch>><br><br>
+      Bailey puts the deck down. "That's enough. I have somewhere to be." Leighton finishes the last of the gin. Quinn pushes the empty glass towards the tray.<br><br>
+      Avery turns towards you. "There's another party. We can still make it." The invitation sounds rather like an instruction. Leighton mentions a club instead, while Quinn suggests continuing the evening at home. Bailey glances at you. "I'm going back to the orphanage."
+    <<option 'CN'>>
+      纸牌摊开。<<switch $cards_win>>
+        <<case 'avery_cards_win'>>艾弗里收拢钞票，笑着，没有看贝利。
+        <<case 'leighton_cards_win'>>礼顿打开包，把钞票收进去。“好极了。”
+        <<case 'quinn_cards_win'>>“胜利！”奎因环视牌桌，享受着随后出现的沉默。
+      <</switch>><br><br>
+      贝利放下牌堆。“够了。我还有地方要去。”礼顿喝完最后一点金酒，奎因把空杯子推向托盘。<br><br>
+      艾弗里转向你。“还有一场聚会。我们还赶得上。”听起来像命令多过邀请。礼顿提起了一家俱乐部，奎因则建议去家里继续今晚的消遣。贝利瞥了你一眼。“我要回孤儿院。”
+  <</language>><br><br>
+  <<averyscore>>
+  <<lanLink ['Go with Avery to the next party', '跟艾弗里去下一场聚会'] 'Avery Cards Avery 2'>><<endevent>><</lanLink>><br>
+  <<lanLink ['Stay with Bailey', '留下来，跟贝利一起走'] 'Avery Cards Bailey 2'>><<endevent>><</lanLink>><br>
+  <<lanLink ['Go with Leighton', '跟礼顿一起走'] 'Avery Cards Leighton 3'>><<endevent>><</lanLink>><br>
+  <<lanLink ["Accept Quinn's invitation", '接受奎因的邀请'] 'Deadwood Reblooms Company Cards Quinn Guest'>><</lanLink>><br>
+  <<getouticon>><<lanLink ['Leave on your own (0:02)', '独自离开 (0:02)'] 'Barb Street'>>
+    <<avery_cards_end>><<endevent>><<pass 2>>
+  <</lanLink>><br>
+<</widget>>
+
+<<widget 'deadwood-private-cards-bailey-guest'>>
+  <<effects>><<npc Bailey>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      Bailey shuts the door behind the others. "Help me tidy up. Then I'll drive you home." Empty glasses go back onto the tray. Bailey looks up to see whether you have moved.<br><br>
+      "Or stand there," Bailey adds. "Just keep out of my way."
+    <<option 'CN'>>
+      贝利在其他人身后关上门。“帮我收拾。然后我开车送你回去。”空杯子被放回托盘，贝利抬起头，看你有没有动。<br><br>
+      “不然就站着。”贝利又说。“别挡我的路。”
+  <</language>><br><br>
+  <<lanLink ['Help (0:05)', '帮忙 (0:05)'] 'Avery Cards Bailey Help'>><<pass 5>><</lanLink>><br>
+  <<refuseicon>><<lanLink ['Wait without helping (0:10)', '不帮忙，等贝利收拾完 (0:10)'] 'Avery Cards Bailey 3'>><<pass 10>><</lanLink>><br>
+  <<getouticon>><<lanLink ['Leave on your own (0:02)', '独自离开 (0:02)'] 'Barb Street'>>
+    <<avery_cards_end>><<endevent>><<pass 2>>
+  <</lanLink>><br>
+<</widget>>
+
+<!-- 在原版调酒、第一局和随机谈话之后插入一次普通牌局。原版 drink / skill 与最后一局均不重置。 -->
+<<widget 'deadwood-private-cards-link'>>
+  <<set _privateCards to maplebirch.get('Finance').company.avery.cards>>
+  <<if _privateCards.present and !_privateCards.session.active and !(_privateCards.session.closed and _privateCards.session.day is Math.floor(Time.days))>>
+    <<if maplebirch.get('Finance').company.avery.peer>>
+      <<language>>
+        <<option 'EN'>>
+          The stakes on the table are no longer unfamiliar figures to you. Avery catches you looking at them. "Considering a stake of your own?" Bailey keeps a hand on the deck. "One hand. Your own money."
+        <<option 'CN'>>
+          桌上的数额对你来说，已经不再陌生。艾弗里注意到你的目光。“想拿自己的钱试试？”贝利把手留在牌堆上。“一局。拿你自己的钱。”
+      <</language>><br><br>
+    <</if>>
+    <<if _privateCards.funds gte _privateCards.buyIns[0] and !pcAreArmsBound('any') and $exposed lte 0 and $stress lt $stressmax>>
+      <<icon 'casino/poker-chips.png'>><<lanLink ['Ask to join one hand', '要求加入一局'] 'Deadwood Reblooms Company Cards'>>
+        <<if maplebirch.get('Finance').company.avery.cards.enter()>><<set $Finance.company.avery.cards.mode to 'play'>><</if>>
+      <</lanLink>><br>
+    <</if>>
+    <<if $exposed lte 0 and $stress lt $stressmax>>
+      <<icon 'casino/lounge.png'>><<lanLink ['Watch a hand without interfering (0:02)', '不干扰他们，旁观一局 (0:02)'] 'Deadwood Reblooms Company Cards'>>
+        <<if maplebirch.get('Finance').company.avery.cards.enter()>>
+          <<set $Finance.company.avery.cards.mode to 'watch'>>
+          <<if maplebirch.get('Finance').company.avery.cards.join(50000) and maplebirch.get('Finance').company.avery.cards.deal()>><<pass 2>><</if>>
+        <</if>>
+      <</lanLink>><br>
+    <</if>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-private-cards-action'>>
+  <<set $_cards to maplebirch.get('Finance').company.avery.cards>><<set $_cardAccepted to false>>
+  <<switch _args[0]>>
+    <<case 'join'>><<set $_cardAccepted to $_cards.join(Number(_args[1]))>>
+    <<case 'deal'>><<set $_cardAccepted to $_cards.deal()>>
+    <<case 'next'>><<set $_cardAccepted to $_cards.next()>>
+    <<default>><<set $_cardAccepted to $_cards.act(_args[0], Number(_args[1]))>>
+  <</switch>>
+  <<if $_cardAccepted and _args[0] isnot 'join'>><<pass `_args[0] is 'deal' ? 2 : 1`>><</if>>
+<</widget>>
+
+<<widget 'deadwood-private-cards-leave'>>
+  <<getouticon>><<lanLink ['Return to the gathering', '回到聚会'] 'Avery Cards 7'>>
+    <<run maplebirch.get('Finance').company.avery.cards.close()>>
+  <</lanLink>><br>
+<</widget>>
+
+<<widget 'deadwood-private-cards-reaction'>>
+  <<set $_privateHand to maplebirch.get('Finance').company.avery.cards.state>>
+  <<if $_privateHand.phase isnot 'done'>><<exit>><</if>>
+  <<set $_privateWinner to $_privateHand.pots[0]?.winners[0]>>
+  <<set $_privateName to $_privateHand.seats[$_privateWinner]?.name>>
+  <<language>>
+    <<option 'EN'>>
+      <<switch $_privateName>>
+        <<case 'player'>>
+          Bailey counts the pot twice before pushing it over. "Don't let one hand go to your head." Quinn studies your face rather than your cards. "Perhaps we should have found you a chair sooner."
+        <<case 'Avery'>>
+          Avery draws the chips close with an unhurried hand. "A little patience." Bailey has already gathered the cards for the next shuffle.
+        <<case 'Bailey'>>
+          "Housekeeping," Bailey says, raking in the pot. Quinn laughs into a glass. Leighton keeps watching Bailey's hands.
+        <<case 'Leighton'>>
+          Leighton arranges the winnings beside the existing columns. "A lesson in knowing when to stop." Avery looks down at the cards, mouth briefly tight.
+        <<case 'Quinn'>>
+          "A pleasure doing business." Quinn gathers the chips as Bailey reaches for the deck. "Shall we?"
+      <</switch>>
+      <<if $_privateHand.pots[0]?.winners.length gt 1>>They divide the tied pot to the last penny before the conversation resumes.<</if>>
+    <<option 'CN'>>
+      <<switch $_privateName>>
+        <<case 'player'>>
+          贝利数了两遍底池，才把筹码推过来。“别赢一局就不知道自己姓什么了。”奎因看着你的脸，没有看牌。“也许早该给你找把椅子。”
+        <<case 'Avery'>>
+          艾弗里不紧不慢地收拢筹码。“稍微耐心一点。”贝利已经收回牌，准备再洗一遍。
+        <<case 'Bailey'>>
+          “收拾收拾。”贝利说着，把底池扒到面前。奎因对着杯口笑出声，礼顿仍看着贝利的手。
+        <<case 'Leighton'>>
+          礼顿把赢来的筹码排在原有的几列旁。“知道什么时候停手，也是门课。”艾弗里低头看牌，嘴角短暂地绷紧。
+        <<case 'Quinn'>>
+          “合作愉快。”奎因收着筹码，贝利伸手去拿牌堆。“继续？”
+      <</switch>>
+      <<if $_privateHand.pots[0]?.winners.length gt 1>>几人把平分的底池分到最后一便士，才又聊了起来。<</if>>
+  <</language>><br><br>
+<</widget>>
+
+:: Deadwood Reblooms Company Cards
+<<effects>><<set _privateCards to maplebirch.get('Finance').company.avery.cards>>
+<<if !_privateCards.session.active or !_privateCards.present>>
+  <<lanSwitch 'The table is no longer available.' '这张牌桌已经无法继续。'>><br>
+  <<deadwood-private-cards-leave>><<exit>>
+<</if>>
+<<language>>
+  <<option 'EN'>>
+    <<if _privateCards.watching>>
+      You sit clear of the four players. Bailey deals, while Quinn talks over the faint clink of Leighton's chips. Avery glances towards you between hands.
+    <<else>>
+      Bailey brings over a fifth chair. You settle between Quinn and Avery, with Leighton and Bailey across the table. "Your own stake," Bailey repeats, watching you count it out.
+    <</if>><br><br>
+    For this hand they agree on hold'em: two cards each, five community cards, with blinds and side pots for short all-ins. Nobody can buy more during the hand. The glasses from earlier stay beside the cards.
+  <<option 'CN'>>
+    <<if _privateCards.watching>>
+      你坐在四名玩家旁边，没有挤进牌桌。贝利发着牌，奎因的说话声盖过礼顿拨动筹码的轻响。艾弗里在两局之间朝你看过来。
+    <<else>>
+      贝利搬来第五把椅子。你在奎因与艾弗里之间坐下，礼顿和贝利就在对面。“拿自己的本钱。”贝利又说了一遍，盯着你数出的钱。
+    <</if>><br><br>
+    这一局，几人商定玩德州扑克：每人两张底牌，五张公共牌，设盲注，小额全下另分边池，中途不能再买入。先前的酒杯仍放在牌旁。
+  <</language>><br><br>
+<<deadwood-private-cards-reaction>>
+<<deadwood-private-cards-table>>
+<<if !_privateCards.canDeal and !_privateCards.active and _privateCards.state.joined>>
+  <span class='blue'><<lanSwitch 'Your hand is over. Collect your remaining money and return to the gathering.' '你参与的这一局已经结束，可以收回余款，回到聚会。'>></span><br>
+<</if>>
+<<deadwood-private-cards-leave>>
+
+:: Deadwood Reblooms Company Cards Drinks
+<<effects>>
+<<if !$avery_cards?.finance_refused_drinks>><<lanLink ['Return', '返回'] 'Avery Cards'>><</lanLink>><<exit>><</if>>
+<<language>>
+  <<option 'EN'>>
+    You leave the empty glass where Quinn put it. "I came to spend the evening with you. Not to carry the tray."<br><br>
+    Quinn's eyebrows rise. "A guest with conditions." Leighton looks from you to Avery, waiting to see what will happen. Avery's smile remains, but becomes rather thin.<br><br>
+    "You heard our guest," Avery says at last. "We can manage a bottle between us." Bailey looks at you for a moment before taking the glasses. "Don't expect me to wait on you either."<br><br>
+    Bailey pours vodka into one glass and sets the bottles within reach. Leighton pours a measure of gin. Quinn takes the brandy, while Avery reaches for the whisky.<br><br>
+    "It was a gift," Bailey says when Avery examines the bottle. "One of many." Quinn swallows a mouthful and sets the glass down with a smack. The cards are already back in Bailey's hands.
+  <<option 'CN'>>
+    你没有接奎因推过来的空杯子。“我是来和你们过这个晚上的，不是来端托盘的。”<br><br>
+    奎因挑起眉毛。“还有条件的客人。”礼顿看看你，又看看艾弗里，等着看接下来会怎样。艾弗里的笑容还在，却淡了些。<br><br>
+    “听见客人的话了吧。”艾弗里终于开口。“我们几个，还不至于倒不了一瓶酒。”贝利看了你片刻，才收拢杯子。“也别指望我伺候你。”<br><br>
+    贝利往一只杯子里倒了伏特加，把几瓶酒放到伸手可及的地方。礼顿自己取了金酒，奎因拿走白兰地，艾弗里则伸手去拿威士忌。<br><br>
+    艾弗里端详酒瓶时，贝利说道：“别人送的。诸多礼物中的一件。”奎因喝下一口，把杯子啪地放下。纸牌已经回到贝利手里。
+<</language>><br><br>
+<<lanLink ['Next', '下一步'] 'Avery Cards 4'>><</lanLink>><br>
+
+:: Deadwood Reblooms Company Cards Tidy
+<<effects>>
+<<language>>
+  <<option 'EN'>>
+    "I'm not here to clean your flat," you say. You leave the rag in the cabinet.<br><br>
+    Bailey's expression hardens. "Then keep out of the way." Quinn hides a smile behind the rim of a glass. "Quite the assertive companion you've brought, Avery."<br><br>
+    "I'm aware," Avery replies. Leighton watches you for another moment, then turns back to the table. You remain beside the players as Bailey gathers the cards for another hand.
+  <<option 'CN'>>
+    “我不是来替你打扫公寓的。”你说，没有去拿柜子里的抹布。<br><br>
+    贝利的脸色沉了下来。“那就别挡路。”奎因用杯沿遮住笑意。“艾弗里，你带来的这位伴侣，还真有主意。”<br><br>
+    “我知道。”艾弗里答道。礼顿又看了你一会，才把目光转回牌桌。你留在几人旁边，贝利收拢纸牌，准备下一局。
+<</language>><br><br>
+<<lanLink ['Next', '下一步'] 'Avery Cards 5'>><</lanLink>><br>
+
+:: Deadwood Reblooms Company Cards Boundary
+<<effects>>
+<<if !$avery_cards?.finance_guest>><<lanLink ['Return', '返回'] 'Avery Cards 8'>><</lanLink>><<exit>><</if>>
+<<language>>
+  <<option 'EN'>>
+    You stay off the table. "You don't get to wager me." Bailey's eyes narrow.<br><br>
+    <<if maplebirch.get('Finance').orphanage.pcFree>>
+      "You took payment for my rent already. I'm not paying you again by being put in the pot."
+    <<elseif maplebirch.get('Finance').company.shareholders.controller>>
+      "I can answer for my own money. You can't answer for me."
+    <<else>>
+      "My money and my business are my own. I'm not something you can hand over when your cash runs out."
+    <</if>><br><br>
+    "This is my flat," Bailey says. "My rules." Avery's hand remains beside the clip of notes. Avery looks at Bailey. "And it's my evening you're spoiling." The anger is still there, but the argument has shifted.<br><br>
+    <<if maplebirch.get('Finance').company.ascension.active>>
+      Avery meets your eyes, then looks back at Bailey. "Choose another stake."
+    <</if>>
+    Quinn studies you, then Avery, before tapping the table. "We're friends here. Let's not ruin it." The smile stays in place. "If Bailey can't match the money, Bailey folds." Leighton looks at the pot. "We can finish without another stake."<br><br>
+    Bailey regards the money once more, then pushes the cards face-down across the cloth. "Finish it, then." Nobody apologises. You remain beside the table while the other three play for the cash.
+  <<option 'CN'>>
+    你没有爬上桌子。“你没有资格拿我下注。”贝利眯起眼睛。<br><br>
+    <<if maplebirch.get('Finance').orphanage.pcFree>>
+      “我的房租，你已经收过钱了。我不会再进一次底池，拿自己付给你。”
+    <<elseif maplebirch.get('Finance').company.shareholders.controller>>
+      “我可以为自己的钱做主。你不能替我做主。”
+    <<else>>
+      “我的钱、我的生意，都由我自己做主。你拿不出现金，就想把我交出去？”
+    <</if>><br><br>
+    “这是我的公寓。”贝利说。“我的规矩。”艾弗里的手仍放在那叠钞票旁。艾弗里看着贝利。“你也在搅乱我的晚上。”怒气还在，只是争执的方向变了。<br><br>
+    <<if maplebirch.get('Finance').company.ascension.active>>
+      艾弗里与你对视，又看回贝利。“换个赌注。”
+    <</if>>
+    奎因打量了你，又看向艾弗里，才敲了敲桌子。“大家都是朋友。别毁了今晚的兴致。”笑容仍留在脸上。“贝利跟不起，就弃牌。”礼顿看着底池。“不用另添赌注，我们也能打完。”<br><br>
+    贝利又看了一眼那叠钱，把牌扣着推到桌布中央。“那就打完。”没有人道歉。你留在桌旁，看其余三人争夺那些现金。
+<</language>><br><br>
+<<lanLink ['Next', '下一步'] 'Avery Cards 9'>><</lanLink>><br>
+
+:: Deadwood Reblooms Company Cards Quinn Guest
+<<effects>>
+<<if !$avery_cards?.finance_guest>><<lanLink ['Return', '返回'] 'Avery Cards 9'>><</lanLink>><<exit>><</if>>
+<<language>>
+  <<option 'EN'>>
+    Quinn waits while you collect your things. "A pleasure to have your company." Avery's smile has disappeared by the time the others reach the door.<br><br>
+    Bailey stops you before you follow the mayor. "Don't eat or drink anything Quinn gives you," comes the low warning. Quinn waits beyond the doorway, apparently too occupied with straightening the jacket to have heard.
+  <<option 'CN'>>
+    你拿好东西时，奎因等在一旁。“很高兴你愿意作陪。”其他人走到门口时，艾弗里的笑容已经不见了。<br><br>
+    贝利在你跟上市长之前拦了你一下，压低声音警告：“别吃喝奎因给你的任何东西。”奎因等在门外，好像正忙着整理外套，没有听见。
+<</language>><br><br>
+<<lanLink ['Go with Quinn', '跟奎因一起走'] 'Avery Cards Quinn 3'>><<endevent>><</lanLink>><br>

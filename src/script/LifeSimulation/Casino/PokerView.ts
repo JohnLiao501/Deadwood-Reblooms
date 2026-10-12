@@ -5,6 +5,7 @@ import type Holdem from '../../../module/LifeSimulation/Casino/Holdem';
 import type ThreeCard from '../../../module/LifeSimulation/Casino/ThreeCard';
 import type { PlayingCard } from '../../../module/LifeSimulation/Casino/Blackjack';
 import { casinoPassage } from '../../../module/LifeSimulation/Casino';
+import { privateCardsPassage } from '../../../module/Finance/PrivateCards';
 
 const holdemPassage = 'Deadwood Reblooms Life Simulation Holdem';
 const threeCardPassage = 'Deadwood Reblooms Life Simulation Three Card';
@@ -18,11 +19,11 @@ class TableView {
 
   public constructor(
     private readonly core: typeof maplebirch,
-    private readonly mode: 'holdem' | 'three' | 'watch',
+    private readonly mode: 'holdem' | 'three' | 'watch' | 'private',
     private readonly game: Holdem | ThreeCard
   ) {
-    this.root.id = mode === 'watch' ? 'deadwood-poker-watch' : mode === 'holdem' ? 'deadwood-holdem' : 'deadwood-three-card';
-    const widget = mode === 'watch' ? "<<deadwood-poker-holdem-view 'watch'>>" : `<<deadwood-poker-${mode}-view>>`;
+    this.root.id = mode === 'private' ? 'deadwood-private-cards' : mode === 'watch' ? 'deadwood-poker-watch' : mode === 'holdem' ? 'deadwood-holdem' : 'deadwood-three-card';
+    const widget = ['watch', 'private'].includes(mode) ? `<<deadwood-poker-holdem-view '${mode}'>>` : `<<deadwood-poker-${mode}-view>>`;
     this.root.append(core.SugarCube.Wikifier.wikifyEval(widget));
     for (const spot of this.root.querySelectorAll<HTMLElement>('[data-cards]')) {
       const cards = spot.dataset.cards === 'board' ? (game as Holdem).state.board : (game.state.seats[Number(spot.dataset.cards)]?.cards ?? []);
@@ -34,7 +35,7 @@ class TableView {
       button.addEventListener('click', () => {
         if (button.disabled || this.root.inert) return;
         let amount = Number(button.dataset.amount ?? 0);
-        if (mode === 'holdem' && button.dataset.action === 'raise') {
+        if (['holdem', 'private'].includes(mode) && button.dataset.action === 'raise') {
           const input = this.root.querySelector<HTMLInputElement>('.poker-raise input')!;
           if (!input.reportValidity()) return;
           amount = Math.round(Number(input.value) * 100);
@@ -47,6 +48,12 @@ class TableView {
   private act(action: string, amount: number): void {
     if (this.root.inert) return;
     this.root.inert = true;
+    if (this.mode === 'private') {
+      this.core.SugarCube.Wikifier.wikifyEval(`<<deadwood-private-cards-action '${action}' ${amount}>>`);
+      if (this.core.passage.title === privateCardsPassage) this.core.SugarCube.Engine.play(privateCardsPassage);
+      else this.root.inert = false;
+      return;
+    }
     if (this.mode === 'watch') {
       if ((this.game as Holdem).next() && this.core.passage.title === watchPassage) this.core.SugarCube.Engine.play(watchPassage);
       else this.root.inert = false;
@@ -55,7 +62,7 @@ class TableView {
     this.core.SugarCube.Wikifier.wikifyEval(`<<deadwood-casino-table-action '${this.mode}' '${action}' ${amount}>>`);
     const passage = this.mode === 'holdem' ? holdemPassage : threeCardPassage;
     if (this.core.passage.title === passage) {
-      if ((this.mode === 'holdem' && action === 'join') || (this.mode === 'three' && ['ante', 'look'].includes(action))) {
+      if (action === 'seats' || (this.mode === 'holdem' && action === 'join') || (this.mode === 'three' && ['ante', 'look'].includes(action))) {
         this.core.SugarCube.Wikifier.wikifyEval(`<<run Dynamic.render('${this.mode === 'holdem' ? 'deadwood-holdem-panel' : 'deadwood-three-card-panel'}')>>`);
       } else this.core.SugarCube.Engine.play(action === 'cashout' ? casinoPassage : passage);
     }
@@ -92,8 +99,8 @@ class TableView {
   }
 }
 
-export function holdemView(core: typeof maplebirch, game: Holdem): HTMLElement {
-  return new TableView(core, game.watching ? 'watch' : 'holdem', game).ready(game.active);
+export function holdemView(core: typeof maplebirch, game: Holdem, privateTable = false): HTMLElement {
+  return new TableView(core, privateTable ? 'private' : game.watching ? 'watch' : 'holdem', game).ready(game.active);
 }
 
 export function threeCardView(core: typeof maplebirch, game: ThreeCard): HTMLElement {
