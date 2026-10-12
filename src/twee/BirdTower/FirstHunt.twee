@@ -1,4 +1,4 @@
-:: Deadwood BirdTower FirstHunt Intro []
+:: Deadwood BirdTower FirstHunt Intro
 <<set $outside to 1>>
 <<effects>>
 <<bird_fly_reveal_wings>>
@@ -48,7 +48,7 @@
   <<bird_pass 5>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower FirstHunt Intro 2 []
+:: Deadwood BirdTower FirstHunt Intro 2
 <<language>>
   <<option 'EN'>>
     You return to the sky and keep exploring.
@@ -134,7 +134,7 @@
   <<bird_pass 5>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower FirstHunt Intro 3 []
+:: Deadwood BirdTower FirstHunt Intro 3
 <<rng 2>>
 <<set _beastGen to ($rng is 1 ? "猫" : "狐狸")>>
 <<language>>
@@ -198,7 +198,7 @@
   <<bird_pass 5>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower FirstHunt Intro 4 []
+:: Deadwood BirdTower FirstHunt Intro 4
 <<npc "Great Hawk">><<childSelect $BirdTower.scene.actors[0]>>
 <<language>>
   <<option 'EN'>>
@@ -273,7 +273,7 @@
   <<bird_pass 5>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower FirstHunt Intro 5 []
+:: Deadwood BirdTower FirstHunt Intro 5
 <<language>>
   <<option 'EN'>>
     Close to the tower, you soon find a scattered group of lurkers resting in the grass.
@@ -392,7 +392,7 @@
   <<bird_pass 5>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower FirstHunt Intro 6 []
+:: Deadwood BirdTower FirstHunt Intro 6
 <<language>>
   <<option 'EN'>>
     <<babyhawks>> copy you, folding their wings and diving towards the ground, chasing the fleeing shadows of the lurkers in the grass.
@@ -557,7 +557,7 @@
   <<bird_pass 5>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower FirstHunt Intro 7 []
+:: Deadwood BirdTower FirstHunt Intro 7
 <<language>>
   <<option 'EN'>>
     You spend a long time searching for prey, teaching and practising hunting.

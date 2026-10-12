@@ -48,7 +48,7 @@
   <<set _sirrisAtEstate to _estatePresence.sirris>>
 <</widget>>
 
-:: Deadwood Reblooms Sirris Estate Invitation []
+:: Deadwood Reblooms Sirris Estate Invitation
 <<set $outside to 0>><<set $location to 'adult_shop'>><<effects>>
 <<npc Sirris>><<person1>><<run statusCheck('Sydney')>>
 <<if !isLoveInterest('Sydney') or !$sydneySeen.includes('parent')>>
@@ -87,7 +87,7 @@
 <br><br>
 <<getouticon>><<lanLink ["Return to the shop","返回店铺"] 'Adult Shop Approach Sirris'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Evening Invitation []
+:: Deadwood Reblooms Sirris Estate Evening Invitation
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<sydneySchedule>><<npc Sydney>><<person1>>
 <<if $SydneyExpansion.estate.invited
@@ -114,7 +114,7 @@
 <</if>>
 <br><br><<templeicon 'quarters'>><<lanLink ['Return to the temple quarters', '返回神殿宿舍'] 'Temple Quarters'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Gate []
+:: Deadwood Reblooms Sirris Estate Gate
 <<set $outside to 1>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !$SydneyExpansion.estate.invited>>
@@ -162,7 +162,7 @@
 <</if>>
 <<danubeicon>><<lanLink ['Return to Danube Street (0:05)', '返回多瑙河街 (0:05)'] 'Danube Street'>><<pass 5>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Kylar Talk []
+:: Deadwood Reblooms Sirris Estate Kylar Talk
 <<set $outside to 1>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !_sydneyAtEstate or !$sydneySeen.includes('Kylar manor')>>
@@ -196,7 +196,7 @@
 <br>
 <<getouticon>><<lanLink ['Return to the front garden', '返回前花园'] 'Deadwood Reblooms Sirris Estate Gate'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Kylar Answer []
+:: Deadwood Reblooms Sirris Estate Kylar Answer
 <<set $outside to 1>><<set $location to 'sirris_estate'>><<effects>>
 <<npc Sydney>><<person1>>
 <<if $SydneyExpansion.estate.kylarTalk is 'ask'>>
@@ -226,7 +226,7 @@
 <br><br>
 <<getouticon>><<lanLink ['Return to the front garden', '返回前花园'] 'Deadwood Reblooms Sirris Estate Gate'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Hall []
+:: Deadwood Reblooms Sirris Estate Hall
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if _sirrisAtEstate>>
@@ -293,7 +293,7 @@
   <<getouticon>><<lanLink ['Return to the front garden (0:01)', '返回前花园 (0:01)'] 'Deadwood Reblooms Sirris Estate Gate'>><<pass 1>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Sirris Estate Living Room []
+:: Deadwood Reblooms Sirris Estate Living Room
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if _sydneyAtEstate>>
@@ -338,7 +338,7 @@
 <br>
 <<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Tease []
+:: Deadwood Reblooms Sirris Estate Sydney Tease
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
@@ -377,7 +377,7 @@
 <br><br>
 <<getouticon>><<lanLink ['Return to the living room', '返回客厅'] 'Deadwood Reblooms Sirris Estate Living Room'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Family Talk []
+:: Deadwood Reblooms Sirris Estate Family Talk
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<npc Sydney 1>><<person1>><<npc Sirris 2>><<person2>><<run statusCheck('Sydney')>>
 <<language>>
@@ -412,7 +412,7 @@
 <<socialiseicon>><<lanLink ['Let Sydney finish speaking', '让悉尼把话说完'] 'Deadwood Reblooms Sirris Estate Family Answer'>><<set $SydneyExpansion.estate.familyTalk to 'listen'>><</lanLink>><br>
 <<loveicon>><<lanLink ['Tell Sirris you will support Sydney', '告诉西里斯你会支持悉尼'] 'Deadwood Reblooms Sirris Estate Family Answer'>><<set $SydneyExpansion.estate.familyTalk to 'support'>><</lanLink>><br>
 
-:: Deadwood Reblooms Sirris Estate Family Answer []
+:: Deadwood Reblooms Sirris Estate Family Answer
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<npc Sydney 1>><<person1>><<npc Sirris 2>><<person2>>
 <<if $SydneyExpansion.estate.familyTalk is 'listen'>>
@@ -451,7 +451,7 @@
 <br><br>
 <<getouticon>><<lanLink ['Return to the living room', '返回客厅'] 'Deadwood Reblooms Sirris Estate Living Room'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Study []
+:: Deadwood Reblooms Sirris Estate Study
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if _sirrisAtEstate>>
@@ -508,7 +508,7 @@
 <br>
 <<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris School Project []
+:: Deadwood Reblooms Sirris School Project [nobr]
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !maplebirch.get('LifeSimulation') or $LifeSimulation.school.role is 'student' or (!_sirrisAtEstate and !_sydneyAtEstate)>>
@@ -522,18 +522,20 @@
       <<npc Sydney>><<person1>>
     <</if>>
     <<language>>
-      <<option 'EN'>>You spread a draft for an after-school session across the desk.
-      <<if _sirrisAtEstate>>
-        Sirris points out which diagrams the younger students have already seen.
-      <<else>>
-        Sydney finds the relevant temple notes and marks two passages to explain in plain words.
-      <</if>>
-      <<option 'CN'>>你把课后讲解的草稿铺在桌上。
-      <<if _sirrisAtEstate>>
-        西里斯指出低年级学生已经学过哪些图示。
-      <<else>>
-        悉尼翻出神殿的相关笔记，圈了两处需要用简单说法解释的地方。
-      <</if>>
+      <<option 'EN'>>
+        You spread a draft for an after-school session across the desk.
+        <<if _sirrisAtEstate>>
+          Sirris points out which diagrams the younger students have already seen.
+        <<else>>
+          Sydney finds the relevant temple notes and marks two passages to explain in plain words.
+        <</if>>
+      <<option 'CN'>>
+        你把课后讲解的草稿铺在桌上。
+        <<if _sirrisAtEstate>>
+          西里斯指出低年级学生已经学过哪些图示。
+        <<else>>
+          悉尼翻出神殿的相关笔记，圈了两处需要用简单说法解释的地方。
+        <</if>>
     <</language>><br><br>
     <<if _scienceReady>>
       <span class='teal'><<lanSwitch 'You catch an error in the experiment notes and correct it before the session is announced.' '你发现实验笔记里有一处错误，在活动公布前改好了。'>></span>
@@ -546,7 +548,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ['Return to the study', '返回书房'] 'Deadwood Reblooms Sirris Estate Study'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Study Help []
+:: Deadwood Reblooms Sirris Estate Study Help
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<set _scienceInsight to currentSkillValue('science') gte 500>>
@@ -602,7 +604,7 @@
 <br><br>
 <<getouticon>><<lanLink ['Return to the study', '返回书房'] 'Deadwood Reblooms Sirris Estate Study'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Study Revisit []
+:: Deadwood Reblooms Sirris Estate Study Revisit
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if _sirrisAtEstate>>
@@ -629,7 +631,7 @@
 <br><br>
 <<getouticon>><<lanLink ['Return to the study', '返回书房'] 'Deadwood Reblooms Sirris Estate Study'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Kitchen []
+:: Deadwood Reblooms Sirris Estate Kitchen
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if _sydneyAtEstate>>
@@ -689,7 +691,7 @@
 <br>
 <<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Recipe []
+:: Deadwood Reblooms Sirris Estate Recipe
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
@@ -724,13 +726,13 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ["Return to the kitchen", "返回厨房"] 'Deadwood Reblooms Sirris Estate Kitchen'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Recipe Careful []
+:: Deadwood Reblooms Sirris Estate Recipe Careful
 <<set _sirrisRecipeStyle to 'careful'>><<include 'Deadwood Reblooms Sirris Estate Recipe Finish'>>
 
-:: Deadwood Reblooms Sirris Estate Recipe Sydney []
+:: Deadwood Reblooms Sirris Estate Recipe Sydney
 <<set _sirrisRecipeStyle to 'sydney'>><<include 'Deadwood Reblooms Sirris Estate Recipe Finish'>>
 
-:: Deadwood Reblooms Sirris Estate Recipe Finish []
+:: Deadwood Reblooms Sirris Estate Recipe Finish
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
@@ -755,7 +757,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ["Return to the kitchen", "返回厨房"] 'Deadwood Reblooms Sirris Estate Kitchen'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Kitchen Help []
+:: Deadwood Reblooms Sirris Estate Kitchen Help
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<language>>
@@ -784,7 +786,7 @@
 <br><br>
 <<getouticon>><<lanLink ["Return to the kitchen", "返回厨房"] 'Deadwood Reblooms Sirris Estate Kitchen'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Garden []
+:: Deadwood Reblooms Sirris Estate Garden
 <<set $outside to 1>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if _sydneyAtEstate>>
@@ -823,7 +825,7 @@
 <br>
 <<kitchenicon 'stove'>><<lanLink ['Return to the kitchen (0:01)', '返回厨房 (0:01)'] 'Deadwood Reblooms Sirris Estate Kitchen'>><<pass 1>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Garden Help []
+:: Deadwood Reblooms Sirris Estate Garden Help
 <<set $outside to 1>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<language>>
@@ -852,7 +854,7 @@
 <br><br>
 <<getouticon>><<lanLink ['Return to the glasshouse', '返回温室'] 'Deadwood Reblooms Sirris Estate Garden'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Room []
+:: Deadwood Reblooms Sirris Estate Sydney Room [nobr]
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if _sydneyAtEstate>>
@@ -929,8 +931,10 @@
     <</if>>
     <br>
     <<language>>
-      <<option 'EN'>><<mirroricon>><<link 'Mirror' 'Deadwood Reblooms Sirris Estate Sydney Mirror'>><<preMirror>><</link>>
-      <<option 'CN'>><<mirroricon>><<link '镜子' 'Deadwood Reblooms Sirris Estate Sydney Mirror'>><<preMirror>><</link>>
+      <<option 'EN'>>
+        <<mirroricon>><<link 'Mirror' 'Deadwood Reblooms Sirris Estate Sydney Mirror'>><<preMirror>><</link>>
+      <<option 'CN'>>
+        <<mirroricon>><<link '镜子' 'Deadwood Reblooms Sirris Estate Sydney Mirror'>><<preMirror>><</link>>
     <</language>><br>
     <<if $SydneyExpansion.estate.roomDay isnot Time.days>>
       <<loveicon 'kiss'>>
@@ -947,14 +951,16 @@
   <br>
   <<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Mirror []
+:: Deadwood Reblooms Sirris Estate Sydney Mirror [nobr]
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !$SydneyExpansion.estate.invited or !isLoveInterest('Sydney') or !_sydneyAtEstate>>
   <<lanSwitch 'Sydney is away. You step back from the mirror.' '悉尼不在家。你从镜子前退开。'>><br><br>
   <<language>>
-    <<option 'EN'>><<getouticon>><<link 'Return to the hall' 'Deadwood Reblooms Sirris Estate Hall'>><</link>>
-    <<option 'CN'>><<getouticon>><<link '返回门厅' 'Deadwood Reblooms Sirris Estate Hall'>><</link>>
+    <<option 'EN'>>
+      <<getouticon>><<link 'Return to the hall' 'Deadwood Reblooms Sirris Estate Hall'>><</link>>
+    <<option 'CN'>>
+      <<getouticon>><<link '返回门厅' 'Deadwood Reblooms Sirris Estate Hall'>><</link>>
   <</language>>
 <<else>>
   <<if maplebirch.get('VanillaPlus')>>
@@ -967,7 +973,7 @@
   <<mirror>><br><br>
 <</if>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Bed []
+:: Deadwood Reblooms Sirris Estate Sydney Bed
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>><<wearoutfit>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !_sydneyAtEstate or !isLoveInterest('Sydney')>>
@@ -1010,7 +1016,7 @@
   <</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Sleep []
+:: Deadwood Reblooms Sirris Estate Sydney Sleep
 <<set $outside to 0>><<set $location to 'sirris_estate'>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<set _requestedHours to $sleephour>>
@@ -1085,7 +1091,7 @@
   <<set $phase to 0>>
 <</if>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Night Wake []
+:: Deadwood Reblooms Sirris Estate Sydney Night Wake
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !_sydneyAtEstate or !isLoveInterest('Sydney')>>
@@ -1134,7 +1140,7 @@
   <</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Kiss []
+:: Deadwood Reblooms Sirris Estate Sydney Kiss
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
 <<language>>
@@ -1163,7 +1169,7 @@
 <br><br>
 <<getouticon>><<lanLink ["Continue","继续"] 'Deadwood Reblooms Sirris Estate Sydney Room'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Privacy []
+:: Deadwood Reblooms Sirris Estate Sydney Privacy
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
@@ -1209,7 +1215,7 @@
 <br><br>
 <<getouticon>><<lanLink ["Stop here","到此为止"] 'Deadwood Reblooms Sirris Estate Sydney Room'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Intimacy []
+:: Deadwood Reblooms Sirris Estate Sydney Intimacy
 <<set $outside to 0>><<set $location to 'sirris_estate'>>
 <<if $sexstart is 1>>
   <<clearnpc>><<npc Sydney>>
@@ -1297,7 +1303,7 @@
   </span><<nexttext>>
 <</if>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Intimacy Finish []
+:: Deadwood Reblooms Sirris Estate Sydney Intimacy Finish
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<person1>><<run statusCheck('Sydney')>>
 <<if $enemyarousal gte $enemyarousalmax>>

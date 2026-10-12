@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Sydney Pregnancy Widgets [widget nobr]
+:: Deadwood Reblooms Sydney Pregnancy Widgets [widget]
 <<widget 'deadwood-reblooms-sydney-pregnancy-link'>>
   <<sydneySchedule>>
   <<set _pregnancy_present to (maplebirch.get('Sydney')?.available and _dormAccess and $SydneyExpansion.dormInvited and (_sydneyWorking or _sydneyResting))>>

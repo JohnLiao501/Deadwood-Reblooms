@@ -13,8 +13,10 @@
   <<if _room_residents.length>>
     <label><<lanSwitch 'Company: ' '邀请同住恋人：'>><<listbox '$Finance.real_estate.room_companion' autoselect>><<optionsfrom _room_options>><</listbox>></label><br>
     <<language>>
-      <<option 'EN'>>These lovers are at home. You can ask one to join you for a little while, or leave them to rest.
-      <<option 'CN'>>这些恋人正在家里。你可以请一人过来陪你待一会儿，也可以让他们继续休息。
+      <<option 'EN'>>
+        These lovers are at home. You can ask one to join you for a little while, or leave them to rest.
+      <<option 'CN'>>
+        这些恋人正在家里。你可以请一人过来陪你待一会儿，也可以让他们继续休息。
     <</language>><br><br>
   <</if>>
 <</widget>>
@@ -225,8 +227,7 @@
   <</switch>>
 <</widget>>
 
-:: Deadwood Reblooms Property Extensions []
-<<nobr>>
+:: Deadwood Reblooms Property Extensions [nobr]
 <<set _estate to maplebirch.get('Finance').realEstate>>
 <<set _property to _estate.properties.find(property => property.id === $Finance.real_estate.furniture_property)>>
 <<if !_property or !_estate.owns(_property.id)>>
@@ -234,8 +235,10 @@
 <</if>>
 <<set _management to _estate.managementFor(_property.id)>>
 <<language>>
-  <<option 'EN'>>The agent lays a floor plan beside the deed to <span class='gold'><<= _property.name.EN>></span>. "These are the alterations the building can take. We won't put a pool on a roof that can't hold one. The price includes the fittings. Furniture for the existing rooms is sold separately."
-  <<option 'CN'>>中介把平面图铺在<span class='gold'><<= _property.name.CN>></span>的契据旁。“这栋房子能改的地方都在这里。屋顶承不了重，就不能往上加泳池。报价包括新房间的固定设施，原有房间的家具还是单独选购。”
+  <<option 'EN'>>
+    The agent lays a floor plan beside the deed to <span class='gold'><<= _property.name.EN>></span>. "These are the alterations the building can take. We won't put a pool on a roof that can't hold one. The price includes the fittings. Furniture for the existing rooms is sold separately."
+  <<option 'CN'>>
+    中介把平面图铺在<span class='gold'><<= _property.name.CN>></span>的契据旁。“这栋房子能改的地方都在这里。屋顶承不了重，就不能往上加泳池。报价包括新房间的固定设施，原有房间的家具还是单独选购。”
 <</language>><br><br>
 <<if _management.rented or _management.auction_day isnot null or _estate.isFrozen(_property.id)>>
   <span class='red'><<lanSwitch 'Work cannot begin while the property is occupied by tenants, awaiting auction or frozen.' '房屋出租、等待拍卖或被冻结期间，不能安排扩建。'>></span><br>
@@ -271,9 +274,8 @@
 </div>
 <</deadwood-dynamicblock>>
 <<getouticon>><<lanLink ['Return to the property desk', '返回房产柜台'] 'Deadwood Reblooms Property Office'>><</lanLink>>
-<</nobr>>
 
-:: Deadwood Reblooms Property Lounge []
+:: Deadwood Reblooms Property Lounge
 <<set _estate to maplebirch.get('Finance').realEstate>>
 <<set _property to _estate.current>>
 <<set _facility to _estate.facilities.find(facility => facility.id === 'lounge')>>
@@ -288,12 +290,14 @@
 <</if>>
 <<deadwood-home-facilities 'lounge' _facility.floor>><br><<deadwood-home-exit 'lounge'>>
 
-:: Deadwood Reblooms Property Lounge Rest []
+:: Deadwood Reblooms Property Lounge Rest [nobr]
 <<if !maplebirch.get('Finance').realEstate.facilities.some(facility => facility.id === 'lounge')>><<lanLink ['Return to the agency', '返回房产中介'] 'Deadwood Reblooms Property Office'>><</lanLink>><<exit>><</if>>
 <<run maplebirch.get('Finance').realEstate.enter('lounge')>><<effects>>
 <<language>>
-  <<option 'EN'>>You ease back into the chair. For a few minutes, you have nowhere else to be. <span class='teal'>The ache in your legs begins to fade.</span>
-  <<option 'CN'>>你靠进椅子里。这几分钟，你不用急着赶去别的地方。<span class='teal'>腿上的酸胀慢慢消了些。</span>
+  <<option 'EN'>>
+    You ease back into the chair. For a few minutes, you have nowhere else to be. <span class='teal'>The ache in your legs begins to fade.</span>
+  <<option 'CN'>>
+    你靠进椅子里。这几分钟，你不用急着赶去别的地方。<span class='teal'>腿上的酸胀慢慢消了些。</span>
 <</language>><br><br>
 <<deadwood-home-reaction 'lounge'>><br><br>
 <<set _rest_lounge to maplebirch.get('Finance').realEstate.facilities.find(facility => facility.id === 'lounge')>>
@@ -303,7 +307,7 @@
   <<lanLink ['Stand up', '起身'] _rest_passage>><<run maplebirch.get('Finance').realEstate.setFloor(_rest_lounge.floor)>><</lanLink>>
 <</capture>>
 
-:: Deadwood Reblooms Property Study Finish []
+:: Deadwood Reblooms Property Study Finish
 <<if !maplebirch.get('Finance').realEstate.facilities.some(facility => facility.id === 'study')>><<lanLink ['Return to the agency', '返回房产中介'] 'Deadwood Reblooms Property Office'>><</lanLink>><<exit>><</if>>
 <<run maplebirch.get('Finance').realEstate.enter('desk')>><<effects>>
 <<language>>
@@ -327,7 +331,7 @@
 <<deadwood-home-reaction 'study'>><br><br>
 <<lanLink ['Close the book', '合上书'] 'Deadwood Reblooms Property Desk'>><</lanLink>>
 
-:: Deadwood Reblooms Property Pool []
+:: Deadwood Reblooms Property Pool
 <<set _estate to maplebirch.get('Finance').realEstate>>
 <<set _property to _estate.current>>
 <<set _facility to _estate.facilities.find(facility => facility.id === 'pool')>>
@@ -375,7 +379,7 @@
 <</if>>
 <br><<deadwood-home-exit 'pool'>>
 
-:: Deadwood Reblooms Property Pool Outfits []
+:: Deadwood Reblooms Property Pool Outfits
 <<set _estate to maplebirch.get('Finance').realEstate>>
 <<set _facility to _estate.facilities.find(facility => facility.id === 'pool')>>
 <<if !_estate.poolOpen>><<lanLink ['Return to the pool', '返回泳池'] 'Deadwood Reblooms Property Pool'>><</lanLink>><<exit>><</if>>
@@ -394,7 +398,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Return to the pool', '返回泳池'] 'Deadwood Reblooms Property Pool'>><</lanLink>>
 
-:: Deadwood Reblooms Property Swim []
+:: Deadwood Reblooms Property Swim
 <<if !maplebirch.get('Finance').realEstate.facilities.some(facility => facility.id === 'pool')>><<lanLink ['Return to the agency', '返回房产中介'] 'Deadwood Reblooms Property Office'>><</lanLink>><<exit>><</if>>
 <<run maplebirch.get('Finance').realEstate.enter('pool')>><<set $outside to maplebirch.get('Finance').realEstate.facilities.find(facility => facility.id === 'pool').outdoor ? 1 : 0>><<effects>>
 <<language>>
@@ -416,15 +420,17 @@
   <<elseif $Finance.real_estate.pool_clothing is 'swimwear'>><<run maplebirch.get('Finance').realEstate.openWardrobe()>><<storeon 'Deadwood Property Pool'>><<set $wear_outfit to 'none'>><</if>>
 <</lanLink>>
 
-:: Deadwood Reblooms Property Garage []
+:: Deadwood Reblooms Property Garage [nobr]
 <<set _estate to maplebirch.get('Finance').realEstate>>
 <<set _facility to _estate.facilities.find(facility => facility.id === 'garage')>>
 <<if !_facility>><<lanLink ['Return to the agency', '返回房产中介'] 'Deadwood Reblooms Property Office'>><</lanLink>><<exit>><</if>>
 <<run _estate.enter(_facility.id)>><<effects>>
 <<= lanSwitch(_facility.description.EN, _facility.description.CN)>><br><br>
 <<language>>
-  <<option 'EN'>>There is space for <<if _facility.parking.motor_vehicle gt 0>><span class='teal'><<= _facility.parking.motor_vehicle>> <<if _facility.parking.motor_vehicle is 1>>motor vehicle<<else>>motor vehicles<</if>></span>, <</if>><<if _facility.parking.motorcycle gt 0>><span class='teal'><<= _facility.parking.motorcycle>> <<if _facility.parking.motorcycle is 1>>motorcycle<<else>>motorcycles<</if>></span> and <</if>><span class='teal'><<= _facility.parking.bicycle>> bicycles</span>. You keep the doors clear and hang the spare keys inside the house.
-  <<option 'CN'>>这里可停放<<if _facility.parking.motor_vehicle gt 0>><span class='teal'><<= _facility.parking.motor_vehicle>>辆机动车</span>、<</if>><<if _facility.parking.motorcycle gt 0>><span class='teal'><<= _facility.parking.motorcycle>>辆摩托车</span>和<</if>><span class='teal'><<= _facility.parking.bicycle>>辆自行车</span>。你没有在门前堆东西，备用钥匙挂在屋里。
+  <<option 'EN'>>
+    There is space for <<if _facility.parking.motor_vehicle gt 0>><span class='teal'><<= _facility.parking.motor_vehicle>> <<if _facility.parking.motor_vehicle is 1>>motor vehicle<<else>>motor vehicles<</if>></span>, <</if>><<if _facility.parking.motorcycle gt 0>><span class='teal'><<= _facility.parking.motorcycle>> <<if _facility.parking.motorcycle is 1>>motorcycle<<else>>motorcycles<</if>></span> and <</if>><span class='teal'><<= _facility.parking.bicycle>> bicycles</span>. You keep the doors clear and hang the spare keys inside the house.
+  <<option 'CN'>>
+    这里可停放<<if _facility.parking.motor_vehicle gt 0>><span class='teal'><<= _facility.parking.motor_vehicle>>辆机动车</span>、<</if>><<if _facility.parking.motorcycle gt 0>><span class='teal'><<= _facility.parking.motorcycle>>辆摩托车</span>和<</if>><span class='teal'><<= _facility.parking.bicycle>>辆自行车</span>。你没有在门前堆东西，备用钥匙挂在屋里。
 <</language>><br><br>
 <<if maplebirch.get('Transport')>>
   <<deadwood-transport-garage>><br>

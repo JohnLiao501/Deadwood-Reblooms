@@ -1,4 +1,4 @@
-:: Deadwood BirdTower BreastFeed []
+:: Deadwood BirdTower BreastFeed
 <<set $pregnancyStats.childBreastfedInteractions++>>
 <<if $worn.over_upper.name isnot "naked" or $worn.upper.name isnot "naked" or $worn.under_upper.name isnot "naked">>
   <<language>>
@@ -134,7 +134,7 @@
   <<endevent>>
 <</lanLink>>
 
-:: Deadwood BirdTower Cuddle []
+:: Deadwood BirdTower Cuddle
 <<switch random(1, 5)>>
   <<case 1>>
     <<if $cmonster is 1>>
@@ -291,7 +291,7 @@
   <<endevent>>
 <</lanLink>>
 
-:: Deadwood BirdTower Talk []
+:: Deadwood BirdTower Talk
 <<switch random(1, 4)>>
   <<case 1>>
     <<language>>
@@ -383,7 +383,7 @@
   <<endevent>>
 <</lanLink>>
 
-:: Deadwood BirdTower Play []
+:: Deadwood BirdTower Play
 <<switch random(1, 2)>>
   <<case 1>>
     <<language>>

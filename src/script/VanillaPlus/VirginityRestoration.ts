@@ -3,5 +3,9 @@
 export default function (maplebirch: typeof window.maplebirch) {
   'use strict';
 
-  maplebirch.tool.addTo('BeforeLinkZone', { widget: 'deadwood-reblooms-virginity-restoration-link', passage: 'Hospital Foyer' });
+  maplebirch.tool.inject({
+    locationPassage: {
+      'Hospital Foyer': [{ src: '<<pillicon>>', applybefore: '<<deadwood-reblooms-virginity-restoration-link>>\n\t\t', expected: 1 }]
+    }
+  });
 }

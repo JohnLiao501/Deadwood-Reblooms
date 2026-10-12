@@ -1,4 +1,4 @@
-:: Deadwood Orchard Farm Contract []
+:: Deadwood Orchard Farm Contract [nobr]
 <<set $outside to 1>><<set $location to 'alex_farm'>><<farm_work_update>><<effects>>
 <<if $stress gte $stressmax>>
   <<passoutfarmroad>><<exit>>
@@ -11,8 +11,10 @@
 <<npc Alex>><<person1>>
 <<if $Orchard.farm_contract?.status is 'pending'>>
   <<language>>
-    <<option 'EN'>>Alex checks your name against the dispatch sheet. "I've left room on the cart. All of it needs to arrive together."
-    <<option 'CN'>>艾利克斯在发货单上找出你的名字。“车上给你留了位置。这批得一起交齐。”
+    <<option 'EN'>>
+      Alex checks your name against the dispatch sheet. "I've left room on the cart. All of it needs to arrive together."
+    <<option 'CN'>>
+      艾利克斯在发货单上找出你的名字。“车上给你留了位置。这批得一起交齐。”
   <</language>><br><br>
   <<foodstufficon $Orchard.farm_contract.type>><<= $Orchard.farm_contract.amount>> · <<lanSwitch 'Unit price: ' '单价：'>><<printmoney $Orchard.farm_contract.price>><br>
   <<lanSwitch 'Due: ' '交货期限：'>><<set $_contractDate to Time.startDate.addDays($Orchard.farm_contract.deadline)>><<= $_contractDate.year>> / <<= $_contractDate.month>> / <<= $_contractDate.day>><br>
@@ -26,13 +28,17 @@
 <<else>>
   <<if $Orchard.farm_contract?.status is 'failed'>>
     <<language>>
-      <<option 'EN'>>Alex folds the old dispatch sheet. "The cart went without yours. I had to fill the space." <<He>> sets it aside. "The deposit covered that. Don't book more than you can bring."
-      <<option 'CN'>>艾利克斯折起旧发货单。“车走了，没等到你的货。我得找别的补上。”<<He>>把单子放到一旁。“押金抵了这笔。能送多少，再订多少。”
+      <<option 'EN'>>
+        Alex folds the old dispatch sheet. "The cart went without yours. I had to fill the space." <<He>> sets it aside. "The deposit covered that. Don't book more than you can bring."
+      <<option 'CN'>>
+        艾利克斯折起旧发货单。“车走了，没等到你的货。我得找别的补上。”<<He>>把单子放到一旁。“押金抵了这笔。能送多少，再订多少。”
     <</language>><br><br>
   <<else>>
     <<language>>
-      <<option 'EN'>>Alex runs a finger down the buyers' list. "A full crate gets a better price. I'll book the space for a week, but I need a deposit. If you miss the cart, I still have to pay for it."
-      <<option 'CN'>>艾利克斯顺着收货人的名单看下去。“整箱的价钱好一些。我能替你留一周的位置，不过要押金。你赶不上车，那位置也得付钱。”
+      <<option 'EN'>>
+        Alex runs a finger down the buyers' list. "A full crate gets a better price. I'll book the space for a week, but I need a deposit. If you miss the cart, I still have to pay for it."
+      <<option 'CN'>>
+        艾利克斯顺着收货人的名单看下去。“整箱的价钱好一些。我能替你留一周的位置，不过要押金。你赶不上车，那位置也得付钱。”
     <</language>><br><br>
   <</if>>
   <<if $_orchard.canContract and $_orchard.contractFruit.length>>
@@ -42,8 +48,10 @@
     <label><<lanSwitch 'Fruit: ' '水果：'>><<listbox '_contractFruit' autoselect>><<optionsfrom _contractOptions>><</listbox>></label><br>
     <label><<lanSwitch 'Quantity: ' '数量：'>><<listbox '_contractAmount' autoselect>><<optionsfrom $_orchard.contractQuantities>><</listbox>></label><br>
     <<language>>
-      <<option 'EN'>>The agreed price is 85% of the market-stall price when you sign, fixed for the week. The cash deposit is 20% of the order. Fruit you marked to keep will not be taken.
-      <<option 'CN'>>签单时按集市售价的八五折锁定单价，一周内不变。现金押金为货款的两成。你标记保留的水果不会用于交货。
+      <<option 'EN'>>
+        The agreed price is 85% of the market-stall price when you sign, fixed for the week. The cash deposit is 20% of the order. Fruit you marked to keep will not be taken.
+      <<option 'CN'>>
+        签单时按集市售价的八五折锁定单价，一周内不变。现金押金为货款的两成。你标记保留的水果不会用于交货。
     <</language>><br>
     <<lanLink ['Check the quote', '核对报价']>>
       <<set $_quote to maplebirch.get('Orchard').contractQuote(_contractFruit, Number(_contractAmount))>>
@@ -63,7 +71,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Return to the deliveries', '返回交货处'] 'Deadwood Reblooms Orchard Trade'>><</lanLink>>
 
-:: Deadwood Orchard Farm Contract Result []
+:: Deadwood Orchard Farm Contract Result
 <<set $outside to 1>><<set $location to 'alex_farm'>><<farm_work_update>><<effects>>
 <<if $stress gte $stressmax>>
   <<passoutfarmroad>><<exit>>

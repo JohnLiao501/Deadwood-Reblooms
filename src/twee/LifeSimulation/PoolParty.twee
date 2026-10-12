@@ -49,7 +49,7 @@
             <<case 'Whitney'>>
               惠特尼已经占住了泳池最深的地方，正看着你打算怎么办。<br>
             <<case 'Kylar'>>
-              <<set $pronoun to C.npc.Kylar.pronoun>>凯拉尔一直没离开门口。<<he>>在数你身边隔了多少人。<br>
+              凯拉尔一直没离开门口。<<nnpc_he 'Kylar'>>在数你身边隔了多少人。<br>
             <<case 'Sydney'>>
               悉尼的视线落在你身上的时间，比落在水面上更长。<br>
           <</switch>>
@@ -59,24 +59,22 @@
   <</if>>
   <!-- 原版 30 是 Sus、60 是 Rage，这里在他逼近发作前先给一次提醒。 -->
   <<if _pool.tonight and _pool.has('Kylar') and _pool.kylarRage gte 50 and _pool.kylarWarned()>>
-    <<set $pronoun to C.npc.Kylar.pronoun>>
     <<language>>
       <<option 'EN'>>
         Kylar's hand closes around your wrist, tighter than Kylar means it to. "Who were you looking at?"<br><br>
       <<option 'CN'>>
-        凯拉尔的手扣住你的手腕，比<<he>>自己以为的更用力。“你刚才在看谁？”<br><br>
+        凯拉尔的手扣住你的手腕，比<<nnpc_he 'Kylar'>>自己以为的更用力。“你刚才在看谁？”<br><br>
     <</language>>
   <</if>>
   <<if _pool.tonight and _pool.kylarRaging and _pool.kylarBroke()>>
-    <<set $pronoun to C.npc.Kylar.pronoun>>
     <<run _pool.breakUp()>>
     <<language>>
       <<option 'EN'>>
         Kylar does not shout. Kylar walks to the poolside, picks up your clothes, and holds them out until you take them. "We are leaving," Kylar says. The students nearby fall quiet.<br><br>
       <<option 'CN'>>
-        凯拉尔没有喊。<<he>>走到池边，把你的衣服捡起来，一直举着，直到你接过去。“我们走。”<<he>>说。附近的学生安静下来。<br><br>
+        凯拉尔没有喊。<<nnpc_he 'Kylar'>>走到池边，把你的衣服捡起来，一直举着，直到你接过去。“我们走。”<<nnpc_he 'Kylar'>>说。附近的学生安静下来。<br><br>
     <</language>>
-    <<getouticon>><<lanLink ['Leave with Kylar', '和凯拉尔一起离开'] 'Deadwood Reblooms Pool Party Broke Up'>><</lanLink>><br><br><br>
+    <<getouticon>><<lanLink ['Leave with Kylar', '和凯拉尔一起离开'] 'Deadwood Reblooms Pool Party Broke Up'>><</lanLink>><br><br>
   <</if>>
 <</widget>>
 
@@ -110,7 +108,7 @@
 <</widget>>
 
 <!-- 邀请结果。$LifeSimulation.pool_party.selected 是恋人，结果已由 invite() 结算。 -->
-:: Deadwood Reblooms Pool Party Invite []
+:: Deadwood Reblooms Pool Party Invite
 <<set $outside to 0>><<effects>>
 <<set _name to $LifeSimulation.pool_party.selected>>
 <<set _result to $LifeSimulation.pool_party.reply>>
@@ -203,7 +201,7 @@
 <</lanLink>><br>
 
 <!-- 凯拉尔闹翻后的收场。派对已被 breakUp 终止，这里只负责把 PC 送出去。 -->
-:: Deadwood Reblooms Pool Party Broke Up []
+:: Deadwood Reblooms Pool Party Broke Up
 <<set $outside to 1>><<set $location to 'school'>><<schooleffects>><<effects>>
 <<set _pool to maplebirch.get('LifeSimulation').pool_party>>
 <<if _pool.companions.length gt 0>>

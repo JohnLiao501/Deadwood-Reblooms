@@ -1,4 +1,4 @@
-:: Deadwood BirdTower Hunt Scavenge Party Site []
+:: Deadwood BirdTower Hunt Scavenge Party Site
 <<effects>>
 <<endevent>>
 <<set $daily.emptyCamp to true>>
@@ -73,7 +73,7 @@
   <<bird_pass _time>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower Hunt Scavenge []
+:: Deadwood BirdTower Hunt Scavenge
 <<effects>>
 <<endevent>>
 <<childSelect $BirdTower.hunt.leader>>
@@ -454,7 +454,7 @@
   <</if>>
 <</if>>
 
-:: Deadwood BirdTower Hunt Scavenge Clothes []
+:: Deadwood BirdTower Hunt Scavenge Clothes
 <<effects>>
 <<switch $phase>>
   <<case 1>>
@@ -521,7 +521,7 @@
 <</if>>
 <<birdtower_scavenge_options>>
 
-:: Deadwood BirdTower Hunt Scavenge Leave []
+:: Deadwood BirdTower Hunt Scavenge Leave
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -533,7 +533,7 @@
 <<endevent>>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Camp []
+:: Deadwood BirdTower Hunt Camp
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -575,7 +575,7 @@
   <<endevent>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower Hunt Camp 2 []
+:: Deadwood BirdTower Hunt Camp 2
 <<effects>><<childSelect $BirdTower.hunt.leader>>
 <<switch $phase>>
   <<case 1>>
@@ -656,7 +656,7 @@
     <<babyhawk_hunt_return>>
 <</switch>>
 
-:: Deadwood BirdTower Hunt Dead Tree []
+:: Deadwood BirdTower Hunt Dead Tree
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -701,7 +701,7 @@
   <<set $phase to 2>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower Hunt Dead Tree 2 []
+:: Deadwood BirdTower Hunt Dead Tree 2
 <<effects>><<childSelect $BirdTower.hunt.leader>>
 <<if $phase is 1>>
   <<language>>
@@ -902,7 +902,7 @@
 <<endevent>>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Sticks []
+:: Deadwood BirdTower Hunt Sticks
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -913,7 +913,7 @@
 <br>
 <<lanLink ["Take them", "拿上它们"] "Deadwood BirdTower Hunt Sticks 2">><</lanLink>>
 <br>
-:: Deadwood BirdTower Hunt Sticks 2 []
+:: Deadwood BirdTower Hunt Sticks 2
 <<language>>
   <<option 'EN'>>
     You pick up one of the branches, then signal for your child to take the other.
@@ -941,7 +941,7 @@
 <<flight_hunt_get "sticks" 2>>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Leaves []
+:: Deadwood BirdTower Hunt Leaves
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -1081,7 +1081,7 @@
   <<babyhawk_hunt_return>>
 <</if>>
 
-:: Deadwood BirdTower Hunt Underbrush []
+:: Deadwood BirdTower Hunt Underbrush
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -1102,7 +1102,7 @@
   <<set $phase to 2>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower Hunt Underbrush 2 []
+:: Deadwood BirdTower Hunt Underbrush 2
 <<effects>>
 <<switch $phase>>
   <<case 0>>
@@ -1352,7 +1352,7 @@
   <<babyhawk_hunt_return>>
 <</if>>
 
-:: Deadwood BirdTower Hunt Underbrush Fight []
+:: Deadwood BirdTower Hunt Underbrush Fight
 <<if $fightstart is 1>>
   <<set $fightstart to 0>>
   <<violence 1>>
@@ -1447,7 +1447,7 @@
   <span id="next"><<lanLink ["Next", "继续"] "Deadwood BirdTower Hunt Underbrush Fight">><</lanLink>></span><<nexttext>>
 <</if>>
 
-:: Deadwood BirdTower Hunt Underbrush Fight Finish []
+:: Deadwood BirdTower Hunt Underbrush Fight Finish
 <<effects>>
 <<if $enemyarousal gte $enemyarousalmax>>
   <<beastejaculation>>
@@ -1506,7 +1506,7 @@
 <br><br>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Flowers []
+:: Deadwood BirdTower Hunt Flowers
 <<effects>><<childSelect $BirdTower.hunt.leader>>
 <<language>>
   <<option 'EN'>>
@@ -1541,11 +1541,11 @@
 <</if>>
 <<lanLink ["Leave", "离开"] "Deadwood BirdTower Hunt Flowers Leave">><</lanLink>>
 <br>
-:: Deadwood BirdTower Hunt Flowers Leave []
+:: Deadwood BirdTower Hunt Flowers Leave
 <<effects>>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Flowers Relax []
+:: Deadwood BirdTower Hunt Flowers Relax
 <<effects>>
 <<switch $phase>>
   <<case 1>>
@@ -1801,7 +1801,7 @@
 <</switch>>
 <!-- 狩猎回去之后再检查是否每个人都吃饱了，没吃饱就吃掉潜伏者，吃饱了就放入战利品堆 -->
 
-:: Deadwood BirdTower Hunt Shiny []
+:: Deadwood BirdTower Hunt Shiny
 <<effects>><<flight_distance_check>>
 <<language>>
   <<option 'EN'>>
@@ -1986,7 +1986,7 @@
   <<babyhawk_hunt_return>>
 <</if>>
 
-:: Deadwood BirdTower Hunt Shiny Clothes []
+:: Deadwood BirdTower Hunt Shiny Clothes
 <<effects>>
 <<switch $phase>>
   <<case 1>>
@@ -2020,7 +2020,7 @@
 <br><br>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Pond Dive []
+:: Deadwood BirdTower Hunt Pond Dive
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -2051,7 +2051,7 @@
   <<set $phase to 2>>
 <</lanLink>><<swimmingdifficulty 600 900>>
 <br>
-:: Deadwood BirdTower Hunt Pond Dive 2 []
+:: Deadwood BirdTower Hunt Pond Dive 2
 <<effects>>
 <<unset $swimmingSuccess>>
 <<noClothingCheck>>

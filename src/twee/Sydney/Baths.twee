@@ -8,7 +8,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Sirris Estate Sirris Invitation []
+:: Deadwood Reblooms Sirris Estate Sirris Invitation
 <<set $outside to 0>><<set $location to 'adult_shop'>><<effects>>
 <<npc Sirris>><<person1>>
 <<if !$adultshopclerk or C.npc.Sirris.love lte 50 or isLoveInterest('Sydney')>>
@@ -28,7 +28,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ["Return to the shop","返回店铺"] 'Adult Shop Approach Sirris'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Temple Bath Meeting []
+:: Deadwood Reblooms Sydney Temple Bath Meeting
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<sydneySchedule>>
 <<if !isLoveInterest('Sydney') or _sydney_location isnot 'temple'
@@ -66,14 +66,14 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ["Step back into the showers","退回淋浴区"] 'Temple Cloister Showers'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Temple Bath Towel []
+:: Deadwood Reblooms Sydney Temple Bath Towel
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<npc Sydney>><<person1>>
 <<lanSwitch 'You pass the towel around the screen. Sydney takes it, and the water stops. "Thank you," <<he>> says. <<He>> waits until you have stepped back before coming out.' '你把毛巾从屏风旁递过去。悉尼接住，关上了水。“谢谢你。”<<he>>说。你退远后，<<he>>才从隔间里出来。'>>
 <<npcincr Sydney love 1>><<glove>>
 <br><br><<getouticon>><<lanLink ["Return to the showers","返回淋浴区"] 'Temple Cloister Showers'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Temple Bath Together []
+:: Deadwood Reblooms Sydney Temple Bath Together
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
 <<language>>
@@ -90,17 +90,17 @@
 <</language>>
 <br><br>
 <<bathroomicon 'shower'>><<lanLink ["Shower together (0:20)","一起淋浴 (0:20)"] 'Deadwood Reblooms Sydney Temple Bath Wash'>><<strip>><<pass 20>><</lanLink>><br>
-<<loveicon 'kiss'>><<lanLink ["Kiss Sydney","吻悉尼"] 'Deadwood Reblooms Sydney Bath Intimacy'>><<set $SydneyExpansion.bathReturn to 'temple'>><<set $sexstart to 1>><<strip>><</lanLink>><<promiscuous1>><<kissvirginitywarning>><<NPCvirginitywarning 'Sydney' 'kiss'>><br>
+<<loveicon 'kiss'>><<lanLink ["Kiss Sydney","吻悉尼"] 'Deadwood Reblooms Sydney Bath Intimacy'>><<set $SydneyExpansion.bathReturn to 'temple'>><<set $sexstart to 1>><<strip>><</lanLink>><<promiscuous1>><<kissvirginitywarning>><<NPCvirginitywarning 'Sydney' 'kiss'>>
 <br><br><<getouticon>><<lanLink ["Stop here","到此为止"] 'Temple Cloister Showers'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Temple Bath Wash []
+:: Deadwood Reblooms Sydney Temple Bath Wash
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<npc Sydney>><<person1>><<wash>>
 <<lanSwitch 'Sydney makes room beneath the warm water and hands you the soap. You wash side by side, then dry off without hurrying one another.' '悉尼在温水下为你让出位置，把肥皂递给你。你们并肩洗净身上的污垢，之后各自擦干，没有催促对方。'>>
 <<stress -3>><<lstress>><<npcincr Sydney love 1>><<glove>><<clotheson>>
 <br><br><<getouticon>><<lanLink ["Return to the showers","返回淋浴区"] 'Temple Cloister Showers'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Bathroom []
+:: Deadwood Reblooms Sirris Estate Bathroom [nobr]
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !$SydneyExpansion.estate.invited or (!_sydneyAtEstate and !_sirrisAtEstate)>>
@@ -120,8 +120,10 @@
     <</if>>
   <</if>>
   <<language>>
-    <<option 'EN'>>You stop outside the bathroom. A clean towel waits on a shelf beside the door. Warm air carries the scent of soap and the bath products from Sirris's shop.
-    <<option 'CN'>>你在浴室门外停下。门边的搁板上放着干净的毛巾，暖湿的空气里有肥皂和西里斯店里洗浴用品的气味。
+    <<option 'EN'>>
+      You stop outside the bathroom. A clean towel waits on a shelf beside the door. Warm air carries the scent of soap and the bath products from Sirris's shop.
+    <<option 'CN'>>
+      你在浴室门外停下。门边的搁板上放着干净的毛巾，暖湿的空气里有肥皂和西里斯店里洗浴用品的气味。
   <</language>>
   <br><br>
   <<if $SydneyExpansion.estate.bathVisitDay is Time.days
@@ -141,13 +143,13 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Bath Wash []
+:: Deadwood Reblooms Sirris Estate Bath Wash
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>><<wash>>
 <<set $SydneyExpansion.estate.bathVisitor to ''>>
 <<lanSwitch 'You wash, dry yourself with a clean towel, and put your clothes back on.' '你洗净身体，用干净的毛巾擦干，再穿好衣服。'>><<clotheson>>
 <br><br><<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Bath Meeting []
+:: Deadwood Reblooms Sirris Estate Sydney Bath Meeting [nobr]
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !_sydneyAtEstate or $SydneyExpansion.estate.bathVisitDay isnot Time.days
@@ -156,8 +158,10 @@
 <<else>>
   <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
   <<language>>
-    <<option 'EN'>>Sydney opens the door a little farther when <<he>> hears your voice. "I left a book on the shelf," <<he>> says, looking past you into the hall. <<He>> draws the towel around <<his>> shoulders and notices your expression.
-    <<option 'CN'>>听见你的声音，悉尼才把门又开大一些。“我把书放在搁板上了。”<<he>>说着，向你身后的走廊看了一眼。<<He>>把毛巾披在肩上，留意到你的神情。
+    <<option 'EN'>>
+      Sydney opens the door a little farther when <<he>> hears your voice. "I left a book on the shelf," <<he>> says, looking past you into the hall. <<He>> draws the towel around <<his>> shoulders and notices your expression.
+    <<option 'CN'>>
+      听见你的声音，悉尼才把门又开大一些。“我把书放在搁板上了。”<<he>>说着，向你身后的走廊看了一眼。<<He>>把毛巾披在肩上，留意到你的神情。
   <</language>>
   <br><br>
   <<socialiseicon>><<lanLink ["Pass Sydney the book","把书递给悉尼"] 'Deadwood Reblooms Sirris Estate Sydney Bath Book'>><</lanLink>><br>
@@ -167,7 +171,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ["Close the door gently","轻轻带上门"] 'Deadwood Reblooms Sirris Estate Hall'>><<set $SydneyExpansion.estate.bathVisitor to ''>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Bath Book []
+:: Deadwood Reblooms Sirris Estate Sydney Bath Book
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if _sydneyAtEstate and $SydneyExpansion.estate.bathVisitDay is Time.days
@@ -181,7 +185,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Bath Together []
+:: Deadwood Reblooms Sirris Estate Sydney Bath Together [nobr]
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
@@ -191,18 +195,20 @@
   <<lanSwitch 'You have already finished here. There is nothing more to do.' '你已经收拾好了。这里没有别的事可做。'>>
 <<else>>
   <<language>>
-    <<option 'EN'>>You ask before stepping inside. Sydney sets the book out of reach of the water.
-    <<if _sirrisAtEstate>>
-      "<<nnpc_Mum 'Sirris'>> is downstairs," <<he>> says, closing the door carefully.
-    <<else>>
-      "It's quiet tonight," <<he>> says, and waits for your answer.
-    <</if>>
-    <<option 'CN'>>你站在门外先问了一声。悉尼把书放到水溅不到的地方。
-    <<if _sirrisAtEstate>>
-      “<<nnpc_Mum 'Sirris'>>在楼下。”<<he>>说，轻轻关好门。
-    <<else>>
-      “今晚家里很安静。”<<he>>说，等你回答。
-    <</if>>
+    <<option 'EN'>>
+      You ask before stepping inside. Sydney sets the book out of reach of the water.
+      <<if _sirrisAtEstate>>
+        "<<nnpc_Mum 'Sirris'>> is downstairs," <<he>> says, closing the door carefully.
+      <<else>>
+        "It's quiet tonight," <<he>> says, and waits for your answer.
+      <</if>>
+    <<option 'CN'>>
+      你站在门外先问了一声。悉尼把书放到水溅不到的地方。
+      <<if _sirrisAtEstate>>
+        “<<nnpc_Mum 'Sirris'>>在楼下。”<<he>>说，轻轻关好门。
+      <<else>>
+        “今晚家里很安静。”<<he>>说，等你回答。
+      <</if>>
   <</language>>
   <br><br>
   <<bathroomicon 'bath'>><<lanLink ["Bathe together (0:20)","一起洗浴 (0:20)"] 'Deadwood Reblooms Sirris Estate Sydney Bath Wash'>><<pass 20>><<strip>><</lanLink>><br>
@@ -210,7 +216,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ["Stop here","到此为止"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Bath Wash []
+:: Deadwood Reblooms Sirris Estate Sydney Bath Wash
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<set $SydneyExpansion.estate.bathVisitor to ''>>
 <<npc Sydney>><<person1>><<wash>>
@@ -218,7 +224,7 @@
 <<npcincr Sydney love 1>><<glove>><<stress -3>><<lstress>><<clotheson>>
 <br><br><<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sirris Bath Meeting []
+:: Deadwood Reblooms Sirris Estate Sirris Bath Meeting [nobr]
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !_sirrisAtEstate or $SydneyExpansion.estate.bathVisitDay isnot Time.days
@@ -227,15 +233,17 @@
   <br><br><<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 <<else>>
   <<language>>
-    <<option 'EN'>>You answer from the hall. The water stops. "Oh, it's you," Sirris says through the closed door. "I thought I'd brought a towel in with me. Is there one outside? I'll be out in a moment."
-    <<option 'CN'>>你站在走廊里应了一声。水声停了。“原来是你。”西里斯隔着门说，“我还以为把毛巾带进来了。门外有一条吗？我一会儿就出来。”
+    <<option 'EN'>>
+      You answer from the hall. The water stops. "Oh, it's you," Sirris says through the closed door. "I thought I'd brought a towel in with me. Is there one outside? I'll be out in a moment."
+    <<option 'CN'>>
+      你站在走廊里应了一声。水声停了。“原来是你。”西里斯隔着门说，“我还以为把毛巾带进来了。门外有一条吗？我一会儿就出来。”
   <</language>>
   <br><br>
   <<socialiseicon 'ask'>><<lanLink ["Tell Sirris the towel is outside","告诉西里斯毛巾就在门外"] 'Deadwood Reblooms Sirris Estate Sirris Bath Towel'>><</lanLink>>
   <br><br><<getouticon>><<lanLink ["Leave Sirris to bathe in private","让西里斯独自洗浴"] 'Deadwood Reblooms Sirris Estate Hall'>><<set $SydneyExpansion.estate.bathVisitor to ''>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Sirris Estate Sirris Bath Towel []
+:: Deadwood Reblooms Sirris Estate Sirris Bath Towel
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if _sirrisAtEstate and $SydneyExpansion.estate.bathVisitDay is Time.days
@@ -248,7 +256,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Bath Intimacy []
+:: Deadwood Reblooms Sydney Bath Intimacy [nobr]
 <<set $outside to 0>><<set $location to ($SydneyExpansion.bathReturn is 'estate') ? 'sirris_estate' : 'temple'>>
 <<if $sexstart is 1>>
   <<clearnpc>><<npc Sydney>>
@@ -271,22 +279,24 @@
     <<set $enemyarousalmax -= 100>>
   <</if>>
   <<language>>
-    <<option 'EN'>>Sydney takes your answer seriously, then closes the screen behind you.
-    <<if _sydneyStatus.includes('pure')>>
-      The cloister is still within earshot. "<span class='teal'>Tell me if you want to stop.</span>" <<He>> glances toward the corridor, then waits for your answer before kissing you.
-    <<elseif _sydneyStatus.includes('corrupt')>>
-      "<span class='lewd'>Come closer.</span>" <<He>> waits for your answer before kissing you.
-    <<else>>
-      "Is this all right?" <<he>> asks, waiting for your answer before kissing you.
-    <</if>>
-    <<option 'CN'>>悉尼认真听了你的回答，才在你身后合上屏风。
-    <<if _sydneyStatus.includes('pure')>>
-      回廊离得很近，外面仍能听见动静。“<span class='teal'>想停就告诉我。</span>”<<He>>朝走廊看了一眼，等你回答后才吻住你。
-    <<elseif _sydneyStatus.includes('corrupt')>>
-      “<span class='lewd'>再靠近一点。</span>”<<He>>等你回答后才吻住你。
-    <<else>>
-      “这样可以吗？”<<he>>问过，等你回答后才吻住你。
-    <</if>>
+    <<option 'EN'>>
+      Sydney takes your answer seriously, then closes the screen behind you.
+      <<if _sydneyStatus.includes('pure')>>
+        The cloister is still within earshot. "<span class='teal'>Tell me if you want to stop.</span>" <<He>> glances toward the corridor, then waits for your answer before kissing you.
+      <<elseif _sydneyStatus.includes('corrupt')>>
+        "<span class='lewd'>Come closer.</span>" <<He>> waits for your answer before kissing you.
+      <<else>>
+        "Is this all right?" <<he>> asks, waiting for your answer before kissing you.
+      <</if>>
+    <<option 'CN'>>
+      悉尼认真听了你的回答，才在你身后合上屏风。
+      <<if _sydneyStatus.includes('pure')>>
+        回廊离得很近，外面仍能听见动静。“<span class='teal'>想停就告诉我。</span>”<<He>>朝走廊看了一眼，等你回答后才吻住你。
+      <<elseif _sydneyStatus.includes('corrupt')>>
+        “<span class='lewd'>再靠近一点。</span>”<<He>>等你回答后才吻住你。
+      <<else>>
+        “这样可以吗？”<<he>>问过，等你回答后才吻住你。
+      <</if>>
   <</language>><br><br>
 <</if>>
 <<set $enemyanger to -10>>
@@ -298,7 +308,7 @@
   <span id='next'><<lanLink ["Next","继续"] 'Deadwood Reblooms Sydney Bath Intimacy'>><</lanLink>></span><<nexttext>>
 <</if>>
 
-:: Deadwood Reblooms Sydney Bath Intimacy Finish []
+:: Deadwood Reblooms Sydney Bath Intimacy Finish
 <<set $outside to 0>><<set $location to ($SydneyExpansion.bathReturn is 'estate') ? 'sirris_estate' : 'temple'>><<effects>>
 <<if $SydneyExpansion.bathReturn is 'estate'>>
   <<set $SydneyExpansion.estate.bathVisitor to ''>>

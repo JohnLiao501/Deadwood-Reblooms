@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Orchard Trade []
+:: Deadwood Reblooms Orchard Trade
 <<set _orchard to maplebirch.get('Orchard')>>
 <<if !_orchard or !_orchard.available($Orchard.site)>>
   <<getouticon>><<lanLink ['Return', '返回'] 'Deadwood Reblooms Orchard'>><</lanLink>><<exit>>

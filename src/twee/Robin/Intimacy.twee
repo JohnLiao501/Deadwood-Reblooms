@@ -1,4 +1,4 @@
-:: Deadwood Robin Private Invite []
+:: Deadwood Robin Private Invite
 <<set _site to $RobinExpansion.intimacy_site>>
 <<set _return to _site is 'shop' ? (Time.hour lt 21 ? 'Deadwood Robin Shop' : 'Cliff Street')
   : _site is 'lemonade' ? 'Beach'
@@ -93,7 +93,7 @@
   <<set $RobinExpansion.intimacy_site to null>><<endevent>>
 <</lanLink>>
 
-:: Deadwood Robin Private Sex []
+:: Deadwood Robin Private Sex
 <!-- 原版罗宾的合意战斗初始化与结束流程。site 保存在当前 V 中，读档或跨回合后仍返回正确地点。 -->
 <<set _site to $RobinExpansion.intimacy_site>>
 <<if !['shop', 'lemonade', 'chocolate', 'meteor'].includes(_site)
@@ -169,7 +169,7 @@
   <</if>>
 <</if>>
 
-:: Deadwood Robin Private Sex Finish []
+:: Deadwood Robin Private Sex Finish
 <<set _site to $RobinExpansion.intimacy_site>>
 <<set _return to _site is 'shop' ? 'Cliff Street'
   : _site is 'lemonade' ? 'Beach'

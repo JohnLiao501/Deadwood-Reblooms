@@ -194,9 +194,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Factory Laboratory []
-
-<<nobr>>
+:: Deadwood Reblooms Factory Laboratory [nobr]
 <<deadwood-industry-header>>
 <<set _lab to _factory.laboratory>><<set _lab_state to _lab.state>>
 <<if !_lab.unlocked or !_factory_state.owned>>
@@ -570,11 +568,8 @@
 <</if>>
 <</deadwood-dynamicblock>>
 <<deadwood-industry-return>>
-<</nobr>>
 
-:: Deadwood Laboratory Farm []
-
-<<nobr>>
+:: Deadwood Laboratory Farm [nobr]
 <<set $outside to 0>><<set $location to 'farm'>><<effects>>
 <<set _lab to maplebirch.get('Finance')?.industry.laboratory>>
 <<if !_lab?.unlocked>>
@@ -615,11 +610,8 @@
   </span><br><br>
 <</if>>
 <<getouticon>><<lanLink ['Return to the lab', '返回实验室'] 'Farm Still'>><</lanLink>>
-<</nobr>>
 
-:: Deadwood Remy Laboratory []
-
-<<nobr>>
+:: Deadwood Remy Laboratory [nobr]
 <<effects>><<deadwood-laboratory-client>>
 <<if !maplebirch.get('Orchard')?.remy.available or !_lab?.unlocked>>
   <<deadwood-remy-return>><<exit>>
@@ -676,11 +668,8 @@
   <</lanLink>><br>
 <</if>>
 <<deadwood-remy-return>>
-<</nobr>>
 
-:: Deadwood Harper Laboratory []
-
-<<nobr>>
+:: Deadwood Harper Laboratory [nobr]
 <<set $outside to 0>><<set $location to 'hospital'>><<effects>>
 <<deadwood-laboratory-client>>
 <<if !_lab?.unlocked or !$harperSeen?.includes('hospital') or C.npc.Harper.state isnot 'active'>>
@@ -829,11 +818,8 @@
   <</if>>
 <</if>>
 <br><<getouticon>><<lanLink ['Leave the office', '离开办公室'] 'Hospital Foyer'>><<clotheson>><<endevent>><</lanLink>>
-<</nobr>>
 
-:: Deadwood Sirris Laboratory []
-
-<<nobr>>
+:: Deadwood Sirris Laboratory [nobr]
 <<set $outside to 0>><<set $location to 'adult_shop'>><<effects>>
 <<deadwood-laboratory-client>>
 <<if !_lab?.unlocked>>
@@ -889,11 +875,8 @@
   <</if>>
 <</if>>
 <br><<getouticon>><<lanLink ['Return to the shop', '返回店铺'] 'Adult Shop'>><</lanLink>>
-<</nobr>>
 
-:: Deadwood Sydney Laboratory []
-
-<<nobr>>
+:: Deadwood Sydney Laboratory [nobr]
 <<set $outside to 0>><<set $location to 'adult_shop'>><<effects>>
 <<deadwood-laboratory-client>>
 <<if !_lab?.unlocked>>
@@ -949,4 +932,3 @@
   <</lanLink>><br>
 <</if>>
 <br><<getouticon>><<lanLink ['Return to the shop', '返回店铺'] 'Adult Shop'>><</lanLink>>
-<</nobr>>

@@ -14,7 +14,7 @@
   <<lanLink ['Continue your confession', '继续忏悔'] 'Temple Confess Self End'>><</lanLink>><br>
 <</widget>>
 
-:: Temple Confess Self Sydney Cross []
+:: Temple Confess Self Sydney Cross
 <<set $outside to 0>>
 <<set $location to 'temple'>>
 <<temple_effects>>
@@ -79,7 +79,7 @@
 <</if>>
 <<lanLink ['Return to your side', '回到自己那一侧'] 'Temple Confess Self End Alone'>><</lanLink>><br>
 
-:: Temple Confess Self Sydney Sex []
+:: Temple Confess Self Sydney Sex
 <<run statusCheck('Sydney')>>
 <<set $corruptionEvent to 1>>
 <<if $sexstart is 1>>
@@ -138,7 +138,7 @@
   <span id="next"><<lanLink ["Next","继续"] 'Temple Confess Self Sydney Sex'>><</lanLink>></span><<nexttext>>
 <</if>>
 
-:: Temple Confess Self Sydney Interrupted []
+:: Temple Confess Self Sydney Interrupted
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>><<person1>><<run statusCheck('Sydney')>>
 <<language>>
   <<option 'EN'>>
@@ -176,7 +176,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Stop before you are discovered', '在被发现前停下'] 'Temple Confess Self Sydney Sex Finish'>><<set $SydneyExpansion.confession_intrusion to 3>><</lanLink>><<lstress>><br>
 
-:: Temple Confess Self Sydney Interrupted Wait []
+:: Temple Confess Self Sydney Interrupted Wait
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>><<person1>><<run statusCheck('Sydney')>>
 <<language>>
   <<option 'EN'>>
@@ -208,7 +208,7 @@
 <br><br>
 <<loveicon>><<lanLink ['Turn back to Sydney', '回身面对悉尼'] 'Temple Confess Self Sydney Sex'>><</lanLink>><br>
 
-:: Temple Confess Self Sydney Interrupted Tease []
+:: Temple Confess Self Sydney Interrupted Tease
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>><<person1>><<run statusCheck('Sydney')>>
 <<language>>
   <<option 'EN'>>
@@ -242,7 +242,7 @@
 <br><br>
 <<loveicon>><<lanLink ["Kiss Sydney","吻悉尼"] 'Temple Confess Self Sydney Sex'>><</lanLink>><<kissvirginitywarning>><<NPCvirginitywarning 'Sydney' 'kiss'>><br>
 
-:: Temple Confess Self Sydney Sex Finish []
+:: Temple Confess Self Sydney Sex Finish
 <<temple_effects>>
 <<effects>>
 <<run statusCheck('Sydney')>>

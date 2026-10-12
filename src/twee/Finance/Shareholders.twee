@@ -69,7 +69,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Shareholder Office []
+:: Deadwood Reblooms Shareholder Office
 <<deadwood-shareholder-header>>
 <<if !_shareholder_access>><<exit>><</if>>
 <h3><<lanSwitch 'Shareholder reception' '股东接待处'>></h3>
@@ -124,7 +124,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Return to the lobby', '返回大厅'] 'Office Lobby'>><</lanLink>><br>
 
-:: Deadwood Reblooms Shareholder Meeting []
+:: Deadwood Reblooms Shareholder Meeting
 <<deadwood-shareholder-header>>
 <<if !_shareholder_access>><<exit>><</if>>
 <<if !_shareholders.canMeet>><<deadwood-shareholder-return>><<exit>><</if>>
@@ -182,7 +182,7 @@
 <</deadwood-card>>
 <<deadwood-shareholder-return>>
 
-:: Deadwood Reblooms Shareholder Minutes []
+:: Deadwood Reblooms Shareholder Minutes
 <<deadwood-shareholder-header>>
 <<if !_shareholder_access>><<exit>><</if>>
 <<deadwood-shareholder-result>>
@@ -221,7 +221,7 @@
 <</if>>
 <<deadwood-shareholder-return>>
 
-:: Deadwood Reblooms Shareholder Subscription []
+:: Deadwood Reblooms Shareholder Subscription
 <<deadwood-shareholder-header>>
 <<if !_shareholder_access>><<exit>><</if>>
 <<deadwood-shareholder-result>>
@@ -251,7 +251,7 @@
 <</capture>>
 <<deadwood-shareholder-return>>
 
-:: Deadwood Reblooms Shareholder Negotiation []
+:: Deadwood Reblooms Shareholder Negotiation
 <<deadwood-shareholder-header>>
 <<if !_shareholder_access>><<exit>><</if>>
 <<if !_shareholders.canNegotiate>><<deadwood-shareholder-return>><<exit>><</if>>
@@ -291,7 +291,7 @@
 <<deadwood-shareholder-result>>
 <<deadwood-shareholder-return>>
 
-:: Deadwood Reblooms Shareholder Tower []
+:: Deadwood Reblooms Shareholder Tower
 <<deadwood-shareholder-header>>
 <<if !_shareholder_access>><<exit>><</if>>
 <<deadwood-shareholder-result>>

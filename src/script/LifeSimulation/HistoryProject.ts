@@ -37,17 +37,17 @@ export default function (maplebirch: typeof window.maplebirch) {
   registerAntique();
   maplebirch.on(':language', registerAntique);
 
-  maplebirch.tool.addTo('BeforeLinkZone', { widget: 'deadwood-reblooms-history-project-museum-options', passage: 'Museum' });
-  maplebirch.tool.addTo('CustomLinkZone', { widget: [-1, 'deadwood-reblooms-history-project-library-option'], passage: 'School Library' });
-
   // 在原版事件池、日志和画作归还结算点接入历史项目状态。
   maplebirch.tool.inject({
     locationPassage: {
+      'School Library': [{ src: '<<projectoptions>>', applybefore: '<<deadwood-reblooms-history-project-library-option>>\n\t\t', expected: 1 }],
       'Lake Shore': [
         // 正常活动分支才有返回路线，继承原版昏厥、追逐与遭遇的排除条件。
         { src: '<<lakereturnjourney>>', applybefore: '<<deadwood-reblooms-history-project-lake-option>>\n\t', expected: 1 }
       ],
       Museum: [
+        // 普通交谈菜单才提供调查，首次见面、藏品事件与博物馆遇袭不被打断。
+        { src: '<<museumtalk>>', applybefore: '<<deadwood-reblooms-history-project-museum-options>>\n\t', expected: 1 },
         // 在玩家确认讨论博物馆画作后安排历史课题，不因仅浏览画作而提前触发。
         {
           src: '<<set $museumAntiques.paintings[_labelP] to "talk">>',

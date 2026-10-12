@@ -37,12 +37,6 @@ export default function RealEstate(maplebirch: typeof window.maplebirch): void {
   // 这些原版 Passage 能与 NPC 当面交谈。课堂入口还需由原版出勤状态与考试阶段筛选。
   maplebirch.tool.addTo(
     'BeforeLinkZone',
-    { widget: "deadwood-reblooms-property-invitation-link 'Whitney' 'Deadwood Reblooms Property Invite Whitney'", passage: 'Whitney Home Enter' },
-    { widget: "deadwood-reblooms-property-invitation-link 'Kylar' 'Deadwood Reblooms Property Invite Kylar'", passage: 'Kylar Library' },
-    { widget: "deadwood-reblooms-property-invitation-link 'Kylar' 'Deadwood Reblooms Property Invite Kylar Courtyard'", passage: 'Kylar Courtyard' },
-    { widget: "deadwood-reblooms-property-invitation-link 'Kylar' 'Deadwood Reblooms Property Invite Kylar Park'", passage: 'Kylar Park' },
-    { widget: "deadwood-reblooms-property-invitation-link 'Sydney' 'Deadwood Reblooms Property Invite Sydney'", passage: 'Temple Sydney' },
-    { widget: "deadwood-reblooms-property-invitation-link 'Sydney' 'Deadwood Reblooms Property Invite Sydney Library'", passage: 'Library Rental Counter' },
     { widget: "deadwood-reblooms-property-invitation-link 'Whitney' 'Deadwood Reblooms Property Invite Whitney Maths'", passage: 'Maths Lesson' },
     { widget: "deadwood-reblooms-property-invitation-link 'Kylar' 'Deadwood Reblooms Property Invite Kylar Lesson'", passage: 'English Lesson' },
     { widget: "deadwood-reblooms-property-invitation-link 'Sydney' 'Deadwood Reblooms Property Invite Sydney Science'", passage: 'Science Lesson' },
@@ -95,6 +89,9 @@ export default function RealEstate(maplebirch: typeof window.maplebirch): void {
       ]
     },
     widgetPassage: {
+      'Widgets Kylar': [{ src: '<<if _lewdIdea>>', applybefore: '<<deadwood-reblooms-property-invitation-menu>>\n\t\t', expected: 1 }],
+      'Widgets Whitney': [{ src: '<<if !_noOptions>>', applyafter: '\n\t\t\t<<deadwood-reblooms-property-invitation-menu>>', expected: 1 }],
+      'Widgets Sydney': [{ src: '<<widget "sydneyOptionsTalk">>', applyafter: '\n\t<<deadwood-reblooms-property-invitation-menu>>', expected: 1 }],
       'Widgets Robin': [
         // 只扩展原版普通交谈菜单，覆盖初次进房和游戏、拥抱等互动后的返回。
         {

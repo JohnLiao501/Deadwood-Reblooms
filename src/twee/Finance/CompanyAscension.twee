@@ -286,7 +286,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Company Ascension Preparation []
+:: Deadwood Reblooms Company Ascension Preparation
 <<deadwood-company-header>><<endevent>><<deadwood-ascension-header>>
 <<if _ascension_state.prepared_day lt 0>><<deadwood-shareholder-return>><<exit>><</if>>
 <<npc Avery>><<person1>>
@@ -330,7 +330,7 @@
 <</language>><br><br>
 <<deadwood-shareholder-return>>
 
-:: Deadwood Reblooms Company Ascension Proposal []
+:: Deadwood Reblooms Company Ascension Proposal
 <<deadwood-avery-ceremony-header>><<deadwood-ascension-header>>
 <<if !_ascension.canPropose>><<lanLink ['Continue with them', '继续跟着他们'] 'Skyscraper Party 12'>><</lanLink>><<exit>><</if>>
 <<language>>
@@ -381,7 +381,7 @@
   <<run maplebirch.get('Finance').company.ascension.withdraw()>><<set $Finance.company.avery.decision to 'leave'>><<npcincr Avery rage 3>>
 <</lanLink>><br>
 
-:: Deadwood Reblooms Company Ascension Audience []
+:: Deadwood Reblooms Company Ascension Audience
 <<deadwood-company-header>><<endevent>><<deadwood-ascension-header>>
 <<if !_ascension.active or !_ascension_state.recognized>><<deadwood-ascension-return>><<exit>><</if>>
 <<language>>
@@ -418,7 +418,7 @@
 <</if>>
 <<deadwood-ascension-return>>
 
-:: Deadwood Reblooms Company Ascension Audience Result []
+:: Deadwood Reblooms Company Ascension Audience Result
 <<deadwood-company-header>><<endevent>><<deadwood-ascension-header>>
 <<if !_ascension.active or !_ascension_state.recognized or _ascension_state.audience_day isnot Math.floor(Time.days)>><<deadwood-ascension-return>><<exit>><</if>>
 <<language>>
@@ -627,7 +627,7 @@
 <</language>><br><br>
 <<deadwood-ascension-return>>
 
-:: Deadwood Reblooms Company Ascension Jordan []
+:: Deadwood Reblooms Company Ascension Jordan
 <<set $outside to 0>><<location 'temple'>><<temple_effects>><<effects>><<deadwood-ascension-header>>
 <<if !_ascension_state.ascended or !_ascension_state.jordan_told>>
   <<getouticon>><<lanLink ['Step away', '走开'] 'Temple'>><<endevent>><</lanLink>><<exit>>

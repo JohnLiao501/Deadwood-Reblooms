@@ -116,7 +116,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Orchard Staff []
+:: Deadwood Orchard Staff
 <<set $outside to 0>><<set $location to 'alex_farm'>><<set $bus to 'farm_fields'>><<effects>><<endevent>>
 <<set _crew to maplebirch.get('Orchard')?.staff>>
 <<if !_crew?.available>>
@@ -227,7 +227,7 @@
 <</deadwood-dynamicblock>>
 <<getouticon>><<lanLink ['Return to the laboratory', '返回实验室'] 'Farm Still'>><</lanLink>><br>
 
-:: Deadwood Orchard Trapper []
+:: Deadwood Orchard Trapper
 <<set $outside to 0>><<set $location to 'pub'>><<set $bus to 'harvest'>><<effects>><<endevent>>
 <<set _crew to maplebirch.get('Orchard')?.staff>>
 <<if !_crew?.available or _crew.employed>>
@@ -277,7 +277,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Leave the table', '离开这张桌子'] 'Pub'>><<endevent>><</lanLink>><br>
 
-:: Deadwood Orchard Carrier []
+:: Deadwood Orchard Carrier
 <<set $outside to 0>><<set $location to 'alex_farm'>><<set $bus to 'farm_fields'>><<effects>><<endevent>>
 <<if !maplebirch.get('Orchard')?.staff.available>>
   <<getouticon>><<lanLink ['Return to the laboratory', '返回实验室'] 'Farm Still'>><</lanLink>><<exit>>
@@ -300,7 +300,7 @@
 <<set $NPCList[0].name_known to 1>><<saveNPC 0 'deadwood_orchard_carrier'>>
 <<icon 'company/minutes.png'>><<lanLink ['Write down the delivery address', '写下收货地址'] 'Deadwood Orchard Staff'>><<endevent>><</lanLink>><br>
 
-:: Deadwood Orchard Staff Talk []
+:: Deadwood Orchard Staff Talk
 <<set $outside to 0>><<set $location to 'alex_farm'>><<set $bus to 'farm_fields'>><<effects>><<endevent>>
 <<set _crew to maplebirch.get('Orchard')?.staff>>
 <<if !_crew?.available or !_crew.npc or !_crew.employed or _crew.state.status is 'missing'>>

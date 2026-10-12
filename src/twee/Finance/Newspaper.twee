@@ -139,7 +139,7 @@
   <</lanLink>><br>
 <</widget>>
 
-:: Deadwood Reblooms Newspaper Seller []
+:: Deadwood Reblooms Newspaper Seller
 <<set $outside to 1>><<set $location to 'town'>><<effects>>
 <<set $_paper to maplebirch.get('Finance').newspaper>>
 <<if !$_paper.streetAvailable>>
@@ -164,7 +164,7 @@
 <</if>>
 <<deadwood-finance-paper-return>>
 
-:: Deadwood Reblooms Newspaper Read []
+:: Deadwood Reblooms Newspaper Read
 <<effects>>
 <<if ['paper-read', 'paper-review'].includes($Finance.last_result) and $Finance.newspaper.report>>
   <<if $Finance.last_result is 'paper-read'>>

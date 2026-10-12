@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Property Manager []
+:: Deadwood Reblooms Property Manager [nobr]
 <<set $outside to 0>><<set $location to 'financial_centre'>><<effects>><<endevent>>
 <<set _estate to maplebirch.get('Finance').realEstate>>
 <<if !_estate.properties.some(property => _estate.owns(property.id)) or $exposed gt 0 or $stress gte $stressmax>>
@@ -38,8 +38,10 @@
 <</language>>
 <<set $NPCList[0].name_known to 1>><<saveNPC 0 'deadwood_property_manager'>><br><br>
 <<language>>
-  <<option 'EN'>>The agreement authorises routine repairs when condition falls to <<= _estate.rentalTerms.repairCondition>>, leak repairs, and following up rent after a week. It does not authorise renovations, new tenancies or purchases. <span class='red'>Unfunded work waits; frozen houses and houses awaiting auction are excluded.</span>
-  <<option 'CN'>>协议允许管理员在房况降至 <<= _estate.rentalTerms.repairCondition>> 时安排修缮、修补漏水，并在租金迟付一周后催收。不包括装修、另找租客或买房。<span class='red'>钱不够，工作就得等。被冻结或等待拍卖的房子暂停管理。</span>
+  <<option 'EN'>>
+    The agreement authorises routine repairs when condition falls to <<= _estate.rentalTerms.repairCondition>>, leak repairs, and following up rent after a week. It does not authorise renovations, new tenancies or purchases. <span class='red'>Unfunded work waits; frozen houses and houses awaiting auction are excluded.</span>
+  <<option 'CN'>>
+    协议允许管理员在房况降至 <<= _estate.rentalTerms.repairCondition>> 时安排修缮、修补漏水，并在租金迟付一周后催收。不包括装修、另找租客或买房。<span class='red'>钱不够，工作就得等。被冻结或等待拍卖的房子暂停管理。</span>
 <</language>><br><br>
 <<if _estate.manager>>
   <<refuseicon>><<lanLink ['End the management agreement', '解除物业管理协议'] 'Deadwood Reblooms Property Office'>>

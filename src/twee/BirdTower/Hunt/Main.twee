@@ -1,4 +1,4 @@
-:: Deadwood BirdTower Hunt Accept []
+:: Deadwood BirdTower Hunt Accept
 <<language>>
   <<option 'EN'>>
     You nod, and <<babyhawks>> burst into a delighted cheer.
@@ -75,7 +75,7 @@
   <<endevent>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower Hunt Refuse []
+:: Deadwood BirdTower Hunt Refuse
 <<language>>
   <<option 'EN'>>
     You shake your head and refuse <<babyhawksthem>>. <<babyhawks>> cling to your arm and grumble in displeasure, then let you go.
@@ -87,7 +87,7 @@
   <<HuntTogetherClean>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower Hunt Goal []
+:: Deadwood BirdTower Hunt Goal
 <<set $outside to 1>>
 <<set $location to "moor">>
 <<effects>><<flight_effects>>
@@ -160,7 +160,7 @@
 <br>
 <<set $phase to 0>>
 
-:: Deadwood BirdTower Hunt Direction []
+:: Deadwood BirdTower Hunt Direction
 <<effects>><<flight_effects>><<childSelect $BirdTower.hunt.leader>>
 <<lanSwitch 'You tell ' '你告诉'>><<= $cmonster ? lanSwitch("the little harpy", "小哈比") : lanSwitch("the little hawk", "小鹰")>>
 <<if maplebirch.get('BirdTower').party.length gt 1>>
@@ -303,7 +303,7 @@
   <</if>>
 <</if>>
 
-:: Deadwood BirdTower Hunt Event []
+:: Deadwood BirdTower Hunt Event
 <<effects>><<flight_distance_check>><<babyhawk_hunt_chance>><<flight_effects>><<childSelect $BirdTower.hunt.leader>>
 <<if $phase is 2>>
   <<language>>
@@ -833,7 +833,7 @@
   <<runeventpool>>
 <</if>>
 
-:: Deadwood BirdTower Hunt Return []
+:: Deadwood BirdTower Hunt Return
 <<effects>>
 <<set $moor to 100>>
 <<if $phase is 1>>

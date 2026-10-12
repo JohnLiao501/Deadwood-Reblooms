@@ -1,5 +1,4 @@
-:: Deadwood Transport School []
-<<nobr>>
+:: Deadwood Transport School [nobr]
 <<set $location to 'deadwood_transport_school', $bus to 'elk', $outside to 0, $Transport.shop to 'school'>>
 <<lanSwitch 'Driving school' '驾校'>><br><br>
 <<deadwood-dynamicblock 'deadwood-transport-school'>>
@@ -391,10 +390,8 @@
 <</if>>
 
 <</deadwood-dynamicblock>>
-<</nobr>>
 
-:: Deadwood Transport Road Test []
-<<nobr>>
+:: Deadwood Transport Road Test [nobr]
 <<set _school to maplebirch.get('Transport').school, _exam to $Transport.school.exam>>
 <<if _school.examActive and _exam>>
   <<set _exam_step to _exam.step, _variant to _exam.variants[_exam_step]>>
@@ -583,4 +580,3 @@
     <<run Dynamic.render('deadwood-transport-school')>>
   <</lanLink>>
 <</if>>
-<</nobr>>

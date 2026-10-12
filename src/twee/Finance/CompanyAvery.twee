@@ -166,7 +166,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Company Avery []
+:: Deadwood Reblooms Company Avery
 <<deadwood-avery-header>>
 <<if !_shareholder_access or !_avery_business.available>><<deadwood-shareholder-return>><<exit>><</if>>
 <<npc Avery>><<person1>>
@@ -264,7 +264,7 @@
 <<deadwood-ascension-audience-link>>
 <<deadwood-shareholder-return>>
 
-:: Deadwood Reblooms Company Avery Talk []
+:: Deadwood Reblooms Company Avery Talk
 <<deadwood-avery-header 'result'>>
 <<if !_company.available or C.npc.Avery.state isnot 'active' or _avery_notes.talk_day isnot Math.floor(Time.days) or !_avery_notes.topic>><<deadwood-shareholder-return>><<exit>><</if>>
 <<npc Avery>><<person1>>
@@ -459,7 +459,7 @@
 <<deadwood-avery-private-invitation>>
 <<getouticon>><<lanLink ['Return to the reception desk', '返回股东接待处'] 'Deadwood Reblooms Shareholder Office'>><<set $Finance.company.avery.topic to null>><<endevent>><</lanLink>><br>
 
-:: Deadwood Reblooms Company Avery Invitation []
+:: Deadwood Reblooms Company Avery Invitation
 <<deadwood-avery-header 'result'>>
 <<if !_company.available or C.npc.Avery.state isnot 'active' or _avery_notes.invitation_day isnot Math.floor(Time.days) or !['accepted', 'declined', 'business'].includes(_avery_notes.invitation_choice)>><<deadwood-shareholder-return>><<exit>><</if>>
 <<npc Avery>><<person1>>
@@ -533,7 +533,7 @@
 <</language>><br><br>
 <<getouticon>><<lanLink ['Return to the reception desk', '返回股东接待处'] 'Deadwood Reblooms Shareholder Office'>><<set $Finance.company.avery.topic to null>><<endevent>><</lanLink>><br>
 
-:: Deadwood Reblooms Company Avery Dinner []
+:: Deadwood Reblooms Company Avery Dinner
 <<effects>><<set _avery_business to maplebirch.get('Finance').company.avery>><<set _avery_notes to _avery_business.state>>
 <<set _shareholders to maplebirch.get('Finance').company.shareholders>>
 <<if !$averydateattended or !$averydatedone or C.npc.Avery.state isnot 'active' or _avery_notes.dinner_day isnot Math.floor(Time.days) or !_avery_notes.dinner_topic or $NPCList[0]?.fullDescription isnot 'Avery'>><<getouticon>><<lanLink ['Continue dinner', '继续晚餐'] 'Avery Date 3'>><</lanLink>><<exit>><</if>>
@@ -604,7 +604,7 @@
 <</language>><br><br>
 <<lanLink ['Continue dinner', '继续晚餐'] 'Avery Date 3'>><<set $Finance.company.avery.dinner_topic to null>><</lanLink>><br>
 
-:: Deadwood Reblooms Company Avery Papers []
+:: Deadwood Reblooms Company Avery Papers
 <<deadwood-avery-header 'result'>>
 <<if !_company.available or !_avery_business.project or !_avery_notes.papers_read or !(_shareholders.director or _shareholders.controller)>><<deadwood-shareholder-return>><<exit>><</if>>
 <<language>>
@@ -636,7 +636,7 @@
 <<lanSwitch 'The construction site is on Elk Street.' '施工现场在麋鹿街。'>><br>
 <<deadwood-shareholder-return>>
 
-:: Deadwood Reblooms Company Avery Site []
+:: Deadwood Reblooms Company Avery Site
 <<set _avery_business to maplebirch.get('Finance').company.avery>>
 <<location 'avery_skyscraper'>><<set $outside to 1>><<effects>>
 <<if !_avery_business.project or !_avery_business.state.site_visited>><<getouticon>><<lanLink ['Leave (0:01)', '离开 (0:01)'] 'Elk Street'>><<pass 1>><</lanLink>><<exit>><</if>>
@@ -700,7 +700,7 @@
 <</language>><br><br>
 <<getouticon>><<lanLink ['Return to the site entrance', '返回施工现场入口'] 'Skyscraper'>><</lanLink>><br>
 
-:: Deadwood Reblooms Company Avery Ceremony []
+:: Deadwood Reblooms Company Avery Ceremony
 <<deadwood-avery-ceremony-header>>
 <<if !_avery_business.ceremony>><<getouticon>><<lanLink ['Go outside', '走到外面'] 'Elk Street'>><<unset $silenceNotifications>><<endevent>><</lanLink>><<exit>><</if>>
 <<set _avery_notes.questioned to true>>
@@ -745,7 +745,7 @@
   <</if>>
 <</lanLink>><br>
 
-:: Deadwood Reblooms Company Avery Ceremony Leave []
+:: Deadwood Reblooms Company Avery Ceremony Leave
 <<deadwood-avery-ceremony-header>>
 <<if !_avery_business.ceremony or _avery_notes.decision isnot 'leave'>><<getouticon>><<lanLink ['Go outside', '走到外面'] 'Elk Street'>><<unset $silenceNotifications>><<endevent>><</lanLink>><<exit>><</if>>
 <<person1>>

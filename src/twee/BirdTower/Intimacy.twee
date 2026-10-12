@@ -1,4 +1,4 @@
-:: Deadwood BirdTower Masturbation Help []
+:: Deadwood BirdTower Masturbation Help
 <<effects>>
 <<set $daily.birdWash to 1>>
 <<set $daily.birdSexHelp to true>>
@@ -58,7 +58,7 @@
 <br><br>
 <<lanLink ['Refuse', '拒绝'] 'Deadwood BirdTower Masturbation Help Refuse'>><</lanLink>>
 <br>
-:: Deadwood BirdTower Masturbation Help Refuse []
+:: Deadwood BirdTower Masturbation Help Refuse
 <<effects>>
 <<switch $speech_attitude>>
   <<case "bratty">>
@@ -110,7 +110,7 @@
   <<set $masturbationstart to 1>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower Bird Tower Masturbation []
+:: Deadwood BirdTower Bird Tower Masturbation
 <<effects>>
 <<set _enableSexToys to true>>
 <<if $masturbationstart is 1>>
@@ -170,7 +170,7 @@
 <<set $timer += 1>>
 <<masturbationControls>>
 
-:: Deadwood BirdTower Bird Tower Masturbation Finish []
+:: Deadwood BirdTower Bird Tower Masturbation Finish
 <<effects>>
 <<endmasturbation>>
 <<endcombat>>
@@ -205,7 +205,7 @@
   <<clotheson>>
 <</lanLink>>
 
-:: Deadwood BirdTower Masturbation Help Accept []
+:: Deadwood BirdTower Masturbation Help Accept
 <<effects>>
 <<switch $speech_attitude>>
   <<case "bratty">>
@@ -454,7 +454,7 @@
   <<bird_pass 20>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower Masturbation Help End []
+:: Deadwood BirdTower Masturbation Help End
 <<effects>>
 <<language>>
   <<option 'EN'>>

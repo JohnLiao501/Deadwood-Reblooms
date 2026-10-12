@@ -9,8 +9,10 @@
       <<socialiseicon 'ask'>><<lanLink ['Ask Kylar if you can stay again', '问凯拉尔以后能否留宿'] 'Deadwood Reblooms Kylar Stay Invitation'>><</lanLink>><br><br>
     <<elseif $KylarExpansion.stay_invited>>
       <<language>>
-        <<option 'EN'>>A space beside Kylar's bed has been cleared for your things. Kylar left a folded blanket there.
-        <<option 'CN'>>凯拉尔在床边为你的东西腾出了地方，还放了一条叠好的毯子。
+        <<option 'EN'>>
+          A space beside Kylar's bed has been cleared for your things. Kylar left a folded blanket there.
+        <<option 'CN'>>
+          凯拉尔在床边为你的东西腾出了地方，还放了一条叠好的毯子。
       <</language>><br><br>
       <<if !isLoveInterest('Kylar')>>
         <span class='red'><<lanSwitch "You leave Kylar's bed as it is." '你没有动凯拉尔的床铺。'>></span><br>
@@ -39,8 +41,10 @@
         <span class='red'><<lanSwitch 'The slime will not let you sleep yet.' '史莱姆现在不让你睡觉。'>></span><br>
       <</if>>
       <<language>>
-        <<option 'EN'>><<wardrobeicon>><<link 'Your clothes' 'Deadwood Reblooms Kylar Wardrobe'>><</link>>
-        <<option 'CN'>><<wardrobeicon>><<link '你的衣物' 'Deadwood Reblooms Kylar Wardrobe'>><</link>>
+        <<option 'EN'>>
+          <<wardrobeicon>><<link 'Your clothes' 'Deadwood Reblooms Kylar Wardrobe'>><</link>>
+        <<option 'CN'>>
+          <<wardrobeicon>><<link '你的衣物' 'Deadwood Reblooms Kylar Wardrobe'>><</link>>
       <</language>><br>
       <<mirroricon>><<lanLink ['Mirror', '镜子'] 'Deadwood Reblooms Kylar Mirror'>><<preMirror>><</lanLink>><br>
       <<if _kylarAtManor and isLoveInterest('Kylar') and !pcAreArmsBound('both') and $KylarExpansion.game_day isnot Time.days>>
@@ -77,7 +81,7 @@
   <<lanLink ['Close the wardrobe', '关上衣柜'] 'Manor Kylar Room'>><<cleanupOnWardrobeExit>><</lanLink>>
 <</widget>>
 
-:: Deadwood Reblooms Kylar Stay Invitation []
+:: Deadwood Reblooms Kylar Stay Invitation [nobr]
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>>
 <<set _kylarAtManor to maplebirch.get('Kylar').atManor>>
 <<if $kylar_sleep_abduction isnot 1 or !isLoveInterest('Kylar') or !_kylarAtManor>>
@@ -107,17 +111,21 @@
 <</if>>
 <br><br>
 <<language>>
-  <<option 'EN'>><<getouticon>><<link "Return to Kylar's room" 'Manor Kylar Room'>><</link>>
-  <<option 'CN'>><<getouticon>><<link '返回凯拉尔的房间' 'Manor Kylar Room'>><</link>>
+  <<option 'EN'>>
+    <<getouticon>><<link "Return to Kylar's room" 'Manor Kylar Room'>><</link>>
+  <<option 'CN'>>
+    <<getouticon>><<link '返回凯拉尔的房间' 'Manor Kylar Room'>><</link>>
 <</language>>
 
-:: Deadwood Reblooms Kylar Wardrobe [exitCheckBypass]
+:: Deadwood Reblooms Kylar Wardrobe [exitCheckBypass nobr]
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>>
 <<if !$KylarExpansion.stay_invited>>
   <<lanSwitch 'You leave Kylar’s things where they are.' '你没有动凯拉尔的东西。'>><br><br>
   <<language>>
-    <<option 'EN'>><<link "Return to Kylar's room" 'Manor Kylar Room'>><</link>>
-    <<option 'CN'>><<link '返回凯拉尔的房间' 'Manor Kylar Room'>><</link>>
+    <<option 'EN'>>
+      <<link "Return to Kylar's room" 'Manor Kylar Room'>><</link>>
+    <<option 'CN'>>
+      <<link '返回凯拉尔的房间' 'Manor Kylar Room'>><</link>>
   <</language>>
 <<else>>
   <<run maplebirch.get('Kylar').openWardrobe()>>
@@ -128,7 +136,7 @@
   <<wardrobe>>
 <</if>>
 
-:: Deadwood Reblooms Kylar Mirror []
+:: Deadwood Reblooms Kylar Mirror
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>>
 <<if !$KylarExpansion.stay_invited>>
   <<lanSwitch 'You step away from the mirror.' '你从镜子前退开。'>><br><br>
@@ -144,7 +152,7 @@
   <<mirror>><br><br>
 <</if>>
 
-:: Deadwood Reblooms Kylar Kitchen Tea []
+:: Deadwood Reblooms Kylar Kitchen Tea
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>>
 <<if !$KylarExpansion.stay_invited or $KylarExpansion.tea_day is Time.days or pcAreArmsBound('both')>>
   <<lanSwitch 'You cannot make tea here right now.' '现在无法在这里泡茶。'>>
@@ -173,7 +181,7 @@
 <br><br>
 <<kitchenicon 'stove'>><<lanLink ['Return to the kitchen', '返回厨房'] 'Manor Kitchen'>><</lanLink>>
 
-:: Deadwood Reblooms Kylar Bed []
+:: Deadwood Reblooms Kylar Bed
 <<set $outside to 0>><<set $bus to 'kylarmanor'>><<location 'kylarmanor'>><<effects>><<wearoutfit>>
 <<set _kylarAtManor to maplebirch.get('Kylar').atManor>>
 <<if !$KylarExpansion.stay_invited or !isLoveInterest('Kylar')>>
@@ -215,7 +223,7 @@
 <</if>>
 <<bedicon 'kylar'>><<lanLink ['Get up', '起床'] 'Manor Kylar Room'>><<run maplebirch.get('Kylar').openWardrobe()>><<storeon 'kylar manor bed'>><<loadTempHairStyle>><</lanLink>>
 
-:: Deadwood Reblooms Kylar Sleep []
+:: Deadwood Reblooms Kylar Sleep
 <<set $outside to 0>><<location 'kylarmanor'>>
 <<set _requestedHours to $sleephour>>
 <<set _kylarAtManor to maplebirch.get('Kylar').atManor>>

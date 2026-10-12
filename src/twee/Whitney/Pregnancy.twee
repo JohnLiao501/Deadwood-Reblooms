@@ -1,4 +1,4 @@
-:: Deadwood Whitney Pregnancy Widgets [widget nobr]
+:: Deadwood Whitney Pregnancy Widgets [widget]
 <<widget 'deadwood-whitney-pregnancy-link'>>
   <<set _pregnancy_present to ($whitneyromance is 1 and ['active', 'rescued'].includes(C.npc.Whitney.state))>>
   <<deadwood-pregnancy-links 'Whitney' 'Deadwood Whitney' _pregnancy_present>>

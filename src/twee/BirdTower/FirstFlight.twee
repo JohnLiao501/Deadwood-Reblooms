@@ -1,4 +1,4 @@
-:: Deadwood BirdTower FirstFlight []
+:: Deadwood BirdTower FirstFlight
 <<npc "Great Hawk">><<childSelect $BirdTower.scene.actors[0]>>
 <<bird_fly_reveal_wings>>
 <<switch $speech_attitude>>
@@ -241,7 +241,7 @@
   <<bird_pass 10>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower FirstFlight Back []
+:: Deadwood BirdTower FirstFlight Back
 <<childSelect $BirdTower.scene.actors[0]>>
 <<language>>
   <<option 'EN'>>
@@ -284,7 +284,7 @@
   <<bird_pass 10>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower FirstFlight End []
+:: Deadwood BirdTower FirstFlight End
 <<if $monster is 1>>
   <<language>>
     <<option 'EN'>>
@@ -356,7 +356,7 @@
 <</if>>
 <<BabyHawkStoryClean>><<bird_perch_options>>
 
-:: Deadwood BirdTower FirstFlight Stay []
+:: Deadwood BirdTower FirstFlight Stay
 <<npc "Great Hawk">><<childSelect $BirdTower.scene.actors[0]>>
 <<switch $speech_attitude>>
   <<case "bratty">>

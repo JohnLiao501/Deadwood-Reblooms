@@ -1,4 +1,4 @@
-:: Deadwood BirdTower Hunt People Watching []
+:: Deadwood BirdTower Hunt People Watching
 <<effects>>
 <<if maplebirch.get('BirdTower').selectTrait("sympathy")>>
   <<language>>

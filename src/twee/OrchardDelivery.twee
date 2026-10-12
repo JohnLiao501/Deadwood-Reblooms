@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Orchard Delivery []
+:: Deadwood Reblooms Orchard Delivery
 <<set $outside to 1>><<set $location to 'alex_farm'>><<set $bus to 'farm_fields'>><<farm_work_update>><<effects>><<endevent>>
 <<set _orchard to maplebirch.get('Orchard')>>
 <<if !_orchard or !_orchard.available('farm') or !$Orchard.worker.hired or !_orchard.canWork or _orchard.farmInterrupted or $farm_assault or !maplebirch.get('Finance')>>

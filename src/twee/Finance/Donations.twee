@@ -35,7 +35,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Donations []
+:: Deadwood Reblooms Donations
 <<set $outside to 0>><<set $location to 'townhall'>><<effects>>
 <<if maplebirch.get('Finance').donations.available>>
   <b><<lanSwitch 'Donations desk' '募捐处'>></b><br>

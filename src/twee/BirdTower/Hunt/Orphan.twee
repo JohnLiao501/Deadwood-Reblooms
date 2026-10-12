@@ -1,4 +1,4 @@
-:: Deadwood BirdTower Hunt OrphanHawk Nest []
+:: Deadwood BirdTower Hunt OrphanHawk Nest
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -95,7 +95,7 @@
   <</lanLink>>
 <</if>>
 <br>
-:: Deadwood BirdTower Hunt OrphanHawk Nest 2 []
+:: Deadwood BirdTower Hunt OrphanHawk Nest 2
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -180,7 +180,7 @@
   <<set $BirdTower.ring.kept to 1>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower Hunt OrphanHawk Nest Special []
+:: Deadwood BirdTower Hunt OrphanHawk Nest Special
 <<effects>>
 <<set _colourname = setup.colours.eyes_map[$childRecords[$orphanHawkChildId].features.eyeColour].name>>
 <<set _colourEye = setup.colours.eyes_map[$childRecords[$orphanHawkChildId].features.eyeColour].variable>>
@@ -257,7 +257,7 @@
   <<set $BirdTower.ring.kept to 2>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower Hunt OrphanHawk RingForAntique []
+:: Deadwood BirdTower Hunt OrphanHawk RingForAntique
 <<effects>>
 <<set $antiquemoney += 3000>>
 <<museumAntiqueStatus "antiquegoldring" "found">>
@@ -277,7 +277,7 @@
 <<set $BirdTower.ring.hint to 2>>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt OrphanHawk RingForToy []
+:: Deadwood BirdTower Hunt OrphanHawk RingForToy
 <<effects>>
 <<language>>
   <<option 'EN'>>

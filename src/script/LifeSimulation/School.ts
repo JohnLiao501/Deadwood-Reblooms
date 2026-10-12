@@ -22,8 +22,6 @@ export default function School(maplebirch: typeof window.maplebirch): void {
     }
   });
 
-  maplebirch.tool.addTo('CustomLinkZone', { widget: [-1, 'deadwood-reblooms-life-simulation-school-office-options'], passage: "Head's Office" });
-  maplebirch.tool.addTo('CustomLinkZone', { widget: [-1, 'deadwood-school-council-link'], passage: 'Hallways' });
   maplebirch.tool.addTo('Journal', 'deadwood-reblooms-life-simulation-school-journal');
 
   maplebirch.tool.patch.traits.add(
@@ -52,6 +50,13 @@ export default function School(maplebirch: typeof window.maplebirch): void {
 
   maplebirch.tool.inject({
     locationPassage: {
+      "Head's Office": [
+        {
+          srcmatch: /<<getouticon>><<link \[\[[^\]\n]+\|Hallways]]>>(?=<<endevent>><<pass 1>><<set \$daily\.school\.headInterrupted to 1>>)/,
+          applybefore: '<<deadwood-reblooms-life-simulation-school-office-options>>\n\t\t\t',
+          expected: 1
+        }
+      ],
       "Bailey's Office": [
         // 贝利只有 7–9 点在办公室，入口仍受原版 _options 限制，避免打断惩罚场景。
         {
@@ -115,7 +120,7 @@ export default function School(maplebirch: typeof window.maplebirch): void {
         // 储物柜前的链接数随留堂和特殊事件变化，按原版储物柜定位公告栏。
         {
           srcmatch: /<<lockericon>><<link \[\[[^\]\n]+\|School Lockers]]>/,
-          applybefore: '<<deadwood-reblooms-life-simulation-school-board-link>>',
+          applybefore: '<<deadwood-reblooms-life-simulation-school-board-link>><<deadwood-school-council-link>>',
           expected: 1
         }
       ],

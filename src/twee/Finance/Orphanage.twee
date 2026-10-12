@@ -32,7 +32,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Orphanage Buyout []
+:: Deadwood Reblooms Orphanage Buyout
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Bailey>><<person1>>
 <<if maplebirch.get('Finance').orphanage.canNegotiate>>
   <<if $Finance.orphanage.offer is null>>
@@ -108,7 +108,7 @@
 <</if>>
 <<main_hall_icon>><<lanLink ['Return to the hall (0:01)', '返回大厅 (0:01)'] 'Orphanage'>><<pass 1>><<endevent>><</lanLink>><br>
 
-:: Deadwood Reblooms Orphanage Robin []
+:: Deadwood Reblooms Orphanage Robin
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<if maplebirch.get('Finance').orphanage.canTalkRobin and $Finance.orphanage.offer isnot null and !$Finance.orphanage.agreed and !$Finance.orphanage.robin_bought_out>>
   <<language>>
@@ -132,7 +132,7 @@
 <</if>>
 <<getouticon>><<lanLink ["Return to Robin's room", '返回罗宾的房间'] 'Robin Options'>><<endevent>><</lanLink>><br>
 
-:: Deadwood Reblooms Orphanage Robin Agree []
+:: Deadwood Reblooms Orphanage Robin Agree
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<if maplebirch.get('Finance').orphanage.canTalkRobin and $Finance.orphanage.offer isnot null and !$Finance.orphanage.agreed and !$Finance.orphanage.robin_bought_out>>
   <<set $Finance.orphanage.agreed to true>>
@@ -148,7 +148,7 @@
 <</if>>
 <<getouticon>><<lanLink ["Return to Robin's room", '返回罗宾的房间'] 'Robin Options'>><<endevent>><</lanLink>><br>
 
-:: Deadwood Reblooms Orphanage Buyout Finish []
+:: Deadwood Reblooms Orphanage Buyout Finish [nobr]
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Bailey>><<person1>>
 <<if maplebirch.get('Finance').orphanage.buyout($Finance.orphanage.choice)>>
   <<pass 10>>
@@ -178,13 +178,15 @@
   </span><br>
 <<else>>
   <<language>>
-    <<option 'EN'>>The payment cannot go through. You keep the sheet and your money.
-    <<option 'CN'>>这笔款项没能付清。你收好纸，把钱留在自己手里。
+    <<option 'EN'>>
+      The payment cannot go through. You keep the sheet and your money.
+    <<option 'CN'>>
+      这笔款项没能付清。你收好纸，把钱留在自己手里。
   <</language>><br>
 <</if>>
 <<main_hall_icon>><<lanLink ['Return to the hall (0:01)', '返回大厅 (0:01)'] 'Orphanage'>><<pass 1>><<endevent>><</lanLink>><br>
 
-:: Deadwood Reblooms Orphanage Receipt []
+:: Deadwood Reblooms Orphanage Receipt
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<if maplebirch.get('Finance').orphanage.canTalkRobin and $Finance.orphanage.robin_bought_out and !$Finance.orphanage.robin_told>>
   <<set $Finance.orphanage.robin_told to true>>

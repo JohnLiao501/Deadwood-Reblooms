@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Deviancy Mirror Enter []
+:: Deadwood Reblooms Deviancy Mirror Enter
 <<location 'tentworld'>><<set $outside to 0>><<effects>><<tentacleworldintro>><<set $tentacleEntrance to 'mirror'>>
 <<set _mirrorArrival to $VanillaPlus.deviancy.mirror_locations[$VanillaPlus.deviancy.mirror]>>
 <<if _mirrorArrival>>
@@ -18,7 +18,7 @@
 <br><br>
 <<lanLink ["Continue","继续"] 'Tentacle Plains'>><</lanLink>>
 
-:: Deadwood Reblooms Deviancy Mirror Home []
+:: Deadwood Reblooms Deviancy Mirror Home
 <<set $location to 'home'>><<set $outside to 0>><<deadwood-reblooms-mirror-exit 'home'>>
 <<language>>
   <<option 'EN'>>
@@ -29,7 +29,7 @@
 <br><br>
 <<lanLink ["Continue","继续"] 'Bedroom'>><</lanLink>>
 
-:: Deadwood Reblooms Deviancy Mirror Property []
+:: Deadwood Reblooms Deviancy Mirror Property
 <<if $VanillaPlus.deviancy.mirror_property and maplebirch.get("Finance") and maplebirch.get("Finance").realEstate.visit($VanillaPlus.deviancy.mirror_property)>>
   <<run maplebirch.get("Finance").realEstate.enter()>>
   <<set $_mirror_exit to 'property:' + $VanillaPlus.deviancy.mirror_property>>
@@ -47,7 +47,7 @@
   <<lanLink ["Continue","继续"] 'Bedroom'>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Deviancy Mirror Farm []
+:: Deadwood Reblooms Deviancy Mirror Farm
 <<set $location to 'farm'>><<set $outside to 0>><<deadwood-reblooms-mirror-exit 'farm'>>
 <<language>>
   <<option 'EN'>>
@@ -58,7 +58,7 @@
 <br><br>
 <<lanLink ["Continue","继续"] 'Farm Bedroom'>><</lanLink>>
 
-:: Deadwood Reblooms Deviancy Mirror Tower []
+:: Deadwood Reblooms Deviancy Mirror Tower
 <<set $location to 'tower'>><<set $outside to 0>><<deadwood-reblooms-mirror-exit 'tower'>>
 <<language>>
   <<option 'EN'>>
@@ -69,7 +69,7 @@
 <br><br>
 <<lanLink ["Continue","继续"] 'Bird Tower'>><</lanLink>>
 
-:: Deadwood Reblooms Deviancy Mirror Temple []
+:: Deadwood Reblooms Deviancy Mirror Temple
 <<set $location to 'temple'>><<set $outside to 0>><<deadwood-reblooms-mirror-exit 'temple'>>
 <<language>>
   <<option 'EN'>>
@@ -80,7 +80,7 @@
 <br><br>
 <<lanLink ["Continue","继续"] 'Temple Bunk'>><</lanLink>>
 
-:: Deadwood Reblooms Deviancy Mirror Sirris []
+:: Deadwood Reblooms Deviancy Mirror Sirris [nobr]
 <<if !maplebirch.get('Sydney') or !$SydneyExpansion.estate.invited or !isLoveInterest('Sydney')>>
   <<language>>
     <<option 'EN'>>
@@ -89,8 +89,10 @@
       镜面另一侧仍是触手平原。
   <</language>><br><br>
   <<language>>
-    <<option 'EN'>><<link 'Continue' 'Tentacle Plains'>><</link>>
-    <<option 'CN'>><<link '继续' 'Tentacle Plains'>><</link>>
+    <<option 'EN'>>
+      <<link 'Continue' 'Tentacle Plains'>><</link>>
+    <<option 'CN'>>
+      <<link '继续' 'Tentacle Plains'>><</link>>
   <</language>>
 <<else>>
   <<deadwood-reblooms-sirris-estate-presence>>
@@ -102,8 +104,10 @@
         悉尼的房间空着。镜面没有让你穿过去。
     <</language>><br><br>
     <<language>>
-      <<option 'EN'>><<link 'Continue' 'Tentacle Plains'>><</link>>
-      <<option 'CN'>><<link '继续' 'Tentacle Plains'>><</link>>
+      <<option 'EN'>>
+        <<link 'Continue' 'Tentacle Plains'>><</link>>
+      <<option 'CN'>>
+        <<link '继续' 'Tentacle Plains'>><</link>>
     <</language>>
   <<else>>
     <<set $outside to 0>><<set $location to 'sirris_estate'>><<deadwood-reblooms-mirror-exit 'sirris'>>
@@ -149,18 +153,22 @@
     <br><br>
     <<if _nakedArrival and (Time.hour gte 22 or Time.hour lt 6)>>
       <<language>>
-        <<option 'EN'>><<loveicon>><<link 'Join Sydney under the blanket' 'Deadwood Reblooms Sirris Estate Mirror Night Visit'>><</link>>
-        <<option 'CN'>><<loveicon>><<link '钻进悉尼的被窝' 'Deadwood Reblooms Sirris Estate Mirror Night Visit'>><</link>>
+        <<option 'EN'>>
+          <<loveicon>><<link 'Join Sydney under the blanket' 'Deadwood Reblooms Sirris Estate Mirror Night Visit'>><</link>>
+        <<option 'CN'>>
+          <<loveicon>><<link '钻进悉尼的被窝' 'Deadwood Reblooms Sirris Estate Mirror Night Visit'>><</link>>
       <</language>><br>
     <</if>>
     <<language>>
-      <<option 'EN'>><<getouticon>><<link "Stay in Sydney's room" 'Deadwood Reblooms Sirris Estate Sydney Room'>><</link>>
-      <<option 'CN'>><<getouticon>><<link '留在悉尼的房间' 'Deadwood Reblooms Sirris Estate Sydney Room'>><</link>>
+      <<option 'EN'>>
+        <<getouticon>><<link "Stay in Sydney's room" 'Deadwood Reblooms Sirris Estate Sydney Room'>><</link>>
+      <<option 'CN'>>
+        <<getouticon>><<link '留在悉尼的房间' 'Deadwood Reblooms Sirris Estate Sydney Room'>><</link>>
     <</language>>
   <</if>>
 <</if>>
 
-:: Deadwood Reblooms Sirris Estate Mirror Night Visit []
+:: Deadwood Reblooms Sirris Estate Mirror Night Visit [nobr]
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !_sydneyAtEstate or !isLoveInterest('Sydney')>>
@@ -187,16 +195,20 @@
       <</if>>
   <</language>><br><br>
   <<language>>
-    <<option 'EN'>><<loveicon>><<link 'Draw Sydney closer' 'Deadwood Reblooms Sirris Estate Sydney Intimacy'>><<set $sexstart to 1>><</link>>
-    <<option 'CN'>><<loveicon>><<link '把悉尼拉近' 'Deadwood Reblooms Sirris Estate Sydney Intimacy'>><<set $sexstart to 1>><</link>>
+    <<option 'EN'>>
+      <<loveicon>><<link 'Draw Sydney closer' 'Deadwood Reblooms Sirris Estate Sydney Intimacy'>><<set $sexstart to 1>><</link>>
+    <<option 'CN'>>
+      <<loveicon>><<link '把悉尼拉近' 'Deadwood Reblooms Sirris Estate Sydney Intimacy'>><<set $sexstart to 1>><</link>>
   <</language>><<promiscuous1>><br>
 <</if>>
 <<language>>
-  <<option 'EN'>><<bedicon>><<link "Stay by Sydney's side" 'Deadwood Reblooms Sirris Estate Sydney Room'>><</link>>
-  <<option 'CN'>><<bedicon>><<link '留在悉尼身边' 'Deadwood Reblooms Sirris Estate Sydney Room'>><</link>>
+  <<option 'EN'>>
+    <<bedicon>><<link "Stay by Sydney's side" 'Deadwood Reblooms Sirris Estate Sydney Room'>><</link>>
+  <<option 'CN'>>
+    <<bedicon>><<link '留在悉尼身边' 'Deadwood Reblooms Sirris Estate Sydney Room'>><</link>>
 <</language>>
 
-:: Deadwood Reblooms Deviancy Mirror Kylar []
+:: Deadwood Reblooms Deviancy Mirror Kylar [nobr]
 <<if !maplebirch.get('Kylar') or !$KylarExpansion.stay_invited or !isLoveInterest('Kylar')
   or C.npc.Kylar.state isnot 'active'
   or (Time.hour lt 18 and getKylarLocation().area isnot 'manor_bedroom')
@@ -208,8 +220,10 @@
       凯拉尔的房间遥不可及。镜面仍是一片黑暗。
   <</language>><br><br>
   <<language>>
-    <<option 'EN'>><<link 'Continue' 'Tentacle Plains'>><</link>>
-    <<option 'CN'>><<link '继续' 'Tentacle Plains'>><</link>>
+    <<option 'EN'>>
+      <<link 'Continue' 'Tentacle Plains'>><</link>>
+    <<option 'CN'>>
+      <<link '继续' 'Tentacle Plains'>><</link>>
   <</language>>
 <<else>>
   <<set $outside to 0>><<location 'kylarmanor'>><<deadwood-reblooms-mirror-exit 'kylar'>>
@@ -235,12 +249,14 @@
       <</if>>
   <</language>><br><br>
   <<language>>
-    <<option 'EN'>><<bedicon 'kylar'>><<link "Stay in Kylar's room" 'Manor Kylar Room'>><</link>>
-    <<option 'CN'>><<bedicon 'kylar'>><<link '留在凯拉尔的房间' 'Manor Kylar Room'>><</link>>
+    <<option 'EN'>>
+      <<bedicon 'kylar'>><<link "Stay in Kylar's room" 'Manor Kylar Room'>><</link>>
+    <<option 'CN'>>
+      <<bedicon 'kylar'>><<link '留在凯拉尔的房间' 'Manor Kylar Room'>><</link>>
   <</language>>
 <</if>>
 
-:: Deadwood Reblooms Deviancy Conduct []
+:: Deadwood Reblooms Deviancy Conduct
 <<set $outside to 0>><<set $location to 'forest_shop'>><<effects>><<npc Gwylan>><<person1>><<run statusCheck('Gwylan')>>
 <<language>>
   <<option 'EN'>>

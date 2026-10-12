@@ -10,7 +10,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Kylar Sketch []
+:: Deadwood Reblooms Kylar Sketch
 <<set $outside to 1>><<set $location to 'park'>><<effects>><<run statusCheck('Kylar')>>
 <<if C.npc.Kylar.state isnot 'active' or getKylarLocation().area isnot 'park'
   or !_kylarStatus.includes('Love') or $KylarExpansion.sketch_day is Time.days>>
@@ -46,7 +46,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ['Return to the park', '返回公园'] 'Park'>><</lanLink>>
 
-:: Deadwood Reblooms Kylar Sketch Answer []
+:: Deadwood Reblooms Kylar Sketch Answer
 <<set $outside to 1>><<set $location to 'park'>><<effects>>
 <<if !['kylar-sketch-wait', 'kylar-sketch-praise', 'kylar-sketch-leave'].includes($phase)
   or C.npc.Kylar.state isnot 'active' or getKylarLocation().area isnot 'park'>>

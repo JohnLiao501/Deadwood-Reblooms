@@ -64,7 +64,7 @@
   <<deadwood-reblooms-pool-party-sex-loop _loop>>
 <</widget>>
 
-:: Deadwood Reblooms Pool Party Together []
+:: Deadwood Reblooms Pool Party Together
 <<set $outside to 0>><<set $location to 'pool'>><<schooleffects>><<effects>>
 <<set _pool to maplebirch.get('LifeSimulation').pool_party>>
 <<set _name to $LifeSimulation.pool_party.selected>>
@@ -161,7 +161,7 @@
   <<getouticon>><<lanLink ['Back to the pool', '回到泳池'] 'School Pool'>><<set $LifeSimulation.pool_party.selected to null>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Pool Party Together Sex []
+:: Deadwood Reblooms Pool Party Together Sex
 <<set $outside to 0>><<set $location to 'pool'>><<schooleffects>><<effects>>
 <<if !$combat>>
   <span class='lewd'><<lanSwitch 'Your thighs are still slick when you step back into the shallow water, and the pool only spreads it thin. Two red marks sit on your waist where hands closed hard enough to keep you there.' '你走回浅水区时腿根还黏着，池水只是把那道痕迹摊薄了。腰上留着两道红印，是刚才有人掐着你不让走时留下的。'>></span><br><br>
@@ -170,7 +170,7 @@
   <<deadwood-reblooms-pool-party-sex-loop 'Deadwood Reblooms Pool Party Together Sex'>>
 <</if>>
 
-:: Deadwood Reblooms Pool Party Vow []
+:: Deadwood Reblooms Pool Party Vow
 <<set $outside to 0>><<set $location to 'pool'>><<schooleffects>><<effects>>
 <<set _pool to maplebirch.get('LifeSimulation').pool_party>>
 <<if !_pool.vowReady>>
@@ -201,7 +201,7 @@
   <<getouticon>><<lanLink ['Back to the pool', '回到泳池'] 'School Pool'>><<set $LifeSimulation.pool_party.selected to null>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Pool Party Vow Sex []
+:: Deadwood Reblooms Pool Party Vow Sex
 <<set $outside to 0>><<set $location to 'pool'>><<schooleffects>><<effects>>
 <<if !$combat>>
   <span class='lewd'><<lanSwitch 'The handprint on the tiles is still there at chest height. Nobody has thought to wipe it off, and Robin and Sydney will not look at it either.' '瓷砖上齐胸高的那枚手印还留在那里，谁也没想起来去擦掉，罗宾和悉尼也都避开不看。'>></span><br><br>
@@ -210,7 +210,7 @@
   <<deadwood-reblooms-pool-party-sex-loop 'Deadwood Reblooms Pool Party Vow Sex'>>
 <</if>>
 
-:: Deadwood Reblooms Pool Party Group []
+:: Deadwood Reblooms Pool Party Group
 <<set $outside to 0>><<set $location to 'pool'>><<schooleffects>><<effects>>
 <<set _pool to maplebirch.get('LifeSimulation').pool_party>>
 <<if !_pool.groupAllowed>>
@@ -239,7 +239,7 @@
 <</if>>
 
 <!-- 混场回合循环。 -->
-:: Deadwood Reblooms Pool Party Group Sex []
+:: Deadwood Reblooms Pool Party Group Sex
 <<set $outside to 0>><<set $location to 'pool'>><<schooleffects>><<effects>>
 <<if !$combat>>
   <span class='lewd'><<lanSwitch 'The water around the deep end is cloudy in ways the filter will not fix before morning, and the shallow end is full of students who are not even pretending to swim.' '深水区那片水浑得厉害，过滤一晚上也干净不了；浅水区站着一群学生，装都懒得装出在游泳的样子。'>></span><br><br>
@@ -249,7 +249,7 @@
 <</if>>
 
 <!-- 凯拉尔多人场：PC + 凯拉尔 + 另一位恋人。惠特尼被 householdRefusal 硬性排斥，不会出现在这里。 -->
-:: Deadwood Reblooms Pool Party Kylar Group []
+:: Deadwood Reblooms Pool Party Kylar Group
 <<set $outside to 0>><<set $location to 'pool'>><<schooleffects>><<effects>>
 <<set _pool to maplebirch.get('LifeSimulation').pool_party>>
 <<set _mate to $LifeSimulation.pool_party.selected>>
@@ -283,7 +283,7 @@
 <</if>>
 
 <!-- 凯拉尔多人场的回合循环。 -->
-:: Deadwood Reblooms Pool Party Kylar Group Sex []
+:: Deadwood Reblooms Pool Party Kylar Group Sex
 <<set $outside to 0>><<set $location to 'pool'>><<schooleffects>><<effects>>
 <<if !$combat>>
   <span class='lewd'><<lanSwitch 'You are still wedged between the two of them when the water settles, and neither of them has let go of you yet.' '水静下来时你还被夹在两个人中间，谁也没松手。'>></span><br><br>

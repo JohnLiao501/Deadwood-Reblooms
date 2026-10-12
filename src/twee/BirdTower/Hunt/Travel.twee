@@ -1,4 +1,4 @@
-:: Deadwood BirdTower Hunt Passout []
+:: Deadwood BirdTower Hunt Passout
 <<effects>>
 <<npc "Great Hawk">><<person1>>
 <<if isPregnancyEnding()>>
@@ -97,7 +97,7 @@
   <br>
 <</if>>
 
-:: Deadwood BirdTower Hunt Return Ask []
+:: Deadwood BirdTower Hunt Return Ask
 <<effects>><<childSelect $BirdTower.hunt.leader>>
 <<language>>
   <<option 'EN'>>
@@ -159,7 +159,7 @@
   <<endevent>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower Hunt Plane Chase []
+:: Deadwood BirdTower Hunt Plane Chase
 <<effects>><<childSelect $BirdTower.hunt.leader>>
 <<if maplebirch.get('BirdTower').leaderTrait is "clever">>
   <<language>>
@@ -248,7 +248,7 @@
   <<babyhawk_hunt_options>>
 <</if>>
 
-:: Deadwood BirdTower Hunt Ignore []
+:: Deadwood BirdTower Hunt Ignore
 <<effects>><<flight_distance_check>>
 <<if $bird.hunts.goal is "babyhawk">>
   <<language>>
@@ -285,7 +285,7 @@
 <<endevent>>
 <<babyhawk_hunt_options>>
 
-:: Deadwood BirdTower Hunt Exit []
+:: Deadwood BirdTower Hunt Exit
 <<effects>>
 <<set _huntFail to 1>>
 <<babyhawk_hunt_return>>

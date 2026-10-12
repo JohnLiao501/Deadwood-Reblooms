@@ -48,7 +48,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Sydney Dorm Bunk Invitation []
+:: Deadwood Reblooms Sydney Dorm Bunk Invitation
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>><<sydneySchedule>>
 <<npc Sydney>><<person1>>
 <<if _dormAccess and $temple_rank is 'monk' and _sydneyWorking>>
@@ -71,7 +71,7 @@
 <br><br>
 <<getouticon>><<lanLink ['Return to the quarters', '返回宿舍'] 'Temple Quarters'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm []
+:: Deadwood Reblooms Sydney Dorm
 <<set $outside to 0>><<set $location to 'temple'>><<sydneySchedule>><<temple_effects>><<effects>>
 <!-- 宿舍床上的衣物单独存放。返回宿舍时按原版床铺的做法取回。 -->
 <<if setup.clothingLayer.all.some(slot => $store[slot]?.some(item => item.location === 'Deadwood Sydney Dorm Bed'))>>
@@ -273,7 +273,7 @@
 <<getouticon>><<lanLink ['Return to the quarters', '返回宿舍'] 'Temple Quarters'>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Sydney Dorm Transformation []
+:: Deadwood Reblooms Sydney Dorm Transformation
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
 <<language>>
@@ -365,7 +365,7 @@
 <br><br>
 <<lanLink ["Continue","继续"] 'Deadwood Reblooms Sydney Dorm'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Reading []
+:: Deadwood Reblooms Sydney Dorm Reading
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if _sydneyAvailable is undefined>>
   <<sydneySchedule>>
@@ -422,7 +422,7 @@
 <</if>>
 <<lanLink ["Continue","继续"] 'Deadwood Reblooms Sydney Dorm'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Conversation []
+:: Deadwood Reblooms Sydney Dorm Conversation
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if _sydneyAvailable is undefined>>
   <<sydneySchedule>>
@@ -465,7 +465,7 @@
 <</if>>
 <<lanLink ["Continue","继续"] 'Deadwood Reblooms Sydney Dorm'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Reassure []
+:: Deadwood Reblooms Sydney Dorm Reassure
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if _sydneyAvailable is undefined>>
   <<sydneySchedule>>
@@ -505,7 +505,7 @@
 <</if>>
 <<lanLink ["Continue","继续"] 'Deadwood Reblooms Sydney Dorm'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Hand []
+:: Deadwood Reblooms Sydney Dorm Hand
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if _sydneyAvailable is undefined>>
   <<sydneySchedule>>
@@ -546,7 +546,7 @@
 <</if>>
 <<lanLink ["Continue","继续"] 'Deadwood Reblooms Sydney Dorm'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Wardrobe []
+:: Deadwood Reblooms Sydney Dorm Wardrobe
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if _sydneyAvailable is undefined>>
   <<sydneySchedule>>
@@ -588,7 +588,7 @@
 <br>
 <<lanLink ["Stop here","到此为止"] 'Deadwood Reblooms Sydney Dorm'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Wardrobe Finish []
+:: Deadwood Reblooms Sydney Dorm Wardrobe Finish
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
 <<language>>
@@ -620,7 +620,7 @@
 <br><br>
 <<lanLink ["Continue","继续"] 'Deadwood Reblooms Sydney Dorm'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Screen []
+:: Deadwood Reblooms Sydney Dorm Screen
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
 <<language>>
@@ -652,7 +652,7 @@
 <br>
 <<lanLink ["Stop here","到此为止"] 'Deadwood Reblooms Sydney Dorm'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Halloween []
+:: Deadwood Reblooms Sydney Dorm Halloween
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if _sydneyAvailable is undefined>>
   <<sydneySchedule>>
@@ -692,7 +692,7 @@
 <</if>>
 <<lanLink ["Continue","继续"] 'Deadwood Reblooms Sydney Dorm'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Christmas []
+:: Deadwood Reblooms Sydney Dorm Christmas
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if _sydneyAvailable is undefined>>
   <<sydneySchedule>>
@@ -732,7 +732,7 @@
 <</if>>
 <<lanLink ["Continue","继续"] 'Deadwood Reblooms Sydney Dorm'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Bed []
+:: Deadwood Reblooms Sydney Dorm Bed
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>><<wearoutfit>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
 <<language>>
@@ -776,7 +776,7 @@
 <br>
 <<getouticon>><<lanLink ['Leave the bed', '离开床铺'] 'Deadwood Reblooms Sydney Dorm'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Tease []
+:: Deadwood Reblooms Sydney Dorm Tease
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
 <<set $SydneyExpansion.teaseDay to Time.days>>
@@ -809,7 +809,7 @@
 <br>
 <<lanLink ["Stop here","到此为止"] 'Deadwood Reblooms Sydney Dorm Bed'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Invitation []
+:: Deadwood Reblooms Sydney Dorm Invitation
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
 <<language>>
@@ -845,7 +845,7 @@
 <br>
 <<lanLink ["Stop here","到此为止"] 'Deadwood Reblooms Sydney Dorm Bed'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Close []
+:: Deadwood Reblooms Sydney Dorm Close
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if _sydneyAvailable is undefined>>
   <<sydneySchedule>>
@@ -886,7 +886,7 @@
 <br>
 <<lanLink ["Stop here","到此为止"] 'Deadwood Reblooms Sydney Dorm Bed'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Intimacy []
+:: Deadwood Reblooms Sydney Dorm Intimacy
 <<set $outside to 0>><<set $location to 'temple'>>
 <<if $sexstart is 1>>
   <<clearnpc>><<npc Sydney>>
@@ -1000,7 +1000,7 @@
   <span id="next"><<lanLink ["Next","继续"] 'Deadwood Reblooms Sydney Dorm Intimacy'>><</lanLink>></span><<nexttext>>
 <</if>>
 
-:: Deadwood Reblooms Sydney Dorm Intimacy Finish []
+:: Deadwood Reblooms Sydney Dorm Intimacy Finish [nobr]
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>><<run statusCheck('Sydney')>>
 <<if $enemyarousal gte $enemyarousalmax>>
   <<ejaculation>>
@@ -1068,8 +1068,10 @@
 <<elseif $enemyhealth lte 0>>
   <<npcincr Sydney love -1>><<llove>>
   <<language>>
-    <<option 'EN'>>Sydney pulls away and asks you to stop. You give <<him>> space and help <<him>> put the room back in order.
-    <<option 'CN'>>悉尼躲开了，请你停下。你给<<him>>留出位置，帮<<him>>把房间整理好。
+    <<option 'EN'>>
+      Sydney pulls away and asks you to stop. You give <<him>> space and help <<him>> put the room back in order.
+    <<option 'CN'>>
+      悉尼躲开了，请你停下。你给<<him>>留出位置，帮<<him>>把房间整理好。
   <</language>>
 <<else>>
   <<npcincr Sydney lust 5>><<npcincr Sydney purity 2>><<gglust>><<gspurity>>
@@ -1079,7 +1081,7 @@
 <<clotheson>><<endcombat>><<npc Sydney>><<person1>>
 <<lanLink ["Continue","继续"] 'Deadwood Reblooms Sydney Dorm'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Dorm Sleep []
+:: Deadwood Reblooms Sydney Dorm Sleep
 <<set $outside to 0>><<set $location to 'temple'>><<set $bedGuest to 'Sydney'>>
 <<set _autosavehere to true>>
 <<sydneySchedule>>
@@ -1173,7 +1175,7 @@
   <<set $phase to 0>>
 <</if>>
 
-:: Deadwood Reblooms Sydney Dorm Night Wake []
+:: Deadwood Reblooms Sydney Dorm Night Wake
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<sydneySchedule>><<run statusCheck('Sydney')>>
 <<if !_sydneyResting or !isLoveInterest('Sydney')>>
@@ -1218,7 +1220,7 @@
   <</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Sydney Halloween Morning []
+:: Deadwood Reblooms Sydney Halloween Morning
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<npc Sydney 1>><<person1>><<npc Sirris 2>><<person2>><<run statusCheck('Sydney')>>
 <<set $SydneyExpansion.sirrisHalloweenVisitYear to Time.year>>
@@ -1296,7 +1298,7 @@
   <<getouticon>><<lanLink ['See Sirris off', '送别西里斯'] 'Temple'>><<endevent>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Sydney Dorm Morning Work []
+:: Deadwood Reblooms Sydney Dorm Morning Work
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<npc Sydney>><<person1>>
 <<language>>
@@ -1312,7 +1314,7 @@
 <br><br>
 <<lanLink ["Continue","继续"] 'Temple'>><<endevent>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Halloween Ride []
+:: Deadwood Reblooms Sydney Halloween Ride
 <<set $outside to 1>><<set $location to 'school'>><<effects>>
 <<npc Sydney 1>><<person1>><<npc Sirris 2>><<person2>>
 <<language>>

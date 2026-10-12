@@ -5,7 +5,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Orchard Robin Order []
+:: Deadwood Orchard Robin Order [nobr]
 <<set $outside to 0>><<set $location to 'deadwood_robin_shop'>><<effects>>
 <<deadwood-dynamicblock 'deadwood-orchard-robin-order'>>
 <<set _orchard to maplebirch.get('Orchard')>>
@@ -62,13 +62,17 @@
   <<elseif _orchard.canOrder>>
     <<if Time.season is 'winter'>>
       <<language>>
-        <<option 'EN'>>"Mostly hot chocolate at the moment," Robin says, glancing at the pot. "I won’t need as much fruit."
-        <<option 'CN'>>“最近大多是来买热巧克力的。”罗宾看了看锅子。“水果不用那么多。”
+        <<option 'EN'>>
+          "Mostly hot chocolate at the moment," Robin says, glancing at the pot. "I won’t need as much fruit."
+        <<option 'CN'>>
+          “最近大多是来买热巧克力的。”罗宾看了看锅子。“水果不用那么多。”
       <</language>><br>
     <</if>>
     <<language>>
-      <<option 'EN'>>"Could you bring <<= _orchard.orderQuantity>> fruit within three days?" Robin asks. "That should last until next week."
-      <<option 'CN'>>“三天内能带<<= _orchard.orderQuantity>>个来吗？”罗宾问道。“应该能用到下周。”
+      <<option 'EN'>>
+        "Could you bring <<= _orchard.orderQuantity>> fruit within three days?" Robin asks. "That should last until next week."
+      <<option 'CN'>>
+        “三天内能带<<= _orchard.orderQuantity>>个来吗？”罗宾问道。“应该能用到下周。”
     <</language>><br>
 
     <<foodstufficon 'lemon'>><<lanLink ['Agree to supply lemons', '答应送来柠檬']>>
@@ -84,7 +88,7 @@
 <</deadwood-dynamicblock>>
 <br><<getouticon>><<lanLink ['Return to the shop', '返回饮品店'] 'Deadwood Robin Shop'>><</lanLink>>
 
-:: Deadwood Orchard Robin Supplied []
+:: Deadwood Orchard Robin Supplied
 <<set $outside to 0>><<set $location to 'deadwood_robin_shop'>><<effects>>
 <<if maplebirch.get('Orchard')?.supplyRobin()>>
   <<npc Robin>><<person1>><<pass 10>>

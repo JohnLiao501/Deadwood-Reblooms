@@ -1,4 +1,4 @@
-:: Deadwood BirdTower Hunt Trespasser []
+:: Deadwood BirdTower Hunt Trespasser
 <<effects>>
 <<set $location to "tower">>
 <<set $moor to 100>>
@@ -44,7 +44,7 @@
   <<set $phase to 2>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower Hunt Trespasser 2 []
+:: Deadwood BirdTower Hunt Trespasser 2
 <<effects>>
 <<if $phase is 1>>
   <<language>>
@@ -117,7 +117,7 @@
 <br>
 <<lanLink ["Descend to the base of the tower", "降落到塔底"] "Deadwood BirdTower Hunt Trespasser 3">><</lanLink>>
 <br>
-:: Deadwood BirdTower Hunt Trespasser 3 []
+:: Deadwood BirdTower Hunt Trespasser 3
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -211,7 +211,7 @@
   <<npcincr "Great Hawk" love -1>><<npcincr "Great Hawk" dom -3>>
 <</lanLink>><<llove>><<lldom>>
 <br>
-:: Deadwood BirdTower Hunt Trespasser 4 []
+:: Deadwood BirdTower Hunt Trespasser 4
 <<effects>>
 <<set $outside to 0>>
 <<set $bird.hunts.duo to false>>

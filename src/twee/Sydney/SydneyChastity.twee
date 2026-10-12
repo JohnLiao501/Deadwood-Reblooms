@@ -8,7 +8,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Sydney Chastity Refit []
+:: Deadwood Reblooms Sydney Chastity Refit
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
 <<if _sydneyStatus.includes('pure')>>
@@ -91,7 +91,7 @@
   <<getouticon>><<lanLink ['Return to the temple', '返回神殿'] 'Temple'>><<endevent>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Sydney Chastity Fitting []
+:: Deadwood Reblooms Sydney Chastity Fitting
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<npc Sydney 1>><<npc Jordan 2>><<person1>>
 <<language>>

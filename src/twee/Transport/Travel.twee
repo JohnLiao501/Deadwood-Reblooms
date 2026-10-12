@@ -1,5 +1,4 @@
-:: Deadwood Transport Menu []
-<<nobr>>
+:: Deadwood Transport Menu [nobr]
 <<deadwood-dynamicblock 'deadwood-transport-menu'>>
 <<set _transport to maplebirch.get('Transport')>>
 <<deadwood-transport-notice>>
@@ -134,10 +133,8 @@
 <</if>>
 
 <</deadwood-dynamicblock>>
-<</nobr>>
 
-:: Deadwood Transport Travel []
-<<nobr>>
+:: Deadwood Transport Travel [nobr]
 <<deadwood-dynamicblock 'deadwood-transport-travel'>>
 <<set _transport to maplebirch.get('Transport')>>
 <<if $Transport.trip and !$Transport.trip.settled>>
@@ -278,17 +275,12 @@
   <</if>>
 <</if>>
 <</deadwood-dynamicblock>>
-<</nobr>>
 
-:: Deadwood Transport Repair []
-<<nobr>>
+:: Deadwood Transport Repair [nobr]
 <<deadwood-transport-notice>><br><br>
 <<getouticon>><<lanLink ['Return to your vehicle', '返回载具旁'] 'Deadwood Transport Menu'>><</lanLink>><br>
-<</nobr>>
 
-
-:: Deadwood Transport Pull Over []
-<<nobr>>
+:: Deadwood Transport Pull Over [nobr]
 <<set _transport to maplebirch.get('Transport')>>
 <<set _pull_name to $Transport.trip?.passengers?.[0]>>
 <<set _pull_start to $Transport.trip?.pullstart ? 1 : 0>>
@@ -320,10 +312,8 @@
     <span id='next'><<lanLink ["Next", '继续'] 'Deadwood Transport Pull Over'>><</lanLink>></span><<nexttext>>
   <</if>>
 <</if>>
-<</nobr>>
 
-:: Deadwood Transport Pull Over Finish []
-<<nobr>>
+:: Deadwood Transport Pull Over Finish [nobr]
 <<effects>>
 <<set _pull_name to $Transport.trip?.passengers?.[0]>>
 <<if _pull_name>>
@@ -342,10 +332,8 @@
 <<clotheson>>
 <<endcombat>>
 <<getouticon>><<lanLink ['Continue', '继续'] _transport.arrival>><</lanLink>>
-<</nobr>>
 
-:: Deadwood Transport Date []
-<<nobr>>
+:: Deadwood Transport Date [nobr]
 <<set _transport to maplebirch.get('Transport')>>
 <<if $Transport.trip?.dated>>
   <<language>>
@@ -386,4 +374,3 @@
   <<lanSwitch 'Back at the vehicle, your companions make their way home while you decide where to go next.' '回到车旁，同行的恋人准备回住处。你则想了想接下来要去哪里。'>><br><br>
 <</if>>
 <<getouticon>><<lanLink ['Continue', '继续'] _transport.arrival>><</lanLink>><br>
-<</nobr>>

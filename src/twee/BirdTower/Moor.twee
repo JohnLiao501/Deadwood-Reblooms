@@ -1,4 +1,4 @@
-:: Deadwood BirdTower Moor Screech []
+:: Deadwood BirdTower Moor Screech
 <<effects>>
 <<if $pain gte 95>>
   <<set $phase to 1>>
@@ -166,7 +166,7 @@
   <<stress -6>><<trauma -6>>
 <</lanLink>><<ltrauma>><<lstress>>
 <br>
-:: Deadwood BirdTower Moor Home []
+:: Deadwood BirdTower Moor Home
 <<effects>>
 <<switch $speech_attitude>>
   <<case "bratty">>
@@ -326,7 +326,7 @@
   <br>
 <</if>>
 
-:: Deadwood BirdTower Moor Hug []
+:: Deadwood BirdTower Moor Hug
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -404,7 +404,7 @@
   <<HuntTogetherClean>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower Moor Bath []
+:: Deadwood BirdTower Moor Bath
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -481,7 +481,7 @@
   <<endevent>>
 <</lanLink>>
 <br>
-:: Deadwood BirdTower Moor Return []
+:: Deadwood BirdTower Moor Return
 <<set $location to "tower">>
 <<effects>>
 <<npc "Great Hawk">>

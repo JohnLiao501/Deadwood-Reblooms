@@ -51,20 +51,22 @@
       <<personselect _NPCDoubleStatus.recipient>>
     <<else>>
       <<language>>
-        <<option 'EN'>><<combatPersons>>
-        <<if _NPCDoubleStatusOrifice is 'vagina'>>
-          vagina
-        <<else>>
-          ass
-        <</if>>
-        envelops your <<penis>>.
-        <<option 'CN'>><<combatPersons>>的
-        <<if _NPCDoubleStatusOrifice is 'vagina'>>
-          小穴裹住了
-        <<else>>
-          屁股包裹着
-        <</if>>
-        你的<<penis>>。
+        <<option 'EN'>>
+          <<combatPersons>>
+          <<if _NPCDoubleStatusOrifice is 'vagina'>>
+            vagina
+          <<else>>
+            ass
+          <</if>>
+          envelops your <<penis>>.
+        <<option 'CN'>>
+          <<combatPersons>>的
+          <<if _NPCDoubleStatusOrifice is 'vagina'>>
+            小穴裹住了
+          <<else>>
+            屁股包裹着
+          <</if>>
+          你的<<penis>>。
       <</language>>
     <</if>>
   <</if>>

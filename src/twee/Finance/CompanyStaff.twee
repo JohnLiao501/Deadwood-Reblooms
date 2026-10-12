@@ -42,7 +42,7 @@
   <</language>><br><br>
 <</widget>>
 
-:: Deadwood Reblooms Company Staff []
+:: Deadwood Reblooms Company Staff
 <<deadwood-company-header>><<endevent>>
 <<set _staff to _company.staff>>
 <<if !_company.available or !_company.open or !_company_state.office>><<deadwood-company-return>><<exit>><</if>>
@@ -111,7 +111,7 @@
 <</deadwood-dynamicblock>>
 <<deadwood-company-return>>
 
-:: Deadwood Reblooms Company Employee []
+:: Deadwood Reblooms Company Employee
 <<deadwood-company-header>><<endevent>>
 <<set _staff to _company.staff>>
 <<set _role to _staff.state.selected>>

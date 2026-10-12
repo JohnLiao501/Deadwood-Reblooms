@@ -1,7 +1,6 @@
 :: Deadwood Reblooms School Journal Widgets [widget]
 
 <<widget 'deadwood-reblooms-life-simulation-school-journal'>>
-  <<nobr>>
   <<if !$LifeSimulation?.school>><<exit>><</if>>
   <<set _school_journal to $LifeSimulation.school>>
   <h1 class='header gold bold'><<lanSwitch 'School affairs' '校园事务'>></h1>
@@ -135,12 +134,16 @@
     <<if _school_journal.dress.trialUntil gt Time.days>>
       <li><<lanSwitch 'Days left in the policy trial: ' '现行校规剩余试行天数：'>><span class='gold'><<= _school_journal.dress.trialUntil - Time.days>></span></li>
     <<elseif maplebirch.get('LifeSimulation').school.canReviewPolicy>>
-      <li><<language>><<option 'EN'>>The trial has <span class='gold'>ended</span>. Ask <span class='blue'>Leighton</span> to review the rule.<<option 'CN'>>试行期已<span class='gold'>结束</span>，去找<span class='blue'>礼顿</span>复核校规。<</language>></li>
+      <li><<language>>
+        <<option 'EN'>>
+          The trial has <span class='gold'>ended</span>. Ask <span class='blue'>Leighton</span> to review the rule.
+        <<option 'CN'>>
+          试行期已<span class='gold'>结束</span>，去找<span class='blue'>礼顿</span>复核校规。
+      <</language>></li>
     <</if>>
     <<if _school_journal.role is 'president' and _school_journal.dress.cooldownUntil gt Time.days>>
       <li><<lanSwitch 'You can propose another dress policy in ' '还要等 '>><span class='gold'><<= _school_journal.dress.cooldownUntil - Time.days>></span><<lanSwitch ' days.' ' 天才能再次提出着装校规。'>></li>
     <</if>>
   </ul>
   <hr>
-  <</nobr>>
 <</widget>>

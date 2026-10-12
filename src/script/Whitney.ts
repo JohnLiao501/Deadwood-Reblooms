@@ -3,7 +3,6 @@
 export default function (maplebirch: typeof window.maplebirch): void {
   maplebirch.tool.addTo(
     'BeforeLinkZone',
-    { widget: 'deadwood-whitney-aftercare-link', passage: 'School Front Courtyard' },
     { widget: 'deadwood-whitney-pier-link', passage: 'Docks' },
     { widget: 'deadwood-whitney-flats-link', passage: 'Whitney Home Knock' },
     { widget: 'deadwood-whitney-music-link', passage: 'Whitney Chat' }
@@ -12,6 +11,9 @@ export default function (maplebirch: typeof window.maplebirch): void {
   maplebirch.tool.addTo('CustomLinkZone', { widget: [-1, 'deadwood-whitney-cell-link'], passage: 'Underground Cell Lock' });
 
   maplebirch.tool.inject({
+    locationPassage: {
+      'School Front Courtyard': [{ src: '<<schoolicon "courtyard">>', applybefore: '<<deadwood-whitney-aftercare-link>>\n\t\t\t', expected: 1 }]
+    },
     widgetPassage: {
       'Widgets Underground': [
         // 原版只看恋爱标记。惠特尼仍被关着时，PC 独自逃脱不应触发她在学校迎接 PC。

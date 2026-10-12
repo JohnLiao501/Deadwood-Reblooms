@@ -66,8 +66,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Transport Boarding []
-<<nobr>>
+:: Deadwood Transport Boarding [nobr]
 <<set _commute to maplebirch.get('Transport').commute>><<set _ride to $Transport.commute>>
 <<if _ride and _commute.active and !_ride.boarded>>
   <<npc _ride.npc>><<person1>>
@@ -115,10 +114,8 @@
   <<lanSwitch 'You have missed the chance to leave together.' '你错过了一起出发的时机。'>><br><br>
   <<getouticon>><<lanLink ['Return', '返回'] ` _ride?.source ?? 'Oxford Street' `>><<set $Transport.commute to null>><</lanLink>><br>
 <</if>>
-<</nobr>>
 
-:: Deadwood Transport Avery []
-<<nobr>>
+:: Deadwood Transport Avery [nobr]
 <<set _avery_reply to maplebirch.get('Transport').commute.averyReply>>
 <<if _avery_reply>>
 <<npc Avery>><<person1>>
@@ -153,4 +150,3 @@
   <<lanSwitch 'Avery has already left.' '艾弗里已经离开了。'>><br><br>
 <</if>>
 <<getouticon>><<lanLink ['Continue', '继续'] 'Oxford Street'>><<endevent>><<set $eventskip to 1>><<set $Transport.avery_reply to null>><</lanLink>><br>
-<</nobr>>

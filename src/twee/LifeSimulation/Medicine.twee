@@ -1,6 +1,5 @@
 :: Deadwood Reblooms Medicine Widgets [widget]
 <<widget 'deadwood-medicine-dose'>>
-  <<nobr>>
     <<language>>
       <<option 'EN'>>
         You swallow a tablet with water.
@@ -47,11 +46,9 @@
           <span class='purple'>你已经连续多日依靠这些药片。</span>
       <</language>>
     <</if>>
-  <</nobr>>
 <</widget>>
 
 <<widget 'deadwood-medicine-notices'>>
-  <<nobr>>
     <<set _medicine to maplebirch.get('LifeSimulation').medicine>>
     <<set _notices to $LifeSimulation.medicine.notices.splice(0)>>
     <<for _notice range _notices>>
@@ -76,7 +73,6 @@
       <</if>><br>
     <</for>>
     <<if _notices.length>><br><</if>>
-  <</nobr>>
 <</widget>>
 
 <<widget 'deadwood-medicine-shop'>>

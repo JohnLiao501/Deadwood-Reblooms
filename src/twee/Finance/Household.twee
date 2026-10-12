@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Property Household []
+:: Deadwood Reblooms Property Household
 <<set _property to maplebirch.get("Finance").realEstate.current>>
 <<if !_property or maplebirch.get("Finance").realEstate.residentsHome(_property.id).length lt 2>>
   <<language>>

@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Virginity Restoration []
+:: Deadwood Reblooms Virginity Restoration
 <<set $outside to 0>><<set $location to 'hospital'>><<effects>>
 <<generate1>><<person1>>
 <<language>>
@@ -30,7 +30,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Leave', '离开'] 'Hospital Foyer'>><<endevent>><</lanLink>>
 
-:: Deadwood Reblooms Virginity Restoration Confirm []
+:: Deadwood Reblooms Virginity Restoration Confirm
 <<set $outside to 0>><<set $location to 'hospital'>><<effects>>
 <<harper_intro>>
 <<if $phase is 'vaginal'>>
@@ -71,7 +71,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Leave', '离开'] 'Hospital Foyer'>><<endevent>><</lanLink>>
 
-:: Deadwood Reblooms Virginity Restoration Surgery []
+:: Deadwood Reblooms Virginity Restoration Surgery
 <<set $outside to 0>><<set $location to 'hospital'>><<effects>>
 <<money -100000 'hospitalVirginityRestoration'>>
 <<upperstrip>><<lowerstrip>><<underlowerstrip>><<underupperstrip>>
@@ -91,7 +91,7 @@
 <<fameexhibitionism 10 'pic'>>
 <<lanLink ["Continue","继续"] 'Deadwood Reblooms Virginity Restoration Done'>><</lanLink>>
 
-:: Deadwood Reblooms Virginity Restoration Done []
+:: Deadwood Reblooms Virginity Restoration Done
 <<set $outside to 0>><<set $location to 'hospital'>><<effects>>
 <<if $phase is 'vaginal'>>
   <<set $player.virginity.vaginal to true>>

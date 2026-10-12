@@ -1,4 +1,4 @@
-:: Deadwood BirdTower Hunt Lurkers Lot []
+:: Deadwood BirdTower Hunt Lurkers Lot
 <<effects>><<childSelect $BirdTower.hunt.leader>>
 <<language>>
   <<option 'EN'>>
@@ -36,7 +36,7 @@
 <br>
 <<lanLink ["Hunt the whole group", "狩猎一整群"] "Deadwood BirdTower Hunt Lurkers Lot Group">><</lanLink>><<dancedifficulty 600 1200>><<tendingdifficulty 1 700>>
 <br>
-:: Deadwood BirdTower Hunt Lurkers Lot Single []
+:: Deadwood BirdTower Hunt Lurkers Lot Single
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -90,7 +90,7 @@
 <<birdtower_hunt_companion_loot>>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Lurkers Lot Double []
+:: Deadwood BirdTower Hunt Lurkers Lot Double
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -147,7 +147,7 @@
 <<birdtower_hunt_companion_loot>>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Lurkers Lot Group []
+:: Deadwood BirdTower Hunt Lurkers Lot Group
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -204,7 +204,7 @@
 <<birdtower_hunt_companion_loot>>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Lurkers Few []
+:: Deadwood BirdTower Hunt Lurkers Few
 <<effects>><<childSelect $BirdTower.hunt.leader>>
 <<language>>
   <<option 'EN'>>
@@ -243,7 +243,7 @@
 <br>
 <<lanLink ["Chase", "追赶"] "Deadwood BirdTower Hunt Lurkers Few Chase">><</lanLink>><<athleticsdifficulty _athlDiffMin _athlDiffMax>>
 <br>
-:: Deadwood BirdTower Hunt Lurkers Few PokemonGo []
+:: Deadwood BirdTower Hunt Lurkers Few PokemonGo
 <<switch $speech_attitude>>
   <<case "bratty">>
     <<language>>
@@ -322,7 +322,7 @@
 <br><br>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Lurkers Few Ambush []
+:: Deadwood BirdTower Hunt Lurkers Few Ambush
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -392,7 +392,7 @@
 <</if>>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Lurkers Few Chase []
+:: Deadwood BirdTower Hunt Lurkers Few Chase
 <<effects>>
 <<language>>
   <<option 'EN'>>

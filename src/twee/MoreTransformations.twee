@@ -2,52 +2,53 @@
 
 <!-- 狐火只在成功放逐后触发，波及目标沿用原版触手伤害记录与束缚清理。 -->
 <<widget 'deadwood-foxfire'>>
-	<<set _foxfireMain to _args[0]>>
-	<<set _foxfire to maplebirch.get('MoreTransformations').flare(_foxfireMain, _args[1])>>
-	<<if _foxfire>>
-		<span class="teal"><<language>><<option 'EN'>>
-			Foxfire leaps to the <<= _foxfire.target.fullDesc>>, scorching it.
-		<<option 'CN'>>
-			狐火掠向附近的<<= _foxfire.target.fullDesc>>，将其灼伤。
-		<</language>></span>
-		<<tentacle_record 'banish' _foxfire.damage>>
-		<<if _foxfire.target.tentaclehealth lte 0>>
-		  <<tentacleadvdisable _foxfire.target>>
-		<</if>>
-		<<set _tentacle to _foxfireMain>>
-	<</if>>
+  <<set _foxfireMain to _args[0]>>
+  <<set _foxfire to maplebirch.get('MoreTransformations').flare(_foxfireMain, _args[1])>>
+  <<if _foxfire>>
+    <span class="teal"><<language>>
+      <<option 'EN'>>
+        Foxfire leaps to the <<= _foxfire.target.fullDesc>>, scorching it.
+      <<option 'CN'>>
+        狐火掠向附近的<<= _foxfire.target.fullDesc>>，将其灼伤。
+    <</language>></span>
+    <<tentacle_record 'banish' _foxfire.damage>>
+    <<if _foxfire.target.tentaclehealth lte 0>>
+      <<tentacleadvdisable _foxfire.target>>
+    <</if>>
+    <<set _tentacle to _foxfireMain>>
+  <</if>>
 <</widget>>
 
 <!-- 马蹄踢击：有马蹄时替换原版踢击文本并提高反抗效果。 -->
 <<widget 'deadwood-reblooms-action-kick'>>
-	<<if typeof $transformationParts?.traits?.hooves is 'string' and isPartEnabled($transformationParts.traits.hooves)>>
-		<<print either( maplebirch.t('deadwood-reblooms:combat:hooves:kick:1'), maplebirch.t('deadwood-reblooms:combat:hooves:kick:2'), maplebirch.t('deadwood-reblooms:combat:hooves:kick:3') )>>
-	<<else>>
-		<<actionskick _args[0]>>
-	<</if>>
+  <<if typeof $transformationParts?.traits?.hooves is 'string' and isPartEnabled($transformationParts.traits.hooves)>>
+    <<print either( maplebirch.t('deadwood-reblooms:combat:hooves:kick:1'), maplebirch.t('deadwood-reblooms:combat:hooves:kick:2'), maplebirch.t('deadwood-reblooms:combat:hooves:kick:3') )>>
+  <<else>>
+    <<actionskick _args[0]>>
+  <</if>>
 <</widget>>
 
 <<widget 'deadwood-whale-rest'>>
-	<<iconUi 'whale.png'>><<lanLink ['Float in the pool (0:10)', '在水池里漂浮 (0:10)'] $passage>>
-		<<pass 10>><<stress -3>><<transform 'whale' 1>>
-	<</lanLink>><<lstress>><<transform-hint 'whale' 'lblue'>><br>
+  <<iconUi 'whale.png'>><<lanLink ['Float in the pool (0:10)', '在水池里漂浮 (0:10)'] $passage>>
+    <<pass 10>><<stress -3>><<transform 'whale' 1>>
+  <</lanLink>><<lstress>><<transform-hint 'whale' 'lblue'>><br>
 <</widget>>
 
 <!-- 瑞沃安装阁楼厨房后，每日送来的米可在此烹成白米饭。 -->
 <<widget 'deadwood-reblooms-loft-rice'>>
-	<<if $loftIngredients.rice gt 0>>
-		<<foodstufficon 'rice'>><<lanLink ['Cook and eat a bowl of rice (0:10)', '煮食一碗白米饭 (0:10)'] 'Orphanage Loft Kitchen'>>
-			<<set $loftIngredients.rice -= 1>>
-			<<pass 10>>
-			<<transform 'whale' 1>>
-		<</lanLink>><<transform-hint 'whale' 'lblue'>><br>
-		<<if $loftIngredients.rice gte 3>>
-			<<foodstufficon 'rice'>><<lanLink ['Cook and eat three bowls of rice (0:30)', '煮食三碗白米饭 (0:30)'] 'Orphanage Loft Kitchen'>>
-				<<set $loftIngredients.rice -= 3>>
-				<<pass 30>>
-				<<transform 'whale' 3>>
-			<</lanLink>><<transform-hint 'whale' 'lblue'>><br>
-		<</if>>
-		<br>
-	<</if>>
+  <<if $loftIngredients.rice gt 0>>
+    <<foodstufficon 'rice'>><<lanLink ['Cook and eat a bowl of rice (0:10)', '煮食一碗白米饭 (0:10)'] 'Orphanage Loft Kitchen'>>
+      <<set $loftIngredients.rice -= 1>>
+      <<pass 10>>
+      <<transform 'whale' 1>>
+    <</lanLink>><<transform-hint 'whale' 'lblue'>><br>
+    <<if $loftIngredients.rice gte 3>>
+      <<foodstufficon 'rice'>><<lanLink ['Cook and eat three bowls of rice (0:30)', '煮食三碗白米饭 (0:30)'] 'Orphanage Loft Kitchen'>>
+        <<set $loftIngredients.rice -= 3>>
+        <<pass 30>>
+        <<transform 'whale' 3>>
+      <</lanLink>><<transform-hint 'whale' 'lblue'>><br>
+    <</if>>
+    <br>
+  <</if>>
 <</widget>>

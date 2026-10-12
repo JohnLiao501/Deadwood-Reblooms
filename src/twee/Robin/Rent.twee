@@ -51,7 +51,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Robin Self Rent []
+:: Deadwood Robin Self Rent
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<lanSwitch 'Robin closes the ledger and looks straight at you. The outstanding debt at the current rent rate, next week’s rent and the money for ingredients sit in separate columns.' '罗宾合上账本，直视着你。按当前租金额结清的旧欠、下周要付的房租、购买原料的钱，分别列在不同栏里。'>>
 <br><span class='blue'>
@@ -68,7 +68,7 @@
 <</if>>
 <br><br><<lanLink ['Return to Robin\'s room', '返回罗宾的房间'] 'Robin Options'>><<endevent>><</lanLink>>
 
-:: Deadwood Robin Self Rent Accept []
+:: Deadwood Robin Self Rent Accept
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<if maplebirch.get('Robin').rent.acceptSelfRent()>>
   <<earnFeat 'Deadwood Robin Independent'>>
@@ -79,7 +79,7 @@
 <</if>>
 <br><br><<lanLink ['Return to Robin\'s room', '返回罗宾的房间'] 'Robin Options'>><<endevent>><</lanLink>>
 
-:: Deadwood Robin Both Rent []
+:: Deadwood Robin Both Rent
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<lanSwitch 'Robin notices you counting rent money and sits beside you. The ledger shows income, your rent and a reserve for a bad week.' '罗宾看见你在数房租，便在你身旁坐下。账本上清楚地列着收入、你的房租，以及应付生意差的一周的储备金。'>>
 <br><br><span class='blue'><<lanSwitch '"I could cover yours too, when you need it," Robin says, and does not quite meet your eyes. "If that would not be a burden on you. I will ask first, every time — I want us both to know what we are agreeing to."' '“你需要的时候，我也可以帮你付那份。”罗宾说着，没有完全对上你的目光。“只要这不会让你为难。每次我都会先问你——我想让我们俩都清楚自己答应的是什么。”'>></span>
@@ -93,7 +93,7 @@
 <</if>>
 <br><br><<lanLink ['Return to Robin\'s room', '返回罗宾的房间'] 'Robin Options'>><<endevent>><</lanLink>>
 
-:: Deadwood Robin Pays Rent []
+:: Deadwood Robin Pays Rent
 <<effects>><<npc Robin>><<person1>>
 <<if maplebirch.get('Robin').rent.payPcRent()>>
   <<lanSwitch 'You hand Bailey the sum Robin set aside in an envelope. Robin, still held by the thug, confirms the amount. Bailey counts it twice and orders the thug to let go. Afterwards Robin shows you the ledger entry. "That was our choice," Robin says. "Next week we decide again."' '你把罗宾事先封好的钱交给贝利。打手还钳着罗宾，罗宾仍清楚地报出数目。贝利数了两遍，才叫打手松手。事后罗宾给你看账本上的记录。“这是我们一起决定的。”罗宾说，“下周再一起决定。”'>>
@@ -103,7 +103,7 @@
 <</if>>
 <br><br><<lanLink ["Return to the bedroom", "返回卧室"] 'Bedroom'>><<endevent>><</lanLink>>
 
-:: Deadwood Robin Rebellion []
+:: Deadwood Robin Rebellion
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<lanSwitch 'Robin has budgeted for both of you, but the weekly collection still leaves the other children frightened. "Money bought us time," Robin says. "It will not stop Bailey from hurting someone else." You study the hall together. Robin knows Bailey may bring thugs and restrain Robin first, so you agree on signals to warn each other and a path for retreat.' '罗宾已经算过你们的开支，可每周收租仍让其他孩子胆战心惊。“钱给我们争取了时间，”罗宾说，“但它阻止不了贝利伤害别人。”你们一起看过大厅。罗宾知道贝利可能带打手来，还会先控制住自己，于是你们约好互相示警的暗号，也留好撤退的路。'>>
 <br><br>
@@ -115,7 +115,7 @@
 <</if>>
 <br><br><<lanLink ['Return to Robin\'s room', '返回罗宾的房间'] 'Robin Options'>><<endevent>><</lanLink>>
 
-:: Deadwood Robin Rally []
+:: Deadwood Robin Rally
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<lanSwitch 'Two rent collections have ended with you and Robin standing together. This time, when Robin asks the other orphans to meet in the hall, they come. Robin does not promise that no one will be hurt. Instead, Robin shows them how to warn each other, where to stand, and how to help someone leave the fight. The children choose their own roles.' '连续两次收租，你和罗宾都并肩撑到了最后。这回罗宾请其他孩子到大厅来，他们真的来了。罗宾没有许诺谁都不会受伤，而是讲清如何互相示警、站在哪里、怎样把受伤的人带离现场。孩子们各自选了愿意承担的事。'>>
 <br><br>
@@ -126,7 +126,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ['Return to the orphanage', '返回孤儿院'] 'Orphanage'>><<endevent>><</lanLink>>
 
-:: Deadwood Robin Solidarity []
+:: Deadwood Robin Solidarity
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<lanSwitch 'After the third confrontation, the other orphans meet you and Robin in the hall. Some volunteer to warn the group when Bailey arrives; others offer to guide the youngest children to safety. Robin insists nobody has to join a fight. You agree on a signal and a care fund. When the business reserve can spare it, £10 each week will buy supplies for anyone injured. The next collection will still be dangerous, but you have a plan that belongs to all of you.' '第三次冲突后，其他孤儿在大厅里与你和罗宾会面。有人愿意在贝利来时传话，有人愿意带年幼的孩子避开危险。罗宾坚持，谁都不必被迫参加打斗。你们约好示警信号，还商定照顾伤者的基金：营业储备金宽裕时，每周拿出 £10 买急救用品。下次收租仍会危险，但这回大家有了共同拟定的办法。'>>
 <<if $RobinExpansion.allies and !$RobinExpansion.solidarity and $RobinExpansion.victories gte 3>>
@@ -136,7 +136,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ['Return to the orphanage', '返回孤儿院'] 'Orphanage'>><<endevent>><</lanLink>>
 
-:: Deadwood Robin Bailey Reckoning []
+:: Deadwood Robin Bailey Reckoning
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<if $RobinExpansion.solidarity and !$RobinExpansion.bailey_defeated and $RobinExpansion.victories gte 4 and $baileydefeatedchain gte 3>>
   <<lanSwitch 'Bailey returns to the hall with the rent ledger under one arm. The children have been waiting. No one blocks the door. Instead, they stand in the places you chose together, with room for the youngest to leave.' '贝利夹着房租账本回到大厅。孩子们早就在等着。没人堵住门，只是按先前商量的位置站好，给年幼的孩子留出退路。'>>
@@ -151,7 +151,7 @@
   <br><br><<getouticon>><<lanLink ['Return to the orphanage', '返回孤儿院'] 'Orphanage'>><<endevent>><</lanLink>>
 <</if>>
 
-:: Deadwood Robin Bailey Reckoning Finish []
+:: Deadwood Robin Bailey Reckoning Finish
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<if $RobinExpansion.solidarity and !$RobinExpansion.bailey_defeated and $RobinExpansion.victories gte 4 and $baileydefeatedchain gte 3>>
   <<if $phase is 1>>

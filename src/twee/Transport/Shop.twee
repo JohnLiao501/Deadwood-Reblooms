@@ -1,5 +1,4 @@
-:: Deadwood Transport Motors []
-<<nobr>>
+:: Deadwood Transport Motors [nobr]
 <<set _transport to maplebirch.get('Transport')>>
 <<set $Transport.shop to 'motors', $location to 'deadwood_transport_motors', $bus to 'harvest', $outside to 0>>
 <<= maplebirch.t('deadwood-reblooms:transport:place:motors')>><br><br>
@@ -38,10 +37,8 @@
   <br>
 <</if>>
 <<deadwood-transport-return>>
-<</nobr>>
 
-:: Deadwood Transport Dealer []
-<<nobr>>
+:: Deadwood Transport Dealer [nobr]
 <<set _transport to maplebirch.get('Transport')>>
 <<set $location to $Transport.shop is 'bicycle' ? 'deadwood_transport_bicycle' : 'deadwood_transport_motors', $bus to _transport.shopPoint, $outside to 0>>
 <<= maplebirch.t('deadwood-reblooms:transport:place:' + $Transport.shop)>><br><br>
@@ -125,10 +122,8 @@
   <<deadwood-transport-return>>
   <</deadwood-dynamicblock>>
 <</if>>
-<</nobr>>
 
-:: Deadwood Transport Buy []
-<<nobr>>
+:: Deadwood Transport Buy [nobr]
 <<set _transport to maplebirch.get('Transport'), _model to _transport.offer>>
 <<if !_model or !_transport.dealerOpen>>
   <<getouticon>><<lanLink ['Return to the showroom', '返回展厅'] 'Deadwood Transport Dealer'>><</lanLink>><br>
@@ -207,10 +202,8 @@
     <<set $Transport.offer to null>>
   <</lanLink>>
 <</if>>
-<</nobr>>
 
-:: Deadwood Transport Service []
-<<nobr>>
+:: Deadwood Transport Service [nobr]
 <<set _transport to maplebirch.get('Transport')>>
 <<set $location to $Transport.shop is 'bicycle' ? 'deadwood_transport_bicycle' : 'deadwood_transport_service', $bus to _transport.shopPoint, $outside to 0>>
 <<= maplebirch.t('deadwood-reblooms:transport:place:' + ($Transport.shop is 'bicycle' ? 'bicycle' : 'garage'))>><br><br>
@@ -315,10 +308,8 @@
   <<deadwood-transport-return>>
   <</deadwood-dynamicblock>>
 <</if>>
-<</nobr>>
 
-:: Deadwood Transport Petrol []
-<<nobr>>
+:: Deadwood Transport Petrol [nobr]
 <<set _transport to maplebirch.get('Transport')>>
 <<set $location to 'deadwood_transport_petrol', $bus to _transport.shopPoint, $outside to 1>>
 <<= maplebirch.t('deadwood-reblooms:transport:place:petrol')>><br><br>
@@ -419,10 +410,8 @@
   <<deadwood-transport-return>>
   <</deadwood-dynamicblock>>
 <</if>>
-<</nobr>>
 
-:: Deadwood Transport Sell []
-<<nobr>>
+:: Deadwood Transport Sell [nobr]
 <<deadwood-dynamicblock 'deadwood-transport-sell'>>
 <<set _transport to maplebirch.get('Transport')>>
 <<if _transport.dealerOpen and _transport.vehicle and _transport.shopVehicles.includes(_transport.vehicle) and _transport.availableAtShop>>
@@ -460,4 +449,3 @@
 <</if>>
 <br><<getouticon>><<lanLink ['Return to the shop', '返回店里'] 'Deadwood Transport Dealer'>><</lanLink>><br>
 <</deadwood-dynamicblock>>
-<</nobr>>

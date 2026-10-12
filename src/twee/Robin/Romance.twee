@@ -6,7 +6,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Robin Independent Note []
+:: Deadwood Robin Independent Note
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<lanSwitch 'You unfold Robin’s note. Some lines have been crossed out and written again.' '你展开罗宾的纸条。有几句话被划掉，又重新写了一遍。'>>
 <br><br><i>

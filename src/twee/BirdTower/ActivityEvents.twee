@@ -1,4 +1,4 @@
-:: Deadwood BirdTower Activity Events []
+:: Deadwood BirdTower Activity Events
 <<effects>>
 <<childSelect $childActivityEvent.childid>>
 <<childAge $childActivityEvent.childid>>

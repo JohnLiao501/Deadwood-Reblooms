@@ -1,4 +1,4 @@
-:: Deadwood Robin Night Knock []
+:: Deadwood Robin Night Knock
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<if maplebirch.get('Robin').night.start()>>
   <<pass 5>>
@@ -50,7 +50,7 @@
   <br><br><<getouticon>><<lanLink ['Return to the orphanage', '返回孤儿院'] 'Orphanage'>><<endevent>><</lanLink>>
 <</if>>
 
-:: Deadwood Robin Night Listen []
+:: Deadwood Robin Night Listen
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<if maplebirch.get('Robin').night.finish()>>
   <<pass 15>>
@@ -93,7 +93,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ['Say good night and leave', '道声晚安并离开'] 'Orphanage'>><<endevent>><</lanLink>>
 
-:: Deadwood Robin Night Tomorrow []
+:: Deadwood Robin Night Tomorrow
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<if maplebirch.get('Robin').night.finish()>>
   <<pass 15>>
@@ -125,7 +125,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ['Say good night and leave', '道声晚安并离开'] 'Orphanage'>><<endevent>><</lanLink>>
 
-:: Deadwood Robin Night Stay []
+:: Deadwood Robin Night Stay
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<if $robinromance is 1 and C.npc.Robin.love gte 50 and C.npc.Robin.trauma lt 50
   and maplebirch.get('Robin').available and maplebirch.get('Robin').night.finish()>>
@@ -164,7 +164,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ['Say good night and leave', '道声晚安并离开'] 'Orphanage'>><<endevent>><</lanLink>>
 
-:: Deadwood Robin Night Push []
+:: Deadwood Robin Night Push
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Robin>><<person1>>
 <<if maplebirch.get('Robin').night.finish()>>
   <<pass 10>>

@@ -1,131 +1,131 @@
-:: Deadwood Reblooms Casino Lounge []
-<<nobr>>
+:: Deadwood Reblooms Casino Lounge [nobr]
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<if maplebirch.get('LifeSimulation').casino.available>>
-	<<language>>
-		<<option 'EN'>>
-			A few upholstered chairs sit away from the card tables. The lamps here are dimmer. You can hear glasses clinking over the music from downstairs. A server passes with a tray, smiling at a familiar customer before moving on.<br><br>
-			Two customers sit close together by a curtain, laughing over their drinks. Nearby, someone rolls a chip between their fingers while watching a table. An attendant moves a chair out of the way.
-		<<option 'CN'>>
-			几把软椅摆在远离牌桌的地方。这里的灯光更暗些。楼下传来音乐，杯子碰在一起的声音不时响起。服务员端着托盘经过，朝一位熟客笑了笑，随后继续往前走。<br><br>
-			帘子旁，两位客人挨着坐在一起，一边喝酒一边说笑。旁边有人盯着牌桌，手里来回转着一枚筹码。工作人员把挡路的椅子挪开。
-	<</language>><br><br>
-	<<icon 'casino/lounge.png'>><<lanLink ['Sit down for a while (0:15)', '坐下来歇一会儿 (0:15)']>>
-		<<stress -4>><<tiredness -2>><<pass 15>>
-		<<if $passage is 'Deadwood Reblooms Casino Lounge'>>
-		  <<goto 'Deadwood Reblooms Casino Lounge Rest'>>
-		<</if>>
-	<</lanLink>><<lstress>><<ltiredness>><br>
-	<<icon 'casino/poker-chips.png'>>
-	<<if maplebirch.get('LifeSimulation').casino.watch.active>>
-		<<lanLink ['Continue watching the hand', '继续看刚才的牌局'] 'Deadwood Reblooms Casino Lounge Watch'>><</lanLink>>
-	<<else>>
-		<<lanLink ['Watch a hand (0:10)', '在旁边看一局 (0:10)']>>
-			<<run maplebirch.get('LifeSimulation').casino.watch.join(maplebirch.get('LifeSimulation').casino.watch.buyIns[0])>>
-			<<run maplebirch.get('LifeSimulation').casino.watch.deal()>>
-			<<pass 10>>
-			<<if $passage is 'Deadwood Reblooms Casino Lounge'>>
-			  <<goto 'Deadwood Reblooms Casino Lounge Watch'>>
-			<</if>>
-		<</lanLink>>
-	<</if>><br>
-	<<socialiseicon>><<lanLink ['Talk to a server', '与服务员交谈'] 'Deadwood Reblooms Casino Lounge Talk'>><</lanLink>><br><br>
+  <<language>>
+    <<option 'EN'>>
+      A few upholstered chairs sit away from the card tables. The lamps here are dimmer. You can hear glasses clinking over the music from downstairs. A server passes with a tray, smiling at a familiar customer before moving on.<br><br>
+      Two customers sit close together by a curtain, laughing over their drinks. Nearby, someone rolls a chip between their fingers while watching a table. An attendant moves a chair out of the way.
+    <<option 'CN'>>
+      几把软椅摆在远离牌桌的地方。这里的灯光更暗些。楼下传来音乐，杯子碰在一起的声音不时响起。服务员端着托盘经过，朝一位熟客笑了笑，随后继续往前走。<br><br>
+      帘子旁，两位客人挨着坐在一起，一边喝酒一边说笑。旁边有人盯着牌桌，手里来回转着一枚筹码。工作人员把挡路的椅子挪开。
+  <</language>><br><br>
+  <<icon 'casino/lounge.png'>><<lanLink ['Sit down for a while (0:15)', '坐下来歇一会儿 (0:15)']>>
+    <<stress -4>><<tiredness -2>><<pass 15>>
+    <<if $passage is 'Deadwood Reblooms Casino Lounge'>>
+      <<goto 'Deadwood Reblooms Casino Lounge Rest'>>
+    <</if>>
+  <</lanLink>><<lstress>><<ltiredness>><br>
+  <<icon 'casino/poker-chips.png'>>
+  <<if maplebirch.get('LifeSimulation').casino.watch.active>>
+    <<lanLink ['Continue watching the hand', '继续看刚才的牌局'] 'Deadwood Reblooms Casino Lounge Watch'>><</lanLink>>
+  <<else>>
+    <<lanLink ['Watch a hand (0:10)', '在旁边看一局 (0:10)']>>
+      <<run maplebirch.get('LifeSimulation').casino.watch.join(maplebirch.get('LifeSimulation').casino.watch.buyIns[0])>>
+      <<run maplebirch.get('LifeSimulation').casino.watch.deal()>>
+      <<pass 10>>
+      <<if $passage is 'Deadwood Reblooms Casino Lounge'>>
+        <<goto 'Deadwood Reblooms Casino Lounge Watch'>>
+      <</if>>
+    <</lanLink>>
+  <</if>><br>
+  <<socialiseicon>><<lanLink ['Talk to a server', '与服务员交谈'] 'Deadwood Reblooms Casino Lounge Talk'>><</lanLink>><br><br>
 <<else>>
-	<span class='blue'><<language>>
-		<<option 'EN'>>The lounge is being cleared. The way back to the room remains open.
-		<<option 'CN'>>工作人员正在清理休息区。回大厅的路仍然畅通。
-	<</language>></span><br><br>
+  <span class='blue'><<language>>
+    <<option 'EN'>>
+      The lounge is being cleared. The way back to the room remains open.
+    <<option 'CN'>>
+      工作人员正在清理休息区。回大厅的路仍然畅通。
+  <</language>></span><br><br>
 <</if>>
 <<getouticon>><<lanLink ['Return to the room', '返回赌馆'] 'Deadwood Reblooms Life Simulation Casino'>><</lanLink>><br>
-<</nobr>>
 
-:: Deadwood Reblooms Casino Lounge Rest []
-<<nobr>>
+:: Deadwood Reblooms Casino Lounge Rest [nobr]
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<language>>
-	<<option 'EN'>>
-		You sit in an empty chair. Nearby, customers call their bets and count out chips. You lean back and listen for a while.<br><br>
-		A server takes an empty glass from the low table, then leaves you to <span class='green'>rest</span>.
-	<<option 'CN'>>
-		你找了把空椅子坐下。附近的客人报着赌注，数着筹码。你往椅背上一靠，歇了一会儿。<br><br>
-		服务员收走矮桌上的空杯子，让你安静地<span class='green'>休息</span>。
+  <<option 'EN'>>
+    You sit in an empty chair. Nearby, customers call their bets and count out chips. You lean back and listen for a while.<br><br>
+    A server takes an empty glass from the low table, then leaves you to <span class='green'>rest</span>.
+  <<option 'CN'>>
+    你找了把空椅子坐下。附近的客人报着赌注，数着筹码。你往椅背上一靠，歇了一会儿。<br><br>
+    服务员收走矮桌上的空杯子，让你安静地<span class='green'>休息</span>。
 <</language>><br><br>
 <<getouticon>><<lanLink ['Return to the lounge', '返回休息区'] 'Deadwood Reblooms Casino Lounge'>><</lanLink>><br>
-<</nobr>>
 
-:: Deadwood Reblooms Casino Lounge Watch []
-<<nobr>>
+:: Deadwood Reblooms Casino Lounge Watch [nobr]
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<if maplebirch.get('LifeSimulation').casino.watch.state.joined>>
-	<<if !maplebirch.get('LifeSimulation').casino.watch.state.log.length>>
-		<<language>>
-			<<option 'EN'>>
-				You stand beside a Texas hold'em table. Three customers have put their chips down. Marlow deals two cards to each, keeping the faces hidden. "You can watch. Keep your hands off the table."
-			<<option 'CN'>>
-				你站在一张德州扑克牌桌旁。三位客人已经摆好了筹码。马洛给每人发了两张牌，牌面朝下。“看可以。别碰桌上的东西。”
-		<</language>>
-	<<elseif maplebirch.get('LifeSimulation').casino.watch.active>>
-		<<language>>
-			<<option 'EN'>>You stay beside the table, watching the customers place their bets. Marlow waits for the next player to act.
-			<<option 'CN'>>你继续站在桌旁，看着客人们下注。马洛等着下一位客人行动。
-		<</language>>
-	<<else>>
-		<<language>>
-			<<option 'EN'>>The hand is over. The customers wait as Marlow counts out the pot.
-			<<option 'CN'>>这局已经结束。客人们等着马洛清点底池里的筹码。
-		<</language>>
-	<</if>><br><br>
-	<<deadwood-casino-watch-table>>
-	<<if !maplebirch.get('LifeSimulation').casino.watch.active>>
-		<<language>>
-			<<option 'EN'>>
-			Marlow counts out the <span class='gold'>table fee</span> and pushes the remaining chips to the winners. The customers gather their cards for the next deal.
-			<<option 'CN'>>
-			马洛点出<span class='gold'>抽水</span>，把剩下的筹码推给赢家。客人们把牌交回来，等着下一次发牌。
-		<</language>><br><br>
-	<</if>>
+  <<if !maplebirch.get('LifeSimulation').casino.watch.state.log.length>>
+    <<language>>
+      <<option 'EN'>>
+        You stand beside a Texas hold'em table. Three customers have put their chips down. Marlow deals two cards to each, keeping the faces hidden. "You can watch. Keep your hands off the table."
+      <<option 'CN'>>
+        你站在一张德州扑克牌桌旁。三位客人已经摆好了筹码。马洛给每人发了两张牌，牌面朝下。“看可以。别碰桌上的东西。”
+    <</language>>
+  <<elseif maplebirch.get('LifeSimulation').casino.watch.active>>
+    <<language>>
+      <<option 'EN'>>
+        You stay beside the table, watching the customers place their bets. Marlow waits for the next player to act.
+      <<option 'CN'>>
+        你继续站在桌旁，看着客人们下注。马洛等着下一位客人行动。
+    <</language>>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        The hand is over. The customers wait as Marlow counts out the pot.
+      <<option 'CN'>>
+        这局已经结束。客人们等着马洛清点底池里的筹码。
+    <</language>>
+  <</if>><br><br>
+  <<deadwood-casino-watch-table>>
+  <<if !maplebirch.get('LifeSimulation').casino.watch.active>>
+    <<language>>
+      <<option 'EN'>>
+      Marlow counts out the <span class='gold'>table fee</span> and pushes the remaining chips to the winners. The customers gather their cards for the next deal.
+      <<option 'CN'>>
+      马洛点出<span class='gold'>抽水</span>，把剩下的筹码推给赢家。客人们把牌交回来，等着下一次发牌。
+    <</language>><br><br>
+  <</if>>
 <<else>>
-	<<language>>
-		<<option 'EN'>>Nobody is playing at this table. You step back into the lounge.
-		<<option 'CN'>>这张桌子上还没人玩牌。你退回休息区。
-	<</language>><br><br>
+  <<language>>
+    <<option 'EN'>>
+      Nobody is playing at this table. You step back into the lounge.
+    <<option 'CN'>>
+      这张桌子上还没人玩牌。你退回休息区。
+  <</language>><br><br>
 <</if>>
 <<getouticon>><<lanLink ['Return to the lounge', '返回休息区'] 'Deadwood Reblooms Casino Lounge'>><</lanLink>><br>
-<</nobr>>
 
-:: Deadwood Reblooms Casino Lounge Talk []
-<<nobr>>
+:: Deadwood Reblooms Casino Lounge Talk [nobr]
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<if maplebirch.get('LifeSimulation').casino.available>>
-	<<language>>
-		<<option 'EN'>>
-			The server shifts the tray to one hand. "Taking a break, or waiting for someone?" A smile accompanies the question, but the tray stays between you. "It's easier to hear each other over here. Just leave the walkway clear."
-		<<option 'CN'>>
-			服务员把托盘换到一只手上。“歇一会儿，还是在等人？”问话时带着笑，托盘却仍隔在你们之间。“这里说话听得清些。别挡住过道就行。”
-	<</language>><br><br>
-	<<socialiseicon>><<lanLink ['Compliment the uniform (0:05)', '夸赞对方的制服 (0:05)']>>
-		<<pass 5>>
-		<<if $passage is 'Deadwood Reblooms Casino Lounge Talk'>>
-		  <<goto 'Deadwood Reblooms Casino Lounge Compliment'>>
-		<</if>>
-	<</lanLink>><br>
+  <<language>>
+    <<option 'EN'>>
+      The server shifts the tray to one hand. "Taking a break, or waiting for someone?" A smile accompanies the question, but the tray stays between you. "It's easier to hear each other over here. Just leave the walkway clear."
+    <<option 'CN'>>
+      服务员把托盘换到一只手上。“歇一会儿，还是在等人？”问话时带着笑，托盘却仍隔在你们之间。“这里说话听得清些。别挡住过道就行。”
+  <</language>><br><br>
+  <<socialiseicon>><<lanLink ['Compliment the uniform (0:05)', '夸赞对方的制服 (0:05)']>>
+    <<pass 5>>
+    <<if $passage is 'Deadwood Reblooms Casino Lounge Talk'>>
+      <<goto 'Deadwood Reblooms Casino Lounge Compliment'>>
+    <</if>>
+  <</lanLink>><br>
 <<else>>
-	<<language>>
-		<<option 'EN'>>The server is busy clearing glasses and asks you to head back to the room.
-		<<option 'CN'>>服务员正忙着收杯子，示意你先回大厅。
-	<</language>><br>
+  <<language>>
+    <<option 'EN'>>
+      The server is busy clearing glasses and asks you to head back to the room.
+    <<option 'CN'>>
+      服务员正忙着收杯子，示意你先回大厅。
+  <</language>><br>
 <</if>>
 <<getouticon>><<lanLink ['Leave the server to work', '让对方继续工作'] 'Deadwood Reblooms Casino Lounge'>><</lanLink>><br>
-<</nobr>>
 
-:: Deadwood Reblooms Casino Lounge Compliment []
-<<nobr>>
+:: Deadwood Reblooms Casino Lounge Compliment [nobr]
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<language>>
-	<<option 'EN'>>
-		The server glances at the neat collar and laughs. "Thanks. The manager picked it. Don't expect that to get you drinks on credit, though." Somebody calls from a table. With a brief nod to you, the server carries the tray away.
-	<<option 'CN'>>
-		服务员低头看了眼整齐的衣领，笑了起来。“谢谢，领班挑的。可别指望一句好听的话就让我给你赊酒。”牌桌那边有人招呼。对方朝你点了点头，便端着托盘走开。
+  <<option 'EN'>>
+    The server glances at the neat collar and laughs. "Thanks. The manager picked it. Don't expect that to get you drinks on credit, though." Somebody calls from a table. With a brief nod to you, the server carries the tray away.
+  <<option 'CN'>>
+    服务员低头看了眼整齐的衣领，笑了起来。“谢谢，领班挑的。可别指望一句好听的话就让我给你赊酒。”牌桌那边有人招呼。对方朝你点了点头，便端着托盘走开。
 <</language>><br><br>
 <<getouticon>><<lanLink ['Return to the lounge', '返回休息区'] 'Deadwood Reblooms Casino Lounge'>><</lanLink>><br>
-<</nobr>>

@@ -1,10 +1,9 @@
-:: Deadwood Robin Shop Partnership []
-<<nobr>>
+:: Deadwood Robin Shop Partnership [nobr]
 <<set $outside to 0>><<effects>>
 <<deadwood-dynamicblock 'deadwood-shop-partnership'>>
   <<set _investment to maplebirch.get('Robin').shop.investment>>
   <<if !_investment.canAgree>>
-    <span class='blue'><<language>><<option 'EN'>>You'll need to speak to Robin at the shop, when there is time to go through the accounts together.<<option 'CN'>>需要等罗宾在店里有空时，再一起核对账目。<</language>></span><br><br>
+    <span class='blue'><<lanSwitch "You'll need to speak to Robin at the shop, when there is time to go through the accounts together." "需要等罗宾在店里有空时，再一起核对账目。">></span><br><br>
   <<elseif !_investment.contract.agreed>>
     <<npc 'Robin'>><<person1>>
     <<language>>
@@ -29,10 +28,8 @@
   <</if>>
 <</deadwood-dynamicblock>>
 <<getouticon>><<lanLink ['Return to the shop', '返回店内'] 'Deadwood Robin Shop'>><</lanLink>>
-<</nobr>>
 
-:: Deadwood Reblooms Shop Investment []
-<<nobr>>
+:: Deadwood Reblooms Shop Investment [nobr]
 <<set $outside to 0>><<set $location to 'financial_centre'>><<effects>>
 <<deadwood-reblooms-adrian-greeting 'financial_centre_bank'>>
 <<if Time.weekDay lt 2 or Time.weekDay gt 6 or Time.hour lt 9 or Time.hour gte 17>>
@@ -46,15 +43,13 @@
   <</language>><br><br>
   <div id='deadwood-shop-investment-panel'><<deadwood-shop-investment>></div>
 <<else>>
-  <span class='blue'><<language>><<option 'EN'>>Discuss the partnership with Robin at the shop first. The bank cannot sell you a share without Robin's agreement.<<option 'CN'>>先去店里与罗宾商量合伙。没有罗宾的同意，银行不能把店铺份额卖给你。<</language>></span><br><br>
+  <span class='blue'><<lanSwitch "Discuss the partnership with Robin at the shop first. The bank cannot sell you a share without Robin's agreement." "先去店里与罗宾商量合伙。没有罗宾的同意，银行不能把店铺份额卖给你。">></span><br><br>
 <</if>>
 <<deadwood-reblooms-adrian-counter-link>>
 <<getouticon>><<lanLink ['Return to securities services', '返回证券业务台'] 'Deadwood Reblooms Financial Centre Securities'>><</lanLink>>
-<</nobr>>
 
 :: Deadwood Reblooms Shop Investment Widgets [widget]
 <<widget 'deadwood-shop-investment'>>
-<<nobr>>
 <<set _investment to maplebirch.get('Robin').shop.investment>>
 <<set _contract to _investment.contract>>
 <<language>>
@@ -78,7 +73,7 @@
   <</language>> <<printmoney _contract.report.dividend>><br><br>
 <</if>>
 <<if _contract.exit_day gte 0>>
-  <span class='blue'><<language>><<option 'EN'>>The buyback request is pending. Today's indicative payment:<<option 'CN'>>份额回购申请正在等待处理。按今天估值，预计付款：<</language>></span> <<printmoney _investment.exitValue>><br>
+  <span class='blue'><<lanSwitch "The buyback request is pending. Today's indicative payment:" "份额回购申请正在等待处理。按今天估值，预计付款：">></span> <<printmoney _investment.exitValue>><br>
   <<lanLink ['Withdraw the buyback request', '撤回回购申请']>>
     <<run maplebirch.get('Robin').shop.investment.exit(false)>>
     <<replace '#deadwood-shop-investment-panel'>>
@@ -88,7 +83,7 @@
 <<else>>
   <<if _contract.share lt _investment.terms.maximumShare>>
     <<set _shareTarget to _contract.share + _investment.terms.shareStep>>
-    <label><<language>><<option 'EN'>>Total holding after purchase: <<option 'CN'>>购买后总持有份额：<</language>><<listbox '_shareTarget' autoselect>><<optionsfrom [10,20,30,40].filter(share => share > _contract.share)>><</listbox>>%</label><br>
+    <label><<lanSwitch "Total holding after purchase: " "购买后总持有份额：">><<listbox '_shareTarget' autoselect>><<optionsfrom [10,20,30,40].filter(share => share > _contract.share)>><</listbox>>%</label><br>
     <<lanLink ['Check the price', '核对价格']>><<replace '#deadwood-investment-quote'>><<printmoney `maplebirch.get('Robin').shop.investment.quote(Number(_shareTarget)) ?? 0`>><</replace>><</lanLink>>
     <span id='deadwood-investment-quote' aria-live='polite'><<printmoney `_investment.quote(_shareTarget) ?? 0`>></span><br>
     <<lanLink ['Buy the additional share with your debit card', '用借记卡购买新增份额']>>
@@ -97,7 +92,7 @@
         <<replace '#deadwood-shop-investment-panel'>>
           <<deadwood-shop-investment>>
         <</replace>>
-      <<else>><<replace '#deadwood-investment-result'>><span class='red'><<language>><<option 'EN'>>The transfer could not be made. Check your debit card, balance and Robin's availability.<<option 'CN'>>划款未能完成。请核对借记卡、账户余额，以及罗宾是否能正常办理。<</language>></span><</replace>><</if>>
+      <<else>><<replace '#deadwood-investment-result'>><span class='red'><<lanSwitch "The transfer could not be made. Check your debit card, balance and Robin's availability." "划款未能完成。请核对借记卡、账户余额，以及罗宾是否能正常办理。">></span><</replace>><</if>>
     <</lanLink>><br>
     <span id='deadwood-investment-result' aria-live='polite'></span><br>
   <</if>>
@@ -110,5 +105,4 @@
     <</lanLink>><br><br>
   <</if>>
 <</if>>
-<</nobr>>
 <</widget>>

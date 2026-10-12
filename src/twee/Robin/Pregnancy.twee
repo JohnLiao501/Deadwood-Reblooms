@@ -1,4 +1,4 @@
-:: Deadwood Robin Pregnancy Widgets [widget nobr]
+:: Deadwood Robin Pregnancy Widgets [widget]
 <<widget 'deadwood-robin-pregnancy-link'>>
   <<set _pregnancy_present to maplebirch.get('Robin')?.available>>
   <<deadwood-pregnancy-links 'Robin' 'Deadwood Robin' _pregnancy_present>>

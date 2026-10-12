@@ -235,8 +235,10 @@
   <<set _account_rent to 0, _account_cost to 0>>
   <<deadwood-card 'Property accounts' '房产总账'>>
     <<language>>
-      <<option 'EN'>>Expected weekly figures; vacant rooms and unpaid rent can leave you with less.
-      <<option 'CN'>>预计每周收支；空置或欠租时，实际到账可能更少。
+      <<option 'EN'>>
+        Expected weekly figures; vacant rooms and unpaid rent can leave you with less.
+      <<option 'CN'>>
+        预计每周收支；空置或欠租时，实际到账可能更少。
     <</language>>
     <div class='dr-finance-summary'>
       <<for _account_property range _estate.properties>>

@@ -52,7 +52,7 @@
   <<templeicon 'pew'>><<lanLink ['Sit with Sydney by the pew (0:10)', '在长椅旁陪悉尼坐一会儿 (0:10)'] 'Deadwood Reblooms Sydney Trial Talk'>><<set $phase to 'sydney-trial-talk'>><<set $SydneyExpansion.trialTalkDay to Time.days>><<pass 10>><</lanLink>><br>
 <</if>><</widget>>
 
-:: Deadwood Reblooms Sydney Garden Work []
+:: Deadwood Reblooms Sydney Garden Work
 <<set $outside to 1>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if $phase isnot 'sydney-garden-work'
   or !maplebirch.get('Sydney').available>>
@@ -91,7 +91,7 @@
 <br>
 <<lanLink ["Continue","继续"] 'Temple Garden'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Garden Help []
+:: Deadwood Reblooms Sydney Garden Help
 <<set $outside to 1>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if $phase isnot 'sydney-garden-help'
   or !maplebirch.get('Sydney').available or pcAreArmsBound('both')>>
@@ -117,7 +117,7 @@
 <br><br>
 <<lanLink ["Continue","继续"] 'Temple Garden'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Garden Tease []
+:: Deadwood Reblooms Sydney Garden Tease
 <<set $outside to 1>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if $phase isnot 'sydney-garden-tease'
   or !maplebirch.get('Sydney').available or !maplebirch.get('Sydney').canTease>>
@@ -158,7 +158,7 @@
 <br><br>
 <<lanLink ["Continue","继续"] 'Temple Garden'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Quarters Work []
+:: Deadwood Reblooms Sydney Quarters Work
 <<set $outside to 0>><<set $location to 'temple'>>
 <<if _sydneyAvailable is undefined>>
   <<sydneySchedule>>
@@ -205,7 +205,7 @@
 <br>
 <<lanLink ["Continue","继续"] 'Temple Quarters'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Trial Talk []
+:: Deadwood Reblooms Sydney Trial Talk
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if $phase isnot 'sydney-trial-talk'
   or !maplebirch.get('Sydney').available>>
@@ -250,7 +250,7 @@
 <br>
 <<lanLink ["Continue","继续"] 'Temple'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Trial Encourage []
+:: Deadwood Reblooms Sydney Trial Encourage
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if $phase isnot 'sydney-trial-encourage'
   or !maplebirch.get('Sydney').available>>
@@ -276,7 +276,7 @@
 <br><br>
 <<lanLink ["Continue","继续"] 'Temple'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Trial Hand []
+:: Deadwood Reblooms Sydney Trial Hand
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if $phase isnot 'sydney-trial-hand'
   or !maplebirch.get('Sydney').available or $sydneyromance isnot 1 or pcAreArmsBound('both')>>
@@ -300,7 +300,7 @@
 <br><br>
 <<lanLink ["Continue","继续"] 'Temple'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Quarters Help []
+:: Deadwood Reblooms Sydney Quarters Help
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if $phase isnot 'sydney-quarters-help'
   or !maplebirch.get('Sydney').available or pcAreArmsBound('both')>>
@@ -322,7 +322,7 @@
 <br><br>
 <<lanLink ["Continue","继续"] 'Temple Quarters'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Quarters Tease []
+:: Deadwood Reblooms Sydney Quarters Tease
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<if $phase isnot 'sydney-quarters-tease'
   or !maplebirch.get('Sydney').available or !maplebirch.get('Sydney').canTease>>

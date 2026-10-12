@@ -1,4 +1,4 @@
-:: Deadwood BirdTower Hunt Animal Watch []
+:: Deadwood BirdTower Hunt Animal Watch
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -98,7 +98,7 @@
 <</if>>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Animal Land []
+:: Deadwood BirdTower Hunt Animal Land
 <<effects>>
 <<if $NPCList[0].type.includes("fox")>>
   <<language>>
@@ -656,7 +656,7 @@
   <<babyhawk_hunt_return>>
 <</if>>
 
-:: Deadwood BirdTower Hunt Fox Take []
+:: Deadwood BirdTower Hunt Fox Take
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -698,11 +698,11 @@
 <br>
 <<lanLink ["Leave", "离开"] "Deadwood BirdTower Hunt Fox Leave">><</lanLink>>
 <br>
-:: Deadwood BirdTower Hunt Fox Leave []
+:: Deadwood BirdTower Hunt Fox Leave
 <<effects>>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Fox Play No []
+:: Deadwood BirdTower Hunt Fox Play No
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -750,7 +750,7 @@
 <</if>>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Fox Play Yes []
+:: Deadwood BirdTower Hunt Fox Play Yes
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -961,7 +961,7 @@
 <<earnFeat "Dances with Fox">>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Fox Pet []
+:: Deadwood BirdTower Hunt Fox Pet
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -1199,7 +1199,7 @@
 <br><br>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Fox Fight []
+:: Deadwood BirdTower Hunt Fox Fight
 <<if $fightstart is 1>>
   <<set $fightstart to 0>>
   <<violence 1>>
@@ -1271,7 +1271,7 @@
   <span id="next"><<lanLink ["Next", "继续"] "Deadwood BirdTower Hunt Fox Fight">><</lanLink>></span><<nexttext>>
 <</if>>
 
-:: Deadwood BirdTower Hunt Fox Fight Finish []
+:: Deadwood BirdTower Hunt Fox Fight Finish
 <<effects>>
 <<if $enemyarousal gte $enemyarousalmax>>
   <<beastejaculation>>
@@ -1380,7 +1380,7 @@
 <br><br>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Animal Screech []
+:: Deadwood BirdTower Hunt Animal Screech
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -1464,7 +1464,7 @@
 <</if>>
 <<babyhawk_hunt_return>>
 
-:: Deadwood BirdTower Hunt Foxes Land []
+:: Deadwood BirdTower Hunt Foxes Land
 <<effects>>
 <<language>>
   <<option 'EN'>>
@@ -1772,7 +1772,7 @@
   <br>
 <</if>>
 
-:: Deadwood BirdTower Hunt Foxes Watch []
+:: Deadwood BirdTower Hunt Foxes Watch
 <<effects>>
 <<set _mom to ($NPCList[0].pronoun is "f" ? lanSwitch("mom","妈妈") : lanSwitch("dad","爸爸"))>>
 <<language>>

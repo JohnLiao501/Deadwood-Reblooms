@@ -1,4 +1,4 @@
-:: Deadwood BirdTower Hunt End Food []
+:: Deadwood BirdTower Hunt End Food
 <<effects>>
 <<set _childrenIds to maplebirch.get('BirdTower').hungry.map(child => child.childId)>>
 <<set _childrenTotal to _childrenIds.length>>
@@ -82,7 +82,7 @@
   <<endevent>>
 <</lanLink>>
 
-:: Deadwood BirdTower FoodForOne []
+:: Deadwood BirdTower FoodForOne
 <<set _fedIds to Number.isInteger($BirdTower.scene.feeding_id) ? maplebirch.get('BirdTower').feed($BirdTower.scene.feeding_id) : []>>
 <<if _fedIds.length>>
   <<childSelect _fedIds[0]>>
@@ -127,7 +127,7 @@
   <<endevent>>
 <</lanLink>>
 
-:: Deadwood BirdTower FoodForAll []
+:: Deadwood BirdTower FoodForAll
 <<set _fedIds to maplebirch.get('BirdTower').feed('share')>>
 <<if _fedIds.length>>
   <<language>>

@@ -1,16 +1,15 @@
 :: Deadwood Reblooms Finance News [widget]
 
 <<widget 'deadwood-finance-news'>>
-<<nobr>>
   <<set $_paper_news to _args[0] is undefined ? ($Finance.market.news or []) : _args[0]>>
   <<if $_paper_news.length>>
-    <span class='gold'><<language>><<option 'EN'>>Business notices<<option 'CN'>>业务消息<</language>></span><br>
+    <span class='gold'><<lanSwitch "Business notices" "业务消息">></span><br>
     <<for _news range $_paper_news.slice(-3).reverse()>>
       <<switch _news.event>>
         <<case 'farm'>>
-          <<language>><<option 'EN'>>New work at Alex's farm has attracted orders and competition among local suppliers.<<option 'CN'>>艾利克斯农场的新工程带来了订单，本地供应商开始争夺生意。<</language>>
+          <<lanSwitch "New work at Alex's farm has attracted orders and competition among local suppliers." "艾利克斯农场的新工程带来了订单，本地供应商开始争夺生意。">>
         <<case 'raid'>>
-          <span class='red'><<language>><<option 'EN'>>Damage at Alex's farm has disrupted deliveries. Competing suppliers are taking orders.<<option 'CN'>>艾利克斯的农场受损，交货受到影响。竞争对手正在接下订单。<</language>></span>
+          <span class='red'><<lanSwitch "Damage at Alex's farm has disrupted deliveries. Competing suppliers are taking orders." "艾利克斯的农场受损，交货受到影响。竞争对手正在接下订单。">></span>
         <<case 'cafe'>>
           <<language>>
             <<option 'EN'>>
@@ -103,5 +102,4 @@
       <</if>><br>
     <</for>><br>
   <</if>>
-<</nobr>>
 <</widget>>

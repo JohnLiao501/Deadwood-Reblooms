@@ -1,4 +1,4 @@
-:: Deadwood Orchard Alex []
+:: Deadwood Orchard Alex [nobr]
 <<set $outside to 1>><<farm_work_update>><<effects>>
 <<set $_orchard to maplebirch.get('Orchard')>>
 <<if $_orchard?.canTalkAlex>>
@@ -172,8 +172,10 @@
   </div>
 <<else>>
   <<language>>
-    <<option 'EN'>>Alex cannot leave the farm work right now, or you have already spent your break together today.
-    <<option 'CN'>>艾利克斯现在离不开手头的工作，或者你们今天已经一起休息过了。
+    <<option 'EN'>>
+      Alex cannot leave the farm work right now, or you have already spent your break together today.
+    <<option 'CN'>>
+      艾利克斯现在离不开手头的工作，或者你们今天已经一起休息过了。
   <</language>>
 <</if>>
 <br><br><<lanLink ['Return to the orchard', '返回果园'] 'Deadwood Reblooms Orchard'>><<endevent>><<set $eventskip to 1>><</lanLink>><br>

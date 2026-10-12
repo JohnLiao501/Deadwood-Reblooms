@@ -31,7 +31,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Robin Meteor Date []
+:: Deadwood Robin Meteor Date
 <<set $outside to 1>><<set $location to 'beach'>><<effects>><<npc Robin>><<person1>>
 <<set $RobinExpansion.meteor_return to $passagePrev is "Robin's Lemonade" ? 'Beach' : $passagePrev is 'Robin Options' ? 'Robin Options' : 'Orphanage'>>
 <<if maplebirch.get('Robin').available and ['orphanage', 'beach'].includes(getRobinLocation())
@@ -58,7 +58,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ['Leave', '离开'] $RobinExpansion.meteor_return>><<endevent>><</lanLink>>
 
-:: Deadwood Robin Swim Date []
+:: Deadwood Robin Swim Date
 <<set $outside to 1>><<set $location to 'beach'>><<effects>><<npc Robin>><<person1>>
 <<if maplebirch.get('Robin').available and C.npc.Robin.trauma lt 80 and $RobinExpansion.swim_day isnot Time.days
   and getRobinLocation() is 'beach' and Time.hour gte 9 and Time.hour lte 16

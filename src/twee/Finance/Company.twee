@@ -109,7 +109,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Company Registration []
+:: Deadwood Reblooms Company Registration
 <<deadwood-company-header 'town'>>
 <<if _company.available and _company.open and !_company_state.name>>
   <<language>>
@@ -146,7 +146,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Return to the front desk', '返回前台'] 'Town Hall Wait'>><</lanLink>>
 
-:: Deadwood Reblooms Company Lease []
+:: Deadwood Reblooms Company Lease
 <<deadwood-company-header>>
 <<if $officejobintro is 1>>
   <<generateManager>><<person1>>
@@ -181,7 +181,7 @@
 <</if>>
 <<deadwood-company-return>>
 
-:: Deadwood Reblooms Company Office []
+:: Deadwood Reblooms Company Office
 <<deadwood-company-header>>
 <<if !_company_state.office>><<deadwood-company-return>><<exit>><</if>>
 <h3><<print _company_state.name>></h3>
@@ -262,7 +262,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Return to the lobby', '返回大厅'] 'Office Lobby'>><</lanLink>>
 
-:: Deadwood Reblooms Company Contract []
+:: Deadwood Reblooms Company Contract
 <<deadwood-company-header>>
 <<if !_company.canOrder>><<deadwood-company-return>><<exit>><</if>>
 <<set _company_quote to _company.quote>>
@@ -321,7 +321,7 @@
 <</for>>
 <<deadwood-company-return>>
 
-:: Deadwood Reblooms Company Collection []
+:: Deadwood Reblooms Company Collection
 <<deadwood-company-header>>
 <<if !_company.available or !_company.open or _company_state.contract?.stage isnot 'disputed'>><<deadwood-company-return>><<exit>><</if>>
 <<language>>
@@ -346,7 +346,7 @@
 <</lanLink>><br>
 <<deadwood-company-return>>
 
-:: Deadwood Reblooms Company Agreement []
+:: Deadwood Reblooms Company Agreement
 <<deadwood-company-header>>
 <<if !_company.meeting>><<deadwood-company-return>><<exit>><</if>>
 <<npc 'Avery'>><<person1>>
@@ -418,7 +418,7 @@
 <</if>>
 <<deadwood-company-return>>
 
-:: Deadwood Reblooms Company Result []
+:: Deadwood Reblooms Company Result
 <<deadwood-company-header `['registered', 'register-failed'].includes($Finance.company.result) ? 'town' : 'office'`>>
 <<switch _company_state.result>>
   <<case 'registered'>>

@@ -1,4 +1,4 @@
-:: Deadwood BirdTower Childrens Home []
+:: Deadwood BirdTower Childrens Home
 <<getChildrenIds `{location: "otherNest", excludeUnhatched: true}` "both">>
 <<set _childrenIds to _childrenIds.filter(id => $childRecords[id].species is "hawk")>>
 <<set $BirdTower.scene.other_nest to true>>
@@ -50,7 +50,7 @@
   <<set $BirdTower.scene.other_nest to false>>
 <</lanLink>>
 
-:: Deadwood BirdTower Build OtherNest []
+:: Deadwood BirdTower Build OtherNest
 <<npc "Great Hawk">><<person1>>
 <<run maplebirch.get('BirdTower').at('tower').forEach(child => {
   if (child.development.stage === 'Immature' && child.development.grow_hint_immature !== 1) {

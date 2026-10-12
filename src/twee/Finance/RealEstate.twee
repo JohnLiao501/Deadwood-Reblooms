@@ -17,9 +17,9 @@
     <<else>><span class='red'><<lanSwitch 'No property manager is available. Work is suspended.' '没有在职管理员，物业管理工作暂停。'>></span><br><</if>>
     <<language>>
       <<option 'EN'>>
-				The agent charges <span class='gold'><<= ($_estate.rentalTerms.managementFeeRate * 100).toFixed(0)>>% of the assessed weekly rent</span>, at least <<printmoney $_estate.rentalTerms.managementMinimumPennies>>. Repairs are billed separately. They follow up late rent, arrange leak repairs and restore the house when condition falls to <<= $_estate.rentalTerms.repairCondition>>. They cannot spend money you do not have.
+        The agent charges <span class='gold'><<= ($_estate.rentalTerms.managementFeeRate * 100).toFixed(0)>>% of the assessed weekly rent</span>, at least <<printmoney $_estate.rentalTerms.managementMinimumPennies>>. Repairs are billed separately. They follow up late rent, arrange leak repairs and restore the house when condition falls to <<= $_estate.rentalTerms.repairCondition>>. They cannot spend money you do not have.
       <<option 'CN'>>
-				物业管理员每周收取<span class='gold'>当时应收周租金的 <<= ($_estate.rentalTerms.managementFeeRate * 100).toFixed(0)>>%</span>，至少<<printmoney $_estate.rentalTerms.managementMinimumPennies>>，维修费用另计。物业管理员会催收迟付租金、修补漏水，并在房况降至 <<= $_estate.rentalTerms.repairCondition>> 时安排修缮。银行余额不足时，相应工作暂停。
+        物业管理员每周收取<span class='gold'>当时应收周租金的 <<= ($_estate.rentalTerms.managementFeeRate * 100).toFixed(0)>>%</span>，至少<<printmoney $_estate.rentalTerms.managementMinimumPennies>>，维修费用另计。物业管理员会催收迟付租金、修补漏水，并在房况降至 <<= $_estate.rentalTerms.repairCondition>> 时安排修缮。银行余额不足时，相应工作暂停。
     <</language>><br>
     <<if $_management.management_report>>
       <<set $_report to $_management.management_report>>
@@ -31,305 +31,319 @@
 
 <!-- 住宅选择沿用原版街道图标，不为五处房产另造一套近似的房屋图标。 -->
 <<widget 'deadwood-reblooms-property-street-icon'>>
-	<<switch _args[0]>>
-		<<case 'domus'>><<domusicon>>
-		<<case 'barb'>><<barbicon>>
-		<<case 'high'>><<highicon>>
-		<<case 'cliff'>><<clifficon>>
-		<<case 'danube'>><<danubeicon>>
-		<<case 'penthouse'>><<elkicon>>
-	<</switch>>
+  <<switch _args[0]>>
+    <<case 'domus'>><<domusicon>>
+    <<case 'barb'>><<barbicon>>
+    <<case 'high'>><<highicon>>
+    <<case 'cliff'>><<clifficon>>
+    <<case 'danube'>><<danubeicon>>
+    <<case 'penthouse'>><<elkicon>>
+  <</switch>>
 <</widget>>
 
 <<widget 'deadwood-reblooms-property-outdoor-icon'>>
-	<<switch _args[0]>>
-		<<case 'domus' 'danube' 'penthouse'>><<gardenicon>>
-		<<case 'barb'>><<icon 'property/barb-balcony.png'>>
-		<<case 'high'>><<icon 'property/high-roof-terrace.png'>>
-		<<case 'cliff'>><<icon 'property/cliff-sea-balcony.png'>>
-	<</switch>>
+  <<switch _args[0]>>
+    <<case 'domus' 'danube' 'penthouse'>><<gardenicon>>
+    <<case 'barb'>><<icon 'property/barb-balcony.png'>>
+    <<case 'high'>><<icon 'property/high-roof-terrace.png'>>
+    <<case 'cliff'>><<icon 'property/cliff-sea-balcony.png'>>
+  <</switch>>
 <</widget>>
 
 <<widget 'deadwood-reblooms-property-street'>>
-	<<set _property to maplebirch.get("Finance").realEstate.properties.find(item => item.street === $passage)>>
-	<<if _property
-		and maplebirch.get("Finance").realEstate.owns(_property.id)
-		and !maplebirch.get("Finance").realEstate.managementFor(_property.id).rented
-		and !maplebirch.get("Finance").realEstate.isFrozen(_property.id)>>
-		<<deadwood-reblooms-property-street-icon _property.id>><<lanLink [_property.entry_label.EN, _property.entry_label.CN] 'Deadwood Reblooms Property Home'>><<run maplebirch.get("Finance").realEstate.visit(_property.id)>><<pass 2>><</lanLink>><br><br>
-	<</if>>
+  <<set _property to maplebirch.get("Finance").realEstate.properties.find(item => item.street === $passage)>>
+  <<if _property
+    and maplebirch.get("Finance").realEstate.owns(_property.id)
+    and !maplebirch.get("Finance").realEstate.managementFor(_property.id).rented
+    and !maplebirch.get("Finance").realEstate.isFrozen(_property.id)>>
+    <<deadwood-reblooms-property-street-icon _property.id>><<lanLink [_property.entry_label.EN, _property.entry_label.CN] 'Deadwood Reblooms Property Home'>><<run maplebirch.get("Finance").realEstate.visit(_property.id)>><<pass 2>><</lanLink>><br><br>
+  <</if>>
 <</widget>>
 
 <<widget 'deadwood-reblooms-property-furnishings-link'>>
-	<<if $exposed lte 0 and Time.dayState isnot 'night' and Time.hour isnot 21 and $stress lt $stressmax
-		and maplebirch.get("Finance").realEstate.properties.some(property => maplebirch.get("Finance").realEstate.owns(property.id))>>
-		<<furnitureicon 'catalogue'>><<lanLink ['Shop for furniture for your homes', '为自住房选购家具'] 'Deadwood Reblooms Property Furnishings'>><</lanLink>><br><br>
-	<</if>>
+  <<if $exposed lte 0 and Time.dayState isnot 'night' and Time.hour isnot 21 and $stress lt $stressmax
+    and maplebirch.get("Finance").realEstate.properties.some(property => maplebirch.get("Finance").realEstate.owns(property.id))>>
+    <<furnitureicon 'catalogue'>><<lanLink ['Shop for furniture for your homes', '为自住房选购家具'] 'Deadwood Reblooms Property Furnishings'>><</lanLink>><br><br>
+  <</if>>
 <</widget>>
 
 <!-- 邀请和分开居住都从与 NPC 面对面交谈的原版 Passage 进入。 -->
+<<widget 'deadwood-reblooms-property-invitation-menu'>>
+  <<set $_inviteMenu to {
+    'Whitney Home Enter': ['Whitney', 'Deadwood Reblooms Property Invite Whitney'],
+    'Kylar Library': ['Kylar', 'Deadwood Reblooms Property Invite Kylar'],
+    'Kylar Courtyard': ['Kylar', 'Deadwood Reblooms Property Invite Kylar Courtyard'],
+    'Kylar Park': ['Kylar', 'Deadwood Reblooms Property Invite Kylar Park'],
+    'Temple Sydney': ['Sydney', 'Deadwood Reblooms Property Invite Sydney'],
+    'Library Rental Counter': ['Sydney', 'Deadwood Reblooms Property Invite Sydney Library']
+  }[$passage]>>
+  <<if $_inviteMenu and maplebirch.get('Finance') and $Finance>>
+    <<deadwood-reblooms-property-invitation-link $_inviteMenu[0] $_inviteMenu[1]>>
+  <</if>>
+<</widget>>
+
 <<widget 'deadwood-reblooms-property-invitation-link'>>
-	<<set $_inviteName to _args[0]>>
-	<<set $_invitePassage to _args[1]>>
-	<!-- 是否能当面邀请由原版日程决定，关闭立绘后也照常显示。 -->
-	<<if $_inviteName is 'Sydney' and ['Library Rental Counter', 'Science Lesson'].includes($passage)>>
-		<<silently>><<sydneySchedule>><</silently>>
-	<</if>>
-	<!-- Science Lesson 在特殊检查分支先将事件计数加一，并把计时器设为 14，然后才执行 BeforeLinkZone。 -->
-	<<if window.isLoveInterest($_inviteName)
-		and !$combat and !$statFreeze and $stress lt $stressmax
-		and maplebirch.get("Finance").realEstate.properties.some(property => maplebirch.get("Finance").realEstate.owns(property.id) && !maplebirch.get("Finance").realEstate.managementFor(property.id).rented)
-		and ($passage isnot 'Library Rental Counter' or _sydney_location is 'library')
-		and ($passage isnot 'Maths Lesson' or ($schoolstate is 'second' and $whitneymaths is 'seat'
-			and Time.minute lt 59 and (Time.weekDay isnot 6 or Time.minute lt 37)))
-		and ($passage isnot 'English Lesson' or ($schoolstate is 'third' and $kylarenglishstate is 'active'
-			and Time.minute lt 59 and (Time.weekDay isnot 6 or Time.minute lt 37)))
-		and ($passage isnot 'Science Lesson' or ($schoolstate is 'first' and $sydneyScience is 1
-			and _sydney_location is 'science'
-			and Time.minute lt 59 and (Time.weekDay isnot 6 or Time.minute lt 37)
-			and !($schooleventtimer is 14 and [1, 2, 3].includes($schoolevent))
-			and !($stress gte $stressmax and isPregnancyEnding())))
-		and ($passage isnot 'History Lesson' or ($schoolstate is 'fourth' and $robinhistory is 'seat'
-			and Time.minute lt 59 and (Time.weekDay isnot 6 or Time.minute lt 37)))
-		and ($passage isnot 'History Classroom' or ($schoolstate is 'lunch' and $robinhistory is 'seat'))
-		and ($passage isnot 'English Classroom' or ($schoolstate is 'afternoon' and $englishPlay is 'ongoing' and !$englishPlayLate
-			and ($_inviteName is 'Sydney' or (getKylarLocation().area is 'english' and ['rehearsal', 'dual_rehearsal'].includes(getKylarLocation().state)))))>>
-		<<loveicon>><<lanLink ['Talk about living together', '谈谈同住的事'] $_invitePassage>><</lanLink>><br>
-	<</if>>
+  <<set $_inviteName to _args[0]>>
+  <<set $_invitePassage to _args[1]>>
+  <!-- 是否能当面邀请由原版日程决定，关闭立绘后也照常显示。 -->
+  <<if $_inviteName is 'Sydney' and ['Library Rental Counter', 'Science Lesson'].includes($passage)>>
+    <<silently>><<sydneySchedule>><</silently>>
+  <</if>>
+  <!-- Science Lesson 在特殊检查分支先将事件计数加一，并把计时器设为 14，然后才执行 BeforeLinkZone。 -->
+  <<if window.isLoveInterest($_inviteName)
+    and !$combat and !$statFreeze and !$replayScene and $stress lt $stressmax
+    and maplebirch.get("Finance").realEstate.properties.some(property => maplebirch.get("Finance").realEstate.owns(property.id) && !maplebirch.get("Finance").realEstate.managementFor(property.id).rented)
+    and ($passage isnot 'Library Rental Counter' or _sydney_location is 'library')
+    and ($passage isnot 'Maths Lesson' or ($schoolstate is 'second' and $whitneymaths is 'seat'
+      and Time.minute lt 59 and (Time.weekDay isnot 6 or Time.minute lt 37)))
+    and ($passage isnot 'English Lesson' or ($schoolstate is 'third' and $kylarenglishstate is 'active'
+      and Time.minute lt 59 and (Time.weekDay isnot 6 or Time.minute lt 37)))
+    and ($passage isnot 'Science Lesson' or ($schoolstate is 'first' and $sydneyScience is 1
+      and _sydney_location is 'science'
+      and Time.minute lt 59 and (Time.weekDay isnot 6 or Time.minute lt 37)
+      and !($schooleventtimer is 14 and [1, 2, 3].includes($schoolevent))
+      and !($stress gte $stressmax and isPregnancyEnding())))
+    and ($passage isnot 'History Lesson' or ($schoolstate is 'fourth' and $robinhistory is 'seat'
+      and Time.minute lt 59 and (Time.weekDay isnot 6 or Time.minute lt 37)))
+    and ($passage isnot 'History Classroom' or ($schoolstate is 'lunch' and $robinhistory is 'seat'))
+    and ($passage isnot 'English Classroom' or ($schoolstate is 'afternoon' and $englishPlay is 'ongoing' and !$englishPlayLate
+      and ($_inviteName is 'Sydney' or (getKylarLocation().area is 'english' and ['rehearsal', 'dual_rehearsal'].includes(getKylarLocation().state)))))>>
+    <<loveicon>><<lanLink ['Talk about living together', '谈谈同住的事'] $_invitePassage>><</lanLink>><br>
+  <</if>>
 <</widget>>
 
 <<widget 'deadwood-reblooms-property-invitation'>>
-	<<set $_inviteName to _args[0]>>
-	<<set $_inviteReturn to _args[1]>>
-	<<set $_invitePassage to _args[2]>>
-	<<set $_inLesson to ['Maths Lesson', 'English Lesson', 'Science Lesson', 'History Lesson'].includes($_inviteReturn)>>
-	<<set $_inviteProfile to maplebirch.get("Finance").realEstate.residentProfiles.find(profile => profile.id === $_inviteName)>>
-	<<set $_inviteMessage to maplebirch.get("Finance").realEstate.takeHouseholdMessage()>>
-	<<if $_inviteMessage && $_inviteMessage.name is $_inviteName>>
-		<<switch $_inviteMessage.result>>
-			<<case 'joined'>><span class='green'><<= lanSwitch($_inviteProfile.welcome.EN, $_inviteProfile.welcome.CN)>></span><br><br>
-				<<set $_joinedHome to maplebirch.get("Finance").realEstate.residenceOf($_inviteName)>>
-				<<if $_joinedHome>>
-					<<set $_otherResidents to maplebirch.get("Finance").realEstate.residentsAt($_joinedHome.id).filter(profile => profile.id !== $_inviteName)>>
-					<<if $_otherResidents.length gt 0>>
-						<<language>>
-							<<option 'EN'>>
-								You explain who else lives there and show which room is available. Living under the same roof does not mean sharing a bed or entering someone else’s room without asking.
-							<<option 'CN'>>
-								你说明还有谁住在这里，以及哪间房可以使用。同住不等于同床，进别人的房间之前，也要先问一声。
-						<</language>><br><br>
-						<<switch $_inviteName>>
-							<<case 'Robin'>>
-								<<language>>
-									<<option 'EN'>>
-										Robin asks whether there will still be somewhere to sit with you alone. You point out the guest room and promise to knock.
-									<<option 'CN'>>
-										罗宾问，还能不能找个地方单独和你坐一会儿。你指出客房的位置，答应进门前会敲门。
-								<</language>><br>
-							<<case 'Whitney'>>
-								<<language>>
-									<<option 'EN'>>
-										“Keep them out of my things,” Whitney says. Whitney checks the room before putting the key away.
-									<<option 'CN'>>
-										“别让人乱翻我的东西。”惠特尼说。惠特尼确认了房间的位置，才收起钥匙。
-								<</language>><br>
-							<<case 'Kylar'>>
-								<<language>>
-									<<option 'EN'>>
-										Kylar’s smile falters at the other name. “I thought this was for us.” You explain the arrangement again, without calling the guest room a promise of anything more. Kylar checks which room is available, without taking the arrangement as a promise that you belong only to Kylar.
-									<<option 'CN'>>
-										听到另一个名字，凯拉尔的笑容僵了一下。“我以为这是给我们的。”你又解释了一遍安排，没有把客房说成更多的承诺。凯拉尔确认了能用哪间房，却没有把这份安排当成你只属于凯拉尔的承诺。
-								<</language>><br>
-							<<case 'Sydney'>>
-								<<language>>
-									<<option 'EN'>>
-										Sydney asks about privacy and the early morning routine. “Please tell me before changing the arrangement,” Sydney says, looking at you rather than the spare key.
-									<<option 'CN'>>
-										悉尼问起私人空间和清晨的作息。“以后要改安排，先告诉我，好吗？”悉尼看着你，没有去看那把备用钥匙。
-								<</language>><br>
-						<</switch>><br>
-					<</if>>
-				<</if>>
-			<<case 'full'>><span class='red'><<lanSwitch 'There is no room for another person to live there.' '那处房子住不下更多人了。'>></span><br><br>
-			<<case 'bed'>><span class='red'><<language>>
-				<<option 'EN'>>
-					You need a double bed before you can live together there.
-				<<option 'CN'>>
-					你们需要一张双人床，才能住在一起。
-			<</language>></span><br><br>
-			<<case 'conflict'>>
-				<<if $_inviteMessage.refused_by isnot $_inviteName>>
-					<<if $_inviteMessage.refused_by is 'Robin'>>
-						<<language>>
-							<<option 'EN'>>
-								You think of Robin returning home to find Whitney there. You put the spare key away rather than offer Robin’s home without agreement.
-							<<option 'CN'>>
-								你想到罗宾回家后发现惠特尼也住在那里。你收起备用钥匙，没有替罗宾答应这项安排。
-						<</language>><br>
-					<<elseif C.npc.Kylar.rage gte 60>>
-						<<language>>
-							<<option 'EN'>>
-								You know how Kylar reacts when someone else gets close to you. You withdraw this offer rather than promise a shared address Kylar will refuse.
-							<<option 'CN'>>
-								你知道凯拉尔看见别人靠近你时会有什么反应。你收回这次提议，没有许下凯拉尔不会接受的共同住址。
-						<</language>><br>
-					<<else>>
-						<<language>>
-							<<option 'EN'>>
-								You cannot offer Whitney a place in Kylar’s home as though their hostility ended at the door. You put the spare key away.
-							<<option 'CN'>>
-								你没法把凯拉尔的住处也交给惠特尼，装作两人的敌意到了门口就会消失。你收起备用钥匙。
-						<</language>><br>
-					<</if>>
-					<<if $_inviteName is 'Whitney'>>
-						<<language>>
-							<<option 'EN'>>
-								Whitney laughs through the nose. “So find me somewhere better.” You leave the occupied house out of the offer.
-							<<option 'CN'>>
-								惠特尼从鼻子里笑了一声。“那就给我找个更好的。”你没有把已经有人住的房子重新提出。
-						<</language>><br><br>
-					<</if>>
-				<<elseif $_inviteMessage.refused_by is 'Robin'>>
-					<<if C.npc.Robin.dom gte 80 and C.npc.Robin.trauma lt 20>>
-						<<language>>
-							<<option 'EN'>>
-								Robin puts the key down. “I’m not living with Whitney. Find somewhere else.” The answer is directed at you, and Robin waits until you acknowledge it.
-							<<option 'CN'>>
-								罗宾把钥匙放下。“我不和惠特尼住。换个地方吧。”这句话是对你说的，罗宾等着你回应，没有让你略过。
-						<</language>><br><br>
-					<<else>>
-						<<language>>
-							<<option 'EN'>>
-								Robin stops smiling when you mention Whitney. “Will Whitney be there too? Then I don’t want to.” You put the spare key away.
-							<<option 'CN'>>
-								听见惠特尼的名字，罗宾脸上的笑容消失了。“惠特尼也住在那里？那我不想去。”你收起了备用钥匙。
-						<</language>><br><br>
-					<</if>>
-				<<elseif $_inviteMessage.refused_by is 'Kylar'>>
-					<<if C.npc.Kylar.rage gte 60>>
-						<<language>>
-							<<option 'EN'>>
-								Kylar grips the key until the knuckles whiten. “So this isn’t just for us.” You start to answer, but Kylar turns away and ends the conversation.
-							<<option 'CN'>>
-								凯拉尔攥着钥匙，指节渐渐发白。“所以，这里不只是给我们的。”你刚要回答，凯拉尔便转身离开，结束了这场谈话。
-						<</language>><br><br>
-					<<else>>
-						<<language>>
-							<<option 'EN'>>
-								“Whitney?” Kylar pulls back before taking the spare key. “No. Somewhere else.” The suggestion of a separate room does not change the answer.
-							<<option 'CN'>>
-								“惠特尼？”凯拉尔在接过备用钥匙前退了一步。“不要。换个地方。”你提到还有单独的房间，也没有改变这个回答。
-						<</language>><br><br>
-					<</if>>
-				<</if>>
-				<span class='red'><i><<language>>
-					<<option 'EN'>>
-						The shared arrangement was refused. You can offer a separate home.
-					<<option 'CN'>>
-						共同入住的安排被拒绝了，你可以另找一处住所。
-				<</language>></i></span><br><br>
-			<<case 'left'>><<lanSwitch 'You agree to live apart again.' '你们说好重新分开居住。'>><br><br>
-		<</switch>>
-	<</if>>
-	<<if !window.isLoveInterest($_inviteName)>>
-		<span class='blue'><i><<language>>
-			<<option 'EN'>>
-				You need to speak as lovers before making such a promise.
-			<<option 'CN'>>
-				你们还不是恋人，没法谈这件事。
-		<</language>></i></span><br><br>
-	<<else>>
-		<<if $_inLesson>>
-			<<language>>
-				<<option 'EN'>>
-					You lean close and keep your voice low so the teacher cannot hear.
-				<<option 'CN'>>
-					你凑近对方，压低声音，免得被老师听见。
-			<</language>><br><br>
-		<</if>>
-		<<set $_currentHome to maplebirch.get("Finance").realEstate.properties.find(property => maplebirch.get("Finance").realEstate.residentsAt(property.id).some(resident => resident.id === $_inviteName))>>
-		<<if $_currentHome>>
-			<<language>>
-				<<option 'EN'>>
-				You mention the keys to <<= $_currentHome.name.EN>>. <<= $_inviteName>> already has one, tucked safely away.
-				<br><br>
-				<span class='blue'><i>You can ask <<= $_inviteName>> to live separately again, or offer a different home.</i></span>
-				<<option 'CN'>>
-				你提起<<= $_currentHome.name.CN>>的钥匙。<<= maplebirch.auto($_inviteName)>>已经收好了一把。
-				<br><br>
-				<span class='blue'><i>你可以和<<= maplebirch.auto($_inviteName)>>商量重新分开住，或是搬去另一处房子。</i></span>
-			<</language>><br><br>
-			<<capture $_inviteName $_currentHome>>
-				<<lanLink ['Discuss living separately', '商量分开居住'] $_invitePassage>>
-					<<run maplebirch.get("Finance").realEstate.endCohabitation($_inviteName, $_currentHome.id)>>
-				<</lanLink>><br>
-			<</capture>>
-		<<else>>
-			<<switch $_inviteName>>
-				<<case 'Robin'>>
-					<<language>>
-						<<option 'EN'>>
-							You ask Robin whether they would like a key of their own, while still helping at the orphanage.
-						<<option 'CN'>>
-							你问罗宾，愿不愿意收下一把钥匙。白天还可以照常照顾孤儿院。
-					<</language>><br><br>
-				<<case 'Whitney'>>
-					<<language>>
-						<<option 'EN'>>
-							You suggest sharing a place. Whitney folds their arms, waiting for you to say where.
-						<<option 'CN'>>
-							你提出一起住。惠特尼抱起胳膊，等你说出住处。
-					<</language>><br><br>
-				<<case 'Kylar'>>
-					<<language>>
-						<<option 'EN'>>
-							You ask Kylar whether they would like somewhere to come home to with you.
-						<<option 'CN'>>
-							你问凯拉尔，愿不愿意和你一起有个回去的地方。
-					<</language>><br><br>
-				<<case 'Sydney'>>
-					<<language>>
-						<<option 'EN'>>
-							You ask Sydney whether they could come home to you after their temple duties.
-						<<option 'CN'>>
-							你问悉尼，忙完神殿的事后，愿不愿意回到你们共同的家。
-					<</language>><br><br>
-			<</switch>>
-		<</if>>
-		<<for $_inviteProperty range maplebirch.get("Finance").realEstate.properties>>
-			<<capture $_inviteProperty $_inviteName $_inLesson>>
-				<<if maplebirch.get("Finance").realEstate.owns($_inviteProperty.id)
-					and !maplebirch.get("Finance").realEstate.managementFor($_inviteProperty.id).rented
-					and !maplebirch.get("Finance").realEstate.isFrozen($_inviteProperty.id)
-					and $_currentHome?.id isnot $_inviteProperty.id>>
-					<<set $_occupants to maplebirch.get("Finance").realEstate.residentsAt($_inviteProperty.id).length>>
-					<<if $_occupants gte $_inviteProperty.resident_capacity>>
-						<<deadwood-reblooms-property-street-icon $_inviteProperty.id>><span class='red'><<= lanSwitch($_inviteProperty.name.EN, $_inviteProperty.name.CN)>> · <<lanSwitch 'No room for another resident' '住不下更多人'>></span><br>
-					<<elseif !maplebirch.get("Finance").realEstate.canShareBed($_inviteProperty.id)>>
-						<<deadwood-reblooms-property-street-icon $_inviteProperty.id>><span class='red'><<= lanSwitch($_inviteProperty.name.EN, $_inviteProperty.name.CN)>> · <<lanSwitch 'Needs a double bed' '需要双人床'>></span><br>
-					<<else>>
-						<<if $_occupants gt 0 and maplebirch.get("Finance").realEstate.householdRefusal([...maplebirch.get("Finance").realEstate.residentsAt($_inviteProperty.id).map(profile => profile.id), $_inviteName])>>
-							<span class='red'><i><<language>>
-								<<option 'EN'>>
-									You cannot assume these two will agree to live together. They can stay in separate homes.
-								<<option 'CN'>>
-									你不能指望这两个人会同意一起住。可以让他们分别住在不同的房子里。
-							<</language>></i></span><br>
-						<</if>>
-						<<if $_occupants gt 0>>
-							<span class='blue'><i><<lanSwitch 'Already living here: ' '这里已有同住者：'>><<= maplebirch.get("Finance").realEstate.residentsAt($_inviteProperty.id).map(profile => maplebirch.auto(profile.id)).join(lanSwitch(', ', '、'))>><<lanSwitch '. ' '。'>><<lanSwitch 'You explain this before offering the spare key.' '你先说明这一点，再提出交付备用钥匙。'>></i></span><br>
-						<</if>>
-						<<deadwood-reblooms-property-street-icon $_inviteProperty.id>>
-						<<lanLink `[ $_inviteProperty.name.EN + ($_inLesson ? ' (0:01)' : ' (0:30)'), $_inviteProperty.name.CN + ($_inLesson ? ' (0:01)' : ' (0:30)') ]` $_invitePassage>>
-							<<pass `$_inLesson ? 1 : 30`>>
-							<<run maplebirch.get("Finance").realEstate.inviteResident($_inviteName, $_inviteProperty.id)>>
-						<</lanLink>><br>
-					<</if>>
-				<</if>>
-			<</capture>>
-		<</for>>
-	<</if>>
-	<br><<lanLink ['Continue talking', '继续交谈'] $_inviteReturn>><</lanLink>>
+  <<set $_inviteName to _args[0]>>
+  <<set $_inviteReturn to _args[1]>>
+  <<set $_invitePassage to _args[2]>>
+  <<set $_inLesson to ['Maths Lesson', 'English Lesson', 'Science Lesson', 'History Lesson'].includes($_inviteReturn)>>
+  <<set $_inviteProfile to maplebirch.get("Finance").realEstate.residentProfiles.find(profile => profile.id === $_inviteName)>>
+  <<set $_inviteMessage to maplebirch.get("Finance").realEstate.takeHouseholdMessage()>>
+  <<if $_inviteMessage && $_inviteMessage.name is $_inviteName>>
+    <<switch $_inviteMessage.result>>
+      <<case 'joined'>><span class='green'><<= lanSwitch($_inviteProfile.welcome.EN, $_inviteProfile.welcome.CN)>></span><br><br>
+        <<set $_joinedHome to maplebirch.get("Finance").realEstate.residenceOf($_inviteName)>>
+        <<if $_joinedHome>>
+          <<set $_otherResidents to maplebirch.get("Finance").realEstate.residentsAt($_joinedHome.id).filter(profile => profile.id !== $_inviteName)>>
+          <<if $_otherResidents.length gt 0>>
+            <<language>>
+              <<option 'EN'>>
+                You explain who else lives there and show which room is available. Living under the same roof does not mean sharing a bed or entering someone else’s room without asking.
+              <<option 'CN'>>
+                你说明还有谁住在这里，以及哪间房可以使用。同住不等于同床，进别人的房间之前，也要先问一声。
+            <</language>><br><br>
+            <<switch $_inviteName>>
+              <<case 'Robin'>>
+                <<language>>
+                  <<option 'EN'>>
+                    Robin asks whether there will still be somewhere to sit with you alone. You point out the guest room and promise to knock.
+                  <<option 'CN'>>
+                    罗宾问，还能不能找个地方单独和你坐一会儿。你指出客房的位置，答应进门前会敲门。
+                <</language>><br>
+              <<case 'Whitney'>>
+                <<language>>
+                  <<option 'EN'>>
+                    “Keep them out of my things,” Whitney says. Whitney checks the room before putting the key away.
+                  <<option 'CN'>>
+                    “别让人乱翻我的东西。”惠特尼说。惠特尼确认了房间的位置，才收起钥匙。
+                <</language>><br>
+              <<case 'Kylar'>>
+                <<language>>
+                  <<option 'EN'>>
+                    Kylar’s smile falters at the other name. “I thought this was for us.” You explain the arrangement again, without calling the guest room a promise of anything more. Kylar checks which room is available, without taking the arrangement as a promise that you belong only to Kylar.
+                  <<option 'CN'>>
+                    听到另一个名字，凯拉尔的笑容僵了一下。“我以为这是给我们的。”你又解释了一遍安排，没有把客房说成更多的承诺。凯拉尔确认了能用哪间房，却没有把这份安排当成你只属于凯拉尔的承诺。
+                <</language>><br>
+              <<case 'Sydney'>>
+                <<language>>
+                  <<option 'EN'>>
+                    Sydney asks about privacy and the early morning routine. “Please tell me before changing the arrangement,” Sydney says, looking at you rather than the spare key.
+                  <<option 'CN'>>
+                    悉尼问起私人空间和清晨的作息。“以后要改安排，先告诉我，好吗？”悉尼看着你，没有去看那把备用钥匙。
+                <</language>><br>
+            <</switch>><br>
+          <</if>>
+        <</if>>
+      <<case 'full'>><span class='red'><<lanSwitch 'There is no room for another person to live there.' '那处房子住不下更多人了。'>></span><br><br>
+      <<case 'bed'>><span class='red'><<language>>
+        <<option 'EN'>>
+          You need a double bed before you can live together there.
+        <<option 'CN'>>
+          你们需要一张双人床，才能住在一起。
+      <</language>></span><br><br>
+      <<case 'conflict'>>
+        <<if $_inviteMessage.refused_by isnot $_inviteName>>
+          <<if $_inviteMessage.refused_by is 'Robin'>>
+            <<language>>
+              <<option 'EN'>>
+                You think of Robin returning home to find Whitney there. You put the spare key away rather than offer Robin’s home without agreement.
+              <<option 'CN'>>
+                你想到罗宾回家后发现惠特尼也住在那里。你收起备用钥匙，没有替罗宾答应这项安排。
+            <</language>><br>
+          <<elseif C.npc.Kylar.rage gte 60>>
+            <<language>>
+              <<option 'EN'>>
+                You know how Kylar reacts when someone else gets close to you. You withdraw this offer rather than promise a shared address Kylar will refuse.
+              <<option 'CN'>>
+                你知道凯拉尔看见别人靠近你时会有什么反应。你收回这次提议，没有许下凯拉尔不会接受的共同住址。
+            <</language>><br>
+          <<else>>
+            <<language>>
+              <<option 'EN'>>
+                You cannot offer Whitney a place in Kylar’s home as though their hostility ended at the door. You put the spare key away.
+              <<option 'CN'>>
+                你没法把凯拉尔的住处也交给惠特尼，装作两人的敌意到了门口就会消失。你收起备用钥匙。
+            <</language>><br>
+          <</if>>
+          <<if $_inviteName is 'Whitney'>>
+            <<language>>
+              <<option 'EN'>>
+                Whitney laughs through the nose. “So find me somewhere better.” You leave the occupied house out of the offer.
+              <<option 'CN'>>
+                惠特尼从鼻子里笑了一声。“那就给我找个更好的。”你没有把已经有人住的房子重新提出。
+            <</language>><br><br>
+          <</if>>
+        <<elseif $_inviteMessage.refused_by is 'Robin'>>
+          <<if C.npc.Robin.dom gte 80 and C.npc.Robin.trauma lt 20>>
+            <<language>>
+              <<option 'EN'>>
+                Robin puts the key down. “I’m not living with Whitney. Find somewhere else.” The answer is directed at you, and Robin waits until you acknowledge it.
+              <<option 'CN'>>
+                罗宾把钥匙放下。“我不和惠特尼住。换个地方吧。”这句话是对你说的，罗宾等着你回应，没有让你略过。
+            <</language>><br><br>
+          <<else>>
+            <<language>>
+              <<option 'EN'>>
+                Robin stops smiling when you mention Whitney. “Will Whitney be there too? Then I don’t want to.” You put the spare key away.
+              <<option 'CN'>>
+                听见惠特尼的名字，罗宾脸上的笑容消失了。“惠特尼也住在那里？那我不想去。”你收起了备用钥匙。
+            <</language>><br><br>
+          <</if>>
+        <<elseif $_inviteMessage.refused_by is 'Kylar'>>
+          <<if C.npc.Kylar.rage gte 60>>
+            <<language>>
+              <<option 'EN'>>
+                Kylar grips the key until the knuckles whiten. “So this isn’t just for us.” You start to answer, but Kylar turns away and ends the conversation.
+              <<option 'CN'>>
+                凯拉尔攥着钥匙，指节渐渐发白。“所以，这里不只是给我们的。”你刚要回答，凯拉尔便转身离开，结束了这场谈话。
+            <</language>><br><br>
+          <<else>>
+            <<language>>
+              <<option 'EN'>>
+                “Whitney?” Kylar pulls back before taking the spare key. “No. Somewhere else.” The suggestion of a separate room does not change the answer.
+              <<option 'CN'>>
+                “惠特尼？”凯拉尔在接过备用钥匙前退了一步。“不要。换个地方。”你提到还有单独的房间，也没有改变这个回答。
+            <</language>><br><br>
+          <</if>>
+        <</if>>
+        <span class='red'><i><<language>>
+          <<option 'EN'>>
+            The shared arrangement was refused. You can offer a separate home.
+          <<option 'CN'>>
+            共同入住的安排被拒绝了，你可以另找一处住所。
+        <</language>></i></span><br><br>
+      <<case 'left'>><<lanSwitch 'You agree to live apart again.' '你们说好重新分开居住。'>><br><br>
+    <</switch>>
+  <</if>>
+  <<if !window.isLoveInterest($_inviteName)>>
+    <span class='blue'><i><<language>>
+      <<option 'EN'>>
+        You need to speak as lovers before making such a promise.
+      <<option 'CN'>>
+        你们还不是恋人，没法谈这件事。
+    <</language>></i></span><br><br>
+  <<else>>
+    <<if $_inLesson>>
+      <<language>>
+        <<option 'EN'>>
+          You lean close and keep your voice low so the teacher cannot hear.
+        <<option 'CN'>>
+          你凑近对方，压低声音，免得被老师听见。
+      <</language>><br><br>
+    <</if>>
+    <<set $_currentHome to maplebirch.get("Finance").realEstate.properties.find(property => maplebirch.get("Finance").realEstate.residentsAt(property.id).some(resident => resident.id === $_inviteName))>>
+    <<if $_currentHome>>
+      <<language>>
+        <<option 'EN'>>
+        You mention the keys to <<= $_currentHome.name.EN>>. <<= $_inviteName>> already has one, tucked safely away.
+        <br><br>
+        <span class='blue'><i>You can ask <<= $_inviteName>> to live separately again, or offer a different home.</i></span>
+        <<option 'CN'>>
+        你提起<<= $_currentHome.name.CN>>的钥匙。<<= maplebirch.auto($_inviteName)>>已经收好了一把。
+        <br><br>
+        <span class='blue'><i>你可以和<<= maplebirch.auto($_inviteName)>>商量重新分开住，或是搬去另一处房子。</i></span>
+      <</language>><br><br>
+      <<capture $_inviteName $_currentHome>>
+        <<lanLink ['Discuss living separately', '商量分开居住'] $_invitePassage>>
+          <<run maplebirch.get("Finance").realEstate.endCohabitation($_inviteName, $_currentHome.id)>>
+        <</lanLink>><br>
+      <</capture>>
+    <<else>>
+      <<switch $_inviteName>>
+        <<case 'Robin'>>
+          <<language>>
+            <<option 'EN'>>
+              You ask Robin whether they would like a key of their own, while still helping at the orphanage.
+            <<option 'CN'>>
+              你问罗宾，愿不愿意收下一把钥匙。白天还可以照常照顾孤儿院。
+          <</language>><br><br>
+        <<case 'Whitney'>>
+          <<language>>
+            <<option 'EN'>>
+              You suggest sharing a place. Whitney folds their arms, waiting for you to say where.
+            <<option 'CN'>>
+              你提出一起住。惠特尼抱起胳膊，等你说出住处。
+          <</language>><br><br>
+        <<case 'Kylar'>>
+          <<language>>
+            <<option 'EN'>>
+              You ask Kylar whether they would like somewhere to come home to with you.
+            <<option 'CN'>>
+              你问凯拉尔，愿不愿意和你一起有个回去的地方。
+          <</language>><br><br>
+        <<case 'Sydney'>>
+          <<language>>
+            <<option 'EN'>>
+              You ask Sydney whether they could come home to you after their temple duties.
+            <<option 'CN'>>
+              你问悉尼，忙完神殿的事后，愿不愿意回到你们共同的家。
+          <</language>><br><br>
+      <</switch>>
+    <</if>>
+    <<for $_inviteProperty range maplebirch.get("Finance").realEstate.properties>>
+      <<capture $_inviteProperty $_inviteName $_inLesson>>
+        <<if maplebirch.get("Finance").realEstate.owns($_inviteProperty.id)
+          and !maplebirch.get("Finance").realEstate.managementFor($_inviteProperty.id).rented
+          and !maplebirch.get("Finance").realEstate.isFrozen($_inviteProperty.id)
+          and $_currentHome?.id isnot $_inviteProperty.id>>
+          <<set $_occupants to maplebirch.get("Finance").realEstate.residentsAt($_inviteProperty.id).length>>
+          <<if $_occupants gte $_inviteProperty.resident_capacity>>
+            <<deadwood-reblooms-property-street-icon $_inviteProperty.id>><span class='red'><<= lanSwitch($_inviteProperty.name.EN, $_inviteProperty.name.CN)>> · <<lanSwitch 'No room for another resident' '住不下更多人'>></span><br>
+          <<elseif !maplebirch.get("Finance").realEstate.canShareBed($_inviteProperty.id)>>
+            <<deadwood-reblooms-property-street-icon $_inviteProperty.id>><span class='red'><<= lanSwitch($_inviteProperty.name.EN, $_inviteProperty.name.CN)>> · <<lanSwitch 'Needs a double bed' '需要双人床'>></span><br>
+          <<else>>
+            <<if $_occupants gt 0 and maplebirch.get("Finance").realEstate.householdRefusal([...maplebirch.get("Finance").realEstate.residentsAt($_inviteProperty.id).map(profile => profile.id), $_inviteName])>>
+              <span class='red'><i><<language>>
+                <<option 'EN'>>
+                  You cannot assume these two will agree to live together. They can stay in separate homes.
+                <<option 'CN'>>
+                  你不能指望这两个人会同意一起住。可以让他们分别住在不同的房子里。
+              <</language>></i></span><br>
+            <</if>>
+            <<if $_occupants gt 0>>
+              <span class='blue'><i><<lanSwitch 'Already living here: ' '这里已有同住者：'>><<= maplebirch.get("Finance").realEstate.residentsAt($_inviteProperty.id).map(profile => maplebirch.auto(profile.id)).join(lanSwitch(', ', '、'))>><<lanSwitch '. ' '。'>><<lanSwitch 'You explain this before offering the spare key.' '你先说明这一点，再提出交付备用钥匙。'>></i></span><br>
+            <</if>>
+            <<deadwood-reblooms-property-street-icon $_inviteProperty.id>>
+            <<lanLink `[ $_inviteProperty.name.EN + ($_inLesson ? ' (0:01)' : ' (0:30)'), $_inviteProperty.name.CN + ($_inLesson ? ' (0:01)' : ' (0:30)') ]` $_invitePassage>>
+              <<pass `$_inLesson ? 1 : 30`>>
+              <<run maplebirch.get("Finance").realEstate.inviteResident($_inviteName, $_inviteProperty.id)>>
+            <</lanLink>><br>
+          <</if>>
+        <</if>>
+      <</capture>>
+    <</for>>
+  <</if>>
+  <br><<lanLink ['Continue talking', '继续交谈'] $_inviteReturn>><</lanLink>>
 <</widget>>
 
 <<widget 'deadwood-home-facilities'>>
@@ -382,61 +396,64 @@
 <</widget>>
 
 <<widget 'deadwood-reblooms-property-wardrobe-exit'>>
-	<<if $passage is 'Deadwood Reblooms Company Suite Storage'>>
-		<<lanLink ['Close the storage boxes', '合上寄存箱'] 'Deadwood Reblooms Company Suite'>><<cleanupOnWardrobeExit>><</lanLink>>
-	<<else>>
-		<<lanLink ["Close the wardrobe", "关上衣柜"] 'Deadwood Reblooms Property Bedroom'>><<cleanupOnWardrobeExit>><</lanLink>>
-	<</if>>
+  <<if $passage is 'Deadwood Reblooms Company Suite Storage'>>
+    <<lanLink ['Close the storage boxes', '合上寄存箱'] 'Deadwood Reblooms Company Suite'>><<cleanupOnWardrobeExit>><</lanLink>>
+  <<else>>
+    <<lanLink ["Close the wardrobe", "关上衣柜"] 'Deadwood Reblooms Property Bedroom'>><<cleanupOnWardrobeExit>><</lanLink>>
+  <</if>>
 <</widget>>
 
 <<widget 'deadwood-reblooms-property-sleep-outfits'>>
-	<<run maplebirch.get("Finance").realEstate.openWardrobe()>><<wardrobeSelection true>>
-	<<set $storeLocation to 'Deadwood Property Bed'>>
-	<<set _sleepBed to maplebirch.get("Finance").realEstate.furniture(maplebirch.get("Finance").realEstate.current.id, 'bed')>>
-	<<if !$earSlime.alwaysSleepNaked or $hypnosis_traits.silence>>
-		<<for _index, _outfit range $outfit>>
-			<<if _outfit.type.includes('sleep')>>
-				<<capture _index _outfit>>
-					<<set _outfitname to _outfit.name + (_outfit.colors is false ? '' : ' [C]')>>
-					<<furnitureicon _sleepBed.iconFile>><<lanLink `['Wear ' + _outfitname + ' and climb in bed', '穿上' + _outfitname + '并爬到床上']` 'Deadwood Reblooms Property Bed'>><<set $wear_outfit to _index>><<saveTempHairStyle>><</lanLink>><br>
-				<</capture>>
-			<</if>>
-		<</for>>
-	<</if>>
+  <<run maplebirch.get("Finance").realEstate.openWardrobe()>><<wardrobeSelection true>>
+  <<set $storeLocation to 'Deadwood Property Bed'>>
+  <<set _sleepBed to maplebirch.get("Finance").realEstate.furniture(maplebirch.get("Finance").realEstate.current.id, 'bed')>>
+  <<if !$earSlime.alwaysSleepNaked or $hypnosis_traits.silence>>
+    <<for _index, _outfit range $outfit>>
+      <<if _outfit.type.includes('sleep')>>
+        <<capture _index _outfit>>
+          <<set _outfitname to _outfit.name + (_outfit.colors is false ? '' : ' [C]')>>
+          <<furnitureicon _sleepBed.iconFile>><<lanLink `['Wear ' + _outfitname + ' and climb in bed', '穿上' + _outfitname + '并爬到床上']` 'Deadwood Reblooms Property Bed'>><<set $wear_outfit to _index>><<saveTempHairStyle>><</lanLink>><br>
+        <</capture>>
+      <</if>>
+    <</for>>
+  <</if>>
 <</widget>>
 
 <<widget 'deadwood-reblooms-property-clothes-on'>>
-	<<run maplebirch.get("Finance").realEstate.openWardrobe()>>
-	<<storeon 'Deadwood Property Bed'>><<loadTempHairStyle>>
-	<<updateWornClothingLocation $wardrobe_location>>
-	<<set $wear_outfit to 'none'>>
+  <<run maplebirch.get("Finance").realEstate.openWardrobe()>>
+  <<storeon 'Deadwood Property Bed'>><<loadTempHairStyle>>
+  <<updateWornClothingLocation $wardrobe_location>>
+  <<set $wear_outfit to 'none'>>
 <</widget>>
 
-:: Deadwood Reblooms Property Office []
-<<nobr>>
+:: Deadwood Reblooms Property Office [nobr]
 <<set $outside to 0>><<set $location to 'financial_centre'>><<effects>>
 <<deadwood-reblooms-adrian-greeting 'financial_centre_property'>>
 <<if !maplebirch.get('Finance').realEstate.mortgage.terms.available_terms.includes($Finance.real_estate.mortgage_term)>>
   <<set $Finance.real_estate.mortgage_term to maplebirch.get('Finance').realEstate.mortgage.terms.term_days>>
 <</if>>
 <<language>>
-	<<option 'EN'>>
-	Behind the property desk at the financial centre, <span class='gold'>five deeds</span> stand in a glass display. The agent spreads out the keys and lets you look over the particulars.
-	<<option 'CN'>>
-	金融中心的房产柜台后，玻璃橱窗里摆着<span class='gold'>五处房产的契据</span>。中介摊开钥匙，让你逐项查看房屋资料。
+  <<option 'EN'>>
+  Behind the property desk at the financial centre, <span class='gold'>five deeds</span> stand in a glass display. The agent spreads out the keys and lets you look over the particulars.
+  <<option 'CN'>>
+  金融中心的房产柜台后，玻璃橱窗里摆着<span class='gold'>五处房产的契据</span>。中介摊开钥匙，让你逐项查看房屋资料。
 <</language>><br><br>
 <<if $Finance.bank.opened and !$Finance.bank.debit_card>>
   <span class='blue'><i><<language>>
-    <<option 'EN'>>The agent needs your debit card to authorise purchases, repairs and repayments from your bank account. You can arrange one at the banking desk.
-    <<option 'CN'>>从银行账户支付购房款、维修费或还款时，需要出示借记卡。你可以先到银行柜台办理。
+    <<option 'EN'>>
+      The agent needs your debit card to authorise purchases, repairs and repayments from your bank account. You can arrange one at the banking desk.
+    <<option 'CN'>>
+      从银行账户支付购房款、维修费或还款时，需要出示借记卡。你可以先到银行柜台办理。
   <</language>></i></span><br><br>
 <</if>>
 <<deadwood-dynamicblock 'deadwood-property-mortgage-terms'>>
 <<if !$Finance.real_estate.mortgage>>
   <<deadwood-card 'Mortgage terms' '房贷期限'>>
     <<language>>
-      <<option 'EN'>>Choose a term to see the down payment and weekly instalment for each property.
-      <<option 'CN'>>选择期限，即可查看各处房产的首付和每周应还金额。
+      <<option 'EN'>>
+        Choose a term to see the down payment and weekly instalment for each property.
+      <<option 'CN'>>
+        选择期限，即可查看各处房产的首付和每周应还金额。
     <</language>>
     <div class='dr-finance-actions'>
       <<for _term range maplebirch.get('Finance').realEstate.mortgage.terms.available_terms>>
@@ -464,146 +481,148 @@
 <</if>>
 <div class='deadwood-card-grid'>
 <<for _property range maplebirch.get("Finance").realEstate.properties.filter(property => !property.tenure)>>
-	<<capture _property>>
-		<<set _askingPrice to _property.price>>
-		<<set _baseWeeklyRent to maplebirch.get("Finance").realEstate.baseWeeklyRent(_property.id)>>
-		<<deadwood-card _property.name.EN _property.name.CN>>
-			<div class='dr-finance-summary'>
-				<span><<lanSwitch 'Asking price' '售价'>></span><span><<deadwood-reblooms-finance-money _askingPrice>></span>
-				<span><<lanSwitch 'Floors' '楼层数'>></span><span><<= _property.floors.length>></span>
-				<span><<lanSwitch 'Base weekly rent' '基础周租金'>></span><span><<deadwood-reblooms-finance-money _baseWeeklyRent>></span>
-			</div>
-			<p><<= lanSwitch(_property.description.EN, _property.description.CN)>></p>
-			<<if maplebirch.get("Finance").realEstate.owns(_property.id)>>
-				<<set _management to maplebirch.get("Finance").realEstate.managementFor(_property.id)>>
-				<span class='green'><<lanSwitch 'Owned' '已持有'>></span>
-				<<if !_management.rented>>
-				  · <<lanSwitch 'Your home' '你的住所'>>
-				<</if>>
-				<br>
-				<<set _upkeep to maplebirch.get("Finance").realEstate.maintenanceCost(_property.id)>>
-				<<if maplebirch.get('Finance').realEstate.collateralLimit(_property.id) gt 0>>
-				  <<lanLink ['Borrow against this property', '以这处房产抵押借款'] 'Deadwood Reblooms Property Collateral'>><<set $Finance.real_estate.collateral_property to _property.id>><</lanLink>><br>
-				<</if>>
-				<div class='dr-finance-summary'>
-					<span><<lanSwitch 'Condition' '房屋状况'>></span><span><<= _management.condition>>/100</span>
-					<span><<lanSwitch 'Renovation' '装修等级'>></span><span><<= _management.renovation>>/<<= maplebirch.get("Finance").realEstate.mortgage.terms.rental.max_renovation_level>></span>
-					<span><<lanSwitch 'Weekly upkeep' '每周维护费'>></span><span><<deadwood-reblooms-finance-money _upkeep>></span>
-				</div>
-				<<deadwood-property-management _property.id>>
-				<<icon 'property/improvements.png'>><<lanLink ['Home improvements', '房屋扩建'] 'Deadwood Reblooms Property Extensions'>><<set $Finance.real_estate.furniture_property to _property.id>><</lanLink>><br>
-				<<if _management.rented>>
-					<<if Time.days lt _management.vacancy_until>>
-					  <span class='blue'><<lanSwitch 'Finding a tenant until day ' '寻找租客，预计入住日：'>><<= _management.vacancy_until>></span><br>
-					<</if>>
-					<<if _management.rental_issue>>
-					  <span class='red'><<lanSwitch 'The tenant has left a message.' '租客留下了消息。'>></span> · <<lanLink ['Contact the tenant', '联系租客'] 'Deadwood Reblooms Property Tenant'>><<set $Finance.real_estate.tenant_property to _property.id>><</lanLink>><br>
-					<</if>>
-					<<set _weeklyRent to maplebirch.get("Finance").realEstate.weeklyRent(_property.id)>>
-					<<lanSwitch 'Rented out; weekly rent before upkeep' '已出租。未扣维护费的周租金'>>：<<deadwood-reblooms-finance-money _weeklyRent>><br>
-					<<if _management.lease_end_day is null>>
-					  <<lanLink ['Give tenant seven days notice', '通知租客七天后退租']>>
-					    <<run maplebirch.get("Finance").realEstate.endLease(_property.id)>>
-					    <<run Dynamic.render('deadwood-property-office-properties')>>
-					  <</lanLink>><br>
-					<</if>>
-				<<elseif _management.auction_day isnot null>>
-					<<lanSwitch 'Auction closes on day' '拍卖结束日'>> <<=_management.auction_day>> · <<lanLink ['Withdraw listing', '撤回拍卖委托']>><<run maplebirch.get("Finance").realEstate.cancelAuction(_property.id)>><<run Dynamic.render('deadwood-property-office-properties')>><</lanLink>><br>
-				<<else>>
-					<<if _management.renovation lt maplebirch.get("Finance").realEstate.mortgage.terms.rental.max_renovation_level && !maplebirch.get("Finance").realEstate.isFrozen(_property.id)>>
-						<<set _renovationCost to maplebirch.get("Finance").realEstate.renovationCost(_property.id)>>
-						<<if $Finance.bank.opened and $Finance.bank.debit_card and $Finance.bank.balance gte _renovationCost>>
-						  <<lanLink ["Renovate", "装修"]>>
-						    <<run maplebirch.get("Finance").realEstate.renovate(_property.id)>>
-						    <<run maplebirch.get('Finance').refreshMoneyUI()>>
-						    <<run Dynamic.render('deadwood-property-office-properties')>>
-						  <</lanLink>>
-						<<else>>
-						  <<lanSwitch 'Renovate' '装修'>>
-						<</if>>
-						：<<deadwood-reblooms-finance-money _renovationCost>><br>
-					<</if>>
-					<<if _management.condition lt 100 && !maplebirch.get("Finance").realEstate.isFrozen(_property.id)>>
-						<<set _repairCost to maplebirch.get("Finance").realEstate.repairCost(_property.id)>>
-						<<if $Finance.bank.opened and $Finance.bank.debit_card and $Finance.bank.balance gte _repairCost>>
-						  <<lanLink ["Repair", "维修"]>>
-						    <<run maplebirch.get("Finance").realEstate.repair(_property.id)>>
-						    <<run maplebirch.get('Finance').refreshMoneyUI()>>
-						    <<run Dynamic.render('deadwood-property-office-properties')>>
-						  <</lanLink>>
-						<<else>>
-						  <<lanSwitch 'Repair' '维修'>>
-						<</if>>
-						：<<deadwood-reblooms-finance-money _repairCost>><br>
-					<</if>>
-					<<if maplebirch.get("Finance").realEstate.residentsAt(_property.id).length is 0 && !maplebirch.get("Finance").realEstate.isFrozen(_property.id)>>
-						<<if _management.condition gte maplebirch.get("Finance").realEstate.mortgage.terms.rental.minimum_condition>>
-						  <<lanLink ["Rent out", "出租"]>>
-						    <<run maplebirch.get("Finance").realEstate.rentOut(_property.id)>>
-						    <<run Dynamic.render('deadwood-property-office-properties')>>
-						  <</lanLink>><br>
-						<</if>>
-						<<if !$Finance.real_estate.mortgage || $Finance.real_estate.mortgage.property_id isnot _property.id>>
-							<<lanLink `['List for auction (' + maplebirch.get('Finance').realEstate.mortgage.terms.voluntary_auction_days + ' days)', '委托拍卖（' + maplebirch.get('Finance').realEstate.mortgage.terms.voluntary_auction_days + '天）']`>>
-							  <<run maplebirch.get("Finance").realEstate.listAuction(_property.id)>>
-							  <<run Dynamic.render('deadwood-property-office-properties')>>
-							<</lanLink>><br>
-						<</if>>
-					<</if>>
-				<</if>>
-			<<elseif !$Finance.bank.opened>>
-				<span class='blue'><i><<lanSwitch 'Open a bank account before buying.' '购买前需要开立银行账户。'>></i></span><br>
-			<<else>>
-				<<if $Finance.bank.debit_card and $Finance.bank.balance gte _askingPrice>>
-					<<lanLink ['Buy outright', '全款购买']>>
-					  <<run maplebirch.get("Finance").realEstate.buy(_property.id)>>
-					  <<run maplebirch.get('Finance').refreshMoneyUI()>>
-					  <<run Dynamic.render('deadwood-property-office-properties')>>
-					<</lanLink>><br>
-				<</if>>
-				<<if !$Finance.real_estate.mortgage>>
-					<<set _mortgageCosts to maplebirch.get("Finance").realEstate.mortgage.purchaseCosts(_askingPrice, $Finance.real_estate.mortgage_term)>>
-					<<set _downPayment to _mortgageCosts.deposit>>
-					<<set _closingFee to _mortgageCosts.fee>>
-					<<set _reserve to _mortgageCosts.reserve>>
-					<div class='dr-finance-summary'>
-						<span><<lanSwitch 'Mortgage down payment' '房贷首付'>></span><span><<deadwood-reblooms-finance-money _downPayment>></span>
-						<span><<lanSwitch 'Weekly instalment' '每周应还'>></span><span><<deadwood-reblooms-finance-money _mortgageCosts.weekly_payment>></span>
-						<span><<lanSwitch 'Fee paid from bank funds' '手续费（银行扣款）'>></span><span><<deadwood-reblooms-finance-money _closingFee>></span>
-						<span><<lanSwitch 'Required bank reserve (at most 5% of the price)' '银行准备金（不超过房价的 5%）'>></span><span><<deadwood-reblooms-finance-money _reserve>></span>
-					</div>
-					<<if maplebirch.get("Finance").realEstate.mortgage.canStart(_askingPrice, false, $Finance.real_estate.mortgage_term)>>
-						<<lanLink ['Buy with mortgage', '申请房贷购买']>>
-						  <<run maplebirch.get("Finance").realEstate.buyWithMortgage(_property.id, false, $Finance.real_estate.mortgage_term)>>
-						  <<run maplebirch.get('Finance').refreshMoneyUI()>>
-						  <<run Dynamic.render('deadwood-property-mortgage-terms')>>
-						  <<run Dynamic.render('deadwood-property-office-properties')>>
-						<</lanLink>><br>
-					<<elseif maplebirch.get("Finance").realEstate.mortgage.canStart(_askingPrice, true, $Finance.real_estate.mortgage_term)>>
-						<<lanLink ['Mortgage with credit card advance for down payment', '用信用卡补足首付并申请房贷']>>
-						  <<run maplebirch.get("Finance").realEstate.buyWithMortgage(_property.id, true, $Finance.real_estate.mortgage_term)>>
-						  <<run maplebirch.get('Finance').refreshMoneyUI()>>
-						  <<run Dynamic.render('deadwood-property-mortgage-terms')>>
-						  <<run Dynamic.render('deadwood-property-office-properties')>>
-						<</lanLink>><br>
-					<<elseif $Finance.bank.loan_missed_payments gt 0 or $Finance.bank.credit_missed_payments gt 0 or $Finance.collection.amount gt 0>>
-						<span class='red'><<lanSwitch 'Clear your overdue debts before applying for a mortgage.' '请先清偿逾期债务，再申请房贷。'>></span><br>
-					<<elseif $Finance.bank.balance lt _closingFee + _reserve>>
-						<span class='red'><<lanSwitch 'The bank balance must cover the fee and required reserve.' '银行余额不足以支付手续费并留足准备金。'>></span><br>
-					<<elseif $Finance.bank.debit_card>>
-						<span class='red'><<lanSwitch 'The down payment or available credit is insufficient.' '首付或可用信用额度不足。'>></span><br>
-					<</if>>
-				<</if>>
-			<</if>>
-		<</deadwood-card>>
-	<</capture>>
+  <<capture _property>>
+    <<set _askingPrice to _property.price>>
+    <<set _baseWeeklyRent to maplebirch.get("Finance").realEstate.baseWeeklyRent(_property.id)>>
+    <<deadwood-card _property.name.EN _property.name.CN>>
+      <div class='dr-finance-summary'>
+        <span><<lanSwitch 'Asking price' '售价'>></span><span><<deadwood-reblooms-finance-money _askingPrice>></span>
+        <span><<lanSwitch 'Floors' '楼层数'>></span><span><<= _property.floors.length>></span>
+        <span><<lanSwitch 'Base weekly rent' '基础周租金'>></span><span><<deadwood-reblooms-finance-money _baseWeeklyRent>></span>
+      </div>
+      <p><<= lanSwitch(_property.description.EN, _property.description.CN)>></p>
+      <<if maplebirch.get("Finance").realEstate.owns(_property.id)>>
+        <<set _management to maplebirch.get("Finance").realEstate.managementFor(_property.id)>>
+        <span class='green'><<lanSwitch 'Owned' '已持有'>></span>
+        <<if !_management.rented>>
+          · <<lanSwitch 'Your home' '你的住所'>>
+        <</if>>
+        <br>
+        <<set _upkeep to maplebirch.get("Finance").realEstate.maintenanceCost(_property.id)>>
+        <<if maplebirch.get('Finance').realEstate.collateralLimit(_property.id) gt 0>>
+          <<lanLink ['Borrow against this property', '以这处房产抵押借款'] 'Deadwood Reblooms Property Collateral'>><<set $Finance.real_estate.collateral_property to _property.id>><</lanLink>><br>
+        <</if>>
+        <div class='dr-finance-summary'>
+          <span><<lanSwitch 'Condition' '房屋状况'>></span><span><<= _management.condition>>/100</span>
+          <span><<lanSwitch 'Renovation' '装修等级'>></span><span><<= _management.renovation>>/<<= maplebirch.get("Finance").realEstate.mortgage.terms.rental.max_renovation_level>></span>
+          <span><<lanSwitch 'Weekly upkeep' '每周维护费'>></span><span><<deadwood-reblooms-finance-money _upkeep>></span>
+        </div>
+        <<deadwood-property-management _property.id>>
+        <<icon 'property/improvements.png'>><<lanLink ['Home improvements', '房屋扩建'] 'Deadwood Reblooms Property Extensions'>><<set $Finance.real_estate.furniture_property to _property.id>><</lanLink>><br>
+        <<if _management.rented>>
+          <<if Time.days lt _management.vacancy_until>>
+            <span class='blue'><<lanSwitch 'Finding a tenant until day ' '寻找租客，预计入住日：'>><<= _management.vacancy_until>></span><br>
+          <</if>>
+          <<if _management.rental_issue>>
+            <span class='red'><<lanSwitch 'The tenant has left a message.' '租客留下了消息。'>></span> · <<lanLink ['Contact the tenant', '联系租客'] 'Deadwood Reblooms Property Tenant'>><<set $Finance.real_estate.tenant_property to _property.id>><</lanLink>><br>
+          <</if>>
+          <<set _weeklyRent to maplebirch.get("Finance").realEstate.weeklyRent(_property.id)>>
+          <<lanSwitch 'Rented out; weekly rent before upkeep' '已出租。未扣维护费的周租金'>>：<<deadwood-reblooms-finance-money _weeklyRent>><br>
+          <<if _management.lease_end_day is null>>
+            <<lanLink ['Give tenant seven days notice', '通知租客七天后退租']>>
+              <<run maplebirch.get("Finance").realEstate.endLease(_property.id)>>
+              <<run Dynamic.render('deadwood-property-office-properties')>>
+            <</lanLink>><br>
+          <</if>>
+        <<elseif _management.auction_day isnot null>>
+          <<lanSwitch 'Auction closes on day' '拍卖结束日'>> <<=_management.auction_day>> · <<lanLink ['Withdraw listing', '撤回拍卖委托']>><<run maplebirch.get("Finance").realEstate.cancelAuction(_property.id)>><<run Dynamic.render('deadwood-property-office-properties')>><</lanLink>><br>
+        <<else>>
+          <<if _management.renovation lt maplebirch.get("Finance").realEstate.mortgage.terms.rental.max_renovation_level && !maplebirch.get("Finance").realEstate.isFrozen(_property.id)>>
+            <<set _renovationCost to maplebirch.get("Finance").realEstate.renovationCost(_property.id)>>
+            <<if $Finance.bank.opened and $Finance.bank.debit_card and $Finance.bank.balance gte _renovationCost>>
+              <<lanLink ["Renovate", "装修"]>>
+                <<run maplebirch.get("Finance").realEstate.renovate(_property.id)>>
+                <<run maplebirch.get('Finance').refreshMoneyUI()>>
+                <<run Dynamic.render('deadwood-property-office-properties')>>
+              <</lanLink>>
+            <<else>>
+              <<lanSwitch 'Renovate' '装修'>>
+            <</if>>
+            ：<<deadwood-reblooms-finance-money _renovationCost>><br>
+          <</if>>
+          <<if _management.condition lt 100 && !maplebirch.get("Finance").realEstate.isFrozen(_property.id)>>
+            <<set _repairCost to maplebirch.get("Finance").realEstate.repairCost(_property.id)>>
+            <<if $Finance.bank.opened and $Finance.bank.debit_card and $Finance.bank.balance gte _repairCost>>
+              <<lanLink ["Repair", "维修"]>>
+                <<run maplebirch.get("Finance").realEstate.repair(_property.id)>>
+                <<run maplebirch.get('Finance').refreshMoneyUI()>>
+                <<run Dynamic.render('deadwood-property-office-properties')>>
+              <</lanLink>>
+            <<else>>
+              <<lanSwitch 'Repair' '维修'>>
+            <</if>>
+            ：<<deadwood-reblooms-finance-money _repairCost>><br>
+          <</if>>
+          <<if maplebirch.get("Finance").realEstate.residentsAt(_property.id).length is 0 && !maplebirch.get("Finance").realEstate.isFrozen(_property.id)>>
+            <<if _management.condition gte maplebirch.get("Finance").realEstate.mortgage.terms.rental.minimum_condition>>
+              <<lanLink ["Rent out", "出租"]>>
+                <<run maplebirch.get("Finance").realEstate.rentOut(_property.id)>>
+                <<run Dynamic.render('deadwood-property-office-properties')>>
+              <</lanLink>><br>
+            <</if>>
+            <<if !$Finance.real_estate.mortgage || $Finance.real_estate.mortgage.property_id isnot _property.id>>
+              <<lanLink `['List for auction (' + maplebirch.get('Finance').realEstate.mortgage.terms.voluntary_auction_days + ' days)', '委托拍卖（' + maplebirch.get('Finance').realEstate.mortgage.terms.voluntary_auction_days + '天）']`>>
+                <<run maplebirch.get("Finance").realEstate.listAuction(_property.id)>>
+                <<run Dynamic.render('deadwood-property-office-properties')>>
+              <</lanLink>><br>
+            <</if>>
+          <</if>>
+        <</if>>
+      <<elseif !$Finance.bank.opened>>
+        <span class='blue'><i><<lanSwitch 'Open a bank account before buying.' '购买前需要开立银行账户。'>></i></span><br>
+      <<else>>
+        <<if $Finance.bank.debit_card and $Finance.bank.balance gte _askingPrice>>
+          <<lanLink ['Buy outright', '全款购买']>>
+            <<run maplebirch.get("Finance").realEstate.buy(_property.id)>>
+            <<run maplebirch.get('Finance').refreshMoneyUI()>>
+            <<run Dynamic.render('deadwood-property-office-properties')>>
+          <</lanLink>><br>
+        <</if>>
+        <<if !$Finance.real_estate.mortgage>>
+          <<set _mortgageCosts to maplebirch.get("Finance").realEstate.mortgage.purchaseCosts(_askingPrice, $Finance.real_estate.mortgage_term)>>
+          <<set _downPayment to _mortgageCosts.deposit>>
+          <<set _closingFee to _mortgageCosts.fee>>
+          <<set _reserve to _mortgageCosts.reserve>>
+          <div class='dr-finance-summary'>
+            <span><<lanSwitch 'Mortgage down payment' '房贷首付'>></span><span><<deadwood-reblooms-finance-money _downPayment>></span>
+            <span><<lanSwitch 'Weekly instalment' '每周应还'>></span><span><<deadwood-reblooms-finance-money _mortgageCosts.weekly_payment>></span>
+            <span><<lanSwitch 'Fee paid from bank funds' '手续费（银行扣款）'>></span><span><<deadwood-reblooms-finance-money _closingFee>></span>
+            <span><<lanSwitch 'Required bank reserve (at most 5% of the price)' '银行准备金（不超过房价的 5%）'>></span><span><<deadwood-reblooms-finance-money _reserve>></span>
+          </div>
+          <<if maplebirch.get("Finance").realEstate.mortgage.canStart(_askingPrice, false, $Finance.real_estate.mortgage_term)>>
+            <<lanLink ['Buy with mortgage', '申请房贷购买']>>
+              <<run maplebirch.get("Finance").realEstate.buyWithMortgage(_property.id, false, $Finance.real_estate.mortgage_term)>>
+              <<run maplebirch.get('Finance').refreshMoneyUI()>>
+              <<run Dynamic.render('deadwood-property-mortgage-terms')>>
+              <<run Dynamic.render('deadwood-property-office-properties')>>
+            <</lanLink>><br>
+          <<elseif maplebirch.get("Finance").realEstate.mortgage.canStart(_askingPrice, true, $Finance.real_estate.mortgage_term)>>
+            <<lanLink ['Mortgage with credit card advance for down payment', '用信用卡补足首付并申请房贷']>>
+              <<run maplebirch.get("Finance").realEstate.buyWithMortgage(_property.id, true, $Finance.real_estate.mortgage_term)>>
+              <<run maplebirch.get('Finance').refreshMoneyUI()>>
+              <<run Dynamic.render('deadwood-property-mortgage-terms')>>
+              <<run Dynamic.render('deadwood-property-office-properties')>>
+            <</lanLink>><br>
+          <<elseif $Finance.bank.loan_missed_payments gt 0 or $Finance.bank.credit_missed_payments gt 0 or $Finance.collection.amount gt 0>>
+            <span class='red'><<lanSwitch 'Clear your overdue debts before applying for a mortgage.' '请先清偿逾期债务，再申请房贷。'>></span><br>
+          <<elseif $Finance.bank.balance lt _closingFee + _reserve>>
+            <span class='red'><<lanSwitch 'The bank balance must cover the fee and required reserve.' '银行余额不足以支付手续费并留足准备金。'>></span><br>
+          <<elseif $Finance.bank.debit_card>>
+            <span class='red'><<lanSwitch 'The down payment or available credit is insufficient.' '首付或可用信用额度不足。'>></span><br>
+          <</if>>
+        <</if>>
+      <</if>>
+    <</deadwood-card>>
+  <</capture>>
 <</for>>
 </div>
 <<if $Finance.real_estate.mortgage>>
   <<set _loan to maplebirch.get('Finance').realEstate.mortgage.current>>
   <<language>>
-    <<option 'EN'>>The agent can arrange an early repayment. Your journal has the payment schedule and any bank notices.
-    <<option 'CN'>>中介可以替你办理提前还款。还款日期与银行通知记在日志里。
+    <<option 'EN'>>
+      The agent can arrange an early repayment. Your journal has the payment schedule and any bank notices.
+    <<option 'CN'>>
+      中介可以替你办理提前还款。还款日期与银行通知记在日志里。
   <</language>><br>
   <<if _loan.arrears gt 0>>
     <<if $Finance.bank.opened and $Finance.bank.debit_card and $Finance.bank.balance gte _loan.arrears>>
@@ -636,665 +655,725 @@
 <</deadwood-dynamicblock>>
 <<deadwood-reblooms-adrian-counter-link>>
 <<getouticon>><<lanLink ['Return to the financial centre', '返回金融中心'] 'Deadwood Reblooms Financial Centre'>><</lanLink>>
-<</nobr>>
 
-:: Deadwood Reblooms Property Furnishings []
+:: Deadwood Reblooms Property Furnishings
 <<set $outside to 0>><<set $location to 'shopping_centre'>><<effects>>
 <<lanSwitch 'Choose the home to which the furniture should be delivered.' '选择要配送家具的住处。'>><br><br>
 <<for _property range maplebirch.get("Finance").realEstate.properties>>
-	<<capture _property>>
-		<<if maplebirch.get("Finance").realEstate.owns(_property.id)>>
-			<<deadwood-reblooms-property-street-icon _property.id>>
-			<<lanLink [_property.name.EN, _property.name.CN] 'Deadwood Reblooms Property Furniture Catalogue'>>
-				<<set $Finance.real_estate.furniture_property to _property.id>>
-				<<set $Finance.real_estate.furniture_category to 'bed'>>
-			<</lanLink>><br>
-		<</if>>
-	<</capture>>
+  <<capture _property>>
+    <<if maplebirch.get("Finance").realEstate.owns(_property.id)>>
+      <<deadwood-reblooms-property-street-icon _property.id>>
+      <<lanLink [_property.name.EN, _property.name.CN] 'Deadwood Reblooms Property Furniture Catalogue'>>
+        <<set $Finance.real_estate.furniture_property to _property.id>>
+        <<set $Finance.real_estate.furniture_category to 'bed'>>
+      <</lanLink>><br>
+    <</if>>
+  <</capture>>
 <</for>>
 <br><<getouticon>><<lanLink ['Return to the furniture shop', '返回家具店'] 'Furniture Shop'>><</lanLink>>
 
-:: Deadwood Reblooms Property Furniture Catalogue []
+:: Deadwood Reblooms Property Furniture Catalogue
 <<set $outside to 0>><<set $location to 'shopping_centre'>><<effects>>
 <<set _property to maplebirch.get("Finance").realEstate.properties.find(item => item.id === $Finance.real_estate.furniture_property && maplebirch.get("Finance").realEstate.owns(item.id))>>
 <<if !_property>>
-	<<lanSwitch 'Choose a home first.' '请先选择住处。'>><br><br>
-	<<getouticon>><<lanLink ["Return", "返回"] 'Deadwood Reblooms Property Furnishings'>><</lanLink>>
+  <<lanSwitch 'Choose a home first.' '请先选择住处。'>><br><br>
+  <<getouticon>><<lanLink ["Return", "返回"] 'Deadwood Reblooms Property Furnishings'>><</lanLink>>
 <<else>>
-	<strong class='gold'><<= lanSwitch(_property.name.EN, _property.name.CN)>></strong><br><br>
-	<<if maplebirch.get("Finance").realEstate.managementFor(_property.id).rented or maplebirch.get("Finance").realEstate.isFrozen(_property.id)>>
-		<span class='red'><<lanSwitch 'Furniture cannot be delivered while this home is rented out or frozen.' '房屋出租或冻结期间，无法配送家具。'>></span><br><br>
-	<<else>>
-		<<lanSwitch 'You browse the furniture catalogue. "No Refunds!" is printed along the top.' '你浏览着家具目录。顶部印着“不退款！”的字样。'>><br><br>
-		<hr>
-		<div class='settingsHeader'><<lanSwitch 'Furniture' '家具'>></div>
-		<div id='furnitureContainer'>
-			<<dynamic 'deadwood-reblooms-property-furniture-links' 'furnitureContainerHeader'>>
-			<<dynamic 'deadwood-reblooms-property-furniture-list' 'furniture-menu-container'>>
-		</div>
-	<</if>>
-	<br><br><<getouticon>><<lanLink ['Return to your homes', '返回住处列表'] 'Deadwood Reblooms Property Furnishings'>><</lanLink>>
+  <strong class='gold'><<= lanSwitch(_property.name.EN, _property.name.CN)>></strong><br><br>
+  <<if maplebirch.get("Finance").realEstate.managementFor(_property.id).rented or maplebirch.get("Finance").realEstate.isFrozen(_property.id)>>
+    <span class='red'><<lanSwitch 'Furniture cannot be delivered while this home is rented out or frozen.' '房屋出租或冻结期间，无法配送家具。'>></span><br><br>
+  <<else>>
+    <<lanSwitch 'You browse the furniture catalogue. "No Refunds!" is printed along the top.' '你浏览着家具目录。顶部印着“不退款！”的字样。'>><br><br>
+    <hr>
+    <div class='settingsHeader'><<lanSwitch 'Furniture' '家具'>></div>
+    <div id='furnitureContainer'>
+      <<dynamic 'deadwood-reblooms-property-furniture-links' 'furnitureContainerHeader'>>
+      <<dynamic 'deadwood-reblooms-property-furniture-list' 'furniture-menu-container'>>
+    </div>
+  <</if>>
+  <br><br><<getouticon>><<lanLink ['Return to your homes', '返回住处列表'] 'Deadwood Reblooms Property Furnishings'>><</lanLink>>
 <</if>>
 
 :: Deadwood Reblooms Property Furniture Links [widget]
 <<widget 'deadwood-reblooms-property-furniture-links'>>
-	<<set _categories to [
-		{ id: 'bed', EN: 'Bed', CN: '床' },
-		{ id: 'table', EN: 'Table', CN: '茶几' },
-		{ id: 'chair', EN: 'Chairs', CN: '椅子' },
-		{ id: 'desk', EN: 'Desks', CN: '书桌' },
-		{ id: 'wardrobe', EN: 'Wardrobe', CN: '衣橱' },
-		{ id: 'decoration', EN: 'Decorations', CN: '饰品' },
-		{ id: 'windowsill', EN: 'Miscellaneous', CN: '杂项' },
-		{ id: 'poster', EN: 'Posters', CN: '海报' },
-		{ id: 'wallpaper', EN: 'Wallpaper', CN: '壁纸' }
-	]>>
-	<<for _category range _categories>>
-		<<capture _category>>
-			<div @class="$Finance.real_estate.furniture_category is _category.id ? 'shopTabSelected' : 'shopTab'">
-				<button
-					@class="($Finance.real_estate.furniture_category is _category.id ? 'selected' : '')"
-					@id="Dynamic.eventBinder(_category.id)"
-					onclick="(id) => $Finance.real_estate.furniture_category = id"
-				><<= lanSwitch(_category.EN, _category.CN)>>
-				</button>
-			</div>
-		<</capture>>
-	<</for>>
+  <<set _categories to [
+    { id: 'bed', EN: 'Bed', CN: '床' },
+    { id: 'table', EN: 'Table', CN: '茶几' },
+    { id: 'chair', EN: 'Chairs', CN: '椅子' },
+    { id: 'desk', EN: 'Desks', CN: '书桌' },
+    { id: 'wardrobe', EN: 'Wardrobe', CN: '衣橱' },
+    { id: 'decoration', EN: 'Decorations', CN: '饰品' },
+    { id: 'windowsill', EN: 'Miscellaneous', CN: '杂项' },
+    { id: 'poster', EN: 'Posters', CN: '海报' },
+    { id: 'wallpaper', EN: 'Wallpaper', CN: '壁纸' }
+  ]>>
+  <<for _category range _categories>>
+    <<capture _category>>
+      <div @class="$Finance.real_estate.furniture_category is _category.id ? 'shopTabSelected' : 'shopTab'">
+        <button
+          @class="($Finance.real_estate.furniture_category is _category.id ? 'selected' : '')"
+          @id="Dynamic.eventBinder(_category.id)"
+          onclick="(id) => $Finance.real_estate.furniture_category = id"
+        ><<= lanSwitch(_category.EN, _category.CN)>>
+        </button>
+      </div>
+    <</capture>>
+  <</for>>
 <</widget>>
 
 :: Deadwood Reblooms Property Furniture List [widget]
 <<widget 'deadwood-reblooms-property-furniture-list'>>
 <<set _property to maplebirch.get("Finance").realEstate.properties.find(item => item.id === $Finance.real_estate.furniture_property && maplebirch.get("Finance").realEstate.owns(item.id))>>
-	<<set _current to maplebirch.get("Finance").realEstate.furniture(_property.id, $Finance.real_estate.furniture_category)>>
-	<<if ['poster', 'wallpaper'].includes($Finance.real_estate.furniture_category)>>
-		<<lanSwitch 'You browse the samples of pre-made designs. A custom design costs twice as much.' '你翻看着预制图案的样品。支付双倍价格，可以定制图案。'>><br><br>
-	<</if>>
-	<<lanSwitch 'Currently installed in this home:' '这处住处当前布置的是：'>>
-	<<if _current>>
-		<<furnitureicon _current.iconFile>> <<= _current.nameCap>><br>
-		<<if _current.description>>
-			<span class='description'><<= _current.description>>
-				<<if $Finance.real_estate.furniture_category is 'wardrobe' and _current.type.includes('organiser')>>
-				  <<lanSwitch 'Can hold 40 of each item type.' '每种物品类别可容纳 40 个。'>>
-				<</if>>
-				<<if $Finance.real_estate.furniture_category is 'wardrobe' and _current.type.includes('spacious')>>
-				  <<lanSwitch 'Can hold 30 of each item type.' '每种物品类别可容纳 30 个。'>>
-				<</if>>
-				<<if $Finance.real_estate.furniture_category is 'wardrobe' and _current.type.includes('starter')>>
-				  <<lanSwitch 'Can hold 20 of each item type.' '每种物品类别可容纳 20 个。'>>
-				<</if>>
-				<<if _current.type.includes('comfy')>>
-				  <<if $Finance.real_estate.furniture_category is 'bed'>>
-				    <<lanSwitch 'Improves sleep quality.' '提高睡眠质量。'>>
-				  <<else>>
-				    <<lanSwitch 'Makes working at your desk more effective.' '提高你在书桌前学习的效率。'>>
-				  <</if>>
-				<</if>>
-				<<if _current.type.includes('double')>>
-				  <<lanSwitch 'Has enough space for a proper sleepover.' '有足够的空间容纳两个人过夜。'>>
-				<</if>>
-			</span>
-		<</if>>
-	<<else>>
-		<<lanSwitch 'Nothing.' '暂无。'>>
-	<</if>>
-	<hr>
-	<div id='furnitureContainer'>
-		<<set _offers to maplebirch.get("Finance").realEstate.furnitureOffers(_property.id, $Finance.real_estate.furniture_category)>>
-		<<if $Finance.real_estate.furniture_category is 'desk' and !_current>>
-			<span class='blue'><i><<language>>
-				<<option 'EN'>>There is no space for a desk yet. The agent can arrange a foldaway study corner for this home.
-				<<option 'CN'>>这里还没有放书桌的地方。你可以到房产柜台，为这处住处扩建折叠学习角。
-			<</language>></i></span><br>
-		<</if>>
-		<<for _offer range _offers>>
-			<<capture _offer>>
-				<<set _priceLabel to formatMoney(_offer.cost)>>
-				<div class='shopBlock no-numberify'>
-					<<furnitureicon _offer.item.iconFile>> <<= _offer.item.nameCap>> |
-					<<if _offer.id is 'custom'>>
-					  <<textbox '_customHanging' ''>> |
-					<</if>>
-					<<if _offer.item.type.includes('comfy')>>
-					  <<lanSwitch 'Comfortable' '舒适'>> |
-					<</if>>
-					<<if _offer.item.type.includes('single')>>
-					  <<lanSwitch 'Single' '单人'>> |
-					<</if>>
-					<<if _offer.item.type.includes('double')>>
-					  <<lanSwitch 'Double' '双人'>> |
-					<</if>>
-					<<if _offer.item.type.includes('spacious')>>
-					  <<lanSwitch 'Spacious' '宽敞'>> |
-					<</if>>
-					<<if _offer.item.type.includes('organiser')>>
-					  <<lanSwitch 'Organiser' '收纳'>> |
-					<</if>>
-					<<if _offer.item.description>>
-						<mouse class='tooltip linkBlue'>(?)<span><<= _offer.item.description>>
-							<<if _offer.item.type.includes('comfy')>>
-							  <br>
-							  <<if $Finance.real_estate.furniture_category is 'bed'>>
-							    <<lanSwitch 'Improves sleep quality.' '提高睡眠质量。'>>
-							  <<else>>
-							    <<lanSwitch 'Makes working at your desk more effective.' '提高你在书桌前学习的效率。'>>
-							  <</if>>
-							<</if>>
-							<<if _offer.item.type.includes('double')>>
-							  <br><<lanSwitch 'Has enough space for a proper sleepover.' '有足够的空间容纳两个人过夜。'>>
-							<</if>>
-							<<if _offer.item.type.includes('spacious')>>
-							  <br><<lanSwitch 'Can hold 30 of each item type.' '每种物品类别可容纳 30 个。'>>
-							<</if>>
-							<<if _offer.item.type.includes('organiser')>>
-							  <br><<lanSwitch 'Can hold 40 of each item type.' '每种物品类别可容纳 40 个。'>>
-							<</if>>
-						</span></mouse> |
-					<</if>>
-					<<if maplebirch.get("Finance").canPay(_offer.cost, 'furniture')>>
-						<<lanLink _priceLabel 'Deadwood Reblooms Property Furniture Catalogue'>>
-							<<if maplebirch.get("Finance").realEstate.installFurniture(_property.id, $Finance.real_estate.furniture_category, _offer.id, _offer.id is 'custom' ? _customHanging : undefined)>>
-								<<money `-_offer.cost` 'furniture'>>
-								<<run Furniture.log(['poster', 'wallpaper'].includes($Finance.real_estate.furniture_category) ? $Finance.real_estate.furniture_category : _offer.id)>>
-							<</if>>
-						<</lanLink>>
-					<<else>>
-						<span class='red'><<= _priceLabel>></span>
-					<</if>>
-				</div>
-			<</capture>>
-		<</for>>
-	</div>
+  <<set _current to maplebirch.get("Finance").realEstate.furniture(_property.id, $Finance.real_estate.furniture_category)>>
+  <<if ['poster', 'wallpaper'].includes($Finance.real_estate.furniture_category)>>
+    <<lanSwitch 'You browse the samples of pre-made designs. A custom design costs twice as much.' '你翻看着预制图案的样品。支付双倍价格，可以定制图案。'>><br><br>
+  <</if>>
+  <<lanSwitch 'Currently installed in this home:' '这处住处当前布置的是：'>>
+  <<if _current>>
+    <<furnitureicon _current.iconFile>> <<= _current.nameCap>><br>
+    <<if _current.description>>
+      <span class='description'><<= _current.description>>
+        <<if $Finance.real_estate.furniture_category is 'wardrobe' and _current.type.includes('organiser')>>
+          <<lanSwitch 'Can hold 40 of each item type.' '每种物品类别可容纳 40 个。'>>
+        <</if>>
+        <<if $Finance.real_estate.furniture_category is 'wardrobe' and _current.type.includes('spacious')>>
+          <<lanSwitch 'Can hold 30 of each item type.' '每种物品类别可容纳 30 个。'>>
+        <</if>>
+        <<if $Finance.real_estate.furniture_category is 'wardrobe' and _current.type.includes('starter')>>
+          <<lanSwitch 'Can hold 20 of each item type.' '每种物品类别可容纳 20 个。'>>
+        <</if>>
+        <<if _current.type.includes('comfy')>>
+          <<if $Finance.real_estate.furniture_category is 'bed'>>
+            <<lanSwitch 'Improves sleep quality.' '提高睡眠质量。'>>
+          <<else>>
+            <<lanSwitch 'Makes working at your desk more effective.' '提高你在书桌前学习的效率。'>>
+          <</if>>
+        <</if>>
+        <<if _current.type.includes('double')>>
+          <<lanSwitch 'Has enough space for a proper sleepover.' '有足够的空间容纳两个人过夜。'>>
+        <</if>>
+      </span>
+    <</if>>
+  <<else>>
+    <<lanSwitch 'Nothing.' '暂无。'>>
+  <</if>>
+  <hr>
+  <div id='furnitureContainer'>
+    <<set _offers to maplebirch.get("Finance").realEstate.furnitureOffers(_property.id, $Finance.real_estate.furniture_category)>>
+    <<if $Finance.real_estate.furniture_category is 'desk' and !_current>>
+      <span class='blue'><i><<language>>
+        <<option 'EN'>>
+          There is no space for a desk yet. The agent can arrange a foldaway study corner for this home.
+        <<option 'CN'>>
+          这里还没有放书桌的地方。你可以到房产柜台，为这处住处扩建折叠学习角。
+      <</language>></i></span><br>
+    <</if>>
+    <<for _offer range _offers>>
+      <<capture _offer>>
+        <<set _priceLabel to formatMoney(_offer.cost)>>
+        <div class='shopBlock no-numberify'>
+          <<furnitureicon _offer.item.iconFile>> <<= _offer.item.nameCap>> |
+          <<if _offer.id is 'custom'>>
+            <<textbox '_customHanging' ''>> |
+          <</if>>
+          <<if _offer.item.type.includes('comfy')>>
+            <<lanSwitch 'Comfortable' '舒适'>> |
+          <</if>>
+          <<if _offer.item.type.includes('single')>>
+            <<lanSwitch 'Single' '单人'>> |
+          <</if>>
+          <<if _offer.item.type.includes('double')>>
+            <<lanSwitch 'Double' '双人'>> |
+          <</if>>
+          <<if _offer.item.type.includes('spacious')>>
+            <<lanSwitch 'Spacious' '宽敞'>> |
+          <</if>>
+          <<if _offer.item.type.includes('organiser')>>
+            <<lanSwitch 'Organiser' '收纳'>> |
+          <</if>>
+          <<if _offer.item.description>>
+            <mouse class='tooltip linkBlue'>(?)<span><<= _offer.item.description>>
+              <<if _offer.item.type.includes('comfy')>>
+                <br>
+                <<if $Finance.real_estate.furniture_category is 'bed'>>
+                  <<lanSwitch 'Improves sleep quality.' '提高睡眠质量。'>>
+                <<else>>
+                  <<lanSwitch 'Makes working at your desk more effective.' '提高你在书桌前学习的效率。'>>
+                <</if>>
+              <</if>>
+              <<if _offer.item.type.includes('double')>>
+                <br><<lanSwitch 'Has enough space for a proper sleepover.' '有足够的空间容纳两个人过夜。'>>
+              <</if>>
+              <<if _offer.item.type.includes('spacious')>>
+                <br><<lanSwitch 'Can hold 30 of each item type.' '每种物品类别可容纳 30 个。'>>
+              <</if>>
+              <<if _offer.item.type.includes('organiser')>>
+                <br><<lanSwitch 'Can hold 40 of each item type.' '每种物品类别可容纳 40 个。'>>
+              <</if>>
+            </span></mouse> |
+          <</if>>
+          <<if maplebirch.get("Finance").canPay(_offer.cost, 'furniture')>>
+            <<lanLink _priceLabel 'Deadwood Reblooms Property Furniture Catalogue'>>
+              <<if maplebirch.get("Finance").realEstate.installFurniture(_property.id, $Finance.real_estate.furniture_category, _offer.id, _offer.id is 'custom' ? _customHanging : undefined)>>
+                <<money `-_offer.cost` 'furniture'>>
+                <<run Furniture.log(['poster', 'wallpaper'].includes($Finance.real_estate.furniture_category) ? $Finance.real_estate.furniture_category : _offer.id)>>
+              <</if>>
+            <</lanLink>>
+          <<else>>
+            <span class='red'><<= _priceLabel>></span>
+          <</if>>
+        </div>
+      <</capture>>
+    <</for>>
+  </div>
 <</widget>>
 
-:: Deadwood Reblooms Property Home []
+:: Deadwood Reblooms Property Home [nobr]
 <<set _property to maplebirch.get("Finance").realEstate.current>>
 <<if !_property || !maplebirch.get("Finance").realEstate.owns(_property.id) || maplebirch.get("Finance").realEstate.managementFor(_property.id).rented>>
-	<<lanLink ["Return to High Street", "返回商业街"] 'High Street'>><</lanLink>>
+  <<lanLink ["Return to High Street", "返回商业街"] 'High Street'>><</lanLink>>
 <<elseif maplebirch.get("Finance").realEstate.mortgage.baileyAtDoor(_property.id)>>
-	<<run maplebirch.get("Finance").realEstate.setFloor(1)>><<run maplebirch.get("Finance").realEstate.enter()>><<effects>>
-	<<language>>
-		<<option 'EN'>>Bailey waits on your doorstep with a bank notice in hand. "Your mortgage is overdue. <span class='red'>Pay what you owe, or I'll see this place taken from you.</span>"
-		<<option 'CN'>>贝利拿着银行的催缴通知，堵在你家门前。“房贷逾期了。<span class='red'>把欠款交出来，不然我就看着他们收走这房子。</span>”
-	<</language>><br><br>
-	<<lanLink ['Speak to Bailey', '与贝利交涉'] 'Deadwood Reblooms Mortgage Bailey'>><</lanLink>><br>
+  <<run maplebirch.get("Finance").realEstate.setFloor(1)>><<run maplebirch.get("Finance").realEstate.enter()>><<effects>>
+  <<language>>
+    <<option 'EN'>>
+      Bailey waits on your doorstep with a bank notice in hand. "Your mortgage is overdue. <span class='red'>Pay what you owe, or I'll see this place taken from you.</span>"
+    <<option 'CN'>>
+      贝利拿着银行的催缴通知，堵在你家门前。“房贷逾期了。<span class='red'>把欠款交出来，不然我就看着他们收走这房子。</span>”
+  <</language>><br><br>
+  <<lanLink ['Speak to Bailey', '与贝利交涉'] 'Deadwood Reblooms Mortgage Bailey'>><</lanLink>><br>
 <<else>>
-	<<run maplebirch.get("Finance").realEstate.setFloor(1)>><<run maplebirch.get("Finance").realEstate.enter()>><<home_effects>><<effects>>
-	<<= lanSwitch(_property.floors[0].description.EN, _property.floors[0].description.CN)>><br><br>
-	<<if maplebirch.get("Finance").realEstate.managementFor(_property.id).renovation gt 0>>
-		<<= lanSwitch(_property.interior.renovated.EN, _property.interior.renovated.CN)>><br><br>
-	<</if>>
-	<<if maplebirch.get("Finance").realEstate.isFrozen(_property.id)>>
-	  <span class='red'><<lanSwitch 'The bank has frozen this property.' '银行已经冻结这处房产。'>></span><br>
-	<</if>>
-	<span class='green'><<lanSwitch 'This is one of your homes.' '这里也是你的住所。'>></span><br><br>
-	<<for _resident range maplebirch.get("Finance").realEstate.household.common>>
-		<<capture _resident>>
-			<<npc _resident.id>><<person1>>
-			<<= lanSwitch(_resident.evening.EN, _resident.evening.CN)>><br><br>
-			<<switch _resident.id>>
-				<<case 'Robin'>>
-					<<if C.npc.Robin.trauma gte 20>>
-						<<language>>
-							<<option 'EN'>>Robin keeps the hall lamp on and <span class='red'>glances at the door</span> whenever a sound carries in from the street.
-							<<option 'CN'>>罗宾留着门厅的灯。街上传来一点动静，便<span class='red'>朝门口望去</span>。
-						<</language>>
-					<<else>>
-						<<language>>
-							<<option 'EN'>>Robin pours you a cup of tea. "<span class='teal'>We can worry about the orphanage tomorrow</span>," <<he>> says.
-							<<option 'CN'>>罗宾给你倒了杯茶。“<span class='teal'>孤儿院的事，明天再操心吧。</span>”<<he>>说。
-						<</language>>
-					<</if>><br><br>
-				<<case 'Whitney'>>
-					<<if C.npc.Whitney.dom gte 10>>
-						<<language>>
-							<<option 'EN'>>Whitney has taken the best chair. "What?" <<He>> <span class='teal'>moves over</span> when you come closer.
-							<<option 'CN'>>惠特尼占了最舒服的椅子。“干嘛？”你走近时，<<he>>还是<span class='teal'>挪出一块地方</span>。
-						<</language>>
-					<<else>>
-						<<language>>
-							<<option 'EN'>>Whitney looks up when you come in. "You're late," <<he>> mutters, shifting aside and nodding at the empty coat hook beside the door.
-							<<option 'CN'>>你进门时，惠特尼抬头看了你一眼。“回来晚了。”<<he>>小声说着，侧身让开，朝门边空着的衣帽钩点了点头。
-						<</language>>
-					<</if>><br><br>
-				<<case 'Kylar'>>
-					<<if C.npc.Kylar.love gte 60>>
-						<<language>>
-							<<option 'EN'>>Kylar looks up from the window when you come in. "<span class='teal'>There you are.</span>" <<He>> hurries over to meet you.
-							<<option 'CN'>>你一进门，凯拉尔便从窗边抬起头。“<span class='teal'>你回来啦。</span>”<<He>>连忙迎上来。
-						<</language>>
-					<<else>>
-						<<language>>
-							<<option 'EN'>>Kylar sits near the door, turning the spare key over in <<his>> hands. <<He>> <span class='teal'>lets out a breath</span> when <<he>> sees you.
-							<<option 'CN'>>凯拉尔坐在门边，攥着备用钥匙翻来覆去。见你进来，<<he>>才<span class='teal'>松了口气</span>。
-						<</language>>
-					<</if>><br><br>
-				<<case 'Sydney'>>
-					<<run statusCheck('Sydney')>>
-					<<if _sydneyStatus.includes('corrupt')>>
-						<<language>>
-							<<option 'EN'>>Sydney puts the temple robes aside and draws you close by the wrist. "<span class='lewd'>Come sit here.</span>"
-							<<option 'CN'>>悉尼把神殿长袍搁到一旁，握住你的手腕拉你靠近。“<span class='lewd'>过来坐。</span>”
-						<</language>>
-					<<else>>
-						<<language>>
-							<<option 'EN'>>Sydney folds the temple robes before sitting beside you. "<span class='teal'>It's good to be home</span>," <<he>> says quietly.
-							<<option 'CN'>>悉尼叠好神殿长袍，在你身边坐下。“<span class='teal'>回到家真好。</span>”<<he>>轻声说。
-						<</language>>
-					<</if>><br><br>
-			<</switch>>
-			<<lanLink ["Spend time together (0:20)", "一起待一会儿 (0:20)"] 'Deadwood Reblooms Property Evening Together'>>
-				<<run maplebirch.get("Finance").realEstate.meetResident(_resident.id, _property.id)>>
-				<<pass 20>>
-			<</lanLink>><br><br>
-		<</capture>>
-	<</for>>
-	<<if maplebirch.get("Finance").realEstate.residentsHome(_property.id).length is 2>>
-		<<socialiseicon>><<lanLink ['Invite both lovers to talk (0:20)', '请两位恋人一起聊聊 (0:20)'] 'Deadwood Reblooms Property Household'>><<pass 20>><</lanLink>><br><br>
-	<</if>>
-	<<deadwood-company-suite-home>>
-	<<deadwood-blackjack-home-entry 'Deadwood Reblooms Property Home'>>
-	<<deadwood-reblooms-property-floor-rooms 1>>
-	<<if _property.floors.length gt 1>>
-		<<stairsicon 'up'>><<lanLink ["Go up (0:01)", "上楼 (0:01)"] 'Deadwood Reblooms Property Landing'>><<run maplebirch.get("Finance").realEstate.setFloor(2)>><<pass 1>><</lanLink>><br>
-	<</if>>
-	<br>
-	<<deadwood-reblooms-property-street-icon _property.id>><<lanLink ['Leave', '离开'] _property.street>><<pass 2>><</lanLink>>
+  <<run maplebirch.get("Finance").realEstate.setFloor(1)>><<run maplebirch.get("Finance").realEstate.enter()>><<home_effects>><<effects>>
+  <<= lanSwitch(_property.floors[0].description.EN, _property.floors[0].description.CN)>><br><br>
+  <<if maplebirch.get("Finance").realEstate.managementFor(_property.id).renovation gt 0>>
+    <<= lanSwitch(_property.interior.renovated.EN, _property.interior.renovated.CN)>><br><br>
+  <</if>>
+  <<if maplebirch.get("Finance").realEstate.isFrozen(_property.id)>>
+    <span class='red'><<lanSwitch 'The bank has frozen this property.' '银行已经冻结这处房产。'>></span><br>
+  <</if>>
+  <span class='green'><<lanSwitch 'This is one of your homes.' '这里也是你的住所。'>></span><br><br>
+  <<for _resident range maplebirch.get("Finance").realEstate.household.common>>
+    <<capture _resident>>
+      <<npc _resident.id>><<person1>>
+      <<= lanSwitch(_resident.evening.EN, _resident.evening.CN)>><br><br>
+      <<switch _resident.id>>
+        <<case 'Robin'>>
+          <<if C.npc.Robin.trauma gte 20>>
+            <<language>>
+              <<option 'EN'>>
+                Robin keeps the hall lamp on and <span class='red'>glances at the door</span> whenever a sound carries in from the street.
+              <<option 'CN'>>
+                罗宾留着门厅的灯。街上传来一点动静，便<span class='red'>朝门口望去</span>。
+            <</language>>
+          <<else>>
+            <<language>>
+              <<option 'EN'>>
+                Robin pours you a cup of tea. "<span class='teal'>We can worry about the orphanage tomorrow</span>," <<he>> says.
+              <<option 'CN'>>
+                罗宾给你倒了杯茶。“<span class='teal'>孤儿院的事，明天再操心吧。</span>”<<he>>说。
+            <</language>>
+          <</if>><br><br>
+        <<case 'Whitney'>>
+          <<if C.npc.Whitney.dom gte 10>>
+            <<language>>
+              <<option 'EN'>>
+                Whitney has taken the best chair. "What?" <<He>> <span class='teal'>moves over</span> when you come closer.
+              <<option 'CN'>>
+                惠特尼占了最舒服的椅子。“干嘛？”你走近时，<<he>>还是<span class='teal'>挪出一块地方</span>。
+            <</language>>
+          <<else>>
+            <<language>>
+              <<option 'EN'>>
+                Whitney looks up when you come in. "You're late," <<he>> mutters, shifting aside and nodding at the empty coat hook beside the door.
+              <<option 'CN'>>
+                你进门时，惠特尼抬头看了你一眼。“回来晚了。”<<he>>小声说着，侧身让开，朝门边空着的衣帽钩点了点头。
+            <</language>>
+          <</if>><br><br>
+        <<case 'Kylar'>>
+          <<if C.npc.Kylar.love gte 60>>
+            <<language>>
+              <<option 'EN'>>
+                Kylar looks up from the window when you come in. "<span class='teal'>There you are.</span>" <<He>> hurries over to meet you.
+              <<option 'CN'>>
+                你一进门，凯拉尔便从窗边抬起头。“<span class='teal'>你回来啦。</span>”<<He>>连忙迎上来。
+            <</language>>
+          <<else>>
+            <<language>>
+              <<option 'EN'>>
+                Kylar sits near the door, turning the spare key over in <<his>> hands. <<He>> <span class='teal'>lets out a breath</span> when <<he>> sees you.
+              <<option 'CN'>>
+                凯拉尔坐在门边，攥着备用钥匙翻来覆去。见你进来，<<he>>才<span class='teal'>松了口气</span>。
+            <</language>>
+          <</if>><br><br>
+        <<case 'Sydney'>>
+          <<run statusCheck('Sydney')>>
+          <<if _sydneyStatus.includes('corrupt')>>
+            <<language>>
+              <<option 'EN'>>
+                Sydney puts the temple robes aside and draws you close by the wrist. "<span class='lewd'>Come sit here.</span>"
+              <<option 'CN'>>
+                悉尼把神殿长袍搁到一旁，握住你的手腕拉你靠近。“<span class='lewd'>过来坐。</span>”
+            <</language>>
+          <<else>>
+            <<language>>
+              <<option 'EN'>>
+                Sydney folds the temple robes before sitting beside you. "<span class='teal'>It's good to be home</span>," <<he>> says quietly.
+              <<option 'CN'>>
+                悉尼叠好神殿长袍，在你身边坐下。“<span class='teal'>回到家真好。</span>”<<he>>轻声说。
+            <</language>>
+          <</if>><br><br>
+      <</switch>>
+      <<lanLink ["Spend time together (0:20)", "一起待一会儿 (0:20)"] 'Deadwood Reblooms Property Evening Together'>>
+        <<run maplebirch.get("Finance").realEstate.meetResident(_resident.id, _property.id)>>
+        <<pass 20>>
+      <</lanLink>><br><br>
+    <</capture>>
+  <</for>>
+  <<if maplebirch.get("Finance").realEstate.residentsHome(_property.id).length is 2>>
+    <<socialiseicon>><<lanLink ['Invite both lovers to talk (0:20)', '请两位恋人一起聊聊 (0:20)'] 'Deadwood Reblooms Property Household'>><<pass 20>><</lanLink>><br><br>
+  <</if>>
+  <<deadwood-company-suite-home>>
+  <<deadwood-blackjack-home-entry 'Deadwood Reblooms Property Home'>>
+  <<deadwood-reblooms-property-floor-rooms 1>>
+  <<if _property.floors.length gt 1>>
+    <<stairsicon 'up'>><<lanLink ["Go up (0:01)", "上楼 (0:01)"] 'Deadwood Reblooms Property Landing'>><<run maplebirch.get("Finance").realEstate.setFloor(2)>><<pass 1>><</lanLink>><br>
+  <</if>>
+  <br>
+  <<deadwood-reblooms-property-street-icon _property.id>><<lanLink ['Leave', '离开'] _property.street>><<pass 2>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Property Invite Robin []
+:: Deadwood Reblooms Property Invite Robin
 <<effects>><<npc Robin>><<person1>>
 <<deadwood-reblooms-property-invitation 'Robin' 'Robin Options' 'Deadwood Reblooms Property Invite Robin'>>
 
-:: Deadwood Reblooms Property Invite Robin History []
+:: Deadwood Reblooms Property Invite Robin History
 <<effects>><<npc Robin>><<person1>>
 <<deadwood-reblooms-property-invitation 'Robin' 'History Classroom' 'Deadwood Reblooms Property Invite Robin History'>>
 
-:: Deadwood Reblooms Property Invite Robin Lesson []
+:: Deadwood Reblooms Property Invite Robin Lesson
 <<effects>><<npc Robin>><<person1>>
 <<deadwood-reblooms-property-invitation 'Robin' 'History Lesson' 'Deadwood Reblooms Property Invite Robin Lesson'>>
 
-:: Deadwood Reblooms Property Invite Whitney []
+:: Deadwood Reblooms Property Invite Whitney
 <<effects>><<npc Whitney>><<person1>>
 <<deadwood-reblooms-property-invitation 'Whitney' 'Whitney Home Enter' 'Deadwood Reblooms Property Invite Whitney'>>
 
-:: Deadwood Reblooms Property Invite Whitney Maths []
+:: Deadwood Reblooms Property Invite Whitney Maths
 <<effects>><<npc Whitney>><<person1>>
 <<deadwood-reblooms-property-invitation 'Whitney' 'Maths Lesson' 'Deadwood Reblooms Property Invite Whitney Maths'>>
 
-:: Deadwood Reblooms Property Invite Kylar []
+:: Deadwood Reblooms Property Invite Kylar
 <<effects>><<npc Kylar>><<person1>>
 <<deadwood-reblooms-property-invitation 'Kylar' 'Kylar Library' 'Deadwood Reblooms Property Invite Kylar'>>
 
-:: Deadwood Reblooms Property Invite Kylar Courtyard []
+:: Deadwood Reblooms Property Invite Kylar Courtyard
 <<effects>><<npc Kylar>><<person1>>
 <<deadwood-reblooms-property-invitation 'Kylar' 'Kylar Courtyard' 'Deadwood Reblooms Property Invite Kylar Courtyard'>>
 
-:: Deadwood Reblooms Property Invite Kylar Park []
+:: Deadwood Reblooms Property Invite Kylar Park
 <<effects>><<npc Kylar>><<person1>>
 <<deadwood-reblooms-property-invitation 'Kylar' 'Kylar Park' 'Deadwood Reblooms Property Invite Kylar Park'>>
 
-:: Deadwood Reblooms Property Invite Kylar English []
+:: Deadwood Reblooms Property Invite Kylar English
 <<effects>><<npc Kylar>><<person1>>
 <<deadwood-reblooms-property-invitation 'Kylar' 'English Classroom' 'Deadwood Reblooms Property Invite Kylar English'>>
 
-:: Deadwood Reblooms Property Invite Kylar Lesson []
+:: Deadwood Reblooms Property Invite Kylar Lesson
 <<effects>><<npc Kylar>><<person1>>
 <<deadwood-reblooms-property-invitation 'Kylar' 'English Lesson' 'Deadwood Reblooms Property Invite Kylar Lesson'>>
 
-:: Deadwood Reblooms Property Invite Sydney []
+:: Deadwood Reblooms Property Invite Sydney
 <<effects>><<npc Sydney>><<person1>>
 <<deadwood-reblooms-property-invitation 'Sydney' 'Temple Sydney' 'Deadwood Reblooms Property Invite Sydney'>>
 
-:: Deadwood Reblooms Property Invite Sydney Library []
+:: Deadwood Reblooms Property Invite Sydney Library
 <<effects>><<npc Sydney>><<person1>>
 <<deadwood-reblooms-property-invitation 'Sydney' 'Library Rental Counter' 'Deadwood Reblooms Property Invite Sydney Library'>>
 
-:: Deadwood Reblooms Property Invite Sydney English []
+:: Deadwood Reblooms Property Invite Sydney English
 <<effects>><<npc Sydney>><<person1>>
 <<deadwood-reblooms-property-invitation 'Sydney' 'English Classroom' 'Deadwood Reblooms Property Invite Sydney English'>>
 
-:: Deadwood Reblooms Property Invite Sydney Science []
+:: Deadwood Reblooms Property Invite Sydney Science
 <<effects>><<npc Sydney>><<person1>>
 <<deadwood-reblooms-property-invitation 'Sydney' 'Science Lesson' 'Deadwood Reblooms Property Invite Sydney Science'>>
 
-:: Deadwood Reblooms Property Evening Together []
+:: Deadwood Reblooms Property Evening Together [nobr]
 <<set _property to maplebirch.get("Finance").realEstate.current>>
 <<set _companion to maplebirch.get("Finance").realEstate.currentCompanion>>
 <<if !_property || !_companion>>
-	<<lanLink ["Return to the sitting room", "返回起居室"] 'Deadwood Reblooms Property Home'>><</lanLink>>
+  <<lanLink ["Return to the sitting room", "返回起居室"] 'Deadwood Reblooms Property Home'>><</lanLink>>
 <<else>>
-	<<run maplebirch.get("Finance").realEstate.enter()>><<effects>>
-	<<npc _companion.id>><<person1>>
-	<<if maplebirch.get("Finance").realEstate.residentsAt(_property.id).length gt 1>>
-		<<lanSwitch 'You find a quiet place to talk. The other resident’s room stays undisturbed.' '你们找了一处安静的地方说话，没有去打扰另一位住户的房间。'>><br><br>
-	<</if>>
-	<<= lanSwitch(_companion.together.EN, _companion.together.CN)>><br><br>
-	<<switch _companion.id>>
-		<<case 'Robin'>>
-			<<if C.npc.Robin.trauma gte 20>>
-				<<language>>
-					<<option 'EN'>>Robin's hand <span class='red'>trembles around the cup</span>. You sit beside <<him>> until <<he>> puts it down and begins telling you about the orphanage.
-					<<option 'CN'>>罗宾捧着杯子的手<span class='red'>微微发抖</span>。你在<<him>>身旁坐了一会儿，直到<<he>>放下杯子，说起孤儿院的事。
-				<</language>>
-			<<else>>
-				<<language>>
-					<<option 'EN'>>Robin lists tomorrow's chores. When you offer to take the earliest one, <<he>> laughs and <span class='teal'>rests <<his>> head on your shoulder</span>.
-					<<option 'CN'>>罗宾数着明天要做的杂事。你主动揽下最早的一项，<<he>>笑着<span class='teal'>把头靠在你肩上</span>。
-				<</language>>
-			<</if>>
-			<<if maplebirch.get('Robin') and $RobinExpansion.shop and C.npc.Robin.trauma lt 20>>
-				<br><br>
-				<<language>>
-					<<option 'EN'>>Robin sets a paper bag from the shop on the table. "I saved the last one for you." <<He>> waits while you try it, watching your face more closely than the food.
-					<<option 'CN'>>罗宾把从店里带回的纸袋放在桌上。“最后一份给你留着。”<<He>>等你尝了一口，看你的脸比看食物还仔细。
-				<</language>>
-			<</if>><br><br>
-		<<case 'Whitney'>>
-			<<if C.npc.Whitney.dom gte 10>>
-				<<language>>
-					<<option 'EN'>>Whitney makes fun of your furniture. "You could do better." <<He>> pulls you into the chair anyway, <span class='lewd'>keeping an arm around your waist</span>.
-					<<option 'CN'>>惠特尼拿你的家具打趣。“你还能挑得更好点。”<<He>>却把你拉进椅子里，<span class='lewd'>胳膊搭在你的腰上</span>。
-				<</language>>
-			<<else>>
-				<<language>>
-					<<option 'EN'>>Whitney complains about school while you sit together, keeping half a cushion between you. <<He>> does not look at you while <<he>> talks, and does not leave either.
-					<<option 'CN'>>惠特尼挨着你抱怨学校的事，中间却隔着半个坐垫。<<he>>说话时不看你，但也没有走开。
-				<</language>>
-			<</if>>
-			<<if maplebirch.get('Whitney') and $WhitneyExpansion.rescued>>
-				<br><br>
-				<<language>>
-					<<option 'EN'>>A noise outside makes Whitney look toward the door. <<He>> sees that you have noticed, then <span class='teal'>pulls you closer</span> without a word.
-					<<option 'CN'>>门外有些动静，惠特尼转头看去。<<He>>发觉你注意到了，便一言不发地<span class='teal'>把你拉近</span>。
-				<</language>>
-			<</if>><br><br>
-		<<case 'Kylar'>>
-			<<if C.npc.Kylar.love gte 60>>
-				<<language>>
-					<<option 'EN'>>Kylar shows you the spare key. "I kept it safe." When you say <<he>> can keep it, <<he>> <span class='teal'>presses it against <<his>> chest</span>.
-					<<option 'CN'>>凯拉尔把备用钥匙拿给你看。“我保管得好好的。”你说<<he>>可以留着，<<he>>便<span class='teal'>把钥匙贴在胸前</span>。
-				<</language>>
-			<<else>>
-				<<language>>
-					<<option 'EN'>>"I can stay, can't I?" Kylar asks, holding your sleeve. You tell <<him>> yes. <<He>> <span class='green'>smiles and lets go</span>.
-					<<option 'CN'>>“我能留下来，对吧？”凯拉尔攥着你的衣袖问。你答应了，<<he>>才<span class='green'>松开手笑起来</span>。
-				<</language>>
-			<</if>>
-			<<if maplebirch.get('Kylar') and $KylarExpansion.stay_invited>>
-				<br><br>
-				<<language>>
-					<<option 'EN'>>Kylar lays <<his>> manor key beside the key to this house. <<He>> picks up the second one before you can say anything and <span class='teal'>holds it tightly</span>.
-					<<option 'CN'>>凯拉尔把庄园的钥匙放在这间房的钥匙旁。你还没开口，<<he>>便拿起后者，<span class='teal'>紧紧攥在手里</span>。
-				<</language>>
-			<</if>><br><br>
-		<<case 'Sydney'>>
-			<<run statusCheck('Sydney')>>
-			<<if _sydneyStatus.includes('corruptLust')>>
-				<<language>>
-					<<option 'EN'>>Sydney tells you about an errand at the temple, then leans close. "<span class='lewd'>I've been thinking about you all day.</span>" <<His>> fingers brush your wrist.
-					<<option 'CN'>>悉尼说起神殿里的差事，又靠近你。“<span class='lewd'>我一整天都在想你。</span>”<<His>>手指轻轻擦过你的手腕。
-				<</language>>
-			<<else>>
-				<<language>>
-					<<option 'EN'>>Sydney tells you about someone <<he>> helped at the temple. You tell <<him>> about your day. <<He>> listens, <span class='teal'>still holding your hand</span>.
-					<<option 'CN'>>悉尼说起今天在神殿帮过的人。你也讲了自己的一天，<<he>><span class='teal'>一直握着你的手听</span>。
-				<</language>>
-			<</if>>
-			<<if maplebirch.get('Sydney') and $SydneyExpansion.estate.visited>>
-				<br><br>
-				<<language>>
-					<<option 'EN'>>Sydney unfolds a recipe <<nnpc_Mum 'Sirris'>> wrote out at the estate. "We could make this here," <<he>> says, looking toward the kitchen.
-					<<option 'CN'>>悉尼摊开一张从庄园带来的食谱，上面是<<nnpc_Mum 'Sirris'>>的字迹。“我们可以在这里试试。”<<he>>望向厨房。
-				<</language>>
-			<</if>><br><br>
-	<</switch>>
-	<!-- 这段对白可重看，陪伴带来的压力收益每人每处住所每天只结算一次。 -->
-	<<if maplebirch.get("Finance").realEstate.residentsHome(_property.id).some(profile => profile.id === _companion.id)>>
-		<<earnFeat 'Leave a Light On'>>
-	<</if>>
-	<<set _eveningKey to _property.id + ':' + _companion.id>>
-	<<if !$Finance.real_estate.daily_evening.includes(_eveningKey)>>
-		<<set $Finance.real_estate.daily_evening.push(_eveningKey)>>
-		<<stress -2>><<lstress>><br>
-	<</if>>
-	<<deadwood-pregnancy-property-link>>
-	<<if maplebirch.get("Finance").realEstate.canIntimate(_companion.id, _property.id)>>
-		<<loveicon 'kiss'>>
-		<<lanLink ['Go to the bedroom for intimacy with your lover', '与恋人回卧室亲密'] 'Deadwood Reblooms Property Intimacy'>>
-			<<run maplebirch.get("Finance").realEstate.requestIntimacy(_companion.id, 'bedroom')>>
-			<<set $sexstart to 1>>
-		<</lanLink>><<promiscuous1>><<kissvirginitywarning>><<NPCvirginitywarning _companion.id 'kiss'>><br>
-	<</if>>
-	<br>
-	<<lanLink ["Return to the sitting room", "返回起居室"] 'Deadwood Reblooms Property Home'>><</lanLink>>
+  <<run maplebirch.get("Finance").realEstate.enter()>><<effects>>
+  <<npc _companion.id>><<person1>>
+  <<if maplebirch.get("Finance").realEstate.residentsAt(_property.id).length gt 1>>
+    <<lanSwitch 'You find a quiet place to talk. The other resident’s room stays undisturbed.' '你们找了一处安静的地方说话，没有去打扰另一位住户的房间。'>><br><br>
+  <</if>>
+  <<= lanSwitch(_companion.together.EN, _companion.together.CN)>><br><br>
+  <<switch _companion.id>>
+    <<case 'Robin'>>
+      <<if C.npc.Robin.trauma gte 20>>
+        <<language>>
+          <<option 'EN'>>
+            Robin's hand <span class='red'>trembles around the cup</span>. You sit beside <<him>> until <<he>> puts it down and begins telling you about the orphanage.
+          <<option 'CN'>>
+            罗宾捧着杯子的手<span class='red'>微微发抖</span>。你在<<him>>身旁坐了一会儿，直到<<he>>放下杯子，说起孤儿院的事。
+        <</language>>
+      <<else>>
+        <<language>>
+          <<option 'EN'>>
+            Robin lists tomorrow's chores. When you offer to take the earliest one, <<he>> laughs and <span class='teal'>rests <<his>> head on your shoulder</span>.
+          <<option 'CN'>>
+            罗宾数着明天要做的杂事。你主动揽下最早的一项，<<he>>笑着<span class='teal'>把头靠在你肩上</span>。
+        <</language>>
+      <</if>>
+      <<if maplebirch.get('Robin') and $RobinExpansion.shop and C.npc.Robin.trauma lt 20>>
+        <br><br>
+        <<language>>
+          <<option 'EN'>>
+            Robin sets a paper bag from the shop on the table. "I saved the last one for you." <<He>> waits while you try it, watching your face more closely than the food.
+          <<option 'CN'>>
+            罗宾把从店里带回的纸袋放在桌上。“最后一份给你留着。”<<He>>等你尝了一口，看你的脸比看食物还仔细。
+        <</language>>
+      <</if>><br><br>
+    <<case 'Whitney'>>
+      <<if C.npc.Whitney.dom gte 10>>
+        <<language>>
+          <<option 'EN'>>
+            Whitney makes fun of your furniture. "You could do better." <<He>> pulls you into the chair anyway, <span class='lewd'>keeping an arm around your waist</span>.
+          <<option 'CN'>>
+            惠特尼拿你的家具打趣。“你还能挑得更好点。”<<He>>却把你拉进椅子里，<span class='lewd'>胳膊搭在你的腰上</span>。
+        <</language>>
+      <<else>>
+        <<language>>
+          <<option 'EN'>>
+            Whitney complains about school while you sit together, keeping half a cushion between you. <<He>> does not look at you while <<he>> talks, and does not leave either.
+          <<option 'CN'>>
+            惠特尼挨着你抱怨学校的事，中间却隔着半个坐垫。<<he>>说话时不看你，但也没有走开。
+        <</language>>
+      <</if>>
+      <<if maplebirch.get('Whitney') and $WhitneyExpansion.rescued>>
+        <br><br>
+        <<language>>
+          <<option 'EN'>>
+            A noise outside makes Whitney look toward the door. <<He>> sees that you have noticed, then <span class='teal'>pulls you closer</span> without a word.
+          <<option 'CN'>>
+            门外有些动静，惠特尼转头看去。<<He>>发觉你注意到了，便一言不发地<span class='teal'>把你拉近</span>。
+        <</language>>
+      <</if>><br><br>
+    <<case 'Kylar'>>
+      <<if C.npc.Kylar.love gte 60>>
+        <<language>>
+          <<option 'EN'>>
+            Kylar shows you the spare key. "I kept it safe." When you say <<he>> can keep it, <<he>> <span class='teal'>presses it against <<his>> chest</span>.
+          <<option 'CN'>>
+            凯拉尔把备用钥匙拿给你看。“我保管得好好的。”你说<<he>>可以留着，<<he>>便<span class='teal'>把钥匙贴在胸前</span>。
+        <</language>>
+      <<else>>
+        <<language>>
+          <<option 'EN'>>
+            "I can stay, can't I?" Kylar asks, holding your sleeve. You tell <<him>> yes. <<He>> <span class='green'>smiles and lets go</span>.
+          <<option 'CN'>>
+            “我能留下来，对吧？”凯拉尔攥着你的衣袖问。你答应了，<<he>>才<span class='green'>松开手笑起来</span>。
+        <</language>>
+      <</if>>
+      <<if maplebirch.get('Kylar') and $KylarExpansion.stay_invited>>
+        <br><br>
+        <<language>>
+          <<option 'EN'>>
+            Kylar lays <<his>> manor key beside the key to this house. <<He>> picks up the second one before you can say anything and <span class='teal'>holds it tightly</span>.
+          <<option 'CN'>>
+            凯拉尔把庄园的钥匙放在这间房的钥匙旁。你还没开口，<<he>>便拿起后者，<span class='teal'>紧紧攥在手里</span>。
+        <</language>>
+      <</if>><br><br>
+    <<case 'Sydney'>>
+      <<run statusCheck('Sydney')>>
+      <<if _sydneyStatus.includes('corruptLust')>>
+        <<language>>
+          <<option 'EN'>>
+            Sydney tells you about an errand at the temple, then leans close. "<span class='lewd'>I've been thinking about you all day.</span>" <<His>> fingers brush your wrist.
+          <<option 'CN'>>
+            悉尼说起神殿里的差事，又靠近你。“<span class='lewd'>我一整天都在想你。</span>”<<His>>手指轻轻擦过你的手腕。
+        <</language>>
+      <<else>>
+        <<language>>
+          <<option 'EN'>>
+            Sydney tells you about someone <<he>> helped at the temple. You tell <<him>> about your day. <<He>> listens, <span class='teal'>still holding your hand</span>.
+          <<option 'CN'>>
+            悉尼说起今天在神殿帮过的人。你也讲了自己的一天，<<he>><span class='teal'>一直握着你的手听</span>。
+        <</language>>
+      <</if>>
+      <<if maplebirch.get('Sydney') and $SydneyExpansion.estate.visited>>
+        <br><br>
+        <<language>>
+          <<option 'EN'>>
+            Sydney unfolds a recipe <<nnpc_Mum 'Sirris'>> wrote out at the estate. "We could make this here," <<he>> says, looking toward the kitchen.
+          <<option 'CN'>>
+            悉尼摊开一张从庄园带来的食谱，上面是<<nnpc_Mum 'Sirris'>>的字迹。“我们可以在这里试试。”<<he>>望向厨房。
+        <</language>>
+      <</if>><br><br>
+  <</switch>>
+  <!-- 这段对白可重看，陪伴带来的压力收益每人每处住所每天只结算一次。 -->
+  <<if maplebirch.get("Finance").realEstate.residentsHome(_property.id).some(profile => profile.id === _companion.id)>>
+    <<earnFeat 'Leave a Light On'>>
+  <</if>>
+  <<set _eveningKey to _property.id + ':' + _companion.id>>
+  <<if !$Finance.real_estate.daily_evening.includes(_eveningKey)>>
+    <<set $Finance.real_estate.daily_evening.push(_eveningKey)>>
+    <<stress -2>><<lstress>><br>
+  <</if>>
+  <<deadwood-pregnancy-property-link>>
+  <<deadwood-partner-medicine-links _companion.id>>
+  <<if maplebirch.get("Finance").realEstate.canIntimate(_companion.id, _property.id)>>
+    <<loveicon 'kiss'>>
+    <<lanLink ['Go to the bedroom for intimacy with your lover', '与恋人回卧室亲密'] 'Deadwood Reblooms Property Intimacy'>>
+      <<run maplebirch.get("Finance").realEstate.requestIntimacy(_companion.id, 'bedroom')>>
+      <<set $sexstart to 1>>
+    <</lanLink>><<promiscuous1>><<kissvirginitywarning>><<NPCvirginitywarning _companion.id 'kiss'>><br>
+  <</if>>
+  <br>
+  <<lanLink ["Return to the sitting room", "返回起居室"] 'Deadwood Reblooms Property Home'>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Property Landing []
+:: Deadwood Reblooms Property Landing
 <<set _property to maplebirch.get("Finance").realEstate.current>>
 <<set _floor to maplebirch.get("Finance").realEstate.currentFloor>>
 <<if !_property || !maplebirch.get("Finance").realEstate.owns(_property.id) || maplebirch.get("Finance").realEstate.managementFor(_property.id).rented || _floor lte 1 || _floor gt _property.floors.length>>
-	<<lanLink ["Return to the sitting room", "返回起居室"] 'Deadwood Reblooms Property Home'>><</lanLink>>
+  <<lanLink ["Return to the sitting room", "返回起居室"] 'Deadwood Reblooms Property Home'>><</lanLink>>
 <<else>>
-	<<run maplebirch.get("Finance").realEstate.enter()>><<effects>>
-	<strong><<= lanSwitch(_property.floors[_floor - 1].name.EN, _property.floors[_floor - 1].name.CN)>></strong><br>
-	<<= lanSwitch(_property.floors[_floor - 1].description.EN, _property.floors[_floor - 1].description.CN)>><br><br>
-	<<deadwood-reblooms-property-floor-rooms _floor>>
-	<br>
-	<<if _floor lt _property.floors.length>>
-		<<stairsicon 'up'>><<lanLink ["Go up (0:01)", "上楼 (0:01)"] 'Deadwood Reblooms Property Landing'>><<run maplebirch.get("Finance").realEstate.setFloor(maplebirch.get("Finance").realEstate.currentFloor + 1)>><<pass 1>><</lanLink>><br>
-	<</if>>
-	<<if _floor is 2>>
-		<<stairsicon 'down'>><<lanLink ["Go down (0:01)", "下楼 (0:01)"] 'Deadwood Reblooms Property Home'>><<run maplebirch.get("Finance").realEstate.setFloor(1)>><<pass 1>><</lanLink>>
-	<<else>>
-		<<stairsicon 'down'>><<lanLink ["Go down (0:01)", "下楼 (0:01)"] 'Deadwood Reblooms Property Landing'>><<run maplebirch.get("Finance").realEstate.setFloor(maplebirch.get("Finance").realEstate.currentFloor - 1)>><<pass 1>><</lanLink>>
-	<</if>>
+  <<run maplebirch.get("Finance").realEstate.enter()>><<effects>>
+  <strong><<= lanSwitch(_property.floors[_floor - 1].name.EN, _property.floors[_floor - 1].name.CN)>></strong><br>
+  <<= lanSwitch(_property.floors[_floor - 1].description.EN, _property.floors[_floor - 1].description.CN)>><br><br>
+  <<deadwood-reblooms-property-floor-rooms _floor>>
+  <br>
+  <<if _floor lt _property.floors.length>>
+    <<stairsicon 'up'>><<lanLink ["Go up (0:01)", "上楼 (0:01)"] 'Deadwood Reblooms Property Landing'>><<run maplebirch.get("Finance").realEstate.setFloor(maplebirch.get("Finance").realEstate.currentFloor + 1)>><<pass 1>><</lanLink>><br>
+  <</if>>
+  <<if _floor is 2>>
+    <<stairsicon 'down'>><<lanLink ["Go down (0:01)", "下楼 (0:01)"] 'Deadwood Reblooms Property Home'>><<run maplebirch.get("Finance").realEstate.setFloor(1)>><<pass 1>><</lanLink>>
+  <<else>>
+    <<stairsicon 'down'>><<lanLink ["Go down (0:01)", "下楼 (0:01)"] 'Deadwood Reblooms Property Landing'>><<run maplebirch.get("Finance").realEstate.setFloor(maplebirch.get("Finance").realEstate.currentFloor - 1)>><<pass 1>><</lanLink>>
+  <</if>>
 <</if>>
 
-:: Deadwood Reblooms Mortgage Bailey []
+:: Deadwood Reblooms Mortgage Bailey [nobr]
 <<set _loan to $Finance.real_estate.mortgage>>
 <<if !_loan || _loan.stage isnot 'notice' || !_loan.bailey_pending>>
-	<<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>
+  <<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>
 <<else>>
-	<<effects>><<npc Bailey>>
-	<<language>>
-		<<option 'EN'>>Bailey taps the notice against the doorframe. "I'll give you a chance to settle the arrears. <span class='red'>Make me drag you out and the bank will freeze the deed.</span>"
-		<<option 'CN'>>贝利用催缴单拍了拍门框。“给你一个补缴的机会。<span class='red'>非要我动手赶人，银行就会冻结房契。</span>”
-	<</language>><br><br>
-	<<if $Finance.bank.opened and $Finance.bank.debit_card and $Finance.bank.balance gte $Finance.real_estate.mortgage.arrears>>
-		<<lanLink ["Pay overdue balance", "补缴逾期款"] 'Deadwood Reblooms Property Office'>><<run maplebirch.get("Finance").realEstate.mortgage.repay('arrears')>><</lanLink>><br>
-	<</if>>
-	<<lanLink ["Fight Bailey", "反抗贝利"] 'Deadwood Reblooms Mortgage Fight'>><<set $fightstart to 1>><</lanLink>><br>
-	<<lanLink ['Refuse to pay', '拒绝缴款'] 'Deadwood Reblooms Property Office'>><<run maplebirch.get("Finance").realEstate.mortgage.refuseBailey()>><</lanLink>><br>
+  <<effects>><<npc Bailey>>
+  <<language>>
+    <<option 'EN'>>
+      Bailey taps the notice against the doorframe. "I'll give you a chance to settle the arrears. <span class='red'>Make me drag you out and the bank will freeze the deed.</span>"
+    <<option 'CN'>>
+      贝利用催缴单拍了拍门框。“给你一个补缴的机会。<span class='red'>非要我动手赶人，银行就会冻结房契。</span>”
+  <</language>><br><br>
+  <<if $Finance.bank.opened and $Finance.bank.debit_card and $Finance.bank.balance gte $Finance.real_estate.mortgage.arrears>>
+    <<lanLink ["Pay overdue balance", "补缴逾期款"] 'Deadwood Reblooms Property Office'>><<run maplebirch.get("Finance").realEstate.mortgage.repay('arrears')>><</lanLink>><br>
+  <</if>>
+  <<lanLink ["Fight Bailey", "反抗贝利"] 'Deadwood Reblooms Mortgage Fight'>><<set $fightstart to 1>><</lanLink>><br>
+  <<lanLink ['Refuse to pay', '拒绝缴款'] 'Deadwood Reblooms Property Office'>><<run maplebirch.get("Finance").realEstate.mortgage.refuseBailey()>><</lanLink>><br>
 <</if>>
 
-:: Deadwood Reblooms Mortgage Fight []
+:: Deadwood Reblooms Mortgage Fight [nobr]
 <<if $fightstart is 1>>
-	<<set $fightstart to 0>><<neutral 1>><<maninit>><<set $enemyanger += 200>><<npcidlegenitals>>
-	<<language>>
-		<<option 'EN'>>"<span class='red'>Then I'll take the deed myself</span>," Bailey snarls.
-		<<option 'CN'>>“<span class='red'>那我就亲手把房契拿走。</span>”贝利怒吼道。
-	<</language>>
-	<br><br>
+  <<set $fightstart to 0>><<neutral 1>><<maninit>><<set $enemyanger += 200>><<npcidlegenitals>>
+  <<language>>
+    <<option 'EN'>>
+      "<span class='red'>Then I'll take the deed myself</span>," Bailey snarls.
+    <<option 'CN'>>
+      “<span class='red'>那我就亲手把房契拿走。</span>”贝利怒吼道。
+  <</language>>
+  <br><br>
 <</if>>
 <<effects>><<effectsman>><<man>><<stateman>>
 <br><br>
 <<actionsman>>
 <<if _combatend or ($pain gte 100 and $willpowerpain is 0)>>
-	<span id='next'><<lanLink ["Next","继续"] 'Deadwood Reblooms Mortgage Fight Finish'>><</lanLink>></span><<nexttext>>
+  <span id='next'><<lanLink ["Next","继续"] 'Deadwood Reblooms Mortgage Fight Finish'>><</lanLink>></span><<nexttext>>
 <<else>>
-	<span id='next'><<lanLink ["Next","继续"] 'Deadwood Reblooms Mortgage Fight'>><</lanLink>></span><<nexttext>>
+  <span id='next'><<lanLink ["Next","继续"] 'Deadwood Reblooms Mortgage Fight'>><</lanLink>></span><<nexttext>>
 <</if>>
 
-:: Deadwood Reblooms Mortgage Fight Finish []
+:: Deadwood Reblooms Mortgage Fight Finish [nobr]
 <<effects>>
 <<if $enemyarousal gte $enemyarousalmax or $enemyhealth lte 0>>
-	<<run maplebirch.get("Finance").realEstate.mortgage.fightBailey(true)>>
-	<<language>>
-		<<option 'EN'>>
-			Bailey retreats, furious. <span class='teal'>You have seven more days to clear the arrears</span> before the bank freezes the property.
-		<<option 'CN'>>
-			贝利愤愤退走。<span class='teal'>你又争取到七天补缴欠款</span>，否则银行就会冻结房产。
-		<</language>>
+  <<run maplebirch.get("Finance").realEstate.mortgage.fightBailey(true)>>
+  <<language>>
+    <<option 'EN'>>
+      Bailey retreats, furious. <span class='teal'>You have seven more days to clear the arrears</span> before the bank freezes the property.
+    <<option 'CN'>>
+      贝利愤愤退走。<span class='teal'>你又争取到七天补缴欠款</span>，否则银行就会冻结房产。
+    <</language>>
 <<else>>
-	<<run maplebirch.get("Finance").realEstate.mortgage.fightBailey(false)>>
-	<<language>>
-		<<option 'EN'>>Bailey pins you down and takes the notice to the bank. <span class='red'>Your property is frozen.</span>
-		<<option 'CN'>>贝利制服了你，拿着催缴通知回了银行。<span class='red'>你的房产已被冻结。</span>
-	<</language>>
+  <<run maplebirch.get("Finance").realEstate.mortgage.fightBailey(false)>>
+  <<language>>
+    <<option 'EN'>>
+      Bailey pins you down and takes the notice to the bank. <span class='red'>Your property is frozen.</span>
+    <<option 'CN'>>
+      贝利制服了你，拿着催缴通知回了银行。<span class='red'>你的房产已被冻结。</span>
+  <</language>>
 <</if>>
 <<endcombat>><br><br>
 <<lanLink ["Continue","继续"] 'Deadwood Reblooms Property Office'>><</lanLink>>
 
-:: Deadwood Reblooms Property Bed []
+:: Deadwood Reblooms Property Bed [nobr]
 <<set _bedProperty to maplebirch.get("Finance").realEstate.current>>
 <<if !_bedProperty || !maplebirch.get("Finance").realEstate.owns(_bedProperty.id) || maplebirch.get("Finance").realEstate.managementFor(_bedProperty.id).rented>>
-	<<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>
+  <<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>
 <<else>>
-	<<run maplebirch.get("Finance").realEstate.enter('bedroom')>><<effects>><<wearoutfit>>
-	<<lanSwitch 'You settle beneath your own sheets.' '你躺进属于自己的被褥里。'>><br><br>
-	<<unset $bedGuest>>
-	<<set _bedResidents to maplebirch.get("Finance").realEstate.household.bedroom>>
-	<<if maplebirch.get("Finance").realEstate.canShareBed(_bedProperty.id) && _bedResidents.length gt 0>>
-		<<set _bedCompanion to _bedResidents[0]>>
-		<<set $bedGuest to _bedCompanion.id>>
-		<<run maplebirch.get("Finance").realEstate.meetResident(_bedCompanion.id, _bedProperty.id)>>
-		<<npc _bedCompanion.id>><<person1>>
-		<<switch _bedCompanion.id>>
-			<<case 'Robin'>>
-				<<if C.npc.Robin.trauma gte 20>>
-					<<language>>
-						<<option 'EN'>>"Can we leave the lamp on?" Robin asks. You do, and <<he>> settles beside you.
-						<<option 'CN'>>“能留着灯吗？”罗宾问。你点亮床边的灯，<<he>>在你身旁躺下。
-					<</language>>
-				<<else>>
-					<<language>>
-						<<option 'EN'>>Robin slips under the covers and takes your hand. <<He>> closes <<his>> eyes with a smile.
-						<<option 'CN'>>罗宾钻进被窝，握住你的手，笑着闭上眼睛。
-					<</language>>
-				<</if>>
-			<<case 'Whitney'>>
-				<<language>>
-					<<option 'EN'>>"You're taking up the whole bed," Whitney mutters. <<He>> pulls you closer anyway.
-					<<option 'CN'>>“你把整张床都占了。”惠特尼嘟囔着，却把你拉得更近。
-				<</language>>
-			<<case 'Kylar'>>
-				<<language>>
-					<<option 'EN'>>"Are you comfortable?" Kylar asks. When you nod, <<he>> curls up beside you.
-					<<option 'CN'>>“你睡得舒服吗？”凯拉尔问。你点点头，<<he>>便蜷在你身旁。
-				<</language>>
-			<<case 'Sydney'>>
-				<<language>>
-					<<option 'EN'>>Sydney sets <<his>> temple pendant on the bedside table and lies down beside you.
-					<<option 'CN'>>悉尼把神殿吊坠放在床边，在你身旁躺下。
-				<</language>>
-		<</switch>><br><br>
-	<</if>>
-	<<generateSleepLinks 'Deadwood Reblooms Property Sleep'>>
-	<<lanLink ["Get up", "起床"] 'Deadwood Reblooms Property Bedroom'>><<deadwood-reblooms-property-clothes-on>><</lanLink>>
+  <<run maplebirch.get("Finance").realEstate.enter('bedroom')>><<effects>><<wearoutfit>>
+  <<lanSwitch 'You settle beneath your own sheets.' '你躺进属于自己的被褥里。'>><br><br>
+  <<unset $bedGuest>>
+  <<set _bedResidents to maplebirch.get("Finance").realEstate.household.bedroom>>
+  <<if maplebirch.get("Finance").realEstate.canShareBed(_bedProperty.id) && _bedResidents.length gt 0>>
+    <<set _bedCompanion to _bedResidents[0]>>
+    <<set $bedGuest to _bedCompanion.id>>
+    <<run maplebirch.get("Finance").realEstate.meetResident(_bedCompanion.id, _bedProperty.id)>>
+    <<npc _bedCompanion.id>><<person1>>
+    <<switch _bedCompanion.id>>
+      <<case 'Robin'>>
+        <<if C.npc.Robin.trauma gte 20>>
+          <<language>>
+            <<option 'EN'>>
+              "Can we leave the lamp on?" Robin asks. You do, and <<he>> settles beside you.
+            <<option 'CN'>>
+              “能留着灯吗？”罗宾问。你点亮床边的灯，<<he>>在你身旁躺下。
+          <</language>>
+        <<else>>
+          <<language>>
+            <<option 'EN'>>
+              Robin slips under the covers and takes your hand. <<He>> closes <<his>> eyes with a smile.
+            <<option 'CN'>>
+              罗宾钻进被窝，握住你的手，笑着闭上眼睛。
+          <</language>>
+        <</if>>
+      <<case 'Whitney'>>
+        <<language>>
+          <<option 'EN'>>
+            "You're taking up the whole bed," Whitney mutters. <<He>> pulls you closer anyway.
+          <<option 'CN'>>
+            “你把整张床都占了。”惠特尼嘟囔着，却把你拉得更近。
+        <</language>>
+      <<case 'Kylar'>>
+        <<language>>
+          <<option 'EN'>>
+            "Are you comfortable?" Kylar asks. When you nod, <<he>> curls up beside you.
+          <<option 'CN'>>
+            “你睡得舒服吗？”凯拉尔问。你点点头，<<he>>便蜷在你身旁。
+        <</language>>
+      <<case 'Sydney'>>
+        <<language>>
+          <<option 'EN'>>
+            Sydney sets <<his>> temple pendant on the bedside table and lies down beside you.
+          <<option 'CN'>>
+            悉尼把神殿吊坠放在床边，在你身旁躺下。
+        <</language>>
+    <</switch>><br><br>
+  <</if>>
+  <<generateSleepLinks 'Deadwood Reblooms Property Sleep'>>
+  <<lanLink ["Get up", "起床"] 'Deadwood Reblooms Property Bedroom'>><<deadwood-reblooms-property-clothes-on>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Property Sleep []
+:: Deadwood Reblooms Property Sleep
 <<set _sleepProperty to maplebirch.get("Finance").realEstate.current>>
 <<if !_sleepProperty || !maplebirch.get("Finance").realEstate.owns(_sleepProperty.id) || maplebirch.get("Finance").realEstate.managementFor(_sleepProperty.id).rented>>
-	<<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>
+  <<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>
 <<else>>
-	<<set _autosavehere to true>>
-	<<run maplebirch.get("Finance").realEstate.enter('bedroom')>>
-	<<set _sleepPartner to maplebirch.get("Finance").realEstate.currentCompanion>>
-	<<if _sleepPartner
-		and maplebirch.get("Finance").realEstate.residentsHome(_sleepProperty.id).some(resident => resident.id === _sleepPartner.id)>>
-		<<set $bedGuest to _sleepPartner.id>>
-	<</if>>
-	<!-- 原版按小时睡眠。这里预先选出一个较早的醒来小时，不改动原版 sleephour。 -->
-	<<set _requestedHours to $sleephour>>
-	<<set _nightWake to _sleepPartner
-		and maplebirch.get("Finance").realEstate.residentsHome(_sleepProperty.id).some(resident => resident.id === _sleepPartner.id)
-		and _requestedHours gte 3
-		and (Time.hour gte 23 or Time.hour lt 3)
-		and !$Finance.real_estate.daily_night_wake
-		and $nightmares lte 0
-		and random(1, 8) is 1>>
-	<<if _nightWake>>
-		<<set $sleephour to random(1, Math.min(2, _requestedHours - 1))>>
-	<</if>>
-	<<sleep>>
-	<!-- 原版只在 $location 为 home 时读取孤儿院的床，自购房在此补上同等的每小时床铺收益。 -->
-	<<set _sleepBed to maplebirch.get("Finance").realEstate.furniture(_sleepProperty.id, 'bed')>>
-	<<if _sleepBed and _sleepBed.type.includes('comfy')>>
-		<<set $tiredness to Math.max(0, $tiredness - 10 * $sleepHoursTotal)>>
-	<<elseif _sleepBed and _sleepBed.type.includes('starter')>>
-		<<set $tiredness += 10 * $sleepHoursTotal>>
-	<</if>>
-	<<if !_dreaming>>
-		<<effects>><<wakingEffects $sleepHoursTotal>>
-		<<set _nightWake to _nightWake
-			and !_wakingEffect
-			and $sleepHoursTotal gte 1
-			and (Time.hour gte 23 or Time.hour lt 6)
-			and maplebirch.get("Finance").realEstate.residentsHome(_sleepProperty.id).some(resident => resident.id === _sleepPartner.id)>>
-		<<sleepeffects>>
-		<<if $nightmares gte 1 and $controlled is 0>>
-			<<nightmareWake>>
-		<</if>>
-		<<if _nightWake and !($nightmares gte 1 and $controlled is 0)>>
-			<<set $Finance.real_estate.daily_night_wake to true>>
-			<<set $sleephour to Math.max(1, _requestedHours - $sleepHoursTotal)>>
-			<<lanSwitch 'Something shifts beside you in the dark. You wake before the night is over.' '黑暗中，身旁的人动了动。夜还没过去，你已经醒了。'>>
-			<br><br>
-			<<bedicon>><<lanLink ["Open your eyes", "睁开眼"] 'Deadwood Reblooms Property Night Wake'>><</lanLink>>
-		<<else>>
-			<<if !_wakingEffect and !($nightmares gte 1 and $controlled is 0)>>
-			  <<lanSwitch 'You wake in your own bed.' '你在自己的床上醒来。'>>
-			<</if>>
-			<<if !_wakingEffect and Time.schoolDay and Time.hour gte 6 and Time.hour lt 9
-				and (!$LifeSimulation?.school or ($LifeSimulation.school.role is 'student' and !$LifeSimulation.school.attendanceExempt))>>
-				<br><br><<schoolicon 'building'>><span class='teal'><<lanSwitch 'Today is a school day. Remember your uniform and books before heading out.' '今天有课。出门前记得换好校服，带上课本。'>></span>
-			<</if>>
-			<<set _wakingCompanion to maplebirch.get("Finance").realEstate.currentCompanion>>
-			<<if _wakingCompanion>>
-				<br><br>
-				<<if maplebirch.get("Finance").realEstate.residentsHome(_sleepProperty.id).some(resident => resident.id === _wakingCompanion.id)>>
-					<<switch _wakingCompanion.id>>
-						<<case 'Robin'>>
-							<<lanSwitch 'Robin is still beside you, one hand curled around yours.' '罗宾仍睡在你身边，一只手还握着你的手。'>>
-						<<case 'Whitney'>>
-							<<lanSwitch 'Whitney is still asleep, an arm draped over you.' '惠特尼还睡着，一只胳膊搭在你身上。'>>
-						<<case 'Kylar'>>
-							<<lanSwitch 'Kylar shifts closer in their sleep when you stir.' '你一动，凯拉尔就在睡梦中往你身边靠了靠。'>>
-						<<case 'Sydney'>>
-							<<lanSwitch 'Sydney is still beside you. The temple pendant rests on the bedside table.' '悉尼仍在你身旁。神殿吊坠还放在床头。'>>
-					<</switch>>
-				<<else>>
-					<<switch _wakingCompanion.id>>
-						<<case 'Robin'>>
-							<<lanSwitch 'Robin has gone out. The spare blanket is folded at the foot of the bed.' '罗宾已经出门了，备用毯子叠在床尾。'>>
-						<<case 'Whitney'>>
-							<<lanSwitch 'Whitney has gone out. The second pillow is still pressed against yours.' '惠特尼出门了，第二只枕头还挨着你的枕头。'>>
-						<<case 'Kylar'>>
-							<<lanSwitch 'Kylar has gone out. Their side of the bed is still warm.' '凯拉尔出门了，那侧被窝里还留着一点暖意。'>>
-						<<case 'Sydney'>>
-							<<lanSwitch 'Sydney has left for the temple. The pendant is gone from the bedside table.' '悉尼去神殿了，床头的吊坠也不见了。'>>
-					<</switch>>
-				<</if>>
-			<</if>>
-			<br><br>
-			<<lanLink ["Get up", "起床"] 'Deadwood Reblooms Property Bedroom'>><<deadwood-reblooms-property-clothes-on>><</lanLink>><br>
-			<<lanLink ["Go back to sleep", "继续睡觉"] 'Deadwood Reblooms Property Bed'>><</lanLink>>
-	<</if>>
-	<</if>>
+  <<set _autosavehere to true>>
+  <<run maplebirch.get("Finance").realEstate.enter('bedroom')>>
+  <<set _sleepPartner to maplebirch.get("Finance").realEstate.currentCompanion>>
+  <<if _sleepPartner
+    and maplebirch.get("Finance").realEstate.residentsHome(_sleepProperty.id).some(resident => resident.id === _sleepPartner.id)>>
+    <<set $bedGuest to _sleepPartner.id>>
+  <</if>>
+  <!-- 原版按小时睡眠。这里预先选出一个较早的醒来小时，不改动原版 sleephour。 -->
+  <<set _requestedHours to $sleephour>>
+  <<set _nightWake to _sleepPartner
+    and maplebirch.get("Finance").realEstate.residentsHome(_sleepProperty.id).some(resident => resident.id === _sleepPartner.id)
+    and _requestedHours gte 3
+    and (Time.hour gte 23 or Time.hour lt 3)
+    and !$Finance.real_estate.daily_night_wake
+    and $nightmares lte 0
+    and random(1, 8) is 1>>
+  <<if _nightWake>>
+    <<set $sleephour to random(1, Math.min(2, _requestedHours - 1))>>
+  <</if>>
+  <<sleep>>
+  <!-- 原版只在 $location 为 home 时读取孤儿院的床，自购房在此补上同等的每小时床铺收益。 -->
+  <<set _sleepBed to maplebirch.get("Finance").realEstate.furniture(_sleepProperty.id, 'bed')>>
+  <<if _sleepBed and _sleepBed.type.includes('comfy')>>
+    <<set $tiredness to Math.max(0, $tiredness - 10 * $sleepHoursTotal)>>
+  <<elseif _sleepBed and _sleepBed.type.includes('starter')>>
+    <<set $tiredness += 10 * $sleepHoursTotal>>
+  <</if>>
+  <<if !_dreaming>>
+    <<effects>><<wakingEffects $sleepHoursTotal>>
+    <<set _nightWake to _nightWake
+      and !_wakingEffect
+      and $sleepHoursTotal gte 1
+      and (Time.hour gte 23 or Time.hour lt 6)
+      and maplebirch.get("Finance").realEstate.residentsHome(_sleepProperty.id).some(resident => resident.id === _sleepPartner.id)>>
+    <<sleepeffects>>
+    <<if $nightmares gte 1 and $controlled is 0>>
+      <<nightmareWake>>
+    <</if>>
+    <<if _nightWake and !($nightmares gte 1 and $controlled is 0)>>
+      <<set $Finance.real_estate.daily_night_wake to true>>
+      <<set $sleephour to Math.max(1, _requestedHours - $sleepHoursTotal)>>
+      <<lanSwitch 'Something shifts beside you in the dark. You wake before the night is over.' '黑暗中，身旁的人动了动。夜还没过去，你已经醒了。'>>
+      <br><br>
+      <<bedicon>><<lanLink ["Open your eyes", "睁开眼"] 'Deadwood Reblooms Property Night Wake'>><</lanLink>>
+    <<else>>
+      <<if !_wakingEffect and !($nightmares gte 1 and $controlled is 0)>>
+        <<lanSwitch 'You wake in your own bed.' '你在自己的床上醒来。'>>
+      <</if>>
+      <<if !_wakingEffect and Time.schoolDay and Time.hour gte 6 and Time.hour lt 9
+        and (!$LifeSimulation?.school or ($LifeSimulation.school.role is 'student' and !$LifeSimulation.school.attendanceExempt))>>
+        <br><br><<schoolicon 'building'>><span class='teal'><<lanSwitch 'Today is a school day. Remember your uniform and books before heading out.' '今天有课。出门前记得换好校服，带上课本。'>></span>
+      <</if>>
+      <<set _wakingCompanion to maplebirch.get("Finance").realEstate.currentCompanion>>
+      <<if _wakingCompanion>>
+        <br><br>
+        <<if maplebirch.get("Finance").realEstate.residentsHome(_sleepProperty.id).some(resident => resident.id === _wakingCompanion.id)>>
+          <<switch _wakingCompanion.id>>
+            <<case 'Robin'>>
+              <<lanSwitch 'Robin is still beside you, one hand curled around yours.' '罗宾仍睡在你身边，一只手还握着你的手。'>>
+            <<case 'Whitney'>>
+              <<lanSwitch 'Whitney is still asleep, an arm draped over you.' '惠特尼还睡着，一只胳膊搭在你身上。'>>
+            <<case 'Kylar'>>
+              <<lanSwitch 'Kylar shifts closer in their sleep when you stir.' '你一动，凯拉尔就在睡梦中往你身边靠了靠。'>>
+            <<case 'Sydney'>>
+              <<lanSwitch 'Sydney is still beside you. The temple pendant rests on the bedside table.' '悉尼仍在你身旁。神殿吊坠还放在床头。'>>
+          <</switch>>
+        <<else>>
+          <<switch _wakingCompanion.id>>
+            <<case 'Robin'>>
+              <<lanSwitch 'Robin has gone out. The spare blanket is folded at the foot of the bed.' '罗宾已经出门了，备用毯子叠在床尾。'>>
+            <<case 'Whitney'>>
+              <<lanSwitch 'Whitney has gone out. The second pillow is still pressed against yours.' '惠特尼出门了，第二只枕头还挨着你的枕头。'>>
+            <<case 'Kylar'>>
+              <<lanSwitch 'Kylar has gone out. Their side of the bed is still warm.' '凯拉尔出门了，那侧被窝里还留着一点暖意。'>>
+            <<case 'Sydney'>>
+              <<lanSwitch 'Sydney has left for the temple. The pendant is gone from the bedside table.' '悉尼去神殿了，床头的吊坠也不见了。'>>
+          <</switch>>
+        <</if>>
+      <</if>>
+      <br><br>
+      <<lanLink ["Get up", "起床"] 'Deadwood Reblooms Property Bedroom'>><<deadwood-reblooms-property-clothes-on>><</lanLink>><br>
+      <<lanLink ["Go back to sleep", "继续睡觉"] 'Deadwood Reblooms Property Bed'>><</lanLink>>
+  <</if>>
+  <</if>>
 <</if>>
 
 :: Deadwood Reblooms Property Wardrobe [exitCheckBypass]
 <<set _wardrobeProperty to maplebirch.get("Finance").realEstate.current>>
 <<if !_wardrobeProperty || !maplebirch.get("Finance").realEstate.owns(_wardrobeProperty.id) || maplebirch.get("Finance").realEstate.managementFor(_wardrobeProperty.id).rented>>
-	<<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>
+  <<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>
 <<else>>
-	<<run maplebirch.get("Finance").realEstate.enter('bedroom')>><<effects>><<run maplebirch.get("Finance").realEstate.openWardrobe()>>
-	<<lanSwitch 'You open the wardrobe in your home.' '你打开了家里的衣柜。'>><br><br>
-	<<wardrobeSelection>>
-	<div id='wardrobewear'><<wardrobewear>></div>
-	<div id='wardrobeExits'><<wardrobeExits>></div>
-	<<wardrobe>>
+  <<run maplebirch.get("Finance").realEstate.enter('bedroom')>><<effects>><<run maplebirch.get("Finance").realEstate.openWardrobe()>>
+  <<lanSwitch 'You open the wardrobe in your home.' '你打开了家里的衣柜。'>><br><br>
+  <<wardrobeSelection>>
+  <div id='wardrobewear'><<wardrobewear>></div>
+  <div id='wardrobeExits'><<wardrobeExits>></div>
+  <<wardrobe>>
 <</if>>

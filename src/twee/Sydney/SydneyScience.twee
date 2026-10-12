@@ -337,7 +337,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Sydney Science Transfer []
+:: Deadwood Reblooms Sydney Science Transfer
 <<set $sydneyScience to 1>><<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
 <<language>>
   <<option 'EN'>>
@@ -369,7 +369,7 @@
 <<foodicon 'eat'>><<lanLink ['Stay in the canteen', '留在食堂'] 'Canteen'>><</lanLink>>
 <br>
 
-:: Deadwood Reblooms Sydney Science Late Wake []
+:: Deadwood Reblooms Sydney Science Late Wake
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>>
 <<npc Sydney>><<person1>><<unset $sydneyLate>><<set $daily.sydney.wake to true>><<run statusCheck('Sydney')>>
 <<language>>
@@ -403,7 +403,7 @@
 <<schoolicon>><<lanLink ['Run to school with Sydney (0:05)', '和悉尼一起跑去学校 (0:05)'] 'Sydney Walk School'>><<set $phase to 2>><</lanLink>>
 <br>
 
-:: Deadwood Reblooms Sydney Science Study []
+:: Deadwood Reblooms Sydney Science Study
 <<set $outside to 0>><<set $location to 'school'>><<schooleffects>><<effects>><<towelup>><<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
 <<if _sydneyStatus.includes('corrupt')>>
   <<npcincr Sydney lust 1>>
@@ -443,7 +443,7 @@
   <<lessonEvents 'science'>>
 <</if>>
 
-:: Deadwood Reblooms Sydney Science Chat []
+:: Deadwood Reblooms Sydney Science Chat
 <<set $outside to 0>><<set $location to 'school'>><<schooleffects>><<effects>><<towelup>><<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
 <<if _sydneyStatus.includes('corrupt')>>
   <<npcincr Sydney lust 1>>
@@ -492,7 +492,7 @@
   <<lessonEvents 'science' 2>>
 <</if>>
 
-:: Deadwood Reblooms Sydney Science Tease []
+:: Deadwood Reblooms Sydney Science Tease
 <<set $outside to 0>><<set $location to 'school'>><<schooleffects>><<effects>><<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
 <<if $phase is 1>>
   <<arousal 300>><<npcincr Sydney love 1>>

@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Kylar Pregnancy Widgets [widget nobr]
+:: Deadwood Reblooms Kylar Pregnancy Widgets [widget]
 <<widget 'deadwood-reblooms-kylar-pregnancy-link'>>
   <<set _pregnancy_present to maplebirch.get('Kylar')?.atManor>>
   <<deadwood-pregnancy-links 'Kylar' 'Deadwood Reblooms Kylar' _pregnancy_present>>

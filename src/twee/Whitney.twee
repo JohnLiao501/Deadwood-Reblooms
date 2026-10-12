@@ -24,7 +24,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Whitney Door []
+:: Deadwood Whitney Door
 <<set $outside to 0>><<set $location to 'underground'>><<effects>>
 <<if !$undergroundbrothel?.active or C.npc.Whitney.state isnot 'dungeon'>>
   <<lanSwitch 'The corridor is quiet.' '走廊里静悄悄的。'>>
@@ -56,7 +56,7 @@
   <<getouticon>><<lanLink ['Step back into the cell', '退回牢房'] 'Underground Cell'>><<set $undergroundbrothel.timepass to false>><</lanLink>>
 <</if>>
 
-:: Deadwood Whitney Guard []
+:: Deadwood Whitney Guard
 <<set $outside to 0>><<set $location to 'underground'>><<effects>>
 <<if !$undergroundbrothel?.active or C.npc.Whitney.state isnot 'dungeon'>>
   <<lanSwitch 'There is no one to follow.' '外面已经没有你要找的人。'>>
@@ -88,7 +88,7 @@
   <</if>>
 <</if>>
 
-:: Deadwood Whitney Backstage []
+:: Deadwood Whitney Backstage
 <<set $outside to 0>><<set $location to 'underground'>><<effects>>
 <<if !$undergroundbrothel?.active or C.npc.Whitney.state isnot 'dungeon'>>
   <<lanSwitch 'The backstage passage is empty.' '舞台侧面的通道空无一人。'>>
@@ -117,7 +117,7 @@
   <<getouticon>><<lanLink ['Leave on your own', '独自离开'] 'Deadwood Whitney Leave Behind'>><</lanLink>>
 <</if>>
 
-:: Deadwood Whitney Rescue Attempt []
+:: Deadwood Whitney Rescue Attempt
 <<set $outside to 0>><<set $location to 'underground'>><<effects>>
 <<if !$undergroundbrothel?.active or C.npc.Whitney.state isnot 'dungeon' or ($phase isnot 1 and $phase isnot 2)>>
   <<lanSwitch 'There is no one to free here.' '这里已经没有你要救的人。'>>
@@ -164,7 +164,7 @@
   <</if>>
 <</if>>
 
-:: Deadwood Whitney Leave Behind []
+:: Deadwood Whitney Leave Behind
 <<set $outside to 0>><<set $location to 'underground'>><<effects>>
 <<if !$undergroundbrothel?.active>>
   <<lanSwitch 'You are already outside.' '你已经离开了。'>>

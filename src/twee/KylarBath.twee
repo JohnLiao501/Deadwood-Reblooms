@@ -5,7 +5,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Kylar Manor Bathroom []
+:: Deadwood Reblooms Kylar Manor Bathroom [nobr]
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>>
 <<if !$KylarExpansion.stay_invited>>
   <<lanSwitch 'You leave the closed bathroom door alone.' '你没有擅自推开紧闭的浴室门。'>>
@@ -16,8 +16,10 @@
     <<set $KylarExpansion.bath_encounter to random(1, 2) is 1>>
   <</if>>
   <<language>>
-    <<option 'EN'>>The manor bathroom sits off the front hall. The old pipes knock faintly behind the wall, and someone has left a folded towel on the shelf outside the door.
-    <<option 'CN'>>庄园浴室就在门厅旁。旧水管在墙后轻轻作响，门外的搁板上有人留了一条叠好的毛巾。
+    <<option 'EN'>>
+      The manor bathroom sits off the front hall. The old pipes knock faintly behind the wall, and someone has left a folded towel on the shelf outside the door.
+    <<option 'CN'>>
+      庄园浴室就在门厅旁。旧水管在墙后轻轻作响，门外的搁板上有人留了一条叠好的毛巾。
   <</language>>
   <br><br>
   <<if maplebirch.get('Kylar').canMeetInBath>>
@@ -30,13 +32,13 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ['Return to the hall', '返回门厅'] 'Manor Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Kylar Manor Bath Wash []
+:: Deadwood Reblooms Kylar Manor Bath Wash
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>><<wash>>
 <<set $KylarExpansion.bath_encounter to false>>
 <<lanSwitch 'The pipes rattle as you wash, but the water stays warm. You dry yourself and put your clothes back on.' '你洗浴时水管仍在轻响，水却一直很暖。你擦干身体，重新穿好衣服。'>><<clotheson>>
 <br><br><<getouticon>><<lanLink ['Return to the hall', '返回门厅'] 'Manor Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Kylar Manor Bath Meeting []
+:: Deadwood Reblooms Kylar Manor Bath Meeting
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>>
 <<if !maplebirch.get('Kylar').canMeetInBath>>
   <<lanSwitch 'Kylar has finished bathing and gone back to the bedroom.' '凯拉尔已经洗完，回到房间去了。'>>
@@ -56,7 +58,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ['Leave Kylar to bathe', '让凯拉尔继续洗浴'] 'Manor Hall'>><<set $KylarExpansion.bath_encounter to false>><</lanLink>>
 
-:: Deadwood Reblooms Kylar Manor Bath Reassure []
+:: Deadwood Reblooms Kylar Manor Bath Reassure
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>>
 <<if maplebirch.get('Kylar').canMeetInBath>>
   <<set $KylarExpansion.bath_encounter to false>>
@@ -73,7 +75,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ['Return to the hall', '返回门厅'] 'Manor Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Kylar Manor Bath Together []
+:: Deadwood Reblooms Kylar Manor Bath Together
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>>
 <<npc Kylar>><<person1>>
 <<if !maplebirch.get('Kylar').canMeetInBath or !isLoveInterest('Kylar')>>
@@ -103,7 +105,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ['Leave it there', '到此为止'] 'Manor Hall'>><<set $KylarExpansion.bath_encounter to false>><</lanLink>>
 
-:: Deadwood Reblooms Kylar Manor Bath Together Wash []
+:: Deadwood Reblooms Kylar Manor Bath Together Wash
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>>
 <<set $KylarExpansion.bath_encounter to false>>
 <<npc Kylar>><<person1>><<wash>>
@@ -120,7 +122,7 @@
 <<npcincr Kylar love 1>><<glove>><<stress -3>><<lstress>><<clotheson>>
 <br><br><<getouticon>><<lanLink ['Return to the hall', '返回门厅'] 'Manor Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Kylar Manor Bath Intimacy []
+:: Deadwood Reblooms Kylar Manor Bath Intimacy
 <<set $outside to 0>><<location 'kylarmanor'>>
 <<if $sexstart is 1>>
   <<clearnpc>><<npc Kylar>>
@@ -162,7 +164,7 @@
   <span id='next'><<lanLink ["Next", '继续'] 'Deadwood Reblooms Kylar Manor Bath Intimacy'>><</lanLink>></span><<nexttext>>
 <</if>>
 
-:: Deadwood Reblooms Kylar Manor Bath Intimacy Finish []
+:: Deadwood Reblooms Kylar Manor Bath Intimacy Finish
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>>
 <<set $KylarExpansion.bath_encounter to false>>
 <<person1>>

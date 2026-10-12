@@ -1,5 +1,4 @@
-:: Deadwood Transport Taxi []
-<<nobr>>
+:: Deadwood Transport Taxi [nobr]
 <<set _transport to maplebirch.get('Transport'), _taxi to _transport.taxi>>
 <<set $Transport.origin to 'harvest', $Transport.shop to 'motors', $location to 'deadwood_transport_motors', $bus to 'harvest', $outside to 0>>
 <<lanSwitch 'Taxi desk' '出租车柜台'>><br><br>
@@ -87,10 +86,8 @@
 <</if>>
 <br><<getouticon>><<lanLink ['Return', '返回'] 'Deadwood Transport Motors'>><</lanLink>><br>
 <</deadwood-dynamicblock>>
-<</nobr>>
 
-:: Deadwood Transport Taxi Dispatch []
-<<nobr>>
+:: Deadwood Transport Taxi Dispatch [nobr]
 <<set _transport to maplebirch.get('Transport'), _taxi to _transport.taxi>>
 <<if _taxi.active>>
   <<set $location to 'town', $bus to $Transport.origin, $outside to 0>>
@@ -171,10 +168,8 @@
   <</if>>
 <</if>>
 <</deadwood-dynamicblock>>
-<</nobr>>
 
-:: Deadwood Transport Taxi Pickup []
-<<nobr>>
+:: Deadwood Transport Taxi Pickup [nobr]
 <<set _transport to maplebirch.get('Transport'), _taxi to _transport.taxi>>
 <<deadwood-dynamicblock 'deadwood-taxi-pickup'>>
 <<set _job to _taxi.state.job>>
@@ -255,7 +250,6 @@
   <<icon 'transport/fare-meter.png'>><<lanLink ['Collect the fare', '结算车费'] 'Deadwood Transport Travel'>><</lanLink>><br>
 <</if>>
 <</deadwood-dynamicblock>>
-<</nobr>>
 
 :: Deadwood Transport Taxi Widgets [widget]
 

@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Willpower Unlock 1 []
+:: Deadwood Reblooms Willpower Unlock 1
 <<set $outside to 0>><<set $location to "lake_ruin">><<set $bus to "lake_ruin_prison">><<underwater>><<effects>><<set $oxygen -= 80>>
 <<language>>
   <<option 'EN'>>
@@ -30,7 +30,7 @@
 <</language>>
 <br>
 
-:: Deadwood Reblooms Willpower Unlock 2 []
+:: Deadwood Reblooms Willpower Unlock 2
 <<underwater>><<effects>>
 <<language>>
   <<option 'EN'>>
@@ -54,7 +54,7 @@
 <</language>>
 <br>
 
-:: Deadwood Reblooms Willpower Unlock 3 []
+:: Deadwood Reblooms Willpower Unlock 3
 <<underwater>><<effects>>
 <<language>>
   <<option 'EN'>>
@@ -78,7 +78,7 @@
 <</language>>
 <br>
 
-:: Deadwood Reblooms Willpower Unlock Fight []
+:: Deadwood Reblooms Willpower Unlock Fight
 <<effects>>
 <<if $molestationstart is 1>>
   <<set $molestationstart to 0>><<controlloss>><<violence 1>><<neutral 1>><<molested>><<set $enemytype to $wraith.type>>
@@ -91,7 +91,7 @@
 <</if>>
 <br>
 
-:: Deadwood Reblooms Willpower Unlock End []
+:: Deadwood Reblooms Willpower Unlock End
 <<underwater>><<effects>>
 <<if $enemyhealth lte 0>>
   <<set $VanillaPlus.lock.willpower to true>><<set $wraith.defeated++>>

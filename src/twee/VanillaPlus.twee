@@ -370,8 +370,10 @@
       (_northStep gt 0 ? '北' : _northStep lt 0 ? '南' : '')>>
     <span class='purple'>
       <<language>>
-        <<option 'EN'>>You feel a faint pull from <<= _nearestMirror.EN>> to the <<= _directionEN>>.
-        <<option 'CN'>>你隐约感到<<= _nearestMirror.CN>>在<<= _directionCN>>方牵引着你。
+        <<option 'EN'>>
+          You feel a faint pull from <<= _nearestMirror.EN>> to the <<= _directionEN>>.
+        <<option 'CN'>>
+          你隐约感到<<= _nearestMirror.CN>>在<<= _directionCN>>方牵引着你。
       <</language>>
     </span><br><br>
   <</if>>
@@ -436,8 +438,10 @@
       and $tenteast is _mirrorLocations.sirris.east
       and maplebirch.get("VanillaPlus").deviancy.discovered('sirris')>>
       <<language>>
-        <<option 'EN'>><<mirroricon 'blood'>><<link "Climb through Sydney's bedroom mirror" 'Deadwood Reblooms Deviancy Mirror Sirris'>><</link>>
-        <<option 'CN'>><<mirroricon 'blood'>><<link '从悉尼卧室的镜子爬出去' 'Deadwood Reblooms Deviancy Mirror Sirris'>><</link>>
+        <<option 'EN'>>
+          <<mirroricon 'blood'>><<link "Climb through Sydney's bedroom mirror" 'Deadwood Reblooms Deviancy Mirror Sirris'>><</link>>
+        <<option 'CN'>>
+          <<mirroricon 'blood'>><<link '从悉尼卧室的镜子爬出去' 'Deadwood Reblooms Deviancy Mirror Sirris'>><</link>>
       <</language>><br>
     <</if>>
     <<if _mirrorLocations.kylar and _kylarMirrorReady

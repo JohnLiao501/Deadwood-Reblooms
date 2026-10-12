@@ -1,11 +1,9 @@
 :: Deadwood Reblooms School Council Widgets [widget]
 
 <<widget 'deadwood-school-council-link'>>
-  <<nobr>>
   <<if maplebirch.get('LifeSimulation').school.councilOpen>>
     <<icon 'school/council.png'>><<lanLink ['Visit the student council room (0:01)', '前往学生会室 (0:01)'] 'Deadwood Reblooms School Council'>><<pass 1>><</lanLink>><br>
   <</if>>
-  <</nobr>>
 <</widget>>
 
 <<widget 'deadwood-school-council-study'>>
@@ -232,8 +230,10 @@
       <</switch>>
     <<case 'enforce'>>
       <<language>>
-        <<option 'EN'>>You open the rules beside the complaint and write a report for the staff. <span class='green'>There is no doubt about the decision</span>, though one pupil folds their arms before you've finished explaining it.
-        <<option 'CN'>>你把规定摊在申诉表旁，将处理结果写进给老师的报告。<span class='green'>结论已经很明确</span>，可你还没解释完，就有一名学生抱起了胳膊。
+        <<option 'EN'>>
+          You open the rules beside the complaint and write a report for the staff. <span class='green'>There is no doubt about the decision</span>, though one pupil folds their arms before you've finished explaining it.
+        <<option 'CN'>>
+          你把规定摊在申诉表旁，将处理结果写进给老师的报告。<span class='green'>结论已经很明确</span>，可你还没解释完，就有一名学生抱起了胳膊。
       <</language>><br><br>
       <<switch Time.days % 3>>
         <<case 0>>
@@ -275,8 +275,10 @@
 :: Deadwood Reblooms School Council Rest [nobr]
 <<set $outside to 0, $location to 'school'>><<schooleffects>><<effects>>
 <<language>>
-  <<option 'EN'>>You settle into the worn armchair and let the noise of the corridor stay beyond the door. A cup of hot water warms your hands. For a quarter of an hour, the loose papers on the table can wait.
-  <<option 'CN'>>你坐进旧扶手椅，让走廊里的嘈杂留在门外。杯中的热水暖着双手。这一刻钟，桌上那些没理好的纸可以先放着。
+  <<option 'EN'>>
+    You settle into the worn armchair and let the noise of the corridor stay beyond the door. A cup of hot water warms your hands. For a quarter of an hour, the loose papers on the table can wait.
+  <<option 'CN'>>
+    你坐进旧扶手椅，让走廊里的嘈杂留在门外。杯中的热水暖着双手。这一刻钟，桌上那些没理好的纸可以先放着。
 <</language>><<ltiredness>><<lstress>><br><br>
 <<getouticon>><<lanLink ['Return to the student council room', '返回学生会室'] 'Deadwood Reblooms School Council'>><</lanLink>>
 

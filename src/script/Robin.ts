@@ -55,24 +55,17 @@ export default function (maplebirch: typeof window.maplebirch): void {
     }
   );
 
-  // 原版这些页面的可见链接数量会随日程和剧情变化，放在首个操作链接前，保留末尾的离开/返回链接。
-  // CustomLinkZone 使用固定可见链接序号，不适合这些动态页面。
+  // 这些入口补充当前场景；各 widget 按人物日程和剧情状态限制显示。
   maplebirch.tool.addTo(
     'BeforeLinkZone',
     { widget: 'deadwood-robin-lemonade-links', passage: "Robin's Lemonade" },
     { widget: 'deadwood-robin-beach-links', passage: "Robin's Lemonade" },
-    { widget: 'deadwood-robin-fishing-wait', passage: 'Fishing Beach Wait' },
-    { widget: 'deadwood-robin-fishing-return', passage: 'Beach' },
     { widget: 'deadwood-robin-chocolate-links', passage: 'Robin Chocolate' },
     { widget: 'deadwood-robin-balloon-links', passage: 'Balloon Stand' },
-    { widget: 'deadwood-robin-shop-link', passage: 'Cliff Street' },
     { widget: 'deadwood-robin-shop-permit-link', passage: 'Town Hall Wait' },
     { widget: 'deadwood-robin-night-link', passage: "Robin's Room Entrance" },
-    { widget: 'deadwood-robin-tutor-link', passage: 'Danube Street' },
     { widget: 'deadwood-robin-asylum-links', passage: 'Asylum' },
     { widget: 'deadwood-robin-tentacle-plains-link', passage: 'Tentacle Plains' },
-    { widget: 'deadwood-robin-tutor-clue', passage: 'Orphanage' },
-    { widget: 'deadwood-robin-meteor-hall-link', passage: 'Orphanage' },
     { widget: 'deadwood-robin-pregnancy-link', passage: 'Robin Options' }
   );
 
@@ -136,6 +129,19 @@ export default function (maplebirch: typeof window.maplebirch): void {
       ]
     },
     locationPassage: {
+      // 只跟随普通地点菜单，街道事件和孤儿院强制剧情不会经过这些锚点。
+      'Cliff Street': [{ src: '<<beachicon>>', applybefore: '<<deadwood-robin-shop-link>>\n\t\t', expected: 1 }],
+      'Danube Street': [
+        {
+          srcmatch: /<<if \$exposed lte 0 and Time\.openingHours\(2\)>>(?=\s*<<spaicon>>)/,
+          applybefore: '<<deadwood-robin-tutor-link>>\n\t\t',
+          expected: 1
+        }
+      ],
+      Orphanage: [{ src: '<<gardenicon>>', applybefore: '<<deadwood-robin-tutor-clue>><<deadwood-robin-meteor-hall-link>>\n\t', expected: 1 }],
+      // 钓鱼陪伴只接普通等待分支，约会结算只接海滩普通菜单。
+      'Fishing Beach Wait': [{ src: '<<fishingBeachWaitAmbient>>', applyafter: '<<deadwood-robin-fishing-wait>>', expected: 1 }],
+      Beach: [{ src: '<<if Time.weekDay is 1 and Time.hour is 9 and !Weather.isOvercast>>', applybefore: '<<deadwood-robin-fishing-return>>\n\t\t', expected: 1 }],
       // 保留原版探望、援助条件，仅排除本模组收容中的罗宾。
       'School Infirmary Wakeup': [
         {

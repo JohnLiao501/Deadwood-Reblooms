@@ -1,4 +1,4 @@
-:: Deadwood Pregnancy Widgets [widget nobr]
+:: Deadwood Pregnancy Widgets [widget]
 <<widget 'deadwood-pregnancy-state'>>
   <<set _pregnancy_name to _args[0]>>
   <<set _pregnancy_record to getLabouringPregnancy(_pregnancy_name) ?? getActivePregnancies(_pregnancy_name)[0]>>
@@ -58,7 +58,7 @@
       <<unset $deadwood_pregnancy>>
     <</lanLink>>
   <<else>>
-    <<getouticon>><<lanLink ['Leave', '离开'] 'Town'>><</lanLink>>
+    <<getouticon>><<lanLink ['Leave', '离开'] 'Nightingale Street'>><</lanLink>>
   <</if>>
 <</widget>>
 
@@ -170,7 +170,7 @@
     <</if>>
   <</for>>
   <<if $passage is 'Deadwood Pregnancy After'>>
-    <<getouticon>><<lanLink ['Let them rest and leave the hospital', '让对方休息，离开医院'] 'Hospital'>><<unset $deadwood_pregnancy>><</lanLink>>
+    <<getouticon>><<lanLink ['Let them rest and leave the hospital', '让对方休息，离开医院'] 'Hospital Foyer'>><<unset $deadwood_pregnancy>><</lanLink>>
   <<else>>
     <<deadwood-pregnancy-return _pregnancy_name>>
   <</if>>
@@ -231,7 +231,7 @@
     <<option 'CN'>>
       现在没有需要你陪同的分娩。如果孩子在你离开时已经出生，下次见面时，你可以问问近况。
   <</language>><br><br>
-  <<getouticon>><<lanLink ['Leave the hospital', '离开医院'] 'Hospital'>><<unset $deadwood_pregnancy>><</lanLink>>
+  <<getouticon>><<lanLink ['Leave the hospital', '离开医院'] 'Hospital Foyer'>><<unset $deadwood_pregnancy>><</lanLink>>
 <<else>>
   <<npc _pregnancy_name>><<person1>>
   <<language>>
@@ -291,5 +291,5 @@
     <<option 'CN'>>
       这次分娩已经处理完了。
   <</language>><br><br>
-  <<getouticon>><<lanLink ['Leave the hospital', '离开医院'] 'Hospital'>><<unset $deadwood_pregnancy>><</lanLink>>
+  <<getouticon>><<lanLink ['Leave the hospital', '离开医院'] 'Hospital Foyer'>><<unset $deadwood_pregnancy>><</lanLink>>
 <</if>>

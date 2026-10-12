@@ -1,4 +1,4 @@
-:: Deadwood BirdTower Test Many Hawks []
+:: Deadwood BirdTower Test Many Hawks
 <<set _hawks to [
   ["大强", "f", "dominant", "large", "monster"],
   ["中强", "m", "dominant", "normal", 0],
@@ -30,7 +30,7 @@
   <<endevent>>
 <</lanLink>>
 
-:: Deadwood BirdTower Test OrphanHawk []
+:: Deadwood BirdTower Test OrphanHawk
 <<set _hatchedTime to new DateTime(Time.date).addDays(random(-120, -60))>>
 <<set _laidTime to new DateTime(_hatchedTime).addDays(random(-30, -21))>>
 <<set _conceivedTime to new DateTime(_hatchedTime).addDays(random(-44, -30))>>

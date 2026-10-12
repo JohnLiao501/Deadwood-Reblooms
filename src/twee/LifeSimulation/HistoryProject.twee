@@ -158,8 +158,10 @@
     <<set $_historyDays to $LifeSimulation.historyProject.deadline - Time.days>>
     <<if $LifeSimulation.historyProject.draft gt 0>>
       <<language>>
-        <<option 'EN'>><span class="blue"><i>The exhibition is ready. Present it at the museum.</i></span>
-        <<option 'CN'>><span class="blue"><i>展览已经准备完成。到博物馆开展。</i></span>
+        <<option 'EN'>>
+          <span class="blue"><i>The exhibition is ready. Present it at the museum.</i></span>
+        <<option 'CN'>>
+          <span class="blue"><i>展览已经准备完成。到博物馆开展。</i></span>
       <</language>>
     <<elseif $_historyDays lt 0>>
       <<language>>
@@ -276,7 +278,7 @@
   <br>
 <</widget>>
 
-:: Deadwood Reblooms History Project Begin []
+:: Deadwood Reblooms History Project Begin
 <<set $outside to 0>><<set $location to 'school'>><<schooleffects>><<effects>>
 <<set $_historySource to $LifeSimulation.historyProject.source>>
 <<set $LifeSimulation.historyProject to { status: 'ongoing', source: $_historySource, availableDay: 0, deadline: Time.days + 25, assistant: $phase is 1, kylar: $phase is 1 ? 'sabotage' : 'help', kylarStreet: false, kylarPrepared: false, archive: 0, museum: 0, recovery: 'none', ruin: 0, draft: 0, final: 0 }>>
@@ -313,7 +315,7 @@
 <br><br>
 <<lanLink ['Continue the lesson', '继续上课'] 'History Lesson'>><<endevent>><</lanLink>><br>
 
-:: Deadwood Reblooms History Project Kylar Check []
+:: Deadwood Reblooms History Project Kylar Check
 <<set $outside to 1>><<set $location to 'town'>><<effects>><<npc Kylar>><<person1>><<run statusCheck('Kylar')>>
 <<set $LifeSimulation.historyProject.kylarStreet to true>>
 <<set $LifeSimulation.historyProject.kylarPrepared to true>>
@@ -363,7 +365,7 @@
   <<endevent>>
 <</lanLink>><br>
 
-:: Deadwood Reblooms History Project Kylar Trust []
+:: Deadwood Reblooms History Project Kylar Trust
 <<set $outside to 1>><<set $location to 'town'>><<effects>><<npc Kylar>><<person1>><<run statusCheck('Kylar')>>
 <<set $LifeSimulation.historyProject.kylarStreet to true>>
 <<set $LifeSimulation.historyProject.kylarPrepared to $LifeSimulation.historyProject.kylar is 'help' >>
@@ -404,7 +406,7 @@
   <<endevent>>
 <</lanLink>><br>
 
-:: Deadwood Reblooms History Project Archive []
+:: Deadwood Reblooms History Project Archive
 <<set $outside to 0>><<set $location to 'school'>><<schooleffects>><<effects>>
 <<if maplebirch.get('LifeSimulation').school.historyAssistantAvailable>>
   <<npc Robin>><<person1>>
@@ -457,7 +459,7 @@
 <</if>>
 <<crimeicon 'documents'>><<lanLink ['Write a single version', '拼成一个版本'] 'Deadwood Reblooms History Project Archive Finish' >><<set $phase to 2>><</lanLink>><br>
 
-:: Deadwood Reblooms History Project Archive Finish []
+:: Deadwood Reblooms History Project Archive Finish
 <<if ($phase is 0 and $historytrait lt 4) or ($phase is 3 and currentSkillValue('english') lt 300)>>
   <<set $phase to 1>>
 <</if>>
@@ -527,7 +529,7 @@
 <br><br>
 <<schoolicon 'library'>><<lanLink ['Return to the library', '返回图书馆'] 'School Library'>><</lanLink>><br>
 
-:: Deadwood Reblooms History Project Museum []
+:: Deadwood Reblooms History Project Museum
 <<set $outside to 0>><<set $location to 'museum'>><<effects>>
 <<if maplebirch.get('LifeSimulation').school.historyAssistantAvailable>>
   <<npc Robin>><<person1>>
@@ -576,7 +578,7 @@
   <<icon 'clothes/tuxedo-jacket.png'>><<lanLink ['Try on the display costume', '试穿展览服装'] 'Deadwood Reblooms History Project Museum Finish' >><<set $phase to 2>><</lanLink>><<exhibitionist2>><br>
 <</if>>
 
-:: Deadwood Reblooms History Project Museum Finish []
+:: Deadwood Reblooms History Project Museum Finish
 <<set $LifeSimulation.historyProject.museum to $phase is 0 ? 30 : 18>>
 <<if maplebirch.get('LifeSimulation').school.historyAssistantAvailable>>
   <<npc Robin>><<person1>>
@@ -665,7 +667,7 @@
 <</language>>
 <br><br><<museumicon>><<lanLink ['Return to the museum', '返回博物馆'] 'Museum'>><</lanLink>><br>
 
-:: Deadwood Reblooms History Project Lake Preparation []
+:: Deadwood Reblooms History Project Lake Preparation
 <<set $outside to 1>><<set $location to 'lake'>><<effects>><<lakeeffects>>
 <<if maplebirch.get('LifeSimulation').school.historyAssistantAvailable>>
   <<npc Robin>><<person1>>
@@ -701,7 +703,7 @@
 <br><br>
 <<getinicon>><<lanLink ['Enter the water', '进入湖水'] 'Deadwood Reblooms History Project Lake Descent' >><</lanLink>><br>
 
-:: Deadwood Reblooms History Project Lake Descent []
+:: Deadwood Reblooms History Project Lake Descent
 <<set $outside to 0>><<set $location to 'lake_ruin'>><<underwater>><<effects>><<lakeeffects>>
 <<if maplebirch.get('LifeSimulation').school.historyAssistantAvailable>>
   <<npc Robin>><<person1>>
@@ -759,7 +761,7 @@
 <<historyicon>><<lanLink ['Record the find', '记录发现位置'] 'Deadwood Reblooms History Project Lake Statuette' >><<set $LifeSimulation.historyProject.recovery to 'recorded'>><</lanLink>><<ghistory>><br>
 <<antiqueicon 'golden-priestess'>><<lanLink ['Free the statuette', '取出女祭司像'] 'Deadwood Reblooms History Project Lake Statuette' >><<set $LifeSimulation.historyProject.recovery to 'rushed'>><</lanLink>><<stress 6>><<gstress>><br>
 
-:: Deadwood Reblooms History Project Lake Statuette []
+:: Deadwood Reblooms History Project Lake Statuette
 <<set $outside to 0>><<set $location to 'lake_ruin'>><<underwater>><<effects>><<lakeeffects>>
 <<if $museumAntiques.antiques.antiquegoldpriestess is 'notFound'>>
   <<set $antiquemoney += 4000>>
@@ -816,7 +818,7 @@
   <<getinicon>><<lanLink ['Break through the phantom prison', '冲破幻象囚笼'] 'Deadwood Reblooms History Project Lake Solo' >><<set $phase to 2>><</lanLink>><<trauma 12>><<ggtrauma>><br>
 <</if>>
 
-:: Deadwood Reblooms History Project Lake Robin []
+:: Deadwood Reblooms History Project Lake Robin
 <<set $outside to 0>><<set $location to 'lake_ruin'>><<underwater>><<effects>><<lakeeffects>><<npc Robin>><<person1>>
 <<language>>
   <<option 'EN'>>
@@ -842,7 +844,7 @@
 <br><br>
 <<swimicon 'up'>><<lanLink ['Return to the lake shore', '返回湖岸'] 'Deadwood Reblooms History Project Lake Return' >><</lanLink>><br>
 
-:: Deadwood Reblooms History Project Lake Robin Hallucination []
+:: Deadwood Reblooms History Project Lake Robin Hallucination
 <<set $outside to 0>><<set $location to 'lake_ruin'>><<effects>><<lakeeffects>><<npc Robin>><<person1>>
 <<run statusCheck('Robin')>>
 <<language>>
@@ -911,7 +913,7 @@
 <<loveicon>><<lanLink ['Pull Robin closer', '把罗宾拉得更近'] 'Deadwood Reblooms History Project Lake Robin Sex' >><<set $sexstart to 1>><<npcincr Robin love 1>><</lanLink>><<promiscuous3>><<glove 'Robin'>><br>
 <<swimicon 'up'>><<lanLink ['Follow the guide rope', '沿导向绳离开'] 'Deadwood Reblooms History Project Lake Robin' >><</lanLink>><br>
 
-:: Deadwood Reblooms History Project Lake Robin Sex []
+:: Deadwood Reblooms History Project Lake Robin Sex
 <<run statusCheck('Robin')>>
 <<if $sexstart is 1>>
   <<clearnpc>><<npc Robin>><<person1>>
@@ -946,7 +948,7 @@
   <span id="next"><<lanLink ["Next","继续"] 'Deadwood Reblooms History Project Lake Robin Sex' >><</lanLink>></span><<nexttext>>
 <</if>>
 
-:: Deadwood Reblooms History Project Lake Robin Sex Finish []
+:: Deadwood Reblooms History Project Lake Robin Sex Finish
 <<set $outside to 0>><<set $location to 'lake_ruin'>><<effects>><<person1>>
 <<run statusCheck('Robin')>>
 <<if $enemyarousal gte $enemyarousalmax>>
@@ -1030,7 +1032,7 @@
 <<clotheson>>
 <<swimicon 'up'>><<lanLink ['Return to the lake shore', '返回湖岸'] 'Deadwood Reblooms History Project Lake Return' >><</lanLink>><br>
 
-:: Deadwood Reblooms History Project Lake Solo []
+:: Deadwood Reblooms History Project Lake Solo
 <<set $outside to 0>><<set $location to 'lake_ruin'>><<underwater>><<effects>><<lakeeffects>>
 <<language>>
   <<option 'EN'>>
@@ -1046,7 +1048,7 @@
 <br><br>
 <<swimicon 'up'>><<lanLink ['Return to the lake shore', '返回湖岸'] 'Deadwood Reblooms History Project Lake Return' >><</lanLink>><br>
 
-:: Deadwood Reblooms History Project Lake Return []
+:: Deadwood Reblooms History Project Lake Return
 <<set $outside to 1>><<set $location to 'lake'>><<effects>><<lakeeffects>>
 <<if maplebirch.get('LifeSimulation').school.historyAssistantAvailable>>
   <<npc Robin>><<person1>>
@@ -1107,7 +1109,7 @@
   <<endevent>>
 <</lanLink>><br>
 
-:: Deadwood Reblooms History Project Draft []
+:: Deadwood Reblooms History Project Draft
 <<set $outside to 0>><<set $location to 'home'>><<effects>>
 <<if maplebirch.get('LifeSimulation').school.historyAssistantAvailable>>
   <<npc Robin>><<person1>>
@@ -1169,7 +1171,7 @@
 <<historyicon>><<lanLink ['Hang only what the cards support', '只挂有据可查的部分'] 'Deadwood Reblooms History Project Draft Finish' >><<set $phase to 0>><</lanLink>><<ghistory>><br>
 <<historyicon>><<lanLink ['Fill the gaps with the best story', '用最精彩的说法补上缺口'] 'Deadwood Reblooms History Project Draft Finish' >><<set $phase to 1>><</lanLink>><br>
 
-:: Deadwood Reblooms History Project Draft Finish []
+:: Deadwood Reblooms History Project Draft Finish
 <<set $LifeSimulation.historyProject.draft to $phase is 0 ? 25 : 12>>
 <<language>>
   <<option 'EN'>>
@@ -1212,7 +1214,7 @@
 <</language>>
 <br><br><<homeicon>><<lanLink ['Put the project away', '收好项目'] 'Bedroom'>><</lanLink>><br>
 
-:: Deadwood Reblooms History Project Exhibition []
+:: Deadwood Reblooms History Project Exhibition
 <<set $outside to 0>><<set $location to 'museum'>><<effects>><<npc Winter>><<person1>>
 <<language>>
   <<option 'EN'>>
@@ -1277,7 +1279,7 @@
   <<set $LifeSimulation.historyProject.status to 'done'>>
 <</lanLink>><br>
 
-:: Deadwood Reblooms History Project Result []
+:: Deadwood Reblooms History Project Result
 <<set $outside to 0>><<set $location to 'museum'>><<effects>><<npc Winter>><<person1>>
 <<if ['done', 'won'].includes($LifeSimulation.historyProject.status) and $LifeSimulation.historyProject.archive is 30 and $LifeSimulation.historyProject.museum is 30 and $LifeSimulation.historyProject.draft is 25 and $LifeSimulation.historyProject.final is 15 and $LifeSimulation.historyProject.recovery is 'recorded'>>
   <<earnFeat 'Evidence Matters'>>
@@ -1346,7 +1348,7 @@
 <</language>>
 <br><br><<museumicon>><<lanLink ['Return to the museum', '返回博物馆'] 'Museum'>><</lanLink>><br>
 
-:: Museum Golden Priestess Statuette []
+:: Museum Golden Priestess Statuette
 <<effects>><<museumClearHint 'antiquegoldpriestess'>><<npc Winter>><<person1>>
 <<language>>
   <<option 'EN'>>

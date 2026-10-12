@@ -80,7 +80,7 @@
   <</lanLink>>
 <</widget>>
 
-:: Deadwood Reblooms Company Suite []
+:: Deadwood Reblooms Company Suite
 <<set $outside to 0>><<set $location to 'avery_skyscraper'>><<effects>>
 <<set _company to maplebirch.get('Finance').company>>
 <<set _suite to _company.suite>>
@@ -211,7 +211,7 @@
   <<getouticon>><<lanLink ['Return to the desk', '返回接待处'] 'Deadwood Reblooms Company Suite'>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Company Suite Visit []
+:: Deadwood Reblooms Company Suite Visit
 <<set _suite to maplebirch.get('Finance').company.suite>>
 <<if !_suite.occupied or _suite.state.visit_day isnot Math.floor(Time.days)>>
   <<lanLink ['Return', '返回'] 'Deadwood Reblooms Property Home'>><</lanLink>><<exit>>
@@ -249,7 +249,7 @@
   <<set $Finance.company.suite.visit_topic to 'work'>><<pass 5>>
 <</lanLink>>
 
-:: Deadwood Reblooms Company Suite Visit End []
+:: Deadwood Reblooms Company Suite Visit End
 <<set _suite to maplebirch.get('Finance').company.suite>>
 <<if !_suite.occupied or _suite.state.visit_day isnot Math.floor(Time.days) or !_suite.state.visit_topic>>
   <<lanLink ['Return', '返回'] 'Deadwood Reblooms Property Home'>><</lanLink>><<exit>>

@@ -68,35 +68,35 @@
       <<lanSwitch 'Cohabitants:' '同住者：'>>
       <span class='teal'><<= Object.values($Finance.real_estate?.residents ?? {}).flat().length>></span><br>
       <<if $Finance.brokerage?.opened>>
-        <<language>><<option 'EN'>>Realised share-trading profit / loss: <<option 'CN'>>普通股票已实现盈亏：<</language>>
+        <<lanSwitch "Realised share-trading profit / loss: " "普通股票已实现盈亏：">>
         <span @class="$Finance.brokerage.realised < 0 ? 'red' : 'green'"><<printmoney $Finance.brokerage.realised>></span><br>
-        <<language>><<option 'EN'>>Stock dividends: <<option 'CN'>>股票累计分红：<</language>><<printmoney $Finance.brokerage.dividends>><br>
-        <<language>><<option 'EN'>>Settled margin trades: <<option 'CN'>>保证金交易累计平仓：<</language>><span class='teal'><<= $Finance.brokerage.margin.closed ?? 0>></span><br>
-        <<language>><<option 'EN'>>Margin-trading profit / loss after fees: <<option 'CN'>>保证金交易累计扣费盈亏：<</language>><<printmoney `$Finance.brokerage.margin.realised ?? 0`>><br>
+        <<lanSwitch "Stock dividends: " "股票累计分红：">><<printmoney $Finance.brokerage.dividends>><br>
+        <<lanSwitch "Settled margin trades: " "保证金交易累计平仓：">><span class='teal'><<= $Finance.brokerage.margin.closed ?? 0>></span><br>
+        <<lanSwitch "Margin-trading profit / loss after fees: " "保证金交易累计扣费盈亏：">><<printmoney `$Finance.brokerage.margin.realised ?? 0`>><br>
       <</if>>
       <<if maplebirch.get('Robin') and $RobinExpansion?.investment?.agreed>>
-        <<language>><<option 'EN'>>Shop partnership contributions: <<option 'CN'>>店铺合伙累计出资：<</language>><<printmoney $RobinExpansion.investment.invested_total>><br>
-        <<language>><<option 'EN'>>Partnership dividends / buybacks: <<option 'CN'>>合伙累计分红／回购所得：<</language>><<printmoney $RobinExpansion.investment.dividends_total>> / <<printmoney $RobinExpansion.investment.returned_total>><br>
+        <<lanSwitch "Shop partnership contributions: " "店铺合伙累计出资：">><<printmoney $RobinExpansion.investment.invested_total>><br>
+        <<lanSwitch "Partnership dividends / buybacks: " "合伙累计分红／回购所得：">><<printmoney $RobinExpansion.investment.dividends_total>> / <<printmoney $RobinExpansion.investment.returned_total>><br>
       <</if>><br>
     <</foldout>>
   <</if>>
 
   <<if maplebirch.get('Finance') and $Finance.industry.factories.some(factory => factory.purchase_price > 0 || factory.earned > 0 || factory.spent > 0)>>
     <<foldout false '_deadwoodFactoryAccounts'>>
-      <span class='gold'><<language>><<option 'EN'>>Factory accounts<<option 'CN'>>工厂账目<</language>></span>
-      <<language>><<option 'EN'>>Receipts / operating costs: <<option 'CN'>>累计经营收入／支出：<</language>><<printmoney `$Finance.industry.factories.reduce((sum, factory) => sum + factory.earned, 0)`>> / <<printmoney `$Finance.industry.factories.reduce((sum, factory) => sum + factory.spent, 0)`>><br>
-      <<language>><<option 'EN'>>Delivered orders / bad debts: <<option 'CN'>>交付订单／坏账：<</language>><span class='teal'><<= $Finance.industry.factories.reduce((sum, factory) => sum + factory.delivered, 0)>> / <<= $Finance.industry.factories.reduce((sum, factory) => sum + factory.defaults, 0)>></span><br>
-      <span class='blue'><<language>><<option 'EN'>>Fund transfers and loans are not sales. Land and the initial factory purchase are outside operating costs.<<option 'CN'>>资金转入与贷款不算销售收入。土地与初次购厂款不计入经营支出。<</language>></span><br><br>
+      <span class='gold'><<lanSwitch "Factory accounts" "工厂账目">></span>
+      <<lanSwitch "Receipts / operating costs: " "累计经营收入／支出：">><<printmoney `$Finance.industry.factories.reduce((sum, factory) => sum + factory.earned, 0)`>> / <<printmoney `$Finance.industry.factories.reduce((sum, factory) => sum + factory.spent, 0)`>><br>
+      <<lanSwitch "Delivered orders / bad debts: " "交付订单／坏账：">><span class='teal'><<= $Finance.industry.factories.reduce((sum, factory) => sum + factory.delivered, 0)>> / <<= $Finance.industry.factories.reduce((sum, factory) => sum + factory.defaults, 0)>></span><br>
+      <span class='blue'><<lanSwitch "Fund transfers and loans are not sales. Land and the initial factory purchase are outside operating costs." "资金转入与贷款不算销售收入。土地与初次购厂款不计入经营支出。">></span><br><br>
     <</foldout>>
   <</if>>
 
   <<if maplebirch.get('Orchard') and $Orchard>>
     <<foldout false '_deadwoodOrchardAccounts'>>
-      <span class='gold'><<language>><<option 'EN'>>Orchard accounts<<option 'CN'>>果园账目<</language>></span>
-      <<language>><<option 'EN'>>Sales income: <<option 'CN'>>累计销售收入：<</language>><<printmoney `$Orchard.sales_income ?? 0`>><br>
-      <<language>><<option 'EN'>>Staff wages: <<option 'CN'>>累计雇工工资：<</language>><<printmoney `$Orchard.worker_expenses ?? 0`>><br>
-      <<language>><<option 'EN'>>Seed purchases: <<option 'CN'>>累计种苗开销：<</language>><<printmoney `$Orchard.seed_expenses ?? 0`>><br>
-      <<language>><<option 'EN'>>Carrier fees: <<option 'CN'>>累计运输费：<</language>><<printmoney `$Orchard.haul_expenses ?? 0`>><br><br>
+      <span class='gold'><<lanSwitch "Orchard accounts" "果园账目">></span>
+      <<lanSwitch "Sales income: " "累计销售收入：">><<printmoney `$Orchard.sales_income ?? 0`>><br>
+      <<lanSwitch "Staff wages: " "累计雇工工资：">><<printmoney `$Orchard.worker_expenses ?? 0`>><br>
+      <<lanSwitch "Seed purchases: " "累计种苗开销：">><<printmoney `$Orchard.seed_expenses ?? 0`>><br>
+      <<lanSwitch "Carrier fees: " "累计运输费：">><<printmoney `$Orchard.haul_expenses ?? 0`>><br><br>
     <</foldout>>
   <</if>>
 
@@ -104,16 +104,21 @@
     <<set _casinoStats to $LifeSimulation.casino.statistics>>
     <<if _casinoStats.rounds or _casinoStats.exchanged>>
       <<foldout false '_deadwoodCasinoAccounts'>>
-        <span class='gold'><<language>><<option 'EN'>>Gambling records<<option 'CN'>>赌馆输赢记录<</language>></span>
-        <<language>><<option 'EN'>>Completed hands and spins: <<option 'CN'>>已结算牌局与转轮：<</language>><span class='teal'><<= _casinoStats.rounds>></span><br>
-        <<language>><<option 'EN'>>Blackjack / three-card poker / hold'em / slots: <<option 'CN'>>二十一点／炸金花／德州扑克／老虎机：<</language>><span class='teal'><<= _casinoStats.games.blackjack ?? 0>> / <<= _casinoStats.games.three_card ?? 0>> / <<= _casinoStats.games.holdem ?? 0>> / <<= _casinoStats.games.slots ?? 0>></span><br>
-        <<language>><<option 'EN'>>Total staked / total paid, including returned stakes: <<option 'CN'>>累计下注／累计派彩（含取回的赌注）：<</language>><<printmoney _casinoStats.staked>> / <<printmoney _casinoStats.paid>><br>
-        <<language>><<option 'EN'>>Net profit / loss: <<option 'CN'>>累计净盈亏：<</language>><span @class="_casinoStats.paid < _casinoStats.staked ? 'red' : 'green'"><<printmoney `_casinoStats.paid - _casinoStats.staked`>></span><br>
-        <<language>><<option 'EN'>>Largest net win / loss in a hand or spin: <<option 'CN'>>单局最大净赢／净亏：<</language>><<printmoney _casinoStats.biggest_win>> / <<printmoney _casinoStats.biggest_loss>><br>
-        <<language>><<option 'EN'>>Longest winning streak in one night: <<option 'CN'>>一晚最长连胜：<</language>><span class='teal'><<= _casinoStats.best_streak>></span><br>
-        <<language>><<option 'EN'>>Highest net profit reached in one night: <<option 'CN'>>一晚最高净赢：<</language>><<printmoney _casinoStats.best_night_profit>><br>
-        <<language>><<option 'EN'>>Chips purchased / redeemed: <<option 'CN'>>累计换入／兑回筹码：<</language>><<printmoney _casinoStats.exchanged>> / <<printmoney _casinoStats.redeemed>><br>
-        <span class='blue'><<language>><<option 'EN'>>Exchanging chips and buying into a table do not count as winning or losing a hand. Records begin when this accounting is enabled.<<option 'CN'>>兑换筹码和买入牌桌不计入牌局输赢。记录从启用这项记账后开始累计。<</language>></span><br><br>
+        <span class='gold'><<lanSwitch "Gambling records" "赌馆输赢记录">></span>
+        <<lanSwitch "Completed hands and spins: " "已结算牌局与转轮：">><span class='teal'><<= _casinoStats.rounds>></span><br>
+        <<lanSwitch "Blackjack / three-card poker / hold'em / slots: " "二十一点／炸金花／德州扑克／老虎机：">><span class='teal'><<= _casinoStats.games.blackjack ?? 0>> / <<= _casinoStats.games.three_card ?? 0>> / <<= _casinoStats.games.holdem ?? 0>> / <<= _casinoStats.games.slots ?? 0>></span><br>
+        <<lanSwitch "Total staked / total paid, including returned stakes: " "累计下注／累计派彩（含取回的赌注）：">><<printmoney _casinoStats.staked>> / <<printmoney _casinoStats.paid>><br>
+        <<lanSwitch "Net profit / loss: " "累计净盈亏：">><span @class="_casinoStats.paid < _casinoStats.staked ? 'red' : 'green'"><<printmoney `_casinoStats.paid - _casinoStats.staked`>></span><br>
+        <<lanSwitch "Largest net win / loss in a hand or spin: " "单局最大净赢／净亏：">><<printmoney _casinoStats.biggest_win>> / <<printmoney _casinoStats.biggest_loss>><br>
+        <<lanSwitch "Longest winning streak in one night: " "一晚最长连胜：">><span class='teal'><<= _casinoStats.best_streak>></span><br>
+        <<lanSwitch "Highest net profit reached in one night: " "一晚最高净赢：">><<printmoney _casinoStats.best_night_profit>><br>
+        <<lanSwitch "Chips purchased / redeemed: " "累计换入／兑回筹码：">><<printmoney _casinoStats.exchanged>> / <<printmoney _casinoStats.redeemed>><br>
+        <span class='blue'><<language>>
+          <<option 'EN'>>
+            Exchanging chips and buying into a table do not count as winning or losing a hand. Records begin when this accounting is enabled.
+          <<option 'CN'>>
+            兑换筹码和买入牌桌不计入牌局输赢。记录从启用这项记账后开始累计。
+        <</language>></span><br><br>
       <</foldout>>
     <</if>>
   <</if>>
