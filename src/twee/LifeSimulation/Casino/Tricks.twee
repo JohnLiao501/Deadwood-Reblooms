@@ -7,7 +7,7 @@
       <<if $_casino.trick.used>>
         <<deadwood-casino-trick-result>>
       <<elseif $_casino.canPeek or $_casino.canDistract>>
-        <<lanLink ['Try a little trick', '做点小动作']>>
+        <<icon 'casino/card-trick.png'>><<lanLink ['Try a little trick', '做点小动作']>>
           <<replace '#deadwood-casino-tricks'>><<deadwood-casino-trick-choices>><</replace>>
         <</lanLink>>
       <</if>>
@@ -45,7 +45,7 @@
   <</language>><br><br>
   <<if $_casino.canPeek>>
     <<set $skulduggerydifficulty to $_casino.trickDifficulty>>
-    <<lanLink ['Try to glimpse a hidden hand (0:01)', '趁机偷看暗牌 (0:01)']>><<deadwood-casino-trick 'peek'>><</lanLink>><<skulduggerydifficulty>><br>
+    <<icon 'casino/card-trick.png'>><<lanLink ['Try to glimpse a hidden hand (0:01)', '趁机偷看暗牌 (0:01)']>><<deadwood-casino-trick 'peek'>><</lanLink>><<skulduggerydifficulty>><br>
   <</if>>
   <<if $_casino.canDistract>>
     <<lanLink ['Flirt across the table (0:01)', '朝对面调情 (0:01)']>><<deadwood-casino-trick 'distract'>><</lanLink>>

@@ -82,7 +82,7 @@
   </div>
   <div id='deadwood-sic-bo-layout'><<deadwood-sic-bo-layout>></div>
 </div><br>
-<<icon 'casino/dealer.png'>><<lanLink ['Read the table rules', '查看牌桌规则'] 'Deadwood Reblooms Casino Sic Bo Rules'>><</lanLink>><br>
+<<icon 'casino/table-rules.png'>><<lanLink ['Read the table rules', '查看牌桌规则'] 'Deadwood Reblooms Casino Sic Bo Rules'>><</lanLink>><br>
 <<getouticon>><<lanLink ['Return to the room', '返回赌馆'] 'Deadwood Reblooms Life Simulation Casino'>>
   <<set $LifeSimulation.casino.sic_bo.bets to {}>>
 <</lanLink>><br>

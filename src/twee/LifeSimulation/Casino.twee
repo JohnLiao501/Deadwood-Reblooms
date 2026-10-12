@@ -307,7 +307,7 @@
     牌桌现在无法继续。你仍可收回剩余筹码，再去柜台兑回。
 <</language>></span><br><br><</if>>
 <</deadwood-dynamicblock>>
-<<icon 'casino/dealer.png'>><<lanLink ['Read the table rules', '查看牌桌规则'] 'Deadwood Reblooms Casino Holdem Rules'>><</lanLink>><br>
+<<icon 'casino/table-rules.png'>><<lanLink ['Read the table rules', '查看牌桌规则'] 'Deadwood Reblooms Casino Holdem Rules'>><</lanLink>><br>
 <<getouticon>><<lanLink ['Return to the room', '返回赌馆'] 'Deadwood Reblooms Life Simulation Casino'>><</lanLink>><br>
 
 :: Deadwood Reblooms Life Simulation Three Card
@@ -327,7 +327,7 @@
     牌桌现在无法继续。你可以离席，放弃已经投入的筹码。
 <</language>></span><br><br><</if>>
 <</deadwood-dynamicblock>>
-<<icon 'casino/dealer.png'>><<lanLink ['Read the table rules', '查看牌桌规则'] 'Deadwood Reblooms Casino Three Card Rules'>><</lanLink>><br>
+<<icon 'casino/table-rules.png'>><<lanLink ['Read the table rules', '查看牌桌规则'] 'Deadwood Reblooms Casino Three Card Rules'>><</lanLink>><br>
 <<getouticon>><<lanLink ['Leave the table', '离开牌桌'] 'Deadwood Reblooms Life Simulation Casino'>><<run maplebirch.get('LifeSimulation').casino.threeCard.leave()>><</lanLink>><br>
 
 :: Deadwood Reblooms Casino Holdem Rules

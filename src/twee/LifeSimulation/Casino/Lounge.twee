@@ -15,7 +15,7 @@
       <<goto 'Deadwood Reblooms Casino Lounge Rest'>>
     <</if>>
   <</lanLink>><<lstress>><<ltiredness>><br>
-  <<icon 'casino/poker-chips.png'>>
+  <<icon 'casino/watch-hand.png'>>
   <<if maplebirch.get('LifeSimulation').casino.watch.active>>
     <<lanLink ['Continue watching the hand', '继续看刚才的牌局'] 'Deadwood Reblooms Casino Lounge Watch'>><</lanLink>>
   <<else>>
