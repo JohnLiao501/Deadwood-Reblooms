@@ -1,6 +1,7 @@
 // ./src/module/constants/life-simulation.ts
 
 import type { MedicineState } from '../LifeSimulation/Medicine';
+import type { PartnerMedicineState } from '../LifeSimulation/PartnerMedicine';
 import type { SchoolState } from '../LifeSimulation/School';
 import { DEFAULT_SCHOOL_STATE } from '../LifeSimulation/School';
 import { DEFAULT_CASINO_STATE, type CasinoState } from '../LifeSimulation/Casino';
@@ -119,6 +120,7 @@ export interface LifeSimulationState {
   /** 历史课题的进度与证据结果。 */
   historyProject: HistoryProjectState;
   medicine: MedicineState;
+  partner_medicine: PartnerMedicineState;
   /** 校园生活的全部状态。 */
   school: SchoolState;
   /** 健身房的会员与当日状态。 */
@@ -132,6 +134,7 @@ export const DEFAULT_LIFE_SIMULATION_STATE: LifeSimulationState = {
   body_growth: DEFAULT_BODY_GROWTH,
   casino: DEFAULT_CASINO_STATE,
   medicine: { uses: {}, notices: [], review: { day: -1, shared: false, pending: false } },
+  partner_medicine: { doses: {} },
   historyProject: {
     status: 'none',
     source: 'none',

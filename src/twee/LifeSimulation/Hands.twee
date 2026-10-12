@@ -1,0 +1,48 @@
+:: Deadwood Hands Widgets [widget]
+
+<<widget 'deadwood-hands-wardrobe'>>
+  <<run maplebirch.get('LifeSimulation').hands.refresh()>>
+  <<if $worn.handheld_left.name isnot 'naked' or maplebirch.get('LifeSimulation').hands.canSwap>>
+    <<if $worn.handheld_left.name isnot 'naked'>>
+      <<set _deadwood_held to $worn.handheld_left>>
+      <<lanSwitch 'Also holding: ' '还持有：'>><<clothingicon _deadwood_held 'handheld'>>
+      <<= lanSwitch(clothingData('handheld', _deadwood_held, 'name_cap'), clothingData('handheld', _deadwood_held, 'cn_name_cap') ?? clothingData('handheld', _deadwood_held, 'name_cap'))>>
+      <<lanLink ['Put away', '收起']>>
+        <<generalUndress $wardrobe_location 'handheld_left'>>
+        <<updatewardrobe>>
+      <</lanLink>>
+    <</if>>
+    <<if maplebirch.get('LifeSimulation').hands.canSwap>>
+      <<if $worn.handheld_left.name isnot 'naked'>> | <</if>>
+      <<lanLink ['Swap', '交换']>>
+        <<run maplebirch.get('LifeSimulation').hands.swap()>>
+        <<updatewardrobe>>
+      <</lanLink>>
+    <</if>><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-hands-duplicate'>>
+  <span class='red'><<lanSwitch 'You are already holding an item with the same function.' '你已持有同款或功能相同的物品。'>></span><br>
+<</widget>>
+
+<<widget 'deadwood-hands-stock'>>
+  <<set _deadwood_stock to selectWardrobe().handheld_left>>
+  <<for _deadwood_id to 0; _deadwood_id lt _deadwood_stock.length; _deadwood_id++>>
+    <<set _deadwood_item to _deadwood_stock[_deadwood_id]>>
+    <<if _deadwood_item.outfitSecondary and !['broken', 'split'].includes(_deadwood_item.outfitSecondary[1])>><<continue>><</if>>
+    <div class='wardrobeItem no-numberify'>
+      <<clothingicon _deadwood_item 'handheld'>>
+      <<capture _deadwood_id>>
+        <<lanLink [clothingData('handheld', _deadwood_item, 'name_cap'), clothingData('handheld', _deadwood_item, 'cn_name_cap') ?? clothingData('handheld', _deadwood_item, 'name_cap')]>>
+          <<set $wear_handheld_left to _deadwood_id>>
+          <<updatewardrobe undefined 'wear_handheld'>>
+        <</lanLink>>
+      <</capture>>
+      <<if _deadwood_item.colour and _deadwood_item.colour isnot 0>>
+        <span @class="_deadwood_item.colour.replace(' ', '-')">(_deadwood_item.colour)</span>
+      <</if>>
+      <<wardrobeintegrity _deadwood_item 'handheld_left'>>
+    </div>
+  <</for>>
+<</widget>>

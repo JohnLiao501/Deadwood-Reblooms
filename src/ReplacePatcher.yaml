@@ -1,3 +1,18 @@
+- comment: '第二手持槽的模型默认数据；沿用原版衣物预处理，不保存模型引用。'
+  fileName: 'canvasmodel-main.js'
+  from: 'handheld: {'
+  before: |
+    handheld_left: {
+      index: 0, alpha: 1, integrity: "full", colour: "white", accColour: "white", pattern: 0, setup: { type: [] },
+    },
+
+- comment: '原版模型参数使用固定槽列表；补入第二手持槽，复用物品、耐久与自定义颜色处理。'
+  fileName: 'base-clothing.js'
+  from: '["handheld"],'
+  after: |
+
+    ...(maplebirch.get('LifeSimulation') ? [["handheld_left"]] : []),
+
 - comment: '六级马化降低行动产生的疲劳。'
   fileName: 'stat-changes.js'
   from: 'if (source === "pass")'

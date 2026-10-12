@@ -1,0 +1,108 @@
+:: Deadwood Partner Medicine Widgets [widget]
+
+<<widget 'deadwood-partner-medicine-links'>>
+  <<set _name to _args[0]>>
+  <<set _medicines to maplebirch.get('LifeSimulation')?.partner_medicine>>
+  <<if _medicines?.stock.length and _medicines.nearby.includes(_name)>>
+    <div @id="'deadwood-medicine-' + setup.NPCNameList.indexOf(_name)">
+      <<capture _name>>
+        <<lanLink ['Discuss the tablets with ' + _name, '和' + maplebirch.auto(_name) + '谈谈药片']>>
+          <<replace `'#deadwood-medicine-' + setup.NPCNameList.indexOf(_name)`>><<deadwood-partner-medicine-menu _name>><</replace>>
+        <</lanLink>>
+      <</capture>>
+    </div>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-partner-medicine-menu'>>
+  <<set _name to _args[0]>>
+  <<set _medicines to maplebirch.get('LifeSimulation')?.partner_medicine>>
+  <<if !_medicines?.nearby.includes(_name)>><<exit>><</if>>
+  <<if !_medicines.willing(_name)>>
+    <<deadwood-partner-medicine-reply _name false>>
+  <<else>>
+    <<deadwood-partner-medicine-reply _name true>>
+    <<set _available to _medicines.stock.filter(dose => _medicines.canTake(_name, dose.part, dose.direction))>>
+    <<if !_available.length>>
+      <<lanSwitch 'There is no suitable dose to offer right now.' '眼下没有适合递给对方的剂量。'>><br>
+    <</if>>
+    <<for _dose range _available>>
+      <<set _part to _dose.part>><<set _direction to _dose.direction>>
+      <<set _labels to {
+        'breast growth': ['Offer breast growth tablets', '询问是否服用丰胸药'],
+        'breast reduction': ['Offer breast reduction tablets', '询问是否服用缩胸药'],
+        'penis growth': ['Offer penis growth tablets', '询问是否服用阴茎增长药'],
+        'penis reduction': ['Offer penis reduction tablets', '询问是否服用阴茎缩小药'],
+        'bottom growth': ['Offer bottom growth tablets', '询问是否服用丰臀药'],
+        'bottom reduction': ['Offer bottom reduction tablets', '询问是否服用缩臀药']
+      }>>
+      <<if _medicines.canTake(_name, _part, _direction)>>
+        <<capture _name _part _direction>>
+          <<lanLink _labels[_dose.id]>>
+            <<set _medicine_result to maplebirch.get('LifeSimulation').partner_medicine.give(_name, _part, _direction)>>
+            <<replace `'#deadwood-medicine-' + setup.NPCNameList.indexOf(_name)`>>
+              <<if _medicine_result is 'refused'>>
+                <<deadwood-partner-medicine-reply _name false>>
+              <<else>>
+                <<language>>
+                  <<option 'EN'>>
+                    You hand over one tablet with its packaging. After hearing your explanation, <<= _name>> takes it with water.
+                    <<if _medicine_result is 'changed'>><span class='purple'>The gradual change has become noticeable.</span><</if>>
+                  <<option 'CN'>>
+                    你把一粒药片连同包装递过去。<<print maplebirch.auto(_name)>>听完你的说明后，接过药片，就着水服下。
+                    <<if _medicine_result is 'changed'>><span class='purple'>逐渐积累的变化已经显现。</span><</if>>
+                <</language>><br>
+              <</if>>
+            <</replace>>
+            <<if _medicine_result isnot 'refused'>><<pass 5>><<updatesidebarimg>><</if>>
+          <</lanLink>><br>
+        <</capture>>
+      <</if>>
+    <</for>>
+  <</if>>
+<</widget>>
+
+<!-- 拒绝不扣库存、不改变好感；高好感也不使强制场景变成自愿服药。 -->
+<<widget 'deadwood-partner-medicine-reply'>>
+  <<set _name to _args[0]>><<set _agreed to _args[1]>>
+  <<language>>
+    <<option 'EN'>>
+      <<switch _name>>
+        <<case 'Robin'>>
+          Robin turns the packet over, lingering on the small print. <<if _agreed>>"You don't think I need these, do you?" A glance at your face, then a small smile. "If I try them, I want to choose which ones."<<else>>"I'm not sure. Can we leave it for now?" Robin returns the packet without opening it.<</if>>
+        <<case 'Kylar'>>
+          Kylar looks from the packet to you. <<if _agreed>>"Y-you'd like that?" Fingers tighten around the packaging. "Tell me which one. I want to read it first."<<else>>"D-do you want me to be different?" Kylar pushes the packet back, watching your expression.<</if>>
+        <<case 'Whitney'>>
+          Whitney takes the packet just far enough to read its label. <<if _agreed>>"Got plans for me, have you?" A grin. "I'll decide what I'm taking."<<else>>"Nice try. Keep your pills." The packet is pressed back into your palm.<</if>>
+        <<case 'Sydney'>>
+          Sydney reads the instructions twice. <<if _agreed>>"One at a time. And no guessing about what they do." Sydney looks up at you. "Let me see the label."<<else>>"I'd rather ask a doctor first." Sydney folds the instructions neatly and returns them.<</if>>
+        <<case 'Alex'>>
+          Alex wipes a hand on a trouser leg before examining the packet. <<if _agreed>>"Not much use taking something without knowing what it does. Let's see."<<else>>"Got enough to worry about right now. Keep those for yourself."<</if>>
+        <<case 'Avery'>>
+          Avery studies you before looking at the packet. <<if _agreed>>"How enterprising. Show me the instructions."<<else>>"You are getting ahead of yourself." Avery leaves the packet in your hand.<</if>>
+        <<case 'Remy'>>
+          Remy holds out a hand for the packaging. <<if _agreed>>"The label first. I will decide what to do with it."<<else>>"That decision is mine. Put it away."<</if>>
+        <<default>>
+          <<if _agreed>><<print _name>> lets you explain what the tablets do, then indicates a willingness to try one.<<else>><<print _name>> declines. You put the packet away.<</if>>
+      <</switch>>
+    <<option 'CN'>>
+      <<switch _name>>
+        <<case 'Robin'>>
+          罗宾翻过包装，视线停留在小字上。<<if _agreed>>“你不是觉得我非吃不可吧？”<<nnpc_he _name>>看了看你的脸，才露出一点笑意。“如果要试，我想自己选。”<<else>>“我还没想好。先不谈这个，可以吗？”<<nnpc_he _name>>没有拆开包装，就把药还给你。<</if>>
+        <<case 'Kylar'>>
+          凯拉尔看看药，又看看你。<<if _agreed>>“你、你会喜欢这样吗？”<<nnpc_he _name>>攥紧了包装。“告诉我是哪一种。我想先读一下。”<<else>>“你、你想让我变得不一样吗？”<<nnpc_he _name>>把药推回来，盯着你的表情。<</if>>
+        <<case 'Whitney'>>
+          惠特尼拿过药，刚好够看清标签。<<if _agreed>>“还给我安排上了？”<<nnpc_he _name>>咧嘴一笑。“吃什么，由我决定。”<<else>>“想得美。你的药自己留着。”<<nnpc_he _name>>把包装按回你的手心。<</if>>
+        <<case 'Sydney'>>
+          悉尼把说明读了两遍。<<if _agreed>>“一次一种。也不能凭猜测决定它有什么作用。”<<nnpc_he _name>>抬头看你。“先让我看标签。”<<else>>“我想先问过医生。”<<nnpc_he _name>>把说明折好，还给你。<</if>>
+        <<case 'Alex'>>
+          艾利克斯在裤腿上擦了擦手，才拿起药检查。<<if _agreed>>“不知道有什么用，吃了也没意义。让我看看。”<<else>>“眼下要操心的事够多了。你先留着吧。”<</if>>
+        <<case 'Avery'>>
+          艾弗里先打量了你一番，才看向包装。<<if _agreed>>“挺有主见。拿说明给我看看。”<<else>>“你想得太远了。”<<nnpc_he _name>>没有接过你手里的药。<</if>>
+        <<case 'Remy'>>
+          雷米伸手示意你递过包装。<<if _agreed>>“先看标签。该怎么用，由我决定。”<<else>>“这由我决定。收起来。”<</if>>
+        <<default>>
+          <<if _agreed>><<print maplebirch.auto(_name)>>听你说明了药片的作用，表示愿意尝试一剂。<<else>><<print maplebirch.auto(_name)>>拒绝了。你把药收起来。<</if>>
+      <</switch>>
+  <</language>><br>
+<</widget>>

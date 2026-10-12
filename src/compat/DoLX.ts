@@ -110,6 +110,32 @@ export default function DoLX(core: MaplebirchCore): void {
       const rules = core.tool.zone.widgetPassage[title];
       if (rules) core.tool.zone.widgetPassage[title] = rules.filter(rule => rule.srcmatch?.source !== npc_size_patch.srcmatch.source || !rule.to?.startsWith('$1<<case 5>><<deadwood-npc-size-five-'));
     }
+    if (core.get('LifeSimulation')) {
+      // DoLX 已将书包分到 bag 槽；保留它的原生判断与暂存，不套用原版手持书包规则。
+      const bookbags = [
+        'Widgets Events Science',
+        'Widgets Events English',
+        'Widgets School Events',
+        'History Classroom',
+        'Science Classroom',
+        'Gwylan Walk School Solo',
+        'Gwylan Ocean Breeze',
+        'School Passout Gang Rape'
+      ];
+      const handRule = (rule: (typeof core.tool.zone.widgetPassage)[string][number]) =>
+        [rule.to, rule.applybefore, rule.applyafter].some(text => text?.includes('maplebirch.get("LifeSimulation").hands') || text?.includes('_deadwood_bookbag')) ||
+        (rule.srcmatch?.source === '\\$?worn\\.handheld\\.type\\.includes\\("bookbag"\\)' && rule.to === '$worn.handheld.type.includes("bookbag")');
+      for (const title of bookbags) {
+        for (const group of [core.tool.zone.widgetPassage, core.tool.zone.locationPassage]) {
+          if (group[title]) group[title] = group[title].filter(rule => !handRule(rule));
+        }
+      }
+      // 雨伞能力已由手持视图统一处理；这里只修正 DoLX 额外的完整度检查与损耗。
+      core.tool.zone.widgetPassage['Ambient Weather And Seasonal Event Widgets'] = [
+        ...(core.tool.zone.widgetPassage['Ambient Weather And Seasonal Event Widgets'] ?? []).filter(rule => !handRule(rule)),
+        { srcmatch: /\$worn\.handheld\.integrity/g, to: '(maplebirch.get("LifeSimulation").hands.item("rainproof") ?? $worn.handheld).integrity', expected: 3 }
+      ];
+    }
   });
 
   core.once(':addon:beforePatch', () => {

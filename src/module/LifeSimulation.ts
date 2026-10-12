@@ -9,6 +9,8 @@ import Weapons from './LifeSimulation/Weapons';
 import Medicine from './LifeSimulation/Medicine';
 import GymCoach from './LifeSimulation/GymCoach';
 import PoolParty from './LifeSimulation/PoolParty';
+import Hands from './LifeSimulation/Hands';
+import PartnerMedicine from './LifeSimulation/PartnerMedicine';
 import { DEFAULT_LIFE_SIMULATION_STATE, type BodyGrowthState, type GymPlan } from './constants';
 
 class LifeSimulation extends Module {
@@ -19,6 +21,8 @@ class LifeSimulation extends Module {
   public readonly medicine = new Medicine(this.core);
   public readonly coach = new GymCoach();
   public readonly pool_party = new PoolParty(this.core);
+  public readonly hands = new Hands(this.core);
+  public readonly partner_medicine = new PartnerMedicine(this.core);
 
   public constructor(core: typeof maplebirch) {
     super(core, 'LifeSimulation', DEFAULT_LIFE_SIMULATION_STATE);
@@ -30,6 +34,7 @@ class LifeSimulation extends Module {
     this.pool_party.preInit();
     this.school.preInit();
     this.medicine.preInit();
+    this.core.on(':variable', () => this.hands.setup());
 
     this.core.dynamic.regTimeEvent('onDay', ':deadwood-reblooms-body-growth', { exact: true, action: () => this.settleBodyGrowth() });
     // 只在原版确实跨日时清除到期卡，读档时直接按保存的到期时间判断入场资格。
