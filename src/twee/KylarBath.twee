@@ -138,7 +138,7 @@
       <<if C.npc.Kylar.rage gte 50>>
         "You came here for me," <<he>> whispers against your lips. "Didn't you?" <<He>> draws back just enough to see your face.
         <br><br>
-        <span class='lewd'><<He>> does not let you answer. <<He>> turns you around against the wet tiles and presses up behind you, one arm banded across your chest to keep you there, the other sliding down your stomach. "I have been thinking about this all day," <<he>> says into the back of your neck, and <<his>> fingers do not stop moving until your knees start to give. "Say it. Say you wanted me to."</span>
+        <span class='lewd'><<He>> does not let you answer. <<He>> turns you around against the wet tiles and presses up behind you, one arm banded across your chest to keep you there, the other sliding down your stomach. "I've been thinking about this all day," <<he>> says into the back of your neck, and <<his>> fingers do not stop moving until your knees start to give. "Say it. Say you wanted me to."</span>
       <<else>>
         "I— I can stop," <<he>> says, then adds much too quickly: "Not that I want to. Unless you do. Sorry." <<He>> watches your face, red to the ears.
       <</if>>

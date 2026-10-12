@@ -87,7 +87,7 @@
     <<npcincr Remy love 1>>
     <<language>>
       <<option 'EN'>>
-        Remy checks what you brought, then puts it out of reach of the lesson register. "After work." A pupil calls from the yard. "I would rather they found me able to answer." <<He>> leaves it closed for later.
+        Remy checks what you brought, then puts it out of reach of the lesson register. "After work." A pupil calls from the yard. "I'd rather they found me able to answer." <<He>> leaves it closed for later.
       <<option 'CN'>>
         雷米看看你带来的东西，把它放到离课程登记簿远些的地方。“下班以后再说。”庭院里的学员叫了<<him>>一声。“我还是希望他们来找我时，能听见个清楚的回答。”<<He>>没有打开，留到之后再享用。
     <</language>><<glove 'Remy'>>
@@ -104,7 +104,7 @@
     <<npcincr Remy love 2>>
     <<language>>
       <<option 'EN'>>
-        Remy clears a space beside the kettle. <<if _remyFood is 'apple'>>"Usually these are for the horses." <<He>> polishes the apple on a handkerchief before setting it apart from the feed.<<else>>"You came prepared." <<He>> tastes the food, then asks where you got it.<</if>> <<if _remy.stage is 'former'>>"Thank you," <<he>> adds, carefully polite.<<elseif _remy.state.romance>>"Next time, let me know. I can leave a little longer between lessons."<<else>>"I will remember that."<</if>>
+        Remy clears a space beside the kettle. <<if _remyFood is 'apple'>>"Usually these are for the horses." <<He>> polishes the apple on a handkerchief before setting it apart from the feed.<<else>>"You came prepared." <<He>> tastes the food, then asks where you got it.<</if>> <<if _remy.stage is 'former'>>"Thank you," <<he>> adds, carefully polite.<<elseif _remy.state.romance>>"Next time, let me know. I can leave a little longer between lessons."<<else>>"I'll remember that."<</if>>
       <<option 'CN'>>
         雷米在水壶旁腾出一点地方。<<if _remyFood is 'apple'>>“一般这些都是给马的。”<<He>>拿手帕擦了擦苹果，再把它与饲料分开放好。<<else>>“准备得挺周全。”<<He>>尝过食物，问你从哪里弄来的。<</if>> <<if _remy.stage is 'former'>>“谢谢。”<<he>>补了一句，客气得很谨慎。<<elseif _remy.state.romance>>“下次提前说一声。我能把课间留长一点。”<<else>>“我会记住的。”<</if>>
     <</language>>

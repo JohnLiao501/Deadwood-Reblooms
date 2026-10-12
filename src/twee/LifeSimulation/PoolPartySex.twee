@@ -132,7 +132,7 @@
     <<case 'Sydney'>>
       <<language>>
         <<option 'EN'>>
-          Sydney takes your hand first and leads, then stops at the edge of the light. "If we are going to do this, we are going to do it properly," <<he>> says, and presses your palm flat against the clasp at <<his>> waist. "That thing has to come off first. You undo it, or I will."
+          Sydney takes your hand first and leads, then stops at the edge of the light. "If we are going to do this, we are going to do it properly," <<he>> says, and presses your palm flat against the clasp at <<his>> waist. "That thing has to come off first. You undo it, or I'll."
           <<if _sydneyChastity and C.npc.Sydney.chastity.anus.includes('shield')>>
             A second clasp sits lower still, and <<he>> does not pretend it is not there. "…And that one stays on. Everything but that."
           <<elseif _sydneyChastity>>
@@ -265,7 +265,7 @@
     <<option 'EN'>>
       You take Kylar by the wrist and lead Kylar to where the light thins, and you do not let go until the third set of footsteps follows. Kylar looks past you at the other and then back, and Kylar's grip on your sleeve is the only part of Kylar that has stopped shaking.
       <br><br>
-      "I can do this," Kylar says, to you rather than to the other. "If it is what you want. Tell me what you want and I will do it."
+      "I can do this," Kylar says, to you rather than to the other. "If it's what you want. Tell me what you want and I'll do it."
     <<option 'CN'>>
       你攥住凯拉尔的手腕，把凯拉尔带到灯光稀薄的地方，直到第三个人的脚步声跟上来，你才松手。凯拉尔越过你看向另一个人，又转回来，唯一不再发抖的地方是抓着你的那只手。
       <br><br>

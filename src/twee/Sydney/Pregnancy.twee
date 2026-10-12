@@ -24,14 +24,14 @@
   <<elseif _sydneyStatus.includes('corrupt')>>
     <<language>>
       <<option 'EN'>>
-        "I should have brought something less sensible to read." Sydney eyes the books in the bedside bag, then leaves them untouched. "Or no books at all." <<He>> asks you to move the chair closer. "You are better company. Don't let that go to your head."
+        "I should have brought something less sensible to read." Sydney eyes the books in the bedside bag, then leaves them untouched. "Or no books at all." <<He>> asks you to move the chair closer. "You're better company. Don't let that go to your head."
       <<option 'CN'>>
         “该带本不那么正经的书来的。”悉尼看了看床边包里的书，却一本也没拿。“或者干脆不带。”<<He>>让你把椅子挪近。“还是你陪着有意思。可别太得意。”
     <</language>><br><br>
   <<else>>
     <<language>>
       <<option 'EN'>>
-        Sydney quietly repeats the names you chose. "I thought I would have something more eloquent to say." <<He>> smiles at you, then bows <<his>> head for a moment. When <<he>> looks up again, <<his>> voice is steadier. "Thank you for staying."
+        Sydney quietly repeats the names you chose. "I thought I'd have something more eloquent to say." <<He>> smiles at you, then bows <<his>> head for a moment. When <<he>> looks up again, <<his>> voice is steadier. "Thank you for staying."
       <<option 'CN'>>
         悉尼小声念了一遍刚取好的名字。“还以为自己能说点更像样的话呢。”<<He>>朝你笑笑，低下头，静静停了一会儿。再抬起头时，<<his>>声音稳了些。“谢谢你一直陪着。”
     <</language>><br><br>
@@ -72,7 +72,7 @@
     <<else>>
       <<language>>
         <<option 'EN'>>
-          Sydney practises how <<he>> might tell <<nnpc_Mum 'Sirris'>>. The first attempt is so formal it sounds like a library notice. You ask what <<he>> would say without the speech. <<He>> looks down at the notes, then puts them aside. "I'd like some help." After a pause, <<he>> adds, "That is much shorter."
+          Sydney practises how <<he>> might tell <<nnpc_Mum 'Sirris'>>. The first attempt is so formal it sounds like a library notice. You ask what <<he>> would say without the speech. <<He>> looks down at the notes, then puts them aside. "I'd like some help." After a pause, <<he>> adds, "That's much shorter."
         <<option 'CN'>>
           悉尼试着练习怎么跟<<nnpc_Mum 'Sirris'>>开口。第一遍郑重得像图书馆通知。你问，不照着那段话，<<he>>最想说什么。<<He>>低头看看笔记，又把它放到一边。“我想找人帮帮忙。”停了一会儿，<<he>>又说：“这样短多了。”
       <</language>><br><br>
@@ -99,7 +99,7 @@
   <<else>>
     <<language>>
       <<option 'EN'>>
-        Sydney closes the book without marking the page. <<He>> notices, slips a finger between the leaves, then gives up on it. "Could we speak quietly? I am <span class="pink">pregnant</span>."
+        Sydney closes the book without marking the page. <<He>> notices, slips a finger between the leaves, then gives up on it. "Could we speak quietly? I'm <span class="pink">pregnant</span>."
       <<option 'CN'>>
         悉尼合上书，却忘了夹书签。<<He>>察觉到，伸根手指夹进书页，又放弃了。“能小声谈谈吗？我<span class="pink">怀孕了</span>。”
     <</language>><br><br>
@@ -115,7 +115,7 @@
   <<elseif $pregnancies.some(record => record.carrier === _pregnancy_name && record.deliveredDate !== null)>>
     <<language>>
       <<option 'EN'>>
-        "I remember thinking I would feel prepared next time." Sydney shakes <<his>> head, smiling a little. "I think I have just found different things to worry about."
+        "I remember thinking I'd feel prepared next time." Sydney shakes <<his>> head, smiling a little. "I think I've just found different things to worry about."
       <<option 'CN'>>
         “我以前还想，下次就该有准备了。”悉尼摇摇头，露出一点笑容。“现在看来，只是换了些担心的事。”
     <</language>><br><br>
@@ -131,14 +131,14 @@
   <<elseif _sydneyStatus.includes('corrupt')>>
     <<language>>
       <<option 'EN'>>
-        "I would have preferred to tell you before you guessed." <<He>> draws your chair closer, then glances towards the door. "People will have opinions. They always do." <<His>> mouth curves into a small smile. "They can wait. I wanted to see your face first."
+        "I'd have preferred to tell you before you guessed." <<He>> draws your chair closer, then glances towards the door. "People will have opinions. They always do." <<His>> mouth curves into a small smile. "They can wait. I wanted to see your face first."
       <<option 'CN'>>
         “我更想自己告诉你，而不是等你猜出来。”<<He>>把你的椅子拉近，又瞥了一眼门口。“别人肯定有话要说。一直都这样。”<<His>>嘴角露出一点笑意。“让他们等着吧。我想先看看你的反应。”
     <</language>><br><br>
   <<elseif _sydneyStatus.includes('pure')>>
     <<language>>
       <<option 'EN'>>
-        Sydney rests <<his>> hands together. "I still want to pray. I do not want people thinking I have stopped caring about any of it." <<He>> hesitates. "I just don't know how to begin explaining. Not yet." <<His>> gaze returns to you. "Could we begin here?"
+        Sydney rests <<his>> hands together. "I still want to pray. I don't want people thinking I've stopped caring about any of it." <<He>> hesitates. "I just don't know how to begin explaining. Not yet." <<His>> gaze returns to you. "Could we begin here?"
       <<option 'CN'>>
         悉尼把双手叠在一起。“我还是想祈祷。不想让别人以为，我已经什么都不在意了。”<<He>>迟疑了一下。“只是还不知道该怎么解释。从哪儿开始都没想好。”<<His>>目光重新落到你身上。“能先在这里，跟你说说吗？”
     <</language>><br><br>
@@ -190,7 +190,7 @@
     <<else>>
       <<language>>
         <<option 'EN'>>
-          Sydney tells you about a nursery visit, carefully distinguishing what the carers said from what <<he>> has read. "I thought I would be less nervous with a book to hand." <<He>> smiles. "They managed perfectly well without consulting it. I'm beginning to think I can, too."
+          Sydney tells you about a nursery visit, carefully distinguishing what the carers said from what <<he>> has read. "I thought I'd be less nervous with a book to hand." <<He>> smiles. "They managed perfectly well without consulting it. I'm beginning to think I can, too."
         <<option 'CN'>>
           悉尼说起去育儿室的事，认真分清哪些是照料人员说的，哪些是书上读来的。“我还以为手边有书，就能少紧张一点。”<<He>>笑了笑。“他们不翻书也照料得很好。现在觉得，我也许也能做到。”
       <</language>><br><br>

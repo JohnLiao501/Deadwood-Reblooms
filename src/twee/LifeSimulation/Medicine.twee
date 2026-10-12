@@ -147,9 +147,9 @@
             <<option 'EN'>>
               Harper asks whether you feel worse without them. As you describe the unease, <<he>> makes a note on your file.<br><br>
               <<if _medicine.dependence gte 3>>
-                "You are finding it difficult to manage without them, then." <<He>> sounds almost pleased to have an answer. "That is something we will need to keep an eye on."<br><br>
+                "You're finding it difficult to manage without them, then." <<He>> sounds almost pleased to have an answer. "That's something we'll need to keep an eye on."<br><br>
               <</if>>
-              "<span class='purple'>Taking more because they seem less effective will not solve this.</span> Bring the packets to your next appointment. I need to know exactly what you are taking."<br><br>
+              "<span class='purple'>Taking more because they seem less effective won't solve this.</span> Bring the packets to your next appointment. I need to know exactly what you are taking."<br><br>
               <<He>> closes the file. "For now, let us continue with today's appointment."
             <<option 'CN'>>
               哈珀问你，不服药时是否会更难受。你描述着那阵不安，<<he>>在病历上记下一笔。<br><br>
@@ -163,7 +163,7 @@
           <<language>>
             <<option 'EN'>>
               Harper asks how often you have been taking them. <<His>> pen pauses over the file when you answer.<br><br>
-              "Feeling a little better does not mean you should reach for another tablet. <span class='purple'>You can become accustomed to them.</span> Bring the packets next time." <<He>> writes something down. "We can discuss it again then."
+              "Feeling a little better doesn't mean you should reach for another tablet. <span class='purple'>You can become accustomed to them.</span> Bring the packets next time." <<He>> writes something down. "We can discuss it again then."
             <<option 'CN'>>
               哈珀问你多久服一次药。听到回答时，<<his>>的笔在病历上停了一下。<br><br>
               “觉得舒服一些，不代表你该立刻再吃一片。<span class='purple'>你可能会越来越依赖它们。</span>下次把包装带来。”<<He>>写下几个字。“到时候我们再谈。”
@@ -171,7 +171,7 @@
         <<else>>
           <<language>>
             <<option 'EN'>>
-              Harper notes the names and asks when you last took them. "Including anything you buy at the pharmacy," <<he>> says. "My prescription is not the only thing I need to know about."
+              Harper notes the names and asks when you last took them. "Including anything you buy at the pharmacy," <<he>> says. "My prescription isn't the only thing I need to know about."
             <<option 'CN'>>
               哈珀记下药名，又问你最后一次服药是什么时候。“包括你在药房买的东西，”<<he>>说，“我需要了解的不只是我开的处方。”
           <</language>>
@@ -189,7 +189,7 @@
         <<language>>
           <<option 'EN'>>
             You say you have not been taking anything else. Harper looks at you for a moment, then returns to the file.<br><br>
-            "That includes things bought without a prescription. It is important that you tell me." <<He>> taps the page with <<his>> pen and moves on.
+            "That includes things bought without a prescription. It's important that you tell me." <<He>> taps the page with <<his>> pen and moves on.
           <<option 'CN'>>
             你说自己没有服用别的药。哈珀看了你片刻，又低头看向病历。<br><br>
             “没有处方就能买到的药也算。告诉我很重要。”<<He>>用笔点了点纸页，继续今天的安排。

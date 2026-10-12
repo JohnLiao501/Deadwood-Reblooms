@@ -301,7 +301,7 @@
 <<case 'boundaries'>>
 <<language>>
   <<option 'EN'>>
-    You say that appointments, where you live and who cares for the children must be discussed with you. Remy taps the pencil against the desk. "You think I cannot make arrangements?" You tell <<him>> that making them and deciding for you are different things.
+    You say that appointments, where you live and who cares for the children must be discussed with you. Remy taps the pencil against the desk. "You think I can't make arrangements?" You tell <<him>> that making them and deciding for you are different things.
   <<option 'CN'>>
     你说，检查、住在哪里，以及由谁照料孩子，都得跟你商量。雷米用铅笔敲着桌面。“你觉得我安排不了？”你告诉<<him>>，安排事情和替你作决定是两回事。
 <</language>>
@@ -332,7 +332,7 @@
 <<if _remyPregnancy.farmConflict>><br><br>
 <<language>>
   <<option 'EN'>>
-    When you mention Alex's farm, Remy's voice turns flat. "That is another matter." You cannot mistake the answer for a truce.
+    When you mention Alex's farm, Remy's voice turns flat. "That's another matter." You cannot mistake the answer for a truce.
   <<option 'CN'>>
     你提到艾利克斯的农场时，雷米的声音冷下来。“那是另一回事。”你没有把这个答复当成停战。
 <</language>>

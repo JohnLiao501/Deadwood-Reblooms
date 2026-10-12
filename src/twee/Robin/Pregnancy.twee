@@ -15,7 +15,7 @@
   <<elseif $deadwood_pregnancy.choice is 'hospital_plan'>>
     <<language>>
       <<option 'EN'>>
-        You ask the nurse to go over the next arrangements with both of you. Robin listens, then asks her to repeat the part about visiting. "I thought I would remember everything." <<He>> looks relieved when she writes it down. "That is better. I can read it again when I'm less tired."
+        You ask the nurse to go over the next arrangements with both of you. Robin listens, then asks her to repeat the part about visiting. "I thought I'd remember everything." <<He>> looks relieved when she writes it down. "That's better. I can read it again when I'm less tired."
       <<option 'CN'>>
         你请护士给你们一起讲讲接下来的安排。罗宾听完，又请她重复了一遍探望的部分。“还以为自己能全记住。”见护士把它写下来，<<he>>松了口气。“这样好些。等没那么累了，还能再看一遍。”
     <</language>><br><br>
@@ -29,7 +29,7 @@
   <<else>>
     <<language>>
       <<option 'EN'>>
-        Robin tries to thank the nurse, but a yawn interrupts <<him>> halfway through. <<He>> looks embarrassed until she tells <<him>> to sleep. "I had so much I wanted to say," <<he>> murmurs to you. "I cannot remember any of it now."
+        Robin tries to thank the nurse, but a yawn interrupts <<him>> halfway through. <<He>> looks embarrassed until she tells <<him>> to sleep. "I had so much I wanted to say," <<he>> murmurs to you. "I can't remember any of it now."
       <<option 'CN'>>
         罗宾想向护士道谢，话说到一半却打了个哈欠。<<He>>有些不好意思，直到护士让<<him>>先睡。“本来有好多话想跟你说。”<<he>>低声道。“现在一句也想不起来了。”
     <</language>><br><br>
@@ -97,7 +97,7 @@
   <<else>>
     <<language>>
       <<option 'EN'>>
-        Robin smooths a crease in the blanket, then smooths it again. "There is something I need to tell you." <<He>> stops working at the fabric and looks up. "I am <span class="pink">pregnant</span>." <<He>> tries a smile, but it does not quite stay in place.
+        Robin smooths a crease in the blanket, then smooths it again. "There's something I need to tell you." <<He>> stops working at the fabric and looks up. "I'm <span class="pink">pregnant</span>." <<He>> tries a smile, but it does not quite stay in place.
       <<option 'CN'>>
         罗宾把毛毯上的褶子抚平，又抚了一遍。“有件事得跟你说。”<<He>>终于停下手里的动作，抬起头。“我<span class="pink">怀孕了</span>。”<<He>>试着笑了一下，却没能一直保持住。
     <</language>><br><br>
@@ -113,7 +113,7 @@
   <<elseif $pregnancies.some(record => record.carrier === _pregnancy_name && record.deliveredDate !== null)>>
     <<language>>
       <<option 'EN'>>
-        "At least I know which questions to ask this time." Robin looks down at <<his>> hands. "That does not mean I have all the answers."
+        "At least I know which questions to ask this time." Robin looks down at <<his>> hands. "That doesn't mean I have all the answers."
       <<option 'CN'>>
         “至少这次我知道该问些什么了。”罗宾低头看着自己的双手。“但也不是每件事都能想明白。”
     <</language>><br><br>
@@ -121,14 +121,14 @@
   <<if C.npc.Robin.trauma gte 50>>
     <<language>>
       <<option 'EN'>>
-        Robin draws <<his>> knees together. "I keep thinking I ought to be happy, or ought to be frightened. I cannot work out which." <<He>> watches you for a moment. "Please do not be cross if I get it wrong."
+        Robin draws <<his>> knees together. "I keep thinking I ought to be happy, or ought to be frightened. I can't work out which." <<He>> watches you for a moment. "Please don't be cross if I get it wrong."
       <<option 'CN'>>
         罗宾并拢膝盖。“总觉得自己该高兴，又觉得该害怕。可我分不清。”<<He>>看了你一会儿。“要是我说得不对，你别生气，好吗？”
     <</language>><br><br>
   <<elseif $RobinExpansion.rebellion and !$RobinExpansion.bailey_defeated>>
     <<language>>
       <<option 'EN'>>
-        "After everything with Bailey, I would rather talk to you first." Robin lowers <<his>> voice. "I do not want this decided for me as well." <<He>> rubs a loose thread between <<his>> fingers, then lets it go. "We can work out what to ask, can't we?"
+        "After everything with Bailey, I'd rather talk to you first." Robin lowers <<his>> voice. "I don't want this decided for me as well." <<He>> rubs a loose thread between <<his>> fingers, then lets it go. "We can work out what to ask, can't we?"
       <<option 'CN'>>
         “跟贝利闹过那些事以后，我还是想先找你说。”罗宾放低声音。“不想连这件事也由别人替我做主。”<<He>>捻了捻一根线头，又松开手。“咱们能先想好该问些什么，对吧？”
     <</language>><br><br>
@@ -192,7 +192,7 @@
     <<else>>
       <<language>>
         <<option 'EN'>>
-          Robin tells you about the nursery, stopping to laugh at how quietly <<he>> had tried to open a creaking door. "I thought I would wake everyone." Then <<his>> smile fades a little. "It feels strange leaving again, even when someone is there to help." <<He>> stays beside you while you listen.
+          Robin tells you about the nursery, stopping to laugh at how quietly <<he>> had tried to open a creaking door. "I thought I'd wake everyone." Then <<his>> smile fades a little. "It feels strange leaving again, even when someone is there to help." <<He>> stays beside you while you listen.
         <<option 'CN'>>
           罗宾说起育儿室的事，还笑着比划自己怎样小心翼翼地推开那扇吱呀作响的门。“就怕把大家都吵醒。”接着，<<his>>笑容淡了些。“明明有人帮忙照料，走的时候还是觉得怪怪的。”你听着，<<he>>便一直坐在你身旁。
       <</language>><br><br>
@@ -232,7 +232,7 @@
   <<elseif npcPregnancyProgress('Robin') gte 0.8>>
     <<language>>
       <<option 'EN'>>
-        Robin puts down what <<he>> was carrying and takes a seat. "I keep thinking I have forgotten something." The list is folded and unfolded so often that its corners have worn soft.
+        Robin puts down what <<he>> was carrying and takes a seat. "I keep thinking I've forgotten something." The list is folded and unfolded so often that its corners have worn soft.
       <<option 'CN'>>
         罗宾放下手里的东西，坐下来。“我总觉得忘了准备什么。”那张单子反复折过、展开，纸角都已经软了。
     <</language>><br><br>
@@ -246,7 +246,7 @@
   <<else>>
     <<language>>
       <<option 'EN'>>
-        Robin makes room beside <<him>>. "Can we talk about something ordinary first?" <<He>> smiles. "I have spent all morning thinking about nappies."
+        Robin makes room beside <<him>>. "Can we talk about something ordinary first?" <<He>> smiles. "I've spent all morning thinking about nappies."
       <<option 'CN'>>
         罗宾往旁边挪了挪。“能先说点平常的事吗？”<<He>>笑起来。“我一早上都在想尿布的事。”
     <</language>><br><br>
@@ -262,7 +262,7 @@
   <<set $outside to 0>><<set $location to $deadwood_pregnancy.location>><<effects>><<npc 'Robin'>><<person1>>
   <<language>>
     <<option 'EN'>>
-      Robin goes quiet in the middle of talking. <<He>> takes a careful breath and reaches for the edge of the chair. "I think it is starting." <<His>> fingers tremble when <<he>> reaches for the phone. "Could you stay while I call?"
+      Robin goes quiet in the middle of talking. <<He>> takes a careful breath and reaches for the edge of the chair. "I think it's starting." <<His>> fingers tremble when <<he>> reaches for the phone. "Could you stay while I call?"
     <<option 'CN'>>
       罗宾说着说着安静下来。<<He>>小心地吸了口气，扶住椅子边缘。“好像开始了。”<<He>>伸手拿手机，手指有点发抖。“我打电话的时候，你能陪着吗？”
   <</language>><br><br>

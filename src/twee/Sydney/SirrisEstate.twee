@@ -17,7 +17,9 @@
 
 <!-- 只在悉尼确实待在宿舍的晚间提供约定，回家前不会凭空出现在庄园。 -->
 <<widget 'deadwood-reblooms-sirris-estate-evening-link'>>
-  <<sydneySchedule>>
+  <<silently>>
+    <<sydneySchedule>>
+  <</silently>>
   <<if $SydneyExpansion.estate.invited
     and isLoveInterest('Sydney')
     and Time.hour gte 17 and Time.hour lt 21

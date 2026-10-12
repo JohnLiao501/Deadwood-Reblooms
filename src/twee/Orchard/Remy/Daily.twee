@@ -48,7 +48,7 @@
         <<option 'EN'>>
           You sit beside the office window. <<if Weather.precipitation is 'rain'>>Rain drums on the sill. A muddy pupil stops outside and thinks better of bringing their boots indoors. Remy points them towards the scraper.<<elseif Time.season is 'winter'>>The glass has misted over. Remy clears a circle with <<his>> glove to check the track, then turns back to you.<<else>>Someone drops a bucket in the yard. Remy listens for a moment, then leaves the worker to pick it up.<</if>>
           <br><br>
-          <<if _remy.stage is 'close'>>"You can stop watching the clock. That is my job." <<He>> leaves the pencil down until a knock finally calls <<him>> away.<<elseif _remy.stage is 'former'>>You talk about the yard rather than the evenings you used to spend together. Remy lets the silences stand.<<else>>"A quiet visitor. That makes a change." You ask whether <<he>> would prefer another complaint about the horses. "Not particularly."<</if>>
+          <<if _remy.stage is 'close'>>"You can stop watching the clock. That's my job." <<He>> leaves the pencil down until a knock finally calls <<him>> away.<<elseif _remy.stage is 'former'>>You talk about the yard rather than the evenings you used to spend together. Remy lets the silences stand.<<else>>"A quiet visitor. That makes a change." You ask whether <<he>> would prefer another complaint about the horses. "Not particularly."<</if>>
         <<option 'CN'>>
           你坐在办公室窗边。<<if Weather.precipitation is 'rain'>>雨点敲着窗台。一名满身泥的学员停在门外，没有把靴子带进屋。雷米指了指刮泥的地方。<<elseif Time.season is 'winter'>>玻璃上起了一层雾。雷米用手套擦出一个圈，看看跑道，再转回你这里。<<else>>有人在庭院里弄翻了桶。雷米听了一会儿，把捡拾的事留给工人。<</if>>
           <br><br>
@@ -69,9 +69,9 @@
     <<case 'rota'>>
       <<language>>
         <<option 'EN'>>
-          Remy turns the timetable towards you. There is an empty space between two group lessons. <<if $maths gte 400>>You compare the numbers of riders and horses and point out that the apparent gap includes a change of tack. Remy moves an entry instead of filling it. "That is why I leave margins."<<else>>You suggest filling the gap. Remy asks which horses will be ready. When you look again, the break no longer seems so empty.<</if>>
+          Remy turns the timetable towards you. There is an empty space between two group lessons. <<if $maths gte 400>>You compare the numbers of riders and horses and point out that the apparent gap includes a change of tack. Remy moves an entry instead of filling it. "That's why I leave margins."<<else>>You suggest filling the gap. Remy asks which horses will be ready. When you look again, the break no longer seems so empty.<</if>>
           <br><br>
-          <<if _remy.stage is 'close'>>At the edge of the page, <<he>> leaves another gap. "That one is for us. Tell me before I put somebody else in it."<<elseif _remy.state.romance>>"Ask before turning up," <<he>> says. "It is easier to make time while the page is still blank."<<else>>Remy folds the timetable and returns it to the register. "You can see why I do not promise an afternoon at a moment's notice."<</if>>
+          <<if _remy.stage is 'close'>>At the edge of the page, <<he>> leaves another gap. "That one is for us. Tell me before I put somebody else in it."<<elseif _remy.state.romance>>"Ask before turning up," <<he>> says. "It's easier to make time while the page is still blank."<<else>>Remy folds the timetable and returns it to the register. "You can see why I don't promise an afternoon at a moment's notice."<</if>>
         <<option 'CN'>>
           雷米把时间表转向你。两节团体课之间留着一处空白。<<if $maths gte 400>>你对照学员和马的数量，指出这段看似空着的时间还得换马具。雷米挪动了一项，没有把空白填满。“所以才要留余地。”<<else>>你提议把空档填上。雷米问，哪几匹马到时能准备好。你再看一遍，才发现这段休息没那么空。<</if>>
           <br><br>
@@ -90,7 +90,7 @@
           <<option 'EN'>>
             Remy asks how often you intend to come. You ask what time <<he>> will make available. "You want an appointment?" <<He>> looks amused until you remind <<him>> how often the register interrupts.
             <br><br>
-            <<if _remy.stage is 'close'>>"Fair enough." <<He>> shows you a gap instead of asking you to fit around every lesson.<<else>>"Tell me beforehand. I cannot promise to drop everything." You ask <<him>> to tell you when the plans change too.<</if>> <<if _remy.farmConflict>>When the talk reaches Alex's farm, <<his>> hand stops on the page. "You know what I think of that." The question remains between you.<</if>>
+            <<if _remy.stage is 'close'>>"Fair enough." <<He>> shows you a gap instead of asking you to fit around every lesson.<<else>>"Tell me beforehand. I can't promise to drop everything." You ask <<him>> to tell you when the plans change too.<</if>> <<if _remy.farmConflict>>When the talk reaches Alex's farm, <<his>> hand stops on the page. "You know what I think of that." The question remains between you.<</if>>
           <<option 'CN'>>
             雷米问，你打算多久来一次。你反问<<he>>会留出哪些时间。“要预约吗？”<<He>>觉得有些好笑，直到你提醒<<him>>，登记簿已经打断你们多少回。
             <br><br>
@@ -108,7 +108,7 @@
     <<case 'pc'>>
       <<language>>
         <<option 'EN'>>
-          Remy asks whether you need the chair moved. <<if _remy.stage is 'close'>>"You do not have to wait for the next lesson to finish before asking." <<He>> moves the paperwork instead of making you stand beside it.<<else>>You explain what would make the visit easier, leaving the medical questions for your appointment.<</if>>
+          Remy asks whether you need the chair moved. <<if _remy.stage is 'close'>>"You don't have to wait for the next lesson to finish before asking." <<He>> moves the paperwork instead of making you stand beside it.<<else>>You explain what would make the visit easier, leaving the medical questions for your appointment.<</if>>
         <<option 'CN'>>
           雷米问，要不要把椅子挪过来。<<if _remy.stage is 'close'>>“想坐就说，不必等下一节课上完。”<<He>>把文件挪开，没有让你一直站在旁边。<<else>>你说清怎样安排会让相处容易些，把医疗问题留到检查时再问。<</if>>
       <</language>>
@@ -142,7 +142,7 @@
   <<elseif !_remy.state.romance and _remy.daysAway gte 7>>
     <<language>>
       <<option 'EN'>>
-        "A while since I saw you." Remy pauses over the register. <<if _remy.state.romance>>"Tell me when you are coming next time." You remind <<him>> that plans can change on your side too.<<else>>"The school is still here, as you can see." <<He>> asks whether you remembered your riding boots.<</if>>
+        "A while since I saw you." Remy pauses over the register. <<if _remy.state.romance>>"Tell me when you're coming next time." You remind <<him>> that plans can change on your side too.<<else>>"The school is still here, as you can see." <<He>> asks whether you remembered your riding boots.<</if>>
       <<option 'CN'>>
         “有阵子没见你了。”雷米看登记簿的动作停下来。<<if _remy.state.romance>>“下次来，提前说一声。”你提醒<<him>>，你那边的计划也可能有变。<<else>>“学校还在，就像你看到的。”<<He>>问你有没有记得带骑马的靴子。<</if>>
     <</language>>

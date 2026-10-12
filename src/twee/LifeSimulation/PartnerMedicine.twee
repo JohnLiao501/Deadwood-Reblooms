@@ -91,7 +91,7 @@
         <<case 'Avery'>>
           Avery studies you before looking at the packet. <<if _agreed>>"How enterprising. Show me the instructions."<<else>>"You are getting ahead of yourself." Avery leaves the packet in your hand.<</if>>
         <<case 'Remy'>>
-          Remy holds out a hand for the packaging. <<if _agreed>>"The label first. I will decide what to do with it."<<else>>"That decision is mine. Put it away."<</if>>
+          Remy holds out a hand for the packaging. <<if _agreed>>"The label first. I'll decide what to do with it."<<else>>"That decision is mine. Put it away."<</if>>
         <<default>>
           <<if _agreed>><<print _name>> lets you explain what the tablets do, then indicates a willingness to try one.<<else>><<print _name>> declines. You put the packet away.<</if>>
       <</switch>>

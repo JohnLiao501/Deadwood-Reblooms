@@ -72,10 +72,10 @@
           <br><br>
           <span class='lewd'>Somebody's hand finds the inside of your thigh under the water and stays there, and somebody else's mouth closes on the side of your neck and stays there longer. You are held up between the two of them with your hips barely touching the tiles, and every shift of the water drags one of them against you in a way neither of them admits to.</span>
         <<else>>
-          You close the bedroom door behind the three of you. Robin sits on the edge of the bed with <<his>> hands folded, glancing at Sydney until Sydney sits down first. "I said I would stay," Robin says quietly. "I meant it."
+          You close the bedroom door behind the three of you. Robin sits on the edge of the bed with <<his>> hands folded, glancing at Sydney until Sydney sits down first. "I said I'd stay," Robin says quietly. "I meant it."
           <br><br>
           Sydney sets <<his>> temple pendant on the bedside table and keeps one hand on it. <<if _sydneyStatus.includes('pure')>>
-          <<He>> looks from you to Robin and back, and the words come out much slower than usual. "I want to be clear about what I am agreeing to. Not everything. Tonight — only what I can still say at morning prayer." <<He>> makes you look at <<him>> before <<he>> moves. "And if I ask you to stop, we stop, whatever Robin is doing." Only then does <<he>> reach for you, and <<his>> hands are shaking until the third touch.
+          <<He>> looks from you to Robin and back, and the words come out much slower than usual. "I want to be clear about what I'm agreeing to. Not everything. Tonight — only what I can still say at morning prayer." <<He>> makes you look at <<him>> before <<he>> moves. "And if I ask you to stop, we stop, whatever Robin is doing." Only then does <<he>> reach for you, and <<his>> hands are shaking until the third touch.
           <<else>>
           "Then neither of us has to guess," <<he>> says. <<He>> waits for you to sit between them before reaching for you.
           <</if>>

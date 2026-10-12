@@ -281,13 +281,14 @@
 <</widget>>
 
 <!-- 诡异镜入口：已发现镜面且通道开放时进入触手平原。 -->
-<<widget 'deadwood-reblooms-deviancy-eerie-mirror-link'>><<silently>>
-  <<set _banishAvailable to !pcAreArmsBound('both') and $angel gte 4 and $angelBanish gte 1>>
-  <<set _showMirrorLink to _args[0] is (_banishAvailable ? 1 : 0) and maplebirch.get("VanillaPlus").deviancy.mirrorOpen and maplebirch.get("VanillaPlus").deviancy.discovered('home')>>
-<</silently>>
-<<if _showMirrorLink>>
-  <<deadwood-reblooms-deviancy-mirror-enter-link 'home'>>
-<</if>>
+<<widget 'deadwood-reblooms-deviancy-eerie-mirror-link'>>
+  <<silently>>
+    <<set _banishAvailable to !pcAreArmsBound('both') and $angel gte 4 and $angelBanish gte 1>>
+    <<set _showMirrorLink to _args[0] is (_banishAvailable ? 1 : 0) and maplebirch.get("VanillaPlus").deviancy.mirrorOpen and maplebirch.get("VanillaPlus").deviancy.discovered('home')>>
+  <</silently>>
+  <<if _showMirrorLink>>
+    <<deadwood-reblooms-deviancy-mirror-enter-link 'home'>>
+  <</if>>
 <</widget>>
 
 <<widget 'deadwood-reblooms-deviancy-mirror-enter-link'>>

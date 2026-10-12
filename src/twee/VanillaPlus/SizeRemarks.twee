@@ -42,18 +42,18 @@
       <<set _possibilities to [
         "hold still, I want to watch it move,",
         "let me look at it properly, just for a minute,",
-        "I am not the only one in here thinking about my mouth,",
-        "do not make me say what I would do with that,",
-        "both hands and it still would not be enough,",
-        "you would have to fold me in half, and I would let you,",
+        "I'm not the only one in here thinking about my mouth,",
+        "don't make me say what I'd do with that,",
+        "both hands and it still wouldn't be enough,",
+        "you'd have to fold me in half, and I'd let you,",
         "someone in this room is going to follow you home,",
-        "it will not fit, and I want to try anyway,",
-        "if you put that in me I am not walking tomorrow,",
+        "it won't fit, and I want to try anyway,",
+        "if you put that in me I'm not walking tomorrow,",
         "tell me what you do with it. I want the details,",
-        "one night, that is all I am asking, just let me feel it,",
-        "put it in my mouth and do not be gentle,",
+        "one night, that's all I'm asking, just let me feel it,",
+        "put it in my mouth and don't be gentle,",
         "I want to know what it feels like to be split open,",
-        "I would let you ruin me and thank you for it,",
+        "I'd let you ruin me and thank you for it,",
       ]>>
     <<option 'CN'>>
       <<set _possibilities to [
@@ -121,7 +121,7 @@
   <<language>>
     <<option 'EN'>>
       <<if $enemyanger lte 20>>
-        <<He>> ?admires your newly-exposed <<genitals>>. "That is not a cock. That is a threat, and I am not backing off."
+        <<He>> ?admires your newly-exposed <<genitals>>. "That's not a cock. That's a threat, and I'm not backing off."
       <<elseif $enemyanger lte 100>>
         <<He>> ?admires your newly-exposed <<genitals>>. "I have never seen one that size. Not even close."
       <<else>>
@@ -196,7 +196,7 @@
   <<language>>
     <<option 'EN'>>
       <<He>> looks down at it, and whatever <<he>> was going to say does not come out. <<He>> presses <<his>> thighs together instead and works <<himself>> against the length of you, slow and deliberate, <<his>> eyes on the ceiling.
-      "At least I will not need to worry about it slipping in by accident," <<he>> manages at last, and it sounds like <<he>> is trying to convince <<himself>>.
+      "At least I won't need to worry about it slipping in by accident," <<he>> manages at last, and it sounds like <<he>> is trying to convince <<himself>>.
     <<option 'CN'>>
       <<He>>低头看了一眼，本来要说的那句话没说出来。<<He>>改成把两条腿夹紧，贴着你的整根慢慢磨，动作很慢、很有数，眼睛盯着天花板。
       “至少我不用担心它一不小心滑进去。”<<he>>最后还是挤出这么一句——听着像是在说服自己。
@@ -220,7 +220,7 @@
   <<language>>
     <<option 'EN'>>
       The <<group>> go quiet. For a moment nobody laughs, and the <<trashSelect>><<person>> has to look twice.
-      "That is not a penis," <<he>> says at last, quieter than <<he>> meant to. "That is a problem."
+      "That's not a penis," <<he>> says at last, quieter than <<he>> meant to. "That's a problem."
     <<option 'CN'>>
       这伙人安静下来。有那么一瞬谁都没笑，那个<<trashSelect>><<person>>还看了第二眼。
       “那不叫阴茎。”<<he>>最后说，声音比<<he>>自己想要的要轻。“那是个麻烦。”
@@ -396,7 +396,7 @@
       <<language>>
         <<option 'EN'>>
           <<He>> convulses and <<print either("glides into","grinds into","thrusts deep into","rams into")>> your crotch as <<he>> cums. With the other cock still buried in you the semen has nowhere to go. It is pumped deep into your <<pussy>>, then forced back out around both of them and down your thighs.
-          <<set _postOrgasmSpeech to [`"Look at that. Both of us, and you still took all of it."`,`"You will be feeling us inside you for a week."`,`"Stuffed so full of cum you cannot even close your legs, slut."`].random()>>
+          <<set _postOrgasmSpeech to [`"Look at that. Both of us, and you still took all of it."`,`"You'll be feeling us inside you for a week."`,`"Stuffed so full of cum you can't even close your legs, slut."`].random()>>
         <<option 'CN'>>
           <<He>>在高潮时抽搐着<<print either("快速插入","粗暴插入","深深插入","用力插入")>>你的下身。另一根肉棒还埋在体内，精液根本无处可去，被狠狠顶进<<pussy>>最深处，再从两根肉棒周围挤出来，顺着大腿往下淌。
           <<set _postOrgasmSpeech to [`"看看你这副样子。两根一起，你居然全吃下了。"`,`"接下来一周你都会觉得我们还在你里面。"`,`"被精液灌得连腿都合不拢了吧，骚货。"`].random()>>
@@ -431,7 +431,7 @@
       <<language>>
         <<option 'EN'>>
           <<He>> holds <<his>> $NPCList[_args[0]].penisdesc tight, working it while aiming straight at your face. There is too much of it to catch, and thick ropes of cum cover your face and mouth, cling to your lashes and drip from your chin onto your chest.
-          <<set _postOrgasmSpeech to `"That is a good look on you. Keep your mouth open."`>>
+          <<set _postOrgasmSpeech to `"That's a good look on you. Keep your mouth open."`>>
         <<option 'CN'>>
           <<He>>紧紧攥住<<his>>的$NPCList[_args[0]].penisdesc，对准你的脸撸动。量大得根本接不住，浓稠的精液一股股射在脸上和嘴里，挂在睫毛上，又从下巴滴到胸口。
           <<set _postOrgasmSpeech to `"这模样挺适合你。嘴张开，别合上。"`>>
@@ -458,7 +458,7 @@
       <<language>>
         <<option 'EN'>>
           <<He>> convulses and rams himself in to the base as <<he>> cums. Your <<pussy>> is hammered so full that the excess is forced back out around <<his>> $NPCList[_args[0]].penisdesc with every throb, and semen pours down your legs.
-          <<set _postOrgasmSpeech to `"You cannot even hold it. Look at you leaking."`>>
+          <<set _postOrgasmSpeech to `"You can't even hold it. Look at you leaking."`>>
         <<option 'CN'>>
           <<He>>抽搐着把整根肉棒撞到底，在你<<pussy>>里狠狠射了出来。射得又急又多，每一下搏动都把多余的精液从<<his>>的$NPCList[_args[0]].penisdesc周围挤出去，一股股淌满双腿。
           <<set _postOrgasmSpeech to `"连装都装不住，看看你流成什么样子了。"`>>
@@ -478,7 +478,7 @@
       <<language>>
         <<option 'EN'>>
           <<He>> convulses and drives in with one last brutal shove, and the load that follows is more than your <<bottom>> can hold. Thick waves of semen are pumped into you until they spill back out around <<his>> $NPCList[_args[0]].penisdesc and drip down your legs.
-          <<set _postOrgasmSpeech to `"You are going to learn to take something this size. By the end of the week you will not even flinch."`>>
+          <<set _postOrgasmSpeech to `"You're going to learn to take something this size. By the end of the week you won't even flinch."`>>
         <<option 'CN'>>
           <<He>>颤抖着，用最后一记狠插把<<his>>的$NPCList[_args[0]].penisdesc砸进<<bottom>>最深处射了出来。浓稠的精液一股股灌进去，多到屁股装不下，又从$NPCList[_args[0]].penisdesc周围溢出来，顺着腿往下滴。
           <<set _postOrgasmSpeech to `"你得学会吃下这个尺寸。到这个周末，我要你连缩都不缩一下。"`>>
@@ -510,7 +510,7 @@
       <<language>>
         <<option 'EN'>>
           <<He>> fists your hair and rams himself down your throat as <<he>> cums. <<His>> $NPCList[_args[0]].penisdesc is thick enough to fill it completely, and the semen is forced straight down, choking you until your throat convulses around the shaft and your eyes stream.
-          <<set _postOrgasmSpeech to `"Choke on it. That is exactly what I wanted."`>>
+          <<set _postOrgasmSpeech to `"Choke on it. That's exactly what I wanted."`>>
         <<option 'CN'>>
           <<He>>揪紧你的头发，在<<he>>射精的时候把整根肉棒捅进你喉咙最深处。粗得把嗓子整个堵死，精液被硬灌进食道，呛得你喉咙一阵阵抽搐，眼泪都淌了出来。
           <<set _postOrgasmSpeech to `"呛着吧，这才是我要的样子。"`>>

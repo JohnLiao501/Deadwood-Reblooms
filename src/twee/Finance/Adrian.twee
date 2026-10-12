@@ -526,7 +526,7 @@
             <<case 'account' 'securities'>>
               <<language>>
                 <<option 'EN'>>
-                  Adrian turns the form towards you and goes through the boxes one at a time. You stop <<him>> at a line you do not understand. "That is the transfer amount. It is blank until you choose it." <<glove 'Adrian'>>
+                  Adrian turns the form towards you and goes through the boxes one at a time. You stop <<him>> at a line you do not understand. "That's the transfer amount. It's blank until you choose it." <<glove 'Adrian'>>
                 <<option 'CN'>>
                   阿德里安把表格转向你，逐栏解释。你指着不明白的一行问<<him>>。“这是转账金额。你决定好以后再填。”<<glove 'Adrian'>>
               <</language>>

@@ -26,7 +26,7 @@
                   You ask what right <<he>> has to drive Alex off the land. "Alex has had opportunities to make sensible arrangements." <<He>> speaks as if describing a missed lesson. "I suggest you consider your own."
                 <</if>>
                 <br><br>
-                <<if $Orchard.remy.romance>>"You can come here to see me. That doesn't give Alex a place at my desk." <<He>> waits for you to move on.<<elseif $speech_attitude is 'bratty'>>You tell <<him>> you will keep the farm standing. "Then you'd better be there when you're needed."<<elseif $speech_attitude is 'meek'>>You ask <<him>> to leave the farm alone. "Asking nicely won't make it a good investment."<<else>>You tell <<him>> you are staying with Alex. "That is your decision. Don't expect me to share it."<</if>>
+                <<if $Orchard.remy.romance>>"You can come here to see me. That doesn't give Alex a place at my desk." <<He>> waits for you to move on.<<elseif $speech_attitude is 'bratty'>>You tell <<him>> you will keep the farm standing. "Then you'd better be there when you're needed."<<elseif $speech_attitude is 'meek'>>You ask <<him>> to leave the farm alone. "Asking nicely won't make it a good investment."<<else>>You tell <<him>> you are staying with Alex. "That's your decision. Don't expect me to share it."<</if>>
                 <br><br><span class='red'>Remy has offered no truce.</span>
               <<option 'CN'>>
                 “艾利克斯让你来的？”雷米问。你说是自己来的。<<He>>将腕口的手套拉紧。“那你就该看清，是谁在浪费你的时间。”

@@ -88,7 +88,7 @@
 <<if $monster is 1>>
   <<language>>
     <<option 'EN'>>
-      "No?" <<bhim>> asks, "<<= C.npc["Great Hawk"].dom gte 50 ? "All right. <<Wife>>'s wishes come first." : "That is fine. If you need me, I will be right here.">>"
+      "No?" <<bhim>> asks, "<<= C.npc["Great Hawk"].dom gte 50 ? "All right. <<Wife>>'s wishes come first." : "That's fine. If you need me, I'll be right here.">>"
     <<option 'CN'>>
       "不要吗？"<<bhim>>问道，"<<= C.npc["Great Hawk"].dom gte 50 ? "好吧。<<Wife>>的意愿为重。" : "没关系。如果你需要我，我就在这里。">>"
   <</language>>
@@ -248,7 +248,7 @@
         <br>
         "What is this, <<wife>>? Are you caught by a parasite?" The harpy examines your chest in confusion and tries to pull the _parasite off you, but only makes it cling tighter.<<gpain>><<garousal>>
         <br>
-        <<bHe>> coos at you in worry, "Sorry, <<wife>>, I cannot get it off."
+        <<bHe>> coos at you in worry, "Sorry, <<wife>>, I can't get it off."
       <<option 'CN'>>
         <<bHe>>一边向你身上泼水，一边轻柔地触碰着你。<<bHe>>试图抚摸你的胸口，却被你乳头上的_parasite拦住了。
         <br>

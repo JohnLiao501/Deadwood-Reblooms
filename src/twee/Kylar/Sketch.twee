@@ -28,7 +28,7 @@
       <<else>>
         <<He>> notices you looking and shuts the book, then, after a moment, opens it a little way.
       <</if>>
-      A few lines show the park path and the place where you stood a moment ago. "It is— it is not finished," <<he>> says.
+      A few lines show the park path and the place where you stood a moment ago. "It's— it's not finished," <<he>> says.
     <<option 'CN'>>
       凯拉尔又在画你了。
       <<if $KylarExpansion.sketch_response is 'praise'>>

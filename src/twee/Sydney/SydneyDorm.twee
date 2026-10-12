@@ -1,25 +1,29 @@
 :: Deadwood Reblooms Sydney Dorm Widgets [widget]
-<<widget 'deadwood-reblooms-sydney-dorm-link'>><<silently>>
+<<widget 'deadwood-reblooms-sydney-dorm-link'>>
+  <<silently>>
   <<set _position to _args[0]>>
   <<if _sydneyAvailable is undefined>>
     <<sydneySchedule>>
   <</if>>
   <<set _cleaningLink to $exposed lt 1 and Time.dayState isnot 'night' and $temple_quarters lt 100 and !pcAreArmsBound('both')>>
   <<set _showDormLink to _dormAccess and $temple_rank is 'monk' and $stress lt $stressmax and _position is (_cleaningLink ? 2 : 1)>>
-<</silently>><<if _showDormLink and !$SydneyExpansion.dormInvited and _sydneyWorking>>
-  <<icon 'temple/sydney-quarters.png'>><<lanLink ['Ask Sydney to sit by the bunk', '问悉尼能否来床铺旁坐坐'] 'Deadwood Reblooms Sydney Dorm Bunk Invitation'>><</lanLink>><br>
-<<elseif _showDormLink and $SydneyExpansion.dormInvited>>
-  <<icon 'temple/sydney-quarters.png'>><<lanLink ["Sydney's bunk (0:01)", '悉尼的床铺 (0:01)'] 'Deadwood Reblooms Sydney Dorm'>><<pass 1>><</lanLink>><br>
-<</if>><</widget>>
+  <</silently>>
+  <<if _showDormLink and !$SydneyExpansion.dormInvited and _sydneyWorking>>
+    <<icon 'temple/sydney-quarters.png'>><<lanLink ['Ask Sydney to sit by the bunk', '问悉尼能否来床铺旁坐坐'] 'Deadwood Reblooms Sydney Dorm Bunk Invitation'>><</lanLink>><br>
+  <<elseif _showDormLink and $SydneyExpansion.dormInvited>>
+    <<icon 'temple/sydney-quarters.png'>><<lanLink ["Sydney's bunk (0:01)", '悉尼的床铺 (0:01)'] 'Deadwood Reblooms Sydney Dorm'>><<pass 1>><</lanLink>><br>
+  <</if>>
+<</widget>>
 
-<<widget 'deadwood-reblooms-sydney-dorm-sirris-link'>><<silently>>
+  <<widget 'deadwood-reblooms-sydney-dorm-sirris-link'>>
+  <<silently>>
   <<if _sydneyAvailable is undefined>>
     <<sydneySchedule>>
   <</if>>
-<</silently>>
-<<if _sirrisMorning>>
-  <<getouticon>><<lanLink ['Go to see Sirris with Sydney', '和悉尼去见西里斯'] 'Deadwood Reblooms Sydney Halloween Morning'>><</lanLink>><br>
-<</if>>
+  <</silently>>
+  <<if _sirrisMorning>>
+    <<getouticon>><<lanLink ['Go to see Sirris with Sydney', '和悉尼去见西里斯'] 'Deadwood Reblooms Sydney Halloween Morning'>><</lanLink>><br>
+  <</if>>
 <</widget>>
 
 <<widget 'deadwood-reblooms-sydney-dorm-bed-links'>>
@@ -787,7 +791,7 @@
     <<if _sydneyStatus.includes('pure')>>
       "I have an early shift," <<he>> whispers, catching your hand. "Not here. Please." <<He>> does not move your hand away.
     <<elseif _sydneyStatus.includes('corrupt')>>
-      Sydney laces <<his>> fingers through yours and presses your hand down harder. "Keep going," <<he>> breathes against your ear. "If they wake up, I will say you seduced me."
+      Sydney laces <<his>> fingers through yours and presses your hand down harder. "Keep going," <<he>> breathes against your ear. "If they wake up, I'll say you seduced me."
     <<else>>
       Sydney catches <<his>> breath and takes your wrist. "I thought we were meant to be sleeping," <<he>> says quietly, without any strength in the grip.
     <</if>>

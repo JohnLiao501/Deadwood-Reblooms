@@ -94,7 +94,7 @@
           <<option 'EN'>>
             Remy looks towards the office door. "People already see you here." You ask whether <<he>> minds them noticing why.
             <br><br>
-            <<if C.npc.Remy.dom gte 60>>"Let them notice." <<He>> moves <<his>> chair closer, then waits for you to do the same. You decide how close you want to sit.<<elseif _remy.stage is 'close'>>"I am not hiding you." <<He>> looks back at you. "I would rather they did not waste our time asking."<<else>>"They may ask rather more questions than you expect." You ask whether that is a reason to stop coming. Remy says no, after a short pause.<</if>>
+            <<if C.npc.Remy.dom gte 60>>"Let them notice." <<He>> moves <<his>> chair closer, then waits for you to do the same. You decide how close you want to sit.<<elseif _remy.stage is 'close'>>"I'm not hiding you." <<He>> looks back at you. "I'd rather they didn't waste our time asking."<<else>>"They may ask rather more questions than you expect." You ask whether that is a reason to stop coming. Remy says no, after a short pause.<</if>>
             <br><br>
             <<if _remy.farmConflict>>"Alex will have an opinion," <<he>> adds. You tell <<him>> you will decide what to say at the farm yourself.<<else>>A passing pupil wishes you both a good afternoon. Remy returns the greeting and continues talking to you.<</if>>
           <<option 'CN'>>

@@ -776,7 +776,7 @@
     <<case 'Sydney'>>
       <<language>>
         <<option 'EN'>>
-          Sydney closes the bundle of papers. "Not here, and not while you are supposed to be on duty." Sydney goes inside without waiting for another suggestion.
+          Sydney closes the bundle of papers. "Not here, and not while you're supposed to be on duty." Sydney goes inside without waiting for another suggestion.
         <<option 'CN'>>
           悉尼合上文件：“不在这里，也不在你值勤的时候。”说完便进了学校，没有给你再次提议的机会。
       <</language>>
@@ -808,7 +808,7 @@
     <<case 'Whitney'>>
       <<language>>
         <<option 'EN'>>
-          Whitney laughs, but takes a step back. "Try asking when you are not waving that badge at me." Whitney clears the doorway with a shove of the shoulder and walks off.
+          Whitney laughs, but takes a step back. "Try asking when you're not waving that badge at me." Whitney clears the doorway with a shove of the shoulder and walks off.
         <<option 'CN'>>
           惠特尼笑出了声，却退开一步：“等你不拿那块徽章冲我摆架子，再来问。”惠特尼用肩膀挤开堵着门的人，转身走了。
       <</language>>
@@ -1122,7 +1122,7 @@
 <<language>>
   <<option 'EN'>>
     You place the proposal for <span class='blue'><<print maplebirch.t('deadwood-reblooms:LifeSimulation:school:policy:' + _policy)>></span> on Leighton's desk.
-    "A proposal is not a rule," <<he>> says. "Show me why the school will accept it."
+    "A proposal isn't a rule," <<he>> says. "Show me why the school will accept it."
   <<option 'CN'>>
     你把<span class='blue'>“<<print maplebirch.t('deadwood-reblooms:LifeSimulation:school:policy:' + _policy)>>”</span>提案放在礼顿桌上。
     “提案还不是校规。”<<he>>说道，“先证明学校能够接受它。”

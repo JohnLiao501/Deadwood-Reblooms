@@ -193,12 +193,9 @@
       <</replace>>
     <</if>>
   <</lanLink>><br>
-
 <</widget>>
+
 :: Deadwood Remy Cell Intimacy
-<!-- 谷仓里的用法。和骑术学校那场不是一回事：那边是"给你一个下午"，这边是"你留在这儿等"。
-     不调用 <<consensual>>，改走 <<molested>> + $consensual 0 —— 原版囚禁场景的惯例。
-     钥匙始终在他腰上，这一场从头到尾没有人去碰锁。 -->
 <<set _remy to maplebirch.get('Orchard')?.remy>>
 <<if !maplebirch.get('Orchard')?.remy.canFarmIntimacy or $Orchard.remy.last_intimacy_day isnot Time.days>>
   <<set $sexstart to 0>>
@@ -216,13 +213,13 @@
       <<option 'EN'>>
         Remy does not open the gate. <<He>> reaches through it instead, one gloved hand closing around the back of your neck — not hard, just enough that you feel the shape of <<his>> grip and understand it is not going to move on its own.
         <br><br>
-        <span class='lewd'>"You have been standing there since the last round of feed," <<he>> says. "I have been watching you decide something all afternoon."</span> The keys on <<his>> belt knock against the bars as <<he>> leans in. <<He>> does not unpick the lock, and does not explain how this is going to work.
+        <span class='lewd'>"You've been standing there since the last round of feed," <<he>> says. "I've been watching you decide something all afternoon."</span> The keys on <<his>> belt knock against the bars as <<he>> leans in. <<He>> does not unpick the lock, and does not explain how this is going to work.
         <br><br>
         <span class='lewd'>It works the way everything here works: you reach for <<him>> through the bars, and <<he>> lets you.</span>
       <<option 'CN'>>
         雷米没有开源栏门。<<He>>只是把手伸进来，戴着手套的一只按住你后颈——不重，刚好让你记住这只手的形状，并且明白它不会自己松开。
         <br><br>
-        <span class='lewd'>"上一轮饲料之后你就一直站在这儿。"<<he>>说。"我看你犹豫了一下午。"</span> <<He>>俯身过来时，腰间那串钥匙磕在栏杆上。<<He>>没有去开锁，也没解释接下来要怎么办。
+        <span class='lewd'>“上一轮饲料之后你就一直站在这儿。”<<he>>说。“我看你犹豫了一下午。”</span> <<He>>俯身过来时，腰间那串钥匙磕在栏杆上。<<He>>没有去开锁，也没解释接下来要怎么办。
         <br><br>
         <span class='lewd'>这里的事情都按同一个规矩办：你隔着栏杆伸手去够<<him>>，而<<he>>由着你够。</span>
     <</language>>
@@ -247,7 +244,7 @@
         <<elseif _heat lt 0.67>>
           <span class='lewd'>谷仓深处还有工人在干活。雷米不压低声音，也没有让人出去。</span>
         <<else>>
-          <span class='lewd'>"看着我。"<<he>>说，然后等着——比你舒服的时限长得多——一直等到你照做。</span>
+          <span class='lewd'>“看着我。”<<he>>说，然后等着——比你舒服的时限长得多——一直等到你照做。</span>
         <</if>>
     <</language>><br><br>
   <</if>>
@@ -274,7 +271,7 @@
     <<option 'CN'>>
       雷米不紧不慢地做完，也没什么特别的仪式感，之后才摘掉手套擦了擦手——这是他这一下午表现出的最体贴的一个动作。
       <br><br>
-      <span class='lewd'>"明天还是这个时间。"<<he>>说——不是问句。</span> <<He>>习惯性地把栏门又扣了一道，其实那门从头到尾就没开过。钥匙落回腰间，脚步声沿着谷仓中间走远。
+      <span class='lewd'>“明天还是这个时间。”<<he>>说——不是问句。</span> <<He>>习惯性地把栏门又扣了一道，其实那门从头到尾就没开过。钥匙落回腰间，脚步声沿着谷仓中间走远。
       <br><br>
       <span class='red'>你还站在<<he>>放你站的地方。</span>
   <</language>>
@@ -298,7 +295,7 @@
     <<option 'EN'>>
       Remy simply stops, and pulls the glove back on finger by finger, taking <<his>> time about it.
       <br><br>
-      "Gather-up soon." <<He>> checks that the gate is seated in its frame. "You will want to be standing where I can see you."
+      "Gather-up soon." <<He>> checks that the gate is seated in its frame. "You'll want to be standing where I can see you."
       <br><br>
       <span class='purple'>Behind <<him>>, further down the barn, a farmhand is still moving between the stalls. Nobody comes over.</span>
     <<option 'CN'>>

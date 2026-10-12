@@ -1,10 +1,11 @@
 :: Deadwood Reblooms Festivals Widgets [widget]
-<<widget 'deadwood-reblooms-sydney-christmas-link'>><<silently>>
-  <<set _showChristmasLink to $christmas is 1 and Time.month is 12 and Time.monthDay is 25 and Time.hour gte 8 and Time.hour lt 22 and _sydneyAvailable and $SydneyExpansion.christmasYear isnot Time.year>>
-<</silently>>
-<<if _showChristmasLink>>
-  <<gifticon 'christmas'>><<lanLink ['Spend Christmas with Sydney', '和悉尼一起过圣诞节'] 'Deadwood Reblooms Sydney Christmas'>><</lanLink>><br>
-<</if>>
+<<widget 'deadwood-reblooms-sydney-christmas-link'>>
+  <<silently>>
+    <<set _showChristmasLink to $christmas is 1 and Time.month is 12 and Time.monthDay is 25 and Time.hour gte 8 and Time.hour lt 22 and _sydneyAvailable and $SydneyExpansion.christmasYear isnot Time.year>>
+  <</silently>>
+  <<if _showChristmasLink>>
+    <<gifticon 'christmas'>><<lanLink ['Spend Christmas with Sydney', '和悉尼一起过圣诞节'] 'Deadwood Reblooms Sydney Christmas'>><</lanLink>><br>
+  <</if>>
 <</widget>>
 
 <!-- 罗宾路线的三种收尾共用同一段引导，原版选择与结算保持不变。 -->

@@ -197,13 +197,13 @@
         <<option 'EN'>>
           Remy turns the key and leaves it hanging in the lock, so that anyone who tries the handle will hear it rattle and think better of knocking. <<His>> glove comes off first — laid flat on the register, fingers still curled, the way <<he>> leaves it when <<he>> intends to pick it straight back up.
           <br><br>
-          <span class='lewd'>"I have moved the two o'clock lesson," <<he>> says, close enough that you feel it against your ear. "Do not make me regret the trouble."</span> <<He>> does not wait for an answer. One hand finds the small of your back and keeps you against the desk while the other works your clothes loose with the unhurried competence of someone who has undressed a great many people and has never once been rushed about it.
+          <span class='lewd'>"I've moved the two o'clock lesson," <<he>> says, close enough that you feel it against your ear. "Don't make me regret the trouble."</span> <<He>> does not wait for an answer. One hand finds the small of your back and keeps you against the desk while the other works your clothes loose with the unhurried competence of someone who has undressed a great many people and has never once been rushed about it.
           <br><br>
           <span class='lewd'>The register ends up under your hips. <<He>> notices, and does not care.</span>
         <<option 'CN'>>
           雷米把钥匙转了一圈，就那么挂在锁孔里——谁要是伸手来拧，锁芯会先响一声，人也会自己走开。<<He>>先摘手套，平放在登记簿上，手指还保持着握持的形状，就像随时要拿起来接着用。
           <br><br>
-          <span class='lewd'>"两点的课我挪走了。"<<he>>说，近得让这句话贴在你耳朵上。"别让我白费这个工夫。"</span> <<He>>不等你回答。一只手按住你后腰，把你抵在桌沿，另一只手解你的衣服——不紧不慢，是替许多人脱过衣服、并且从来没为任何一次赶过时间的人才会有的手法。
+          <span class='lewd'>“两点的课我挪走了。”<<he>>说，近得让这句话贴在你耳朵上。“别让我白费这个工夫。”</span> <<He>>不等你回答。一只手按住你后腰，把你抵在桌沿，另一只手解你的衣服——不紧不慢，是替许多人脱过衣服、并且从来没为任何一次赶过时间的人才会有的手法。
           <br><br>
           <span class='lewd'>最后登记簿垫在了你身下。<<He>>看见了，也不打算管。</span>
       <</language>>
@@ -211,13 +211,13 @@
       <!-- 室外：围栏挡得住视线，挡不住声音。 -->
       <<language>>
         <<option 'EN'>>
-          Remy walks you along the fence until the stable wall is between you and the track. <<He>> checks the angle once, unhurried, the way <<he>> checks a gate — then his belt is open before <<he>> has finished the thought, and the ring of keys on it knocks against <<his>> thigh.
+          Remy walks you along the fence until the stable wall is between you and the track. <<He>> checks the angle once, unhurried, the way <<he>> checks a gate — then <<his>> belt is open before <<he>> has finished the thought, and the ring of keys on it knocks against <<his>> thigh.
           <br><br>
-          <span class='lewd'>"I do not do this outdoors." <<His>> voice has no conviction in it at all. <<He>> backs you against the boards and gets a hand under your thigh, lifting until you have nowhere to put your weight but <<him>>.</span> Somewhere past the wall, an instructor is counting strides. Remy listens to the count, all the way to the end, before <<he>> lets <<himself>> stop listening altogether.
+          <span class='lewd'>"I don't do this outdoors." <<His>> voice has no conviction in it at all. <<He>> backs you against the boards and gets a hand under your thigh, lifting until you have nowhere to put your weight but <<him>>.</span> Somewhere past the wall, an instructor is counting strides. Remy listens to the count, all the way to the end, before <<he>> lets <<himself>> stop listening altogether.
         <<option 'CN'>>
           雷米陪你沿着围栏走，直到马厩墙正好隔在你们和跑道之间。<<He>>看了一眼角度——不慌不忙，像在检查一道门闩——然后扣子就先开了，腰上那串钥匙磕在<<his>>大腿上。
           <br><br>
-          <span class='lewd'>"我不在外面做这种事。"<<he>>说，这句话里没有一点底气。<<He>>把你抵在木板墙上，一只手兜住你大腿往上托，托到你除了<<him>>身上再没处放重心。</span> 墙那头有教练在数节拍。雷米把那串数字听到头，才让自己不再听。
+          <span class='lewd'>“我不在外面做这种事。”<<he>>说，这句话里没有一点底气。<<He>>把你抵在木板墙上，一只手兜住你大腿往上托，托到你除了<<him>>身上再没处放重心。</span> 墙那头有教练在数节拍。雷米把那串数字听到头，才让自己不再听。
       <</language>>
     <</if>><br><br>
     <<promiscuous2>><<kissvirginitywarning>><<NPCvirginitywarning 'Remy' 'kiss'>><br><br>
@@ -226,10 +226,10 @@
   <<effects>><<effectsman>><<man>><<stateman>>
   <!-- 回合中途的插入描写。只在自己这一侧、且战斗未结束时出现。 -->
   <<if $enemyarousal gt 0 and $enemyarousal lt $enemyarousalmax and !_combatend and $consensual is 1>>
+    <<set _heat to $enemyarousal / $enemyarousalmax>>
     <<if _remy_indoors>>
       <<language>>
         <<option 'EN'>>
-          <<set _heat to $enemyarousal / $enemyarousalmax>>
           <<if _heat lt 0.34>>
             The desk creaks under the pair of you. Remy glances at the door, decides the lock will hold, and goes back to what <<he>> was doing.
           <<elseif _heat lt 0.67>>
@@ -243,7 +243,7 @@
           <<elseif _heat lt 0.67>>
             <<He>>已经不看门了。一只手平按在登记簿上把它压稳，另一只手从开始到现在就没离开过你的腰。
           <<else>>
-            <span class='lewd'>"叫我的名字。"<<he>>说。这句话说出来，比你们俩谁预想的都更不像命令。</span>
+            <span class='lewd'>“叫我的名字。”<<he>>说。这句话说出来，比你们俩谁预想的都更不像命令。</span>
           <</if>>
       <</language>>
     <<else>>
@@ -262,7 +262,7 @@
           <<elseif _heat lt 0.67>>
             <span class='lewd'><<His>>钥匙不响了。<<He>>没在想课、没在想登记簿，也没在想墙那头数到哪了。</span>
           <<else>>
-            <span class='lewd'>"别出声。"<<he>>贴着你喉咙说——并且一点也没打算帮你做到。</span>
+            <span class='lewd'>“别出声。”<<he>>贴着你喉咙说——并且一点也没打算帮你做到。</span>
           <</if>>
       <</language>>
     <</if>>
@@ -310,7 +310,7 @@
     <<option 'EN'>>
       You bring it to a stop. Remy takes <<his>> hands off you at once, and does not ask why.
       <br><br>
-      "All right." <<He>> fastens <<his>> belt and looks at the door rather than at you. <span class='blue'><<He>> is not going to ask twice.</span> "You can go, or you can sit. I have work either way."
+      "All right." <<He>> fastens <<his>> belt and looks at the door rather than at you. <span class='blue'><<He>> is not going to ask twice.</span> "You can go, or you can sit. I've got work either way."
       <br><br>
       <span class='lewd'>Something in <<his>> jaw says <<he>> would rather you stayed. <<He>> does not say it.</span>
     <<option 'CN'>>
@@ -325,7 +325,7 @@
     <<option 'EN'>>
       Remy steps back first, and straightens <<his>> collar with the same motion <<he>> uses on pupils who have gone wrong — brisk, finished, no room to argue with it.
       <br><br>
-      "Not today, then." <<He>> returns the register to <<his>> side of the desk, squaring it against the edge. A beat. "You are still welcome on Saturday."
+      "Not today, then." <<He>> returns the register to <<his>> side of the desk, squaring it against the edge. A beat. "You're still welcome on Saturday."
       <br><br>
       <span class='lewd'><<He>> does not look up while <<he>> says it. That is the closest either of you gets to the subject.</span>
     <<option 'CN'>>

@@ -36,7 +36,7 @@
           <<if _sydneyStatus.includes('corruptLust')>>
             "<span class='lewd'>We don't have to go back to sleep yet,</span>" <<he>> whispers.
           <<elseif _sydneyStatus.includes('corrupt')>>
-            "Go back to sleep," <<he>> says, and does not turn away. "I will be here in the morning."
+            "Go back to sleep," <<he>> says, and does not turn away. "I'll be here in the morning."
           <<else>>
             "<span class='teal'>Would you like me to stay awake with you?</span>" <<he>> asks.
           <</if>>

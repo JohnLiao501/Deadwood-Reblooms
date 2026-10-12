@@ -72,7 +72,7 @@
   <<npc Remy>><<person1>>
   <<language>>
     <<option 'EN'>>
-      "Then come back," Remy says. <<He>> offers <<his>> hand across the desk. You take it, and <<his>> fingers close around yours. "I will expect to see you again."
+      "Then come back," Remy says. <<He>> offers <<his>> hand across the desk. You take it, and <<his>> fingers close around yours. "I'll expect to see you again."
       You ask <<him>> to find time to see you too. Remy's thumb stills against your fingers. "Tell me when. I'll see what I can arrange."
       <br><br>
       <<if C.npc.Remy.love gte 50>>A knock comes at the door. "In a moment," <<he>> calls, keeping your hand a little longer before letting go.<<else>>The courtyard bell rings. Remy checks the clock with a sigh. "A little more warning next time, perhaps. I do have a school to run."<</if>> <<He>> gets up to open the door for you.

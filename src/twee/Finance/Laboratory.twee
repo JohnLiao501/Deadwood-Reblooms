@@ -634,7 +634,7 @@
         "People who already have suppliers don't tend to welcome surprises."
       <</if>>
       <<if $Orchard.remy.romance>>
-        <br><br>Remy reaches across to straighten your sleeve. "I would rather hear what you're doing from you." <<His>> hand remains there a moment. "That doesn't make your price my price."
+        <br><br>Remy reaches across to straighten your sleeve. "I'd rather hear what you're doing from you." <<His>> hand remains there a moment. "That doesn't make your price my price."
       <</if>>
       <br><br>
       <<if _lab.trade.independent_sales gt 0>>
