@@ -62,6 +62,7 @@
   <<deadwood-home-company>>
   <<icon _inline_lounge.icon>><<lanLink ['Sit down and rest (0:15)', '坐下休息 (0:15)'] 'Deadwood Reblooms Property Lounge Rest'>><<deadwood-home-activity 'lounge' 'rest'>><</lanLink>><<ltiredness>>
   <<if maplebirch.get('Finance').realEstate.managementFor(_inline_property.id).rest_day isnot Time.days>><<lstress>><</if>><br><br>
+  <<deadwood-home-life-menu 'lounge' true>>
 <</widget>>
 
 <<widget 'deadwood-home-study'>>
@@ -98,6 +99,7 @@
   <<elseif _args[1] is 'rest'>>
     <<tiredness -4>><<pass 15>>
     <<if _activity_management.rest_day isnot Time.days>>
+      <<if _activity_estate.staff.active('housekeeper')>><<tiredness -1>><</if>>
       <<stress -4>><<set _activity_management.rest_day to Time.days>>
     <</if>>
   <<elseif _args[1] is 'read'>>
@@ -285,6 +287,8 @@
 <<deadwood-home-company>>
 <<icon _facility.icon>><<lanLink ['Sit down and rest (0:15)', '坐下休息 (0:15)'] 'Deadwood Reblooms Property Lounge Rest'>><<deadwood-home-activity 'lounge' 'rest'>><</lanLink>><<ltiredness>>
 <<if _estate.managementFor(_property.id).rest_day isnot Time.days>><<lstress>><</if>><br>
+<<deadwood-home-life-menu 'lounge' true>>
+<<deadwood-banquet-link>>
 <<if _property.outdoor_access is 'lounge'>>
   <<deadwood-reblooms-property-outdoor-icon _property.id>><<lanLink [_property.interior.outdoor_label.EN, _property.interior.outdoor_label.CN] 'Deadwood Reblooms Property Outdoor'>><<pass 1>><</lanLink>><br>
 <</if>>

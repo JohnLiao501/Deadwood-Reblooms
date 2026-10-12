@@ -346,6 +346,26 @@
         EN: A side door leads from the house to a single-car garage opening onto the street behind it. The recessed garage door keeps the worst salt spray off the lock.
         CN: 住宅的侧门通向单车位车库，车库门朝着屋后的街道。门藏在背风处，锁孔不至于直接挨盐雾吹。
       parking: { bicycle: 2, motorcycle: 1, motor_vehicle: 1 }
+    - id: cinema
+      icon: property/screening-room.png
+      floor: 2
+      access: landing
+      cost: 1800000
+      upkeep: 2000
+      name: { EN: Screening room, CN: 放映室 }
+      description:
+        EN: Thick curtains shut out the sea glare. Two rows of low seats face a screen, with a reading light beside the door and a shelf for your films.
+        CN: 厚窗帘遮住海面的反光。两排低座椅朝着屏幕，门边留着阅读灯，架子上能放你挑的影片。
+    - id: staff_room
+      icon: property/staff-room.png
+      floor: 1
+      access: sitting
+      cost: 1800000
+      upkeep: 2500
+      name: { EN: Staff room, CN: 雇员房 }
+      description:
+        EN: A room off the service corridor holds lockers, a small table and the household rota. The back entrance lets staff arrive without crossing your bedroom.
+        CN: 服务走廊旁的房间放着储物柜、小桌与值班表。雇员从后门出入，走动不用经过你的卧室。
   interior:
     bedroom_label: { EN: Bedroom (0:01), CN: 卧室 (0:01) }
     bedroom:
@@ -455,6 +475,36 @@
         EN: A door in the conservatory opens into the new wing containing the enclosed pool. High windows overlook the garden; warm pipes keep the water comfortable all year.
         CN: 温室旁的门通向新侧翼里的封闭泳池。高窗朝着花园，暖水管让池水一年四季都保持舒适。
       outdoor: false
+    - id: wine_cellar
+      icon: property/wine-cellar.png
+      floor: 1
+      access: sitting
+      cost: 2400000
+      upkeep: 1800
+      name: { EN: Wine cellar, CN: 酒窖 }
+      description:
+        EN: A short flight of steps leads below the entrance hall. Bottle racks line the cool walls, and a small tasting table stands clear of the stairs. The empty racks wait for bottles you bring home.
+        CN: 门厅旁的短阶梯通向地下。凉爽的墙边排着酒架，小品酒桌避开了楼梯。空着的格子等你带酒回来。
+    - id: reception
+      icon: property/reception-room.png
+      floor: 1
+      access: sitting
+      cost: 3000000
+      upkeep: 3500
+      name: { EN: Dining hall, CN: 宴客厅 }
+      description:
+        EN: The long table stands between the kitchen door and tall garden windows. A sideboard holds clean china, while the chairs can be drawn close for a smaller gathering.
+        CN: 长桌摆在厨房门与花园高窗之间。餐具柜里放着干净瓷器，人少时，可以把椅子挪近些围坐。
+    - id: staff_room
+      icon: property/staff-room.png
+      floor: 1
+      access: sitting
+      cost: 2200000
+      upkeep: 3000
+      name: { EN: Staff room, CN: 雇员房 }
+      description:
+        EN: The former service room opens onto the back hall. Lockers and a duty book stand beside the kettle. A separate door leads to the drive inside the boundary wall.
+        CN: 原来的杂用间通向后门厅。水壶旁放着储物柜与交接簿，另一扇门通往围墙内的车道。
   interior:
     bedroom_label: { EN: Bedroom (0:01), CN: 卧室 (0:01) }
     bedroom:
@@ -555,6 +605,36 @@
         EN: The residents' lift takes you down to the underground car park. Two marked bays are reserved for the suite, beside a locked bicycle rack. The security desk keeps a record of visitors.
         CN: 住户电梯带你下到地下车库。套房有两个划好的车位，旁边是一架可上锁的自行车架。安保台留着访客登记簿。
       parking: { bicycle: 2, motorcycle: 1, motor_vehicle: 2 }
+    - id: cinema
+      icon: property/screening-room.png
+      floor: 2
+      access: landing
+      cost: 0
+      upkeep: 0
+      name: { EN: Screening room, CN: 放映室 }
+      description:
+        EN: A darkened side room has a wall screen and low seats. The ventilation hums behind padded walls. You can leave the town lights behind for the length of a film.
+        CN: 昏暗的侧室有整面屏幕与低座椅。包着软垫的墙后传来轻轻的通风声。一部影片的时间里，可以把小镇的灯火留在门外。
+    - id: reception
+      icon: property/reception-room.png
+      floor: 1
+      access: sitting
+      cost: 0
+      upkeep: 0
+      name: { EN: Private dining room, CN: 私人餐厅 }
+      description:
+        EN: The table overlooks the office towers. A service door connects it to your kitchen, and the visitors' lift brings guests to the entrance on this floor.
+        CN: 餐桌俯瞰办公大楼。服务门连接着厨房，访客电梯把来客送到这一层的门厅。
+    - id: staff_room
+      icon: property/staff-room.png
+      floor: 1
+      access: sitting
+      cost: 0
+      upkeep: 0
+      name: { EN: Staff room, CN: 雇员房 }
+      description:
+        EN: Behind the service door is a compact room with lockers and a duty desk. Staff report here before entering the suite. The building's security remains downstairs.
+        CN: 服务门后是一间紧凑的房间，放着储物柜与值班桌。雇员先在这里报到，再进入套房。大楼本身的安保仍在楼下。
   interior:
     bedroom_label: { EN: Main bedroom (0:01), CN: 主卧 (0:01) }
     bedroom:

@@ -5,6 +5,9 @@ import PropertyCatalog, { type Property, type ResidentProfile } from './Property
 import type Finance from '../Finance';
 import Mortgage, { type MortgageState } from './Mortgage';
 import rentalTerms from '../../assets/finance/rentals.json';
+import PropertyLife, { type PropertyLifeState } from './PropertyLife';
+import PropertyStaff, { type PropertyStaffState, type StaffRole } from './PropertyStaff';
+import PropertyBanquet, { type PropertyBanquetState } from './PropertyBanquet';
 
 type PropertyId = string;
 type PropertyRoom = keyof Property['rooms'] | Property['extensions'][number]['id'];
@@ -41,9 +44,13 @@ export interface RealEstateState {
   intimacy_place: IntimacyPlace;
   /** 已答应一起亲近的两位恋人，连同他们同意的地点，交给亲密场景读取。 */
   pair_request: { names: string[]; place: IntimacyPlace } | null;
+  life: PropertyLifeState;
+  staff_role: StaffRole;
+  banquet: PropertyBanquetState;
 }
 
 interface PropertyManagement {
+  staff?: PropertyStaffState;
   upgrades: string[];
   rest_day: number;
   affection_days: Record<string, number>;
@@ -97,11 +104,17 @@ class RealEstate {
     room_companion: null,
     pool_clothing: 'clothed',
     intimacy_place: 'bedroom',
-    pair_request: null
+    pair_request: null,
+    life: PropertyLife.defaults,
+    staff_role: 'housekeeper',
+    banquet: PropertyBanquet.defaults
   };
   private loadedProperties?: Property[];
   private loadedResidents?: ResidentProfile[];
   public readonly mortgage: Mortgage;
+  public readonly life: PropertyLife;
+  public readonly staff: PropertyStaff;
+  public readonly banquet: PropertyBanquet;
   public readonly rentalTerms = rentalTerms;
 
   public constructor(
@@ -109,6 +122,9 @@ class RealEstate {
     private readonly finance: Finance
   ) {
     this.mortgage = new Mortgage(finance, (id, debt, day) => this.sellByAuction(id, 'foreclosure', debt, day));
+    this.life = new PropertyLife(this, core);
+    this.staff = new PropertyStaff(this, finance);
+    this.banquet = new PropertyBanquet(core, finance, this);
   }
 
   public get properties(): readonly Property[] {
@@ -120,12 +136,21 @@ class RealEstate {
   }
 
   public preInit(): void {
+    this.life.preInit();
+    this.banquet.preInit();
     this.core.tool.onInit(() => {
       void this.properties;
       void this.residentProfiles;
     });
     this.core.dynamic.regTimeEvent('onDay', ':deadwood-reblooms-property-management', {
       action: () => this.settleDays(),
+      exact: true,
+      priority: 1
+    });
+    // Time.days 从开局时刻起算，原版通常是 07:00。小时事件覆盖跨过
+    // 该时刻的活动；paid_until 防止与午夜日结重复扣款。
+    this.core.dynamic.regTimeEvent('onHour', ':deadwood-reblooms-household-wages', {
+      action: () => this.staff.advance(RealEstate.today),
       exact: true,
       priority: 1
     });
@@ -224,7 +249,7 @@ class RealEstate {
           const halloweenVisit =
             expansion?.halloweenYear === Time.year || (expansion?.robinHalloweenYear === Time.year && expansion?.whitneyHalloweenYear === Time.year && V.halloween_kylar_proposed === 1);
           const christmasNight = (Time.month === 12 && Time.monthDay === 25 && Time.hour >= 21) || (Time.month === 12 && Time.monthDay === 26 && Time.hour < 6);
-          const estateVisit = (expansion?.estate.visitDay === Time.days && Time.hour >= 21) || (expansion?.estate.visitDay === Time.days - 1 && Time.hour < 6);
+          const estateVisit = expansion?.estate.visitDay >= 0 && ((expansion.estate.visitDay === Time.days && Time.hour >= 21) || (expansion.estate.visitDay === Time.days - 1 && Time.hour < 6));
           return (
             C.npc.Sydney?.init === 1 &&
             !['prison', 'dungeon'].includes(C.npc.Sydney.state) &&
@@ -687,6 +712,9 @@ class RealEstate {
     const management = this.managementFor(id);
     if (management.rented || management.auction_day !== null || management.condition < this.mortgage.terms.rental.minimum_condition) return false;
     management.rented = true;
+    this.staff.clear(id);
+    this.life.clear(id);
+    this.banquet.cancel(id);
     management.vacancy_until = RealEstate.today + rentalTerms.vacancyDays;
     management.rental_issue = null;
     management.lease_end_day = null;
@@ -783,6 +811,9 @@ class RealEstate {
     const management = this.managementFor(id);
     if (management.rented || management.auction_day !== null) return false;
     management.auction_day = RealEstate.today + this.mortgage.terms.voluntary_auction_days;
+    this.staff.clear(id);
+    this.life.clear(id);
+    this.banquet.cancel(id);
     return true;
   }
 
@@ -861,6 +892,7 @@ class RealEstate {
       this.mortgage.advanceThrough(day);
       this.finance.advanceBankThrough(day);
       this.finance.company.suite.advance(day);
+      this.staff.advance(day);
     }
     state.last_managed_day = today;
     this.finance.company.suite.sync();
@@ -883,6 +915,9 @@ class RealEstate {
 
   public vacate(id: PropertyId): void {
     if (!this.owns(id)) return;
+    this.staff.clear(id);
+    this.life.clear(id);
+    this.banquet.cancel(id);
     const management = this.managementFor(id);
     this.state.owned[id] = false;
     // 地块沿用原版 $plots。产权拍卖后清掉这处房屋的作物，避免重新购买时接手旧存档的苗圃。

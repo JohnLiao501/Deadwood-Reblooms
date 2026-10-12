@@ -96,6 +96,7 @@
 <<deadwood-avery-header>>
 <<if !_shareholder_access or !_avery_business.available>><<deadwood-shareholder-return>><<exit>><</if>>
 <<npc Avery>><<person1>>
+<<deadwood-banquet-followup 'Avery'>>
 <<language>>
   <<option 'EN'>>
     The clerk waits for Avery's call before letting you through. The meeting papers have been put away. Avery leaves a chair free on your side of the desk.

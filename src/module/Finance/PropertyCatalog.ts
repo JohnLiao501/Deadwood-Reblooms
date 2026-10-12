@@ -32,7 +32,7 @@ export interface Property {
   floors: PropertyFloor[];
   rooms: Record<'bedroom' | 'bathroom' | 'kitchen' | 'outdoor', number> & Partial<Record<'desk' | 'guest' | 'balcony', number>>;
   extensions: {
-    id: 'lounge' | 'study' | 'pool' | 'pool_heating' | 'garage';
+    id: 'lounge' | 'study' | 'pool' | 'pool_heating' | 'garage' | 'wine_cellar' | 'cinema' | 'reception' | 'staff_room';
     icon: string;
     floor: number;
     access: 'sitting' | 'landing' | 'bedroom' | 'outdoor' | 'lounge';
@@ -108,9 +108,9 @@ export default class PropertyCatalog {
         new Set(property.extensions.map(extension => extension.id)).size !== property.extensions.length ||
         property.extensions.some(
           extension =>
-            !['lounge', 'study', 'pool', 'pool_heating', 'garage'].includes(extension.id) ||
+            !['lounge', 'study', 'pool', 'pool_heating', 'garage', 'wine_cellar', 'cinema', 'reception', 'staff_room'].includes(extension.id) ||
             typeof extension.icon !== 'string' ||
-            !/^(?:[a-z0-9-]+\/)*[a-z0-9-]+\.png$/.test(extension.icon) ||
+            !/^(?:[a-z0-9-]+\/)*[a-z0-9-]+\.(?:png|gif)$/.test(extension.icon) ||
             !Number.isInteger(extension.floor) ||
             extension.floor < 1 ||
             extension.floor > property.floors!.length ||

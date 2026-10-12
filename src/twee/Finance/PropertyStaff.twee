@@ -1,0 +1,313 @@
+:: Deadwood Reblooms Property Staff Widgets [widget]
+
+<<widget 'deadwood-property-staff-entry'>>
+  <<set _home_staff to maplebirch.get('Finance').realEstate.staff>>
+  <<if _home_staff.book and !maplebirch.get('Finance').realEstate.facilities.some(room => room.id === 'staff_room')>>
+    <<icon 'company/staff.png'>><<lanLink ['Household staff (0:01)', '安排住宅雇员 (0:01)'] 'Deadwood Reblooms Property Staff Quarters'>><<pass 1>><</lanLink>><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-property-staff-chat'>>
+  <<set _chat_staff to maplebirch.get('Finance').realEstate.staff>>
+  <<set _chat_role to _chat_staff.selected>>
+  <<if !_chat_staff.book or !_chat_staff.state?.contracts[_chat_role]?.employed or $NPCList[0]?.per isnot _chat_staff.key(_chat_role)>><<exit>><</if>>
+  <<if _staff_note>>
+    <<language>>
+      <<option 'EN'>>
+        <<if _staff_note is 'privacy'>>"I'll knock first, and leave the private drawers and papers as they are." <<print $NPCList[0].name>> marks it in the book, including the rooms used by your housemates.
+        <<elseif _staff_note is 'stock'>>"I'll use what you've left in the kitchen. If we need more, I'll bring you the list." <<He>> checks where you keep the prepared dishes.
+        <<else>>"I'll leave the next shift a clear note." <<print $NPCList[0].name>> goes over the keys and the end of the shift with you.<</if>>
+      <<option 'CN'>>
+        <<if _staff_note is 'privacy'>>“先敲门，私人的抽屉和文件都不动。”<<print $NPCList[0].name>>记进值班簿，也把同住者使用的房间标了出来。
+        <<elseif _staff_note is 'stock'>>“我用您留在厨房的东西。缺了什么，先把清单给您。”<<He>>确认了做好的餐点放在哪里。
+        <<else>>“下一班过来，能看见清楚的记录。”<<print $NPCList[0].name>>与你核对钥匙和交班时间。<</if>>
+    <</language>><br><br>
+  <<elseif $NPCList[0].deadwood_work?.last>>
+    <<language>>
+      <<option 'EN'>>
+        <<if $NPCList[0].deadwood_work.last is 'privacy'>>"The rooms you marked are still on the private list."
+        <<elseif $NPCList[0].deadwood_work.last is 'stock'>>"I've kept the kitchen list the way we discussed."
+        <<else>>"Your instructions are in the duty book for the next shift."<</if>> <<He>> waits to hear whether you want anything changed.
+      <<option 'CN'>>
+        <<if $NPCList[0].deadwood_work.last is 'privacy'>>“您标出的房间，还在私人清单里。”
+        <<elseif $NPCList[0].deadwood_work.last is 'stock'>>“厨房的清单，还是照上次说的留着。”
+        <<else>>“您交代的安排已经写进值班簿，下一班也能看见。”<</if>><<He>>等着听你有没有要改的地方。
+    <</language>><br><br>
+  <</if>>
+  <<if $NPCList[0].deadwood_work?.day isnot Math.floor(Time.days)>>
+    <<for _chat_topic range ['routine', 'privacy', ...(_chat_role === 'cook' ? ['stock'] : [])]>>
+      <<capture _chat_topic>>
+        <<socialiseicon>><<lanLink `_chat_topic === 'privacy' ? ['Explain the private rooms (0:05)', '交代私人房间的安排 (0:05)'] : _chat_topic === 'stock' ? ['Discuss the kitchen stock (0:05)', '商量厨房储存的餐点 (0:05)'] : ['Go over the shift handover (0:05)', '核对交接安排 (0:05)']`>>
+          <<if maplebirch.get('Finance').realEstate.staff.book and maplebirch.get('Finance').realEstate.staff.state?.contracts[_role]?.employed and $NPCList[0]?.per is maplebirch.get('Finance').realEstate.staff.key(_role) and $NPCList[0].deadwood_work?.day isnot Math.floor(Time.days)>>
+            <<set $NPCList[0].deadwood_work to $NPCList[0].deadwood_work ?? { chats: 0, last: null, day: -1 }>>
+            <<set $NPCList[0].deadwood_work.last to _chat_topic, $NPCList[0].deadwood_work.day to Math.floor(Time.days)>>
+            <<if _chat_topic is 'privacy'>><<set $NPCList[0].deadwood_work.private to true>><</if>>
+            <<if _chat_topic is 'stock'>><<set $NPCList[0].deadwood_work.stock to true>><</if>>
+            <<set $NPCList[0].deadwood_work.chats += 1>><<saveNPC 0 `_staff.key(_role)`>>
+            <<set _staff_note to _chat_topic>><<pass 5>>
+            <<run Dynamic.render('deadwood-property-staff-contract')>>
+          <</if>>
+        <</lanLink>><br>
+      <</capture>>
+    <</for>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-home-staff-presence'>>
+  <<set _presence_estate to maplebirch.get('Finance').realEstate>>
+  <<set _presence_property to _presence_estate.current>>
+  <<if !_presence_property>><<exit>><</if>>
+  <<set _presence_case to (Math.floor(Time.days) + _presence_property.id.length) % 3>>
+  <<for _presence_role range _presence_estate.staff.roles>>
+    <<set _presence_npc to $per_npc[_presence_estate.staff.key(_presence_role)]>>
+    <<if _presence_estate.staff.active(_presence_role) and _presence_npc>>
+      <<set _presence_name to _presence_npc.name_known is 1 ? _presence_npc.name : ''>>
+      <<set _presence_en to _presence_name ? _presence_name + ', your ' + _presence_role + ',' : 'Your ' + _presence_role>>
+      <<language>>
+        <<option 'EN'>>
+          <<switch _presence_role>>
+            <<case 'housekeeper'>>
+              <<if _presence_case is 0>><<print _presence_en>> spreads the washed cloths out to dry, then puts the bucket and brushes away.
+              <<elseif _presence_case is 1>><<print _presence_en>> wipes the kitchen table, working around the things you have left on it.
+              <<else>><<print _presence_en>> lifts a cushion to brush beneath it. The clean covers wait in a folded pile.<</if>>
+            <<case 'cook'>>
+              <<if _presence_case is 0>><<print _presence_en>> checks the dates on the food you have stored, moving the older dishes to the front.
+              <<elseif _presence_case is 1>><<print _presence_en>> checks the cupboards and notes what is running low. The list is left beside the kettle for you to read.
+              <<else>><<print _presence_en>> sets clean plates by the stove, then checks which prepared dishes you have put aside for the next meal.<</if>>
+            <<case 'steward'>>
+              <<if _presence_case is 0>>
+                <<if $Finance.real_estate.banquet?.invited.length>><<print _presence_en>> checks the names on your invitation list and puts the place cards in order.
+                <<else>><<print _presence_en>> sorts the blank place cards beside the correspondence tray, ready for your next guest list.<</if>>
+              <<elseif _presence_case is 1>><<print _presence_en>> sets a folder of correspondence on your table. Anything needing a signature has been left open for you.
+              <<else>><<print _presence_en>> checks that the guest route is clear, then closes the doors to the private rooms.<</if>>
+            <<case 'guard'>>
+              <<if _presence_property.id is 'penthouse'>>
+                <<if _presence_case is 0>><<print _presence_en>> checks a caller's name at the residents' service entrance before calling through to ask you.
+                <<elseif _presence_case is 1>><<print _presence_en>> checks the service entrance lock. The building's security team can still be heard over the radio in the corridor.
+                <<else>><<print _presence_en>> goes over the expected visitors with the building's security team, then takes up a position outside your service door.<</if>>
+              <<else>>
+                <<if _presence_case is 0>>Someone knocks without an appointment. <<print _presence_en>> asks for a name at the entrance, then waits for your answer before opening the inner door.
+                <<elseif _presence_case is 1>><<print _presence_en>> checks the back door lock and returns to the entrance, keys quiet in one hand.
+                <<else>>A torch moves along the path outside. <<print _presence_en>> checks the side gate before returning to the front door.<</if>>
+              <</if>>
+          <</switch>>
+        <<option 'CN'>>
+          <<switch _presence_role>>
+            <<case 'housekeeper'>>
+              <<if _presence_case is 0>>保洁员<<print _presence_name>>把洗净的抹布展开晾好，将水桶和刷子收回柜里。
+              <<elseif _presence_case is 1>>保洁员<<print _presence_name>>擦着厨房的桌子，小心绕开你留在上面的东西。
+              <<else>>保洁员<<print _presence_name>>掀起坐垫，刷净底下的灰尘。干净的罩子已经叠在旁边。<</if>>
+            <<case 'cook'>>
+              <<if _presence_case is 0>>厨师<<print _presence_name>>检查着储存食物的日期，将放得久些的菜肴挪到前面。
+              <<elseif _presence_case is 1>>厨师<<print _presence_name>>查看橱柜，记下快用完的东西，把清单留在水壶旁等你过目。
+              <<else>>厨师<<print _presence_name>>将干净餐盘放在炉边，查看你为下一顿留好了哪些菜肴。<</if>>
+            <<case 'steward'>>
+              <<if _presence_case is 0>>
+                <<if $Finance.real_estate.banquet?.invited.length>>管家<<print _presence_name>>核对你留下的邀请名单，将座位卡按名字排好。
+                <<else>>管家<<print _presence_name>>把空白座位卡整理到信件托盘旁，等你安排下一份宾客名单。<</if>>
+              <<elseif _presence_case is 1>>管家<<print _presence_name>>把一叠来信放到你的桌上，需要签字的文件都摊开了，等你过目。
+              <<else>>管家<<print _presence_name>>查看客人经过的地方有没有障碍，再合上私人房间的门。<</if>>
+            <<case 'guard'>>
+              <<if _presence_property.id is 'penthouse'>>
+                <<if _presence_case is 0>>门卫<<print _presence_name>>在住户服务入口核对来客姓名，再打电话询问你的意见。
+                <<elseif _presence_case is 1>>门卫<<print _presence_name>>检查着服务入口的门锁。走廊里还能听见大楼保安的对讲机声。
+                <<else>>门卫<<print _presence_name>>与大楼保安核对预约访客，随后回到你家服务入口旁守着。<</if>>
+              <<else>>
+                <<if _presence_case is 0>>有人没预约就敲了门。门卫<<print _presence_name>>在入口问起姓名，等你答复后才会开里面的门。
+                <<elseif _presence_case is 1>>门卫<<print _presence_name>>检查过后门的锁，回到入口，握在手里的钥匙没有发出响声。
+                <<else>>一束手电光沿着屋外的小径移动。门卫<<print _presence_name>>检查过侧门，才返回前门。<</if>>
+              <</if>>
+          <</switch>>
+      <</language>><br><br>
+    <</if>>
+  <</for>>
+<</widget>>
+
+<<widget 'deadwood-property-staff-menu'>>
+  <<set _staff to maplebirch.get('Finance').realEstate.staff>>
+  <<if !_staff.book>><<exit>><</if>>
+  <<set _staff_day to Math.floor(Time.days)>>
+  <<for _role range _staff.roles>>
+    <<capture _role>>
+      <<set _terms to _staff.terms[_role]>>
+      <<set _contract to _staff.state.contracts[_role] ?? { employed: false, paid_until: 0 }>>
+      <<set _staff_key to _staff.key(_role)>>
+      <<deadwood-card _terms.name.EN _terms.name.CN>>
+        <p><<icon _terms.icon>><<= lanSwitch(_terms.description.EN, _terms.description.CN)>></p>
+        <<if _contract.employed>>
+          <<print $per_npc[_staff_key]?.name>> · <<if _contract.paid_until gt _staff_day>><span class='green'><<lanSwitch 'Wages paid' '已预付工资'>></span><<else>><span class='red'><<lanSwitch 'Work suspended' '工作暂停'>></span><</if>><br>
+          <<lanSwitch 'Next payment: ' '下次续付：'>><<deadwood-reblooms-finance-date _contract.paid_until>><br>
+          <<if _contract.paid_until lte _staff_day>>
+            <span class='red'><<lanSwitch 'The employee will leave if another week is not paid within seven days.' '七天内仍未续付工资，雇员便会离职。'>></span><br>
+          <</if>>
+        <<else>>
+          <<lanSwitch 'Vacant' '空缺'>><br>
+        <</if>>
+        <<lanSwitch 'Weekly wage: ' '周薪：'>><<deadwood-reblooms-finance-money _terms.weeklyWage>><br>
+        <<lanSwitch 'On duty: ' '当值时间：'>><span class='lblue'><<print _terms.shifts.map(([start, end]) => String(start).padStart(2, '0') + ':00–' + String(end).padStart(2, '0') + ':00').join(lanSwitch(', ', '、'))>></span><br>
+        <<if _contract.employed or _staff.available(_role)>>
+          <<icon _terms.icon>><<lanLink `[_contract.employed ? 'Discuss the arrangement (0:05)' : 'Meet the applicant (0:05)', _contract.employed ? '谈谈工作安排 (0:05)' : '面试应聘者 (0:05)']` 'Deadwood Reblooms Property Staff Interview'>>
+            <<set $Finance.real_estate.staff_role to _role>>
+            <<set _applicant_key to maplebirch.get('Finance').realEstate.staff.key(_role)>>
+            <<if !$per_npc[_applicant_key]>>
+              <<endevent>><<generateNPC 1 a>><<saveNPC 0 _applicant_key>><<endevent>>
+            <</if>>
+            <<pass 5>>
+          <</lanLink>><br>
+        <<else>>
+          <span class='blue'><<lanSwitch 'A staff room is needed for this post.' '这个岗位需要雇员房。'>></span><br>
+        <</if>>
+      <</deadwood-card>>
+    <</capture>>
+  <</for>>
+<</widget>>
+
+:: Deadwood Reblooms Property Staff Quarters
+<<endevent>>
+<<set _estate to maplebirch.get('Finance').realEstate>>
+<<set _staff to _estate.staff>>
+<<set _property to _estate.current>>
+<<if !_staff.book>>
+  <<getouticon>><<lanLink ['Return to the property desk', '返回房产柜台'] 'Deadwood Reblooms Property Office'>><</lanLink>><<exit>>
+<</if>>
+<<set _staff_room to _estate.facilities.find(facility => facility.id === 'staff_room')>>
+<<if _staff_room>><<run _estate.enter('staff_room')>><<else>><<run _estate.enter()>><</if>><<effects>>
+<span class='gold bold'><<lanSwitch 'Household staff' '住宅雇员'>></span><br><br>
+<<if _staff_room>>
+  <<deadwood-home-staff-room>><br><br>
+<<else>>
+  <<language>>
+    <<option 'EN'>>
+      You make room for a cleaning schedule on the sitting room table. A visiting housekeeper can bring their own supplies, then leave when the work is finished.
+    <<option 'CN'>>
+      你在起居室的桌上腾出地方，放下一张清洁安排表。上门的保洁员会带着用品来，做完便离开。
+  <</language>><br><br>
+<</if>>
+<<deadwood-dynamicblock 'deadwood-property-staff-payroll'>>
+  <<deadwood-property-staff-menu>>
+<</deadwood-dynamicblock>>
+<<language>>
+  <<option 'EN'>>
+    The first week's wages are paid when you sign. Each following week is paid from your bank account in advance. If there is not enough money, work stops until you renew the arrangement. After seven days without a paid week, the employee leaves. Paid weeks are not refunded.
+  <<option 'CN'>>
+    签约时预付首周工资，此后每周从银行预付。余额不足时停工，续付后恢复。停工满七天，雇员离职。已经支付的周薪不退还。
+<</language>><br><br>
+<<if _staff_room>>
+  <<deadwood-home-exit 'staff_room'>>
+<<else>>
+  <<getouticon>><<lanLink ['Return to the sitting room (0:01)', '返回起居室 (0:01)'] 'Deadwood Reblooms Property Home'>><<run maplebirch.get('Finance').realEstate.setFloor(1)>><<pass 1>><</lanLink>>
+<</if>>
+
+:: Deadwood Reblooms Property Staff Interview
+<<endevent>>
+<<set _estate to maplebirch.get('Finance').realEstate>>
+<<set _staff to _estate.staff>>
+<<set _role to _staff.selected>>
+<<if !_staff.book or !_staff.roles.includes(_role)>>
+  <<getouticon>><<lanLink ['Return to the property desk', '返回房产柜台'] 'Deadwood Reblooms Property Office'>><</lanLink>><<exit>>
+<</if>>
+<<set _staff_key to _staff.key(_role)>>
+<<if !$per_npc[_staff_key]>>
+  <<getouticon>><<lanLink ['Return to the staff arrangements', '返回雇员安排'] 'Deadwood Reblooms Property Staff Quarters'>><</lanLink>><<exit>>
+<</if>>
+<<run _estate.enter()>><<effects>>
+<<loadNPC 0 _staff_key>><<person1>>
+<<set _terms to _staff.terms[_role]>>
+<span class='gold bold'><<= lanSwitch(_terms.name.EN, _terms.name.CN)>></span><br><br>
+<<language>>
+  <<option 'EN'>>
+    <<if $NPCList[0].name_known is 1>>
+      <<print $NPCList[0].name>> lays the work schedule beside your copy of the agreement.
+    <<else>>
+      A <<person>> sets a folded application on the table. "<<print $NPCList[0].name>>," <<he>> says, pointing to the name at the top. <<He>> waits while you read the work history.
+    <</if>>
+    <br><br>
+    <<switch _role>>
+      <<case 'housekeeper'>>
+        "Floors, linen, and the rooms you've given me a key for," <<he>> says. "I'll leave a note if something leaks. A bucket won't mend a pipe." <<He>> asks where you keep the clean sheets, then marks the rooms you want cleaned.
+      <<case 'cook'>>
+        "Show me the kitchen and tell me about any allergies." <<He>> opens a notebook. "I'll use what's in your cupboards. If we need more, we settle the grocery money first." <<He>> leaves room beside each dish for your household's preferences.
+      <<case 'steward'>>
+        "Give me the guest list before they arrive." <<He>> sets a pencil beside it. "I'll check the names at the door and arrange the table. If someone brings a business proposal, I'll bring it to you." <<He>> asks which rooms visitors may enter.
+      <<case 'guard'>>
+        <<He>> asks to see the locks and the route around the house. "I'll cover the entrance at night and turn away callers who aren't expected. You decide who gets a key." <<He>> draws a line between the front gate and the road on your plan.
+    <</switch>>
+  <<option 'CN'>>
+    <<if $NPCList[0].name_known is 1>>
+      <<print $NPCList[0].name>>把工作表放到你的协议副本旁。
+    <<else>>
+      一位<<person>>把折好的应聘表放在桌上。“<<print $NPCList[0].name>>。”<<he>>说，指了指表头的名字。你查看工作经历时，<<he>>安静地等着。
+    <</if>>
+    <br><br>
+    <<switch _role>>
+      <<case 'housekeeper'>>
+        “地板、床单，还有你交给我钥匙的房间。”<<he>>说。“哪里漏水，我会留条子。拿个桶可修不好水管。”<<He>>问起干净床单放在哪里，再圈出你要清理的房间。
+      <<case 'cook'>>
+        “先带我看看厨房，有什么过敏的也得告诉我。”<<He>>翻开小本子。“我用你橱柜里的食材。缺了什么，先把采购的钱安排好。”每道菜旁边都留了位置，记下住户的口味。
+      <<case 'steward'>>
+        “客人来之前，先把名单给我。”<<He>>在名单旁放了支铅笔。“门口核对名字，桌上安排座位。有人带来生意上的提议，我会转给你。”<<He>>问起哪些房间可以让客人进去。
+      <<case 'guard'>>
+        <<He>>问起门锁和屋外巡查的路线。“我夜里守住入口，没预约的人会被请走。钥匙交给谁，由你决定。”<<He>>在平面图上划了一道线，分开前门和街道。
+    <</switch>>
+<</language>><br><br>
+<<set $NPCList[0].name_known to 1>><<saveNPC 0 _staff_key>>
+<<set _staff_result to null, _staff_note to null>>
+<<deadwood-dynamicblock 'deadwood-property-staff-contract'>>
+  <<set _staff to maplebirch.get('Finance').realEstate.staff>>
+  <<set _role to _staff.selected>>
+  <<set _contract to _staff.state?.contracts[_role] ?? { employed: false, paid_until: 0 }>>
+  <<set _terms to _staff.terms[_role]>>
+  <<deadwood-property-staff-chat>>
+  <<if _staff_result>>
+    <<language>>
+      <<option 'EN'>>
+        <<switch _staff_result>>
+          <<case 'hire-ok'>>
+            <span class='green'>The first week's wages are paid.</span> <<print $NPCList[0].name>> signs beside yours, then asks for the keys needed for the work.
+          <<case 'renew-ok'>>
+            <span class='green'>Another week's wages are paid.</span> <<print $NPCList[0].name>> checks the date on the receipt. "All right. I'll put my name back on the rota."
+          <<case 'dismiss-ok'>>
+            <<print $NPCList[0].name>> removes <<his>> name from the rota and lays the keys on the table. <span class='blue'>The employment has ended.</span>
+          <<default>>
+            <span class='red'>The arrangement could not be completed.</span> You check the agreement and the bank balance before trying again.
+        <</switch>>
+      <<option 'CN'>>
+        <<switch _staff_result>>
+          <<case 'hire-ok'>>
+            <span class='green'>首周工资已经支付。</span><<print $NPCList[0].name>>在你旁边签了字，问你要工作时用到的钥匙。
+          <<case 'renew-ok'>>
+            <span class='green'>又一周工资已经支付。</span><<print $NPCList[0].name>>核对收据上的日期。“行，我把名字填回值班表上。”
+          <<case 'dismiss-ok'>>
+            <<print $NPCList[0].name>>划去值班表上的名字，把钥匙放到桌上。<span class='blue'>聘用已经结束。</span>
+          <<default>>
+            <span class='red'>手续没有办妥。</span>你重新检查协议和银行余额。
+        <</switch>>
+    <</language>><br><br>
+  <</if>>
+  <<lanSwitch 'Weekly wage: ' '周薪：'>><<deadwood-reblooms-finance-money _terms.weeklyWage>><br>
+  <<if _contract.employed>>
+    <<lanSwitch 'Next payment: ' '下次续付：'>><<deadwood-reblooms-finance-date _contract.paid_until>><br>
+    <<if _contract.paid_until lte Math.floor(Time.days)>>
+      <span class='red'><<lanSwitch 'Work is suspended until the next week is paid.' '续付下一周工资后，才能恢复工作。'>></span><br>
+      <<icon 'finance/bank-withdraw.png'>><<lanLink ['Pay the next week (0:05)', '续付一周工资 (0:05)']>>
+        <<set _staff_result to maplebirch.get('Finance').realEstate.staff.renew(_role) ? 'renew-ok' : 'failed'>>
+        <<if _staff_result is 'renew-ok'>><<pass 5>><</if>>
+        <<run maplebirch.get('Finance').refreshMoneyUI()>><<run Dynamic.render('deadwood-property-staff-contract')>>
+      <</lanLink>><br>
+    <</if>>
+    <<refuseicon>><<lanLink ['End the employment (0:05)', '解除聘用 (0:05)']>>
+      <<set _staff_result to maplebirch.get('Finance').realEstate.staff.dismiss(_role) ? 'dismiss-ok' : 'failed'>>
+      <<if _staff_result is 'dismiss-ok'>><<pass 5>><</if>>
+      <<run Dynamic.render('deadwood-property-staff-contract')>>
+    <</lanLink>><br>
+  <<elseif _staff.available(_role) and $per_npc[_staff.key(_role)]>>
+    <<icon _terms.icon>><<lanLink ['Hire and pay the first week (0:10)', '聘用并预付首周工资 (0:10)']>>
+      <<set _staff_result to maplebirch.get('Finance').realEstate.staff.hire(_role) ? 'hire-ok' : 'failed'>>
+      <<if _staff_result is 'hire-ok'>><<pass 10>><</if>>
+      <<run maplebirch.get('Finance').refreshMoneyUI()>><<run Dynamic.render('deadwood-property-staff-contract')>>
+    <</lanLink>><br>
+  <<elseif _staff_result is 'dismiss-ok'>>
+    <<lanSwitch 'Return to the staff arrangements to meet another applicant.' '返回雇员安排，可以面试新的应聘者。'>><br>
+  <</if>>
+<</deadwood-dynamicblock>><br>
+<<getouticon>><<lanLink ['Return to the staff arrangements (0:01)', '返回雇员安排 (0:01)'] 'Deadwood Reblooms Property Staff Quarters'>><<endevent>><<pass 1>><</lanLink>>

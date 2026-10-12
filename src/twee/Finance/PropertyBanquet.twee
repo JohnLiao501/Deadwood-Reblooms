@@ -1,0 +1,456 @@
+:: Deadwood Reblooms Property Banquet Widgets [widget]
+<<widget 'deadwood-banquet-link'>>
+  <<set $_banquet to maplebirch.get('Finance').realEstate.banquet>>
+  <<if $_banquet.canPlan>>
+    <<icon 'property/banquet.png'>><<lanLink ['Arrange a private supper (0:01)', '筹备私人晚宴 (0:01)'] 'Deadwood Reblooms Property Banquet Plan'>>
+      <<run maplebirch.get('Finance').realEstate.banquet.plan()>>
+      <<pass 1>>
+    <</lanLink>><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-banquet-header'>>
+  <<set _banquet to maplebirch.get('Finance').realEstate.banquet>>
+  <<set _property to maplebirch.get('Finance').realEstate.current>>
+  <<if !_banquet.valid>>
+    <<language>>
+      <<option 'EN'>>
+        The room is no longer available for your supper. You put the arrangements aside.
+      <<option 'CN'>>
+        这间房已经不能供你举办晚宴。你先放下了筹备的事。
+    <</language>><br><br>
+    <<getouticon>><<lanLink ['Return', '返回'] _banquet.returnPassage>><<run _banquet.close(true)>><</lanLink>><<exit>>
+  <</if>>
+  <<run maplebirch.get('Finance').realEstate.enter()>><<effects>>
+<</widget>>
+
+<<widget 'deadwood-banquet-inactive'>>
+  <<language>>
+    <<option 'EN'>>
+      This part of the evening has already ended. You return to the room.
+    <<option 'CN'>>
+      这一段晚宴已经结束。你回到房间。
+  <</language>><br><br>
+  <<getouticon>><<lanLink ['Return to the room', '回到房间'] _banquet.returnPassage>><</lanLink>>
+<</widget>>
+
+<<widget 'deadwood-banquet-plan'>>
+  <<set $_banquet to maplebirch.get('Finance').realEstate.banquet>>
+  <<set $_formal to $_banquet.state.formal>>
+  <<lanSwitch 'Guests: ' '宾客：'>><<print $_banquet.state.invited.length>> / <<print $_banquet.capacity>><br>
+  <<lanSwitch 'Estimated food and service: ' '预计餐食与服务：'>><<printmoney $_banquet.cost>><br>
+  <<language>>
+    <<option 'EN'>>
+      Supper can begin between <span class='lblue'>18:00 and 21:00</span>. Preparing the room, receiving your guests and seeing them out will take about <span class='lblue'>two and a half hours</span>. Replies depend on their plans for tonight. The bill is paid from your bank account with your debit card.
+    <<option 'CN'>>
+      晚宴可在<span class='lblue'>18:00 至 21:00</span>之间开始。布置房间、接待宾客到送客，共需约<span class='lblue'>两个半小时</span>。他们会按今晚的安排答复。费用由借记卡从银行账户支付。
+  <</language>><br><br>
+  <<if $_banquet.state.invited.includes('Sydney')>>
+    <span class='lblue'><<lanSwitch 'Sydney needs to return for prayers at 21:00; begin before 18:30 if you invite Sydney.' '悉尼需要在 21:00 回去晚祷，请在 18:30 前开始晚宴。'>></span><br><br>
+  <</if>>
+  <<lanLink `$_formal ? ['Serve a home supper', '家常晚餐'] : ['Arrange a reception supper', '商务晚宴']`>>
+    <<set $Finance.real_estate.banquet.formal to !$Finance.real_estate.banquet.formal>>
+    <<set _banquet_failed to false>>
+    <<run Dynamic.render('deadwood-banquet-plan')>>
+  <</lanLink>> | <span class='gold'><<if $_formal>><<lanSwitch 'Reception supper' '商务晚宴'>><<else>><<lanSwitch 'Home supper' '家常晚餐'>><</if>></span><br><br>
+  <<for $_name range $_banquet.candidates>>
+    <<capture $_name>>
+      <<socialiseicon>>
+      <<lanLink [lanSwitch('Invite ', '邀请') + maplebirch.auto($_name), lanSwitch('Invite ', '邀请') + maplebirch.auto($_name)]>>
+        <<run maplebirch.get('Finance').realEstate.banquet.invite($_name)>>
+        <<set _banquet_failed to false>>
+        <<run Dynamic.render('deadwood-banquet-plan')>>
+      <</lanLink>>
+      <<if $_banquet.state.invited.includes($_name)>> <span class='green'>(<<lanSwitch 'on the guest list' '已列入宾客名单'>>)</span><</if>><br>
+    <</capture>>
+  <</for>>
+  <<if $_banquet.candidates.length is 0>>
+    <<language>>
+      <<option 'EN'>>
+        You have no one to send a personal invitation to yet. Housemates and people you have actually met through your work can join the list.
+      <<option 'CN'>>
+        你暂时还没有能寄出私人邀请的人。同住者，以及在生意往来中实际结识的人，可以列入名单。
+    <</language>><br>
+  <</if>>
+  <<if $_banquet.state.refused.length>>
+    <span class='blue'><<lanSwitch 'Unable to attend tonight: ' '今晚不能赴约：'>><<print $_banquet.state.refused.map(name => maplebirch.auto(name)).join(lanSwitch(', ', '、'))>></span><br>
+  <</if>><br>
+  <<if _banquet_failed>>
+    <span class='red'><<lanSwitch 'The arrangements could not be confirmed. Check the replies and your bank balance.' '安排没能落实，请核对宾客答复和银行余额。'>></span><br>
+  <</if>>
+  <<if $_banquet.canStart>>
+    <<icon 'property/banquet.png'>><<lanLink ['Send invitations and prepare (0:30)', '发出邀请并布置 (0:30)']>>
+      <<if maplebirch.get('Finance').realEstate.banquet.begin()>>
+        <<pass 30>><<goto 'Deadwood Reblooms Property Banquet Preparation'>>
+      <<else>>
+        <<set _banquet_failed to true>><<run Dynamic.render('deadwood-banquet-plan')>>
+      <</if>>
+    <</lanLink>><br>
+  <<elseif Time.hour lt 18 or Time.hour gt 21>>
+    <span class='lblue'><<lanSwitch 'Come back during the evening.' '请在晚宴时段回来。'>></span><br>
+  <</if>>
+  <br><<getouticon>><<lanLink ['Put the arrangements aside', '暂时放下筹备'] $_banquet.returnPassage>><</lanLink>>
+<</widget>>
+
+<<widget 'deadwood-banquet-arrival'>>
+  <<switch _args[0]>>
+    <<case 'Robin'>>
+      <<language>>
+        <<option 'EN'>>
+          Robin pauses beside the laid table. "This is for us?" <<nnpc_He 'Robin'>> pulls the nearest chair out, then waits to see where you will sit.
+        <<option 'CN'>>
+          罗宾在摆好的餐桌旁停下。“这是为我们准备的？”<<nnpc_he 'Robin'>>拉开最近的椅子，又等着看你会坐在哪里。
+      <</language>>
+    <<case 'Kylar'>>
+      <<language>>
+        <<option 'EN'>>
+          Kylar arrives early and follows your hand as you set down the place cards. "I'm next to you, right?" <<nnpc_He 'Kylar'>> keeps a hand on the back of the chair.
+        <<option 'CN'>>
+          凯拉尔来得很早，目光跟着你摆放座位卡的手。“我坐你旁边，对吗？”<<nnpc_he 'Kylar'>>的手仍搭在椅背上。
+      <</language>>
+    <<case 'Whitney'>>
+      <<language>>
+        <<option 'EN'>>
+          Whitney looks from the cutlery to the windows. "You laying all this on to impress me?" <<nnpc_He 'Whitney'>> takes a chair and hooks one ankle behind the other.
+        <<option 'CN'>>
+          惠特尼看了看餐具，又扫向窗户。“摆这么大阵仗，想讨好我？”<<nnpc_he 'Whitney'>>拉开椅子坐下，将一只脚踝勾到另一只后面。
+      <</language>>
+    <<case 'Sydney'>>
+      <<language>>
+        <<option 'EN'>>
+          Sydney thanks you for the invitation, then checks the clock. "I can stay until evening prayers." <<nnpc_He 'Sydney'>> folds the napkin carefully before taking a seat.
+        <<option 'CN'>>
+          悉尼感谢了你的邀请，随即看了眼钟。“我能待到晚祷之前。”<<nnpc_he 'Sydney'>>仔细折好餐巾，才在桌边坐下。
+      <</language>>
+    <<case 'Avery'>>
+      <<language>>
+        <<option 'EN'>>
+          Avery lets you receive <<nnpc_him 'Avery'>> at your own door. "A change of venue," <<nnpc_he 'Avery'>> says, taking in the room before returning <<nnpc_his 'Avery'>> attention to you. "Let's see what you've arranged."
+        <<option 'CN'>>
+          艾弗里让你在自己的门口迎接<<nnpc_him 'Avery'>>。“换了个地方。”<<nnpc_he 'Avery'>>打量房间，随后将注意力转回你身上。“让我看看你安排了什么。”
+      <</language>>
+    <<case 'Remy'>>
+      <<language>>
+        <<option 'EN'>>
+          Remy checks the time before removing <<nnpc_his 'Remy'>> coat. "The school is covered for the evening." <<nnpc_He 'Remy'>> tests the weight of a glass, then looks toward the kitchen. "What are you serving?"
+        <<option 'CN'>>
+          雷米脱外套前先看了眼时间。“骑术学校今晚有人照看。”<<nnpc_he 'Remy'>>掂了掂杯子，看向厨房。“准备上什么？”
+      <</language>>
+    <<case 'Harper'>>
+      <<language>>
+        <<option 'EN'>>
+          Harper smiles as you greet <<nnpc_him 'Harper'>>. "How considerate." <<nnpc_His 'Harper'>> eyes linger on your face a moment longer than the greeting requires, then turn toward the other guests.
+        <<option 'CN'>>
+          哈珀笑着接受你的迎接。“真周到。”<<nnpc_his 'Harper'>>的目光在你脸上停留得稍久了些，才转向其他宾客。
+      <</language>>
+    <<case 'Leighton'>>
+      <<language>>
+        <<option 'EN'>>
+          Leighton notices the place settings before <<nnpc_he 'Leighton'>> notices the view. "Quite an undertaking." <<nnpc_He 'Leighton'>> waits for you to offer a seat rather than choosing one <<nnpc_himself 'Leighton'>>.
+        <<option 'CN'>>
+          礼顿先留意了餐具的摆放，才看向窗外。“安排得颇有规模。”<<nnpc_he 'Leighton'>>等着你安排座位，没有自行坐下。
+      <</language>>
+    <<case 'Quinn'>>
+      <<language>>
+        <<option 'EN'>>
+          Quinn takes your hand in a firm, faintly damp grip. "We ought to see more of this sort of initiative." <<nnpc_He 'Quinn'>> studies the room while you lead <<nnpc_him 'Quinn'>> toward the table.
+        <<option 'CN'>>
+          奎恩握住你的手，掌心有些潮湿，力道却很重。“这样的积极举动，应该多一些。”你带<<nnpc_him 'Quinn'>>走向餐桌时，<<nnpc_he 'Quinn'>>仍在审视房间。
+      <</language>>
+  <</switch>>
+<</widget>>
+
+<<widget 'deadwood-banquet-reaction'>>
+  <<switch _args[0]>>
+    <<case 'Robin'>>
+      <<if C.npc.Robin.trauma gte 20>>
+        <<language>>
+          <<option 'EN'>>
+            Robin listens from the chair nearest the door. When you ask <<nnpc_his 'Robin'>> opinion, <<nnpc_he 'Robin'>> answers softly, holding the cup with both hands.
+          <<option 'CN'>>
+            罗宾坐在离门最近的椅子上听着。你问起<<nnpc_his 'Robin'>>的想法时，<<nnpc_he 'Robin'>>两手捧着杯子，轻声回答。
+        <</language>>
+      <<else>>
+        <<language>>
+          <<option 'EN'>>
+            Robin begins with a brief answer, then adds a story of <<nnpc_his 'Robin'>> own once the conversation slows. <<nnpc_He 'Robin'>> smiles when you make room for <<nnpc_him 'Robin'>> to finish.
+          <<option 'CN'>>
+            罗宾起初只答了几句，等谈话慢下来，才补上一段自己的见闻。你留出时间让<<nnpc_him 'Robin'>>说完，<<nnpc_he 'Robin'>>便露出笑容。
+        <</language>>
+      <</if>>
+    <<case 'Kylar'>>
+      <<language>>
+        <<option 'EN'>>
+          Kylar watches who holds your attention. When you turn back toward <<nnpc_him 'Kylar'>>, <<nnpc_he 'Kylar'>> leans forward at once, eager to keep the conversation between the two of you.
+        <<option 'CN'>>
+          凯拉尔一直注意谁占着你的目光。你转回<<nnpc_him 'Kylar'>>这边时，<<nnpc_he 'Kylar'>>立刻向前倾身，急着将谈话留在你们两人之间。
+      <</language>>
+    <<case 'Whitney'>>
+      <<language>>
+        <<option 'EN'>>
+          Whitney cuts into a pause with a crude joke. <<nnpc_He 'Whitney'>> watches your reaction, then settles back, taking another mouthful before anyone can ask for an explanation.
+        <<option 'CN'>>
+          惠特尼趁着谈话停顿插了一句粗俗的玩笑。<<nnpc_he 'Whitney'>>盯着你的反应，随后往后一靠，在别人追问前又吃了一口。
+      <</language>>
+    <<case 'Sydney'>>
+      <<language>>
+        <<option 'EN'>>
+          Sydney puts <<nnpc_his 'Sydney'>> cutlery down to hear the answer. <<nnpc_He 'Sydney'>> asks a precise question, then apologises for turning supper into a lesson.
+        <<option 'CN'>>
+          悉尼放下餐具，认真听完回答。<<nnpc_he 'Sydney'>>提出了一个细致的问题，又为把晚餐弄得像课堂而道了歉。
+      <</language>>
+    <<case 'Avery'>>
+      <<if _banquet.state.topic is 'business'>>
+        <<language>>
+          <<option 'EN'>>
+            Avery sets <<nnpc_his 'Avery'>> glass down. "Put the figures in writing. I'll read them at the office." <<nnpc_He 'Avery'>> asks who would carry the risk, and waits for your answer.
+          <<option 'CN'>>
+            艾弗里放下杯子。“把数字写下来。我会在办公室看。”<<nnpc_he 'Avery'>>问起风险由谁承担，随后等着你的回答。
+        <</language>>
+      <<else>>
+        <<language>>
+          <<option 'EN'>>
+            Avery listens without surrendering the conversation. "And what led you to that?" <<nnpc_He 'Avery'>> asks, testing the reply before allowing the subject to move on.
+          <<option 'CN'>>
+            艾弗里听着，却没有放弃对谈话的掌控。“那你是怎么想到这一点的？”<<nnpc_he 'Avery'>>问，掂量过你的回答，才让话题继续下去。
+        <</language>>
+      <</if>>
+    <<case 'Remy'>>
+      <<language>>
+        <<option 'EN'>>
+          Remy asks how much the evening has cost you. "Fine things need maintaining." <<nnpc_He 'Remy'>> gives the room another measured look. "So do arrangements."
+        <<option 'CN'>>
+          雷米问起今晚花了你多少钱。“好东西需要养护。”<<nnpc_he 'Remy'>>又有分寸地打量了一遍房间。“关系也是。”
+      <</language>>
+    <<case 'Harper'>>
+      <<language>>
+        <<option 'EN'>>
+          Harper lowers <<nnpc_his 'Harper'>> voice as <<nnpc_he 'Harper'>> asks how you have been sleeping. When you steer the conversation back to the table, <<nnpc_he 'Harper'>> smiles and follows your lead.
+        <<option 'CN'>>
+          哈珀压低声音，问你最近睡得怎样。你将话题带回桌边时，<<nnpc_he 'Harper'>>微笑着顺着你说下去。
+      <</language>>
+    <<case 'Leighton'>>
+      <<language>>
+        <<option 'EN'>>
+          Leighton remarks on how difficult it is to keep an institution running. <<nnpc_He 'Leighton'>> names no particular difficulty, leaving you to decide whether to ask.
+        <<option 'CN'>>
+          礼顿提起维持一所机构运转有多费心。<<nnpc_he 'Leighton'>>没有说具体难在哪里，将是否追问留给了你。
+      <</language>>
+    <<case 'Quinn'>>
+      <<language>>
+        <<option 'EN'>>
+          Quinn returns to the town's history, praising the care of old things while watching how the others respond. A question about costs draws a much shorter answer.
+        <<option 'CN'>>
+          奎恩将话题带回小镇历史，一边赞扬保管旧物的用心，一边看着其他人的反应。有人问到费用时，<<nnpc_his 'Quinn'>>的回答便短了许多。
+      <</language>>
+  <</switch>>
+<</widget>>
+
+:: Deadwood Reblooms Property Banquet Plan
+<<deadwood-banquet-header>>
+<<if !_banquet.valid>><<exit>><</if>>
+<<if _banquet.state.stage isnot 'plan'>><<deadwood-banquet-inactive>><<exit>><</if>>
+<<language>>
+  <<option 'EN'>>
+    You lay out a guest list beside the dining arrangements. There is room to receive a few people, provided the chairs are kept clear of the doors. You decide who to invite before ordering the food.
+  <<option 'CN'>>
+    你将宾客名单放在餐桌布置的草稿旁。只要椅子不挡住门，这里就容得下几位来客。订餐之前，你先决定邀请谁。
+<</language>><br><br>
+<<set _banquet_failed to false>>
+<<deadwood-dynamicblock 'deadwood-banquet-plan'>><<deadwood-banquet-plan>><</deadwood-dynamicblock>>
+
+:: Deadwood Reblooms Property Banquet Preparation
+<<deadwood-banquet-header>>
+<<if !_banquet.valid>><<exit>><</if>>
+<<if _banquet.state.stage isnot 'prepared'>>
+  <<language>>
+    <<option 'EN'>>
+      The arrangements could not be confirmed. Check the replies, your bank account and debit card before ordering the food.
+    <<option 'CN'>>
+      晚宴还没能确认下来。订餐前，请检查宾客答复、银行余额与借记卡。
+  <</language>><br><br>
+  <<getouticon>><<lanLink ['Return to the guest list', '返回宾客名单'] 'Deadwood Reblooms Property Banquet Plan'>><</lanLink>><<exit>>
+<</if>>
+<<language>>
+  <<option 'EN'>>
+    You confirm the replies and the bill. The kitchen grows warm as the food is set out, and the lamplight catches the rims of the glasses.
+  <<option 'CN'>>
+    你确认了答复与账单。餐食一一备好，厨房渐渐暖起来，杯沿映着灯光。
+<</language>><br><br>
+<<if _banquet.staff('housekeeper')>>
+  <<language>>
+    <<option 'EN'>>
+      <<print $per_npc[maplebirch.get('Finance').realEstate.staff.key('housekeeper')].name>> clears a route between the table and the door, leaving the personal rooms closed.
+    <<option 'CN'>>
+      保洁员<<print $per_npc[maplebirch.get('Finance').realEstate.staff.key('housekeeper')].name>>收拾出餐桌与门之间的通道，将私人房间的门关好。
+  <</language>><br><br>
+<</if>>
+<<if _banquet.staff('cook')>>
+  <<language>>
+    <<option 'EN'>>
+      <<print $per_npc[maplebirch.get('Finance').realEstate.staff.key('cook')].name>> checks the portions against the accepted invitations. You agree on when the hot dishes should leave the kitchen.
+    <<option 'CN'>>
+      厨师<<print $per_npc[maplebirch.get('Finance').realEstate.staff.key('cook')].name>>按答应赴约的人数核对分量。你和对方商量好热菜出厨房的时间。
+  <</language>><br><br>
+<</if>>
+<<if _banquet.state.refused.length>>
+  <<lanSwitch 'Declined or unavailable tonight: ' '今晚婉拒或抽不开身：'>><<print _banquet.state.refused.map(name => maplebirch.auto(name)).join(lanSwitch(', ', '、'))>><br><br>
+<</if>>
+<<socialiseicon>><<lanLink ['Receive your guests (0:30)', '迎接宾客 (0:30)'] 'Deadwood Reblooms Property Banquet Reception'>>
+  <<if _banquet.arrive()>><<pass 30>><</if>>
+<</lanLink>><br>
+<<getouticon>><<lanLink ['End the evening here', '今晚就到这里'] 'Deadwood Reblooms Property Banquet End'>><<run _banquet.close(true)>><</lanLink>>
+
+:: Deadwood Reblooms Property Banquet Reception
+<<deadwood-banquet-header>>
+<<if !_banquet.valid>><<exit>><</if>>
+<<if _banquet.state.stage isnot 'reception'>><<deadwood-banquet-inactive>><<exit>><</if>>
+<<for _guest range _banquet.state.arrived>>
+  <<deadwood-banquet-arrival _guest>><br><br>
+  <<deadwood-banquet-followup _guest>>
+<</for>>
+<<if _banquet.state.left.length>>
+  <<language>>
+    <<option 'EN'>>
+      A last-minute message arrives. <span class='lblue'><<print _banquet.state.left.map(name => maplebirch.auto(name)).join(', ')>></span> can no longer make it. You leave those places empty.
+    <<option 'CN'>>
+      临时送来的口信说，<span class='lblue'><<print _banquet.state.left.map(name => maplebirch.auto(name)).join('、')>></span>已经不能赴约。你留着那些空座位。
+  <</language>><br><br>
+<</if>>
+<<if _banquet.staff('steward')>>
+  <<language>>
+    <<option 'EN'>>
+      <<print $per_npc[maplebirch.get('Finance').realEstate.staff.key('steward')].name>> takes the coats and checks the list quietly. You remain at the door to greet each person yourself.
+    <<option 'CN'>>
+      管家<<print $per_npc[maplebirch.get('Finance').realEstate.staff.key('steward')].name>>接过外套，轻声核对名单。你仍留在门边，亲自迎接每一位来客。
+  <</language>><br><br>
+<</if>>
+<<if _banquet.staff('guard')>>
+  <<language>>
+    <<option 'EN'>>
+      <<print $per_npc[maplebirch.get('Finance').realEstate.staff.key('guard')].name>> stays by the entrance, keeping uninvited visitors outside. Inside, the evening is yours to manage.
+    <<option 'CN'>>
+      门卫<<print $per_npc[maplebirch.get('Finance').realEstate.staff.key('guard')].name>>守在入口，将没有受邀的人留在外面。屋里的晚宴仍由你来主持。
+  <</language>><br><br>
+<</if>>
+<<foodicon>><<lanLink ['Take your places for supper (0:45)', '入席用餐 (0:45)'] 'Deadwood Reblooms Property Banquet Dinner'>>
+  <<if _banquet.serve()>><<pass 45>><</if>>
+<</lanLink>><br>
+<<getouticon>><<lanLink ['Bring the evening to a close', '提前结束晚宴'] 'Deadwood Reblooms Property Banquet End'>><<run _banquet.close(true)>><</lanLink>>
+
+:: Deadwood Reblooms Property Banquet Dinner
+<<deadwood-banquet-header>>
+<<if !_banquet.valid>><<exit>><</if>>
+<<if _banquet.state.stage isnot 'dinner'>><<deadwood-banquet-inactive>><<exit>><</if>>
+<<language>>
+  <<option 'EN'>>
+    Plates pass along the table. The first talk is about the weather and the journey here, but there is room to change the subject once everyone has eaten. You choose how to spend the rest of the evening.
+  <<option 'CN'>>
+    餐盘沿着桌子递过去。最初的谈话围着天气和来时的路打转，吃过东西后，便有了转开话题的余地。你决定剩下的时间怎么度过。
+<</language>><br><br>
+<<englishicon>><<lanLink ['Keep the conversation moving (0:30)', '照应桌边的谈话 (0:30)'] 'Deadwood Reblooms Property Banquet Farewell'>>
+  <<if _banquet.host('conversation', $english)>><<pass 30>><</if>>
+<</lanLink>> | <span class='lblue'><<lanSwitch 'English' '语文'>></span><br>
+<<historyicon>><<lanLink ['Discuss the town’s history (0:30)', '聊聊小镇的历史 (0:30)'] 'Deadwood Reblooms Property Banquet Farewell'>>
+  <<if _banquet.host('history', $history)>><<pass 30>><</if>>
+<</lanLink>> | <span class='lblue'><<lanSwitch 'History' '历史'>></span><br>
+<<icon 'broom-dustpan.png'>><<lanLink ['Attend to the dishes and service (0:30)', '照看餐食与上菜 (0:30)'] 'Deadwood Reblooms Property Banquet Farewell'>>
+  <<if _banquet.host('service', $housekeeping)>><<pass 30>><</if>>
+<</lanLink>> | <span class='lblue'><<lanSwitch 'Housekeeping' '家务'>></span><br>
+<<if _banquet.state.formal>>
+  <<mathicon>><<lanLink ['Discuss costs and practical arrangements (0:30)', '谈谈开支与实际安排 (0:30)'] 'Deadwood Reblooms Property Banquet Farewell'>>
+    <<if _banquet.host('business', $maths)>><<pass 30>><</if>>
+  <</lanLink>> | <span class='lblue'><<lanSwitch 'Mathematics' '数学'>></span><br>
+<</if>><br>
+<<getouticon>><<lanLink ['End the evening early', '提前结束晚宴'] 'Deadwood Reblooms Property Banquet End'>><<run _banquet.close(true)>><</lanLink>>
+
+:: Deadwood Reblooms Property Banquet Farewell
+<<deadwood-banquet-header>>
+<<if !_banquet.valid>><<exit>><</if>>
+<<if _banquet.state.stage isnot 'farewell'>><<deadwood-banquet-inactive>><<exit>><</if>>
+<<switch _banquet.state.topic>>
+  <<case 'conversation'>>
+    <<language>>
+      <<option 'EN'>>
+        You bring the quieter guests into the conversation, and find a moment to change the subject when an answer grows uncomfortable.
+      <<option 'CN'>>
+        你给安静的宾客留出说话的机会，也在回答变得不自在时，找个空隙换开话题。
+    <</language>>
+  <<case 'history'>>
+    <<language>>
+      <<option 'EN'>>
+        You discuss the old buildings and the history behind the street names. The view from your windows gives everyone something concrete to point to.
+      <<option 'CN'>>
+        你说起旧建筑和街道名字背后的历史。窗外的景色让大家有了可以指给彼此看的东西。
+    <</language>>
+  <<case 'business'>>
+    <<language>>
+      <<option 'EN'>>
+        You keep the figures modest and specific: materials, delivery times and the people needed to do the work. Any decision will still need papers and a separate meeting.
+      <<option 'CN'>>
+        你将数字讲得具体：材料、交付时间，以及完成工作需要的人手。要作决定，仍得另约会面、核对文件。
+    <</language>>
+  <<case 'service'>>
+    <<language>>
+      <<option 'EN'>>
+        You attend to the timing of the hot dishes and the empty glasses, leaving space for people to finish what they are saying.
+      <<option 'CN'>>
+        你照看热菜和空杯的时间，留出空隙让桌边的人把话说完。
+    <</language>>
+<</switch>><br><br>
+<<if _banquet.state.result is 'good'>>
+  <span class='green'><<lanSwitch 'The evening finds an easy rhythm. Even the pauses leave room for another person to speak.' '晚宴渐渐顺畅起来，连停顿都给下一个人留出了说话的余地。'>></span><br><br>
+<<elseif _banquet.state.result is 'mixed'>>
+  <<lanSwitch 'A few pauses need rescuing, but you find your way back to a comfortable subject.' '有几次冷场需要你接过去，最后还是找回了让人自在的话题。'>><br><br>
+<<else>>
+  <span class='purple'><<lanSwitch 'You lose the thread more than once. By the end, people are checking the clock between answers.' '你不止一次没能接住话头。到最后，宾客们已在回答的间隙看起了钟。'>></span><br><br>
+<</if>>
+<<for _guest range _banquet.state.arrived>>
+  <<deadwood-banquet-reaction _guest>><br><br>
+<</for>>
+<<if _banquet.state.arrived.includes('Sydney')>>
+  <<language>>
+    <<option 'EN'>>
+      Sydney checks the time again. "Thank you. I should get back before prayers." You leave the way to the door clear.
+    <<option 'CN'>>
+      悉尼又看了眼时间。“谢谢，我该在晚祷前回去了。”你没有挡住去门口的路。
+  <</language>><br><br>
+<</if>>
+<<socialiseicon>><<lanLink ['See your guests out (0:15)', '送别宾客 (0:15)'] 'Deadwood Reblooms Property Banquet End'>>
+  <<pass 15>><<run _banquet.close()>>
+<</lanLink>>
+
+:: Deadwood Reblooms Property Banquet End
+<<set _banquet to maplebirch.get('Finance').realEstate.banquet>>
+<<if _banquet.state.stage isnot 'finished'>><<deadwood-banquet-inactive>><<exit>><</if>>
+<<set _property to maplebirch.get('Finance').realEstate.current>>
+<<if _property>><<run maplebirch.get('Finance').realEstate.enter()>><<effects>><</if>>
+<<if _banquet.state.interrupted>>
+  <<language>>
+    <<option 'EN'>>
+      You bring the evening to a close. The food has been paid for, and the remaining arrangements wait beside the empty table.
+    <<option 'CN'>>
+      你结束了今晚的安排。餐食已经付过钱，剩下的东西留在空餐桌旁。
+  <</language>>
+<<else>>
+  <<language>>
+    <<option 'EN'>>
+      The last guest collects their coat. You close the door on the street noise and turn back to the used plates. The house is your home again.
+    <<option 'CN'>>
+      最后一位来客拿起外套。你关上门，将街上的声音留在外面，回头看向用过的餐盘。房子又只是你的家了。
+  <</language>>
+<</if>><br><br>
+<<if _banquet.state.stage is 'finished'>>
+  <<for _guest range _banquet.state.arrived.filter(name => !_banquet.state.left.includes(name))>>
+    <<deadwood-banquet-departure _guest>>
+  <</for>>
+<</if>>
+<<if _banquet.staff('housekeeper')>>
+  <<language>>
+    <<option 'EN'>>
+      <<print $per_npc[maplebirch.get('Finance').realEstate.staff.key('housekeeper')].name>> starts clearing the table while you put the guest list away.
+    <<option 'CN'>>
+      保洁员<<print $per_npc[maplebirch.get('Finance').realEstate.staff.key('housekeeper')].name>>开始收拾餐桌，你把宾客名单收了起来。
+  <</language>><br><br>
+<</if>>
+<<getouticon>><<lanLink ['Return to the room', '回到房间'] _banquet.returnPassage>><<run maplebirch.get('Finance').realEstate.setFloor(_banquet.state.floor)>><</lanLink>>

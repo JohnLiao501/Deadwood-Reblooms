@@ -178,7 +178,7 @@
 
 <!-- 摩天大楼套房 -->
 
-<<widget 'deadwood-company-suite-journal'>>
+<<widget 'deadwood-property-suite-record'>>
   <<set _suite to maplebirch.get('Finance').company.suite>>
   <<if _suite.state.signed>>
     <ul class='journal'>
@@ -186,10 +186,9 @@
         <li><<language>>
           <<option 'EN'>>
             You hold an accommodation agreement for a private suite in the skyscraper on <span class='teal'>Elk Street</span>.
-            The residents' lift is in the lobby. Weekly upkeep is <<printmoney _suite.upkeep>>.
+            The residents' lift is in the lobby.
           <<option 'CN'>>
             你签有<span class='teal'>麋鹿街摩天大楼</span>私人套房的住宿协议，住户电梯在大厅里。
-            每周维护费为<<printmoney _suite.upkeep>>。
         <</language>></li>
         <<if _suite.state.notice_day isnot null>>
           <li class='red'>
@@ -348,70 +347,78 @@
         <li><<deadwood-finance-paper-summary>></li>
       <</if>>
     </ul>
-    <<if Object.values($Finance.real_estate.owned).some(Boolean) or $Finance.real_estate.last_auction>>
-      <<deadwood-card 'Property details and repayment notices' '房产明细与还款提醒'>>
-        <ul class='journal'>
-          <<for _finance_property range maplebirch.get("Finance").realEstate.properties>>
-            <<capture _finance_property>>
-              <<if maplebirch.get("Finance").realEstate.owns(_finance_property.id)>>
-                <<set _finance_property_state to maplebirch.get("Finance").realEstate.managementFor(_finance_property.id)>>
-                <<set _finance_property_upkeep to maplebirch.get("Finance").realEstate.maintenanceCost(_finance_property.id)>>
-                <li>
-                  <span class='gold'><<= lanSwitch(_finance_property.name.EN, _finance_property.name.CN)>></span>
-                  <<lanSwitch ': ' '：'>>
-                  <<if _finance_property_state.rented>>
-                    <<set _finance_property_rent to maplebirch.get("Finance").realEstate.weeklyRent(_finance_property.id)>>
-                    <<lanSwitch 'Rented out, weekly rent: ' '已出租，每周租金：'>>
-                    <<deadwood-reblooms-finance-money _finance_property_rent>>
-                  <<elseif _finance_property_state.auction_day isnot null>>
-                    <span class='blue'><<lanSwitch 'Auction closes on day ' '拍卖于第 '>>
-                    <<= _finance_property_state.auction_day>><<lanSwitch '.' ' 天结束。'>></span>
-                  <<else>>
-                    <span class='green'><<lanSwitch 'Your home' '你的住所'>></span>
-                  <</if>>
-                  <br><<lanSwitch 'Weekly upkeep: ' '每周维护费：'>>
-                  <<deadwood-reblooms-finance-money _finance_property_upkeep>>
-                  <<lanSwitch ', next settlement: ' '，下次结算：'>>
-                  <<deadwood-reblooms-finance-date _finance_property_state.next_settlement_day>><<lanSwitch '.' '。'>>
-                  <br><<lanSwitch 'Condition: ' '房屋状况：'>><<= _finance_property_state.condition>>/100
-                  <<if _finance_property_state.lease_end_day isnot null>>
-                    <span class='blue'><<lanSwitch ' Tenant leaves on day ' ' 租客将在第 '>>
-                    <<= _finance_property_state.lease_end_day>><<lanSwitch '.' ' 天退租。'>></span>
-                  <</if>>
-                  <<if _finance_mortgage?.property_id is _finance_property.id>>
-                    <br><<lanSwitch 'Mortgage balance: ' '房贷余额：'>><<deadwood-reblooms-finance-money _finance_mortgage.outstanding>>
-                    · <<lanSwitch 'Weekly interest: ' '周利率：'>><span class='gold'><<= (_finance_mortgage.weekly_rate * 100).toFixed(2)>>%</span>
-                    <br><<lanSwitch 'Next instalment: ' '下次应还：'>><<deadwood-reblooms-finance-money _finance_mortgage.weekly_payment>>
-                    · <<deadwood-reblooms-finance-date _finance_mortgage.next_payment_day>>
-                    <br><<lanSwitch 'Final payment: ' '贷款到期：'>><<deadwood-reblooms-finance-date _finance_mortgage.maturity_day>>
-                    <<if _finance_mortgage.arrears gt 0>>
-                      <br><span class='red'><<lanSwitch 'Overdue: ' '逾期款：'>></span><<deadwood-reblooms-finance-money _finance_mortgage.arrears 'red'>>
-                    <</if>>
-                    <<if _finance_mortgage.stage is 'notice'>>
-                      <br><span class='red'><<lanSwitch 'The bank has issued a payment notice.' '银行已发出催缴通知。'>></span>
-                      <<if _finance_mortgage.bailey_pending>><<lanSwitch ' Bailey is waiting outside the financial centre.' ' 贝利正在金融中心门外等你。'>><</if>>
-                    <<elseif _finance_mortgage.stage is 'frozen'>>
-                      <br><span class='red'><<lanSwitch 'The property is frozen. Foreclosure auction: ' '房产已冻结，强制拍卖日期：'>></span><<deadwood-reblooms-finance-date `_finance_mortgage.frozen_day + maplebirch.get('Finance').realEstate.mortgage.terms.auction_after_freeze_days`>>
-                    <</if>>
-                  <</if>>
-                </li>
+    <<for _finance_property range maplebirch.get('Finance').realEstate.properties>>
+      <<capture _finance_property>>
+        <<if maplebirch.get('Finance').realEstate.owns(_finance_property.id) or (_finance_property.tenure is 'company' and $Finance.company.suite.signed and ($Finance.company.suite.arrears gt 0 or Object.values($wardrobes.deadwood_penthouse ?? {}).some(items => Array.isArray(items) and items.length gt 0)))>>
+          <<set _finance_property_state to maplebirch.get('Finance').realEstate.managementFor(_finance_property.id)>>
+          <<set _finance_property_upkeep to maplebirch.get('Finance').realEstate.maintenanceCost(_finance_property.id)>>
+          <<deadwood-card _finance_property.name.EN _finance_property.name.CN>>
+            <<if _finance_property.tenure is 'company'>><<deadwood-property-suite-record>><</if>>
+            <<if maplebirch.get('Finance').realEstate.owns(_finance_property.id)>>
+              <<if _finance_property_state.rented>>
+                <<set _finance_property_rent to maplebirch.get("Finance").realEstate.weeklyRent(_finance_property.id)>>
+                <<lanSwitch 'Rented out, weekly rent: ' '已出租，每周租金：'>>
+                <<deadwood-reblooms-finance-money _finance_property_rent>>
+              <<elseif _finance_property_state.auction_day isnot null>>
+                <span class='blue'><<lanSwitch 'Auction closes on day ' '拍卖于第 '>>
+                <<= _finance_property_state.auction_day>><<lanSwitch '.' ' 天结束。'>></span>
+              <<else>>
+                <span class='green'><<lanSwitch 'Your home' '你的住所'>></span>
               <</if>>
-            <</capture>>
-          <</for>>
-          <<if $Finance.real_estate.last_auction>>
-            <<set _finance_auction to $Finance.real_estate.last_auction>>
-            <<set _finance_auction_property to maplebirch.get("Finance").realEstate.properties.find(item => item.id === _finance_auction.property_id)>>
-            <<if _finance_auction_property>>
-              <li>
-                <<lanSwitch 'Last auction: ' '最近一次拍卖：'>>
-                <span class='gold'><<= lanSwitch(_finance_auction_property.name.EN, _finance_auction_property.name.CN)>></span><br>
-                <<lanSwitch 'Proceeds returned to bank: ' '返还银行账户：'>>
-                <<deadwood-reblooms-finance-money _finance_auction.surplus>>
-              </li>
+              <br><<lanSwitch 'Weekly upkeep: ' '每周维护费：'>>
+              <<deadwood-reblooms-finance-money _finance_property_upkeep>>
+              <<lanSwitch ', next settlement: ' '，下次结算：'>>
+              <<deadwood-reblooms-finance-date `_finance_property.tenure === 'company' ? $Finance.company.suite.next_upkeep_day : _finance_property_state.next_settlement_day`>><<lanSwitch '.' '。'>>
+              <br><<lanSwitch 'Condition: ' '房屋状况：'>><<= _finance_property_state.condition>>/100
+              <<if maplebirch.get('Finance').realEstate.staff.weekly(_finance_property.id) gt 0>>
+                <br><<lanSwitch 'Household weekly wages: ' '住宅雇员周薪：'>><<printmoney `maplebirch.get('Finance').realEstate.staff.weekly(_finance_property.id)`>>
+                <<for _journal_role range maplebirch.get('Finance').realEstate.staff.roles>>
+                  <<set _journal_contract to _finance_property_state.staff?.contracts[_journal_role]>>
+                  <<if _journal_contract?.employed>>
+                    <<set _journal_person to $per_npc['deadwood_home_' + _finance_property.id + '_' + _journal_role]>>
+                    <br><<icon `maplebirch.get('Finance').realEstate.staff.terms[_journal_role].icon`>><<= lanSwitch(maplebirch.get('Finance').realEstate.staff.terms[_journal_role].name.EN, maplebirch.get('Finance').realEstate.staff.terms[_journal_role].name.CN)>><<if _journal_person?.name_known is 1>> · <<print _journal_person.name>><</if>> · <<lanSwitch 'Renewal: ' '下次续付：'>><<deadwood-reblooms-finance-date _journal_contract.paid_until>>
+                    <<if _journal_contract.paid_until lte Time.days>><span class='red'> | <<lanSwitch 'Work suspended' '工作暂停'>></span><</if>>
+                  <</if>>
+                <</for>>
+              <</if>>
+              <<if $Finance.real_estate.banquet?.property is _finance_property.id and ['plan', 'prepared', 'reception', 'dinner', 'farewell'].includes($Finance.real_estate.banquet?.stage)>>
+                <br><span class='blue'><<lanSwitch 'A private dinner is being arranged here.' '你正在这里筹办私人宴会。'>></span>
+              <</if>>
+              <<if _finance_property_state.lease_end_day isnot null>>
+                <br><span class='blue'><<lanSwitch 'Tenant leaves on day ' '租客将在第 '>>
+                <<= _finance_property_state.lease_end_day>><<lanSwitch '.' ' 天退租。'>></span>
+              <</if>>
+              <<if _finance_mortgage?.property_id is _finance_property.id>>
+                <br><<lanSwitch 'Mortgage balance: ' '房贷余额：'>><<deadwood-reblooms-finance-money _finance_mortgage.outstanding>>
+                · <<lanSwitch 'Weekly interest: ' '周利率：'>><span class='gold'><<= (_finance_mortgage.weekly_rate * 100).toFixed(2)>>%</span>
+                <br><<lanSwitch 'Next instalment: ' '下次应还：'>><<deadwood-reblooms-finance-money _finance_mortgage.weekly_payment>>
+                · <<deadwood-reblooms-finance-date _finance_mortgage.next_payment_day>>
+                <br><<lanSwitch 'Final payment: ' '贷款到期：'>><<deadwood-reblooms-finance-date _finance_mortgage.maturity_day>>
+                <<if _finance_mortgage.arrears gt 0>>
+                  <br><span class='red'><<lanSwitch 'Overdue: ' '逾期款：'>></span><<deadwood-reblooms-finance-money _finance_mortgage.arrears 'red'>>
+                <</if>>
+                <<if _finance_mortgage.stage is 'notice'>>
+                  <br><span class='red'><<lanSwitch 'The bank has issued a payment notice.' '银行已发出催缴通知。'>></span>
+                  <<if _finance_mortgage.bailey_pending>><<lanSwitch ' Bailey is waiting outside the financial centre.' ' 贝利正在金融中心门外等你。'>><</if>>
+                <<elseif _finance_mortgage.stage is 'frozen'>>
+                  <br><span class='red'><<lanSwitch 'The property is frozen. Foreclosure auction: ' '房产已冻结，强制拍卖日期：'>></span><<deadwood-reblooms-finance-date `_finance_mortgage.frozen_day + maplebirch.get('Finance').realEstate.mortgage.terms.auction_after_freeze_days`>>
+                <</if>>
+              <</if>>
             <</if>>
-          <</if>>
-        </ul>
-      <</deadwood-card>>
+          <</deadwood-card>>
+        <</if>>
+      <</capture>>
+    <</for>>
+    <<if $Finance.real_estate.last_auction>>
+      <<set _finance_auction to $Finance.real_estate.last_auction>>
+      <<set _finance_auction_property to maplebirch.get('Finance').realEstate.properties.find(item => item.id === _finance_auction.property_id)>>
+      <<if _finance_auction_property>>
+        <<deadwood-card 'Last auction' '最近一次拍卖'>>
+          <span class='gold'><<= lanSwitch(_finance_auction_property.name.EN, _finance_auction_property.name.CN)>></span><br>
+          <<lanSwitch 'Proceeds returned to bank: ' '返还银行账户：'>>
+          <<deadwood-reblooms-finance-money _finance_auction.surplus>>
+        <</deadwood-card>>
+      <</if>>
     <</if>>
     <hr>
   <</if>>
@@ -548,9 +555,10 @@
           <<set _rent to _account_management.rented and Time.days gte _account_management.vacancy_until ? _estate.weeklyRent(_account_property.id) : 0>>
           <<set _upkeep to _estate.maintenanceCost(_account_property.id)>>
           <<set _fee to _account_management.managed ? Math.max(_estate.rentalTerms.managementMinimumPennies, Math.ceil(_estate.weeklyRent(_account_property.id) * _estate.rentalTerms.managementFeeRate)) : 0>>
-          <<set _account_rent += _rent, _account_cost += _upkeep + _fee>>
+          <<set _wages to _estate.staff.weekly(_account_property.id)>>
+          <<set _account_rent += _rent, _account_cost += _upkeep + _fee + _wages>>
           <span><<= lanSwitch(_account_property.name.EN, _account_property.name.CN)>></span>
-          <span><<deadwood-reblooms-finance-money _rent 'green'>> / <<deadwood-reblooms-finance-money `_upkeep + _fee` 'red'>></span>
+          <span><<deadwood-reblooms-finance-money _rent 'green'>> / <<deadwood-reblooms-finance-money `_upkeep + _fee + _wages` 'red'>></span>
         <</if>>
       <</for>>
       <<if $Finance.real_estate.mortgage>>
@@ -570,7 +578,7 @@
   <<set _operations_company to _operations_finance.company>>
   <<if !_operations_company.state.office and !_operations_factories.length and !_operations_company.state.contract>><<exit>><</if>>
   <<set _operations_staff_debt to _operations_company.staff.arrears>>
-  <<set _operations_arrears to _operations_company.state.rent_arrears + _operations_staff_debt + _operations_company.suite.state.arrears + _operations_factories.reduce((sum, factory) => sum + factory.wage_arrears + factory.overhead_arrears, 0)>>
+  <<set _operations_arrears to _operations_company.state.rent_arrears + _operations_staff_debt + _operations_factories.reduce((sum, factory) => sum + factory.wage_arrears + factory.overhead_arrears, 0)>>
   <<set _operations_receivables to _operations_factories.reduce((sum, factory) => sum + factory.invoices.reduce((total, invoice) => total + invoice.order.total, 0) + factory.laboratory.invoices.reduce((total, invoice) => total + invoice.total, 0), 0)>>
   <<if ['disputed', 'waiting'].includes(_operations_company.state.contract?.stage)>>
     <<set _operations_receivables += _operations_company.state.contract.due>>

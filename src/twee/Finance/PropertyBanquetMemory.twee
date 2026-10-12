@@ -1,0 +1,171 @@
+:: Deadwood Reblooms Property Banquet Memory Widgets [widget]
+
+<<widget 'deadwood-banquet-followup'>>
+  <<if !$Finance or !maplebirch.get('Finance')>><<exit>><</if>>
+  <<set _memory_name to _args[0]>>
+  <<set _memory_banquet to maplebirch.get('Finance').realEstate.banquet>>
+  <<if !_memory_banquet.recall(_memory_name)>><<exit>><</if>>
+  <<capture _memory_name>>
+    <span @id="'deadwood-banquet-memory-' + _memory_name">
+      <<socialiseicon>><<lanLink ['Mention the last dinner party (0:05)', '聊聊上次的晚宴 (0:05)']>>
+        <<set _banquet_memory to maplebirch.get('Finance').realEstate.banquet.take(_memory_name)>>
+        <<replace `'#deadwood-banquet-memory-' + _memory_name`>>
+          <<if _banquet_memory>>
+            <<deadwood-banquet-memory-reply _memory_name _banquet_memory>><<pass 5>>
+          <<else>>
+            <<lanSwitch 'You leave the subject for another time.' '你把这个话题留到下次。'>>
+          <</if>>
+        <</replace>>
+      <</lanLink>>
+    </span><br>
+  <</capture>>
+<</widget>>
+
+<<widget 'deadwood-banquet-memory-reply'>>
+  <<set _memory_name to _args[0], _memory to _args[1]>>
+  <<set _memory_property to maplebirch.get('Finance').realEstate.properties.find(property => property.id === _memory.property)>>
+  <<language>>
+    <<option 'EN'>>
+      You mention the evening at <<= _memory_property?.name.EN ?? 'your home'>>.
+    <<option 'CN'>>
+      你提起在<<= _memory_property?.name.CN ?? '家里'>>招待大家的那一晚。
+  <</language>>
+  <<if _memory.result is 'early'>>
+    <<language>>
+      <<option 'EN'>>
+        <<switch _memory_name>>
+          <<case 'Robin'>>"We didn't get much time together," Robin says. "Could we sit for a little longer next time?"
+          <<case 'Whitney'>>"Over already?" Whitney laughs. "Next time, give me time to settle in, slut."
+          <<case 'Kylar'>>"I wanted longer with you." Kylar watches your face. "It could be just us next time."
+          <<case 'Sydney'>>"I had more I wanted to ask you," Sydney says. "Perhaps we can pick up the conversation another day."
+          <<case 'Avery'>>"Next time, set aside the evening before you invite people." Avery waits for your response.
+          <<case 'Remy'>>"A lot of arranging for a short visit." Remy studies you. "Get the timing right next time."
+          <<case 'Harper'>>"A rather brief evening," Harper says with a smile. "I hope you were feeling well afterwards."
+          <<case 'Leighton'>>"A clear finishing time helps people plan," Leighton says. "Give everyone one with the next invitation."
+          <<case 'Quinn'>>Quinn nods. "We all have other engagements. Let me know when you arrange the next one."
+        <</switch>>
+      <<option 'CN'>>
+        <<switch _memory_name>>
+          <<case 'Robin'>>“还没坐多久就散了。”罗宾说。“下次，能多坐一会儿吗？”
+          <<case 'Whitney'>>“这就完了？”惠特尼笑了。“下次，等我坐够了再散场，骚货。”
+          <<case 'Kylar'>>“我还想多陪你一会儿。”凯拉尔盯着你的脸。“下次，可以只有我们。”
+          <<case 'Sydney'>>“还有些事想问你呢。”悉尼说。“改天再接着聊吧。”
+          <<case 'Avery'>>“下次请人来之前，先把晚上的时间空出来。”艾弗里等着你的回应。
+          <<case 'Remy'>>“忙活这么多，只坐这么一会儿。”雷米打量着你。“下次，把时间排好。”
+          <<case 'Harper'>>“挺短的一晚。”哈珀微笑着说。“希望你后来身体还好。”
+          <<case 'Leighton'>>“散场时间定清楚，大家才好安排。”礼顿说。“下次，和邀请一起告诉他们。”
+          <<case 'Quinn'>>奎恩点点头。“大家都有别的安排。下次筹备好了，再通知我。”
+        <</switch>>
+    <</language>><<exit>>
+  <</if>>
+  <<switch _memory_name>>
+    <<case 'Robin'>>
+      <<language>>
+        <<option 'EN'>>
+          <<if C.npc.Robin.trauma gte 20>>"I liked having somewhere quiet to sit afterwards," Robin says. "Could we keep that next time?"
+          <<elseif _memory.result is 'good'>>Robin smiles. "I liked hearing everyone talk. You found time for me too." <<nnpc_He 'Robin'>> asks whether you kept the table the same afterwards.
+          <<else>>"You had a lot to do," Robin says. "Ask me to help with the cups next time." <<nnpc_He 'Robin'>> waits to hear what you thought of the evening.<</if>>
+        <<option 'CN'>>
+          <<if C.npc.Robin.trauma gte 20>>“后来能找个安静地方坐坐，挺好的。”罗宾说。“下次，也留着好吗？”
+          <<elseif _memory.result is 'good'>>罗宾笑了。“听大家说话挺有意思。你也没忘了陪我。”<<nnpc_he 'Robin'>>问，后来有没有把餐桌的摆法留着。
+          <<else>>“你要忙的太多了。”罗宾说。“下次收杯子，叫我帮忙吧。”<<nnpc_he 'Robin'>>等着听你怎么看那一晚。<</if>>
+      <</language>>
+    <<case 'Whitney'>>
+      <<language>>
+        <<option 'EN'>>
+          <<if _memory.result is 'good'>>"Food was decent. Some of the jokes too." Whitney grins. "You been practising playing host, slut?"
+          <<else>>Whitney laughs. "Next time, stop fussing over the fucking plates and sit with me." <<nnpc_He 'Whitney'>> watches your face before adding, "I still ate, didn't I?"<</if>>
+        <<option 'CN'>>
+          <<if _memory.result is 'good'>>“菜还行。有些笑话也是。”惠特尼咧嘴笑了。“练过怎么当主人啊，骚货？”
+          <<else>>惠特尼笑了。“下次别他妈老盯着盘子，坐下来陪我。”<<nnpc_he 'Whitney'>>看着你的脸，又补了一句：“我不是照样吃了吗？”<</if>>
+      <</language>>
+    <<case 'Kylar'>>
+      <<language>>
+        <<option 'EN'>>
+          <<if C.npc.Kylar.rage gte 60>>"They all wanted to talk to you." Kylar turns the memory over before looking up. "Could the next evening be just us?"
+          <<else>>"I remembered where you put my chair." Kylar smiles briefly. "Next time, could I sit there again?"<</if>> You leave the next invitation undecided.
+        <<option 'CN'>>
+          <<if C.npc.Kylar.rage gte 60>>“他们都想跟你说话。”凯拉尔又想了一会儿，才抬起头。“下一次，能只有我们吗？”
+          <<else>>“我还记得你给我安排的椅子。”凯拉尔短短地笑了一下。“下次，还能坐那里吗？”<</if>>你没有就此定下下一次邀请。
+      <</language>>
+    <<case 'Sydney'>>
+      <<run statusCheck('Sydney')>>
+      <<language>>
+        <<option 'EN'>>
+          <<if _memory.result is 'good'>>Sydney remembers part of the conversation. <<if _sydneyStatus.includes('corrupt')>>"I nearly forgot to check the clock. That says something." <<nnpc_He 'Sydney'>> smiles.<<else>>"Thank you for leaving me enough time to get back." <<nnpc_He 'Sydney'>> asks about a subject you had not finished discussing.<</if>>
+          <<else>>"There was rather a lot happening at once," Sydney says gently. "A smaller table might make it easier to hear each other."<</if>>
+        <<option 'CN'>>
+          <<if _memory.result is 'good'>>悉尼还记得谈话中的一段。<<if _sydneyStatus.includes('corrupt')>>“我差点忘了看钟。这可不常有。”<<nnpc_he 'Sydney'>>笑了。<<else>>“谢谢你给我留够回去的时间。”<<nnpc_he 'Sydney'>>又问起没聊完的话题。<</if>>
+          <<else>>“同时要照看的事有些多。”悉尼轻声说。“桌子小些，也许更容易听清彼此。”<</if>>
+      <</language>>
+    <<case 'Avery'>>
+      <<language>>
+        <<option 'EN'>>
+          <<if _memory.topic is 'business'>>Avery recalls the figures you discussed. "Send them to the office. An evening's conversation isn't a signed agreement."
+          <<elseif _memory.result is 'good'>>"You kept the evening moving." Avery lets the compliment stand for a moment. "I'd be interested to see what you arrange next."
+          <<else>>"A host has to choose where to put their attention." Avery studies you. "You tried to do too much at once."<</if>>
+        <<option 'CN'>>
+          <<if _memory.topic is 'business'>>艾弗里还记得你们谈过的数字。“送到办公室。晚宴上的谈话，还算不上签好的协议。”
+          <<elseif _memory.result is 'good'>>“整晚的安排倒挺顺畅。”艾弗里让这句夸奖停了一会儿。“我想看看，你下次又会怎么安排。”
+          <<else>>“主人也得决定把注意力放在哪里。”艾弗里审视着你。“你想同时照看太多事了。”<</if>>
+      <</language>>
+    <<case 'Remy'>>
+      <<language>>
+        <<option 'EN'>>
+          Remy remembers the room before the menu. <<if _memory.result is 'good'>>"You put it to good use." <<nnpc_He 'Remy'>> asks whether the household has settled back into its routine.<<else>>"There was a lot of running about. Plan the work before bringing everyone in." <<nnpc_He 'Remy'>> taps a finger against the nearest surface.<</if>>
+        <<option 'CN'>>
+          雷米先想起房间，再想起菜单。<<if _memory.result is 'good'>>“这地方，倒让你用得不错。”<<nnpc_he 'Remy'>>问，家里后来有没有恢复平常的作息。<<else>>“走来走去的事太多。把人请来之前，先排好要做的事。”<<nnpc_he 'Remy'>>用指尖敲了敲手边。<</if>>
+      <</language>>
+    <<case 'Harper'>>
+      <<language>>
+        <<option 'EN'>>
+          Harper smiles. <<if _memory.result is 'good'>>"You seemed quite at home."<<else>>"You were working rather hard to look after everyone."<</if>> <<nnpc_He 'Harper'>> asks whether you slept well afterwards. You can leave the answer brief.
+        <<option 'CN'>>
+          哈珀微笑着。<<if _memory.result is 'good'>>“你在自己的地方，倒挺自在。”<<else>>“为了照看大家，你忙得可不轻。”<</if>><<nnpc_he 'Harper'>>问起你后来睡得怎样，你只简短答了几句。
+      <</language>>
+    <<case 'Leighton'>>
+      <<language>>
+        <<option 'EN'>>
+          <<if _memory.result is 'good'>>Leighton praises the orderly arrangement, then asks how much advance planning it took.
+          <<else>>Leighton suggests keeping a written running order. "A little structure spares everyone the uncertainty."<</if>> <<nnpc_He 'Leighton'>> waits to see whether you ask for more advice.
+        <<option 'CN'>>
+          <<if _memory.result is 'good'>>礼顿夸了那晚有条理的安排，又问起你提前准备了多久。
+          <<else>>礼顿建议把流程写下来。“安排明确些，也省得大家等着猜。”<</if>><<nnpc_he 'Leighton'>>等着看你会不会继续请教。
+      <</language>>
+    <<case 'Quinn'>>
+      <<language>>
+        <<option 'EN'>>
+          Quinn remembers the other names on the guest list. <<if _memory.result is 'good'>>"A promising gathering. We should keep in touch."<<else>>"These things take practice."<</if>> A question about the bill receives a polite nod and a change of subject.
+        <<option 'CN'>>
+          奎恩还记得宾客名单上的其他名字。<<if _memory.result is 'good'>>“这次聚会，很有前景。以后该多联系。”<<else>>“这样的安排，总要练习。”<</if>>你提到开支时，<<nnpc_he 'Quinn'>>礼貌地点点头，换了话题。
+      <</language>>
+  <</switch>>
+<</widget>>
+
+<<widget 'deadwood-banquet-departure'>>
+  <<set _depart_name to _args[0]>>
+  <<set _depart_memory to maplebirch.get('Finance').realEstate.banquet.state.memories[_depart_name]>>
+  <<if !_depart_memory or _depart_memory.day isnot Math.floor(Time.days)>><<exit>><</if>>
+  <<language>>
+    <<option 'EN'>>
+      <<if _depart_name is 'Robin'>>Robin offers to take a few cups to the kitchen before leaving.
+      <<elseif _depart_name is 'Whitney'>>"See you, host." Whitney flashes you a grin on the way to the door.
+      <<elseif _depart_name is 'Kylar'>>Kylar waits until you have a moment to say goodbye just to <<nnpc_him 'Kylar'>>.
+      <<elseif _depart_name is 'Sydney'>>Sydney thanks you and checks the route back before collecting <<nnpc_his 'Sydney'>> book.
+      <<elseif _depart_name is 'Avery'>>Avery pauses by the door. <<if _depart_memory.result is 'good'>>"You've given me something to think about."<<else>>"Quite an evening."<</if>>
+      <<elseif _depart_name is 'Remy'>>Remy checks <<nnpc_his 'Remy'>> watch. "I should get back. We'll talk again."
+      <<elseif _depart_name is 'Harper'>>Harper thanks you for looking after the guests, with a lingering smile.
+      <<elseif _depart_name is 'Leighton'>>Leighton straightens <<nnpc_his 'Leighton'>> coat before offering a few formal words of thanks.
+      <<else>>Quinn makes sure to say goodbye where the other guests can hear <<nnpc_him 'Quinn'>>.<</if>>
+    <<option 'CN'>>
+      <<if _depart_name is 'Robin'>>罗宾离开前，主动帮你把几只杯子送进厨房。
+      <<elseif _depart_name is 'Whitney'>>“下次见，主人。”惠特尼走向门口时，朝你咧嘴笑了笑。
+      <<elseif _depart_name is 'Kylar'>>凯拉尔等着，直到你有空单独向<<nnpc_him 'Kylar'>>道别。
+      <<elseif _depart_name is 'Sydney'>>悉尼道了谢，确认回去的路线，才拿起书。
+      <<elseif _depart_name is 'Avery'>>艾弗里在门边停了一下。<<if _depart_memory.result is 'good'>>“倒有些值得回味的东西。”<<else>>“挺热闹的一晚。”<</if>>
+      <<elseif _depart_name is 'Remy'>>雷米看了眼手表。“得回去了。以后再聊。”
+      <<elseif _depart_name is 'Harper'>>哈珀为你照看宾客道了谢，笑容多停了一会儿。
+      <<elseif _depart_name is 'Leighton'>>礼顿整理好外套，才说了几句正式的感谢。
+      <<else>>奎恩特意在其他宾客听得见的地方与你告别。<</if>>
+  <</language>><br><br>
+<</widget>>

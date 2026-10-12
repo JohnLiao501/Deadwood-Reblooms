@@ -3,6 +3,7 @@
 <<set $_remy to maplebirch.get('Orchard')?.remy>>
 <<if $_remy?.available and $_remy.canTalk>>
   <<npc Remy>><<person1>>
+  <<deadwood-banquet-followup 'Remy'>>
   <div id='deadwood-remy-talk'>
     <<language>>
       <<option 'EN'>>

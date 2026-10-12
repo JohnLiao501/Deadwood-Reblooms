@@ -1,6 +1,9 @@
 // ./src/script/Finance/RealEstate.ts
 
+import PropertySuite from './PropertySuite';
+
 export default function RealEstate(maplebirch: typeof window.maplebirch): void {
+  PropertySuite(maplebirch);
   const realEstate = maplebirch.get('Finance')!.realEstate;
   for (const property of realEstate.properties) {
     if (property.location) continue;

@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Company Suite Widgets [widget]
+:: Deadwood Reblooms Property Suite Widgets [widget]
 
 <<widget 'deadwood-company-suite-link'>>
   <<set _suite to maplebirch.get('Finance').company.suite>>
@@ -109,7 +109,7 @@
   <</if>>
   <<language>>
     <<option 'EN'>>
-      The suite has a sitting room, a kitchen, two bedrooms, a bathroom, a study and an indoor pool.
+      The suite has a sitting room, a kitchen, two bedrooms, a bathroom, a study and an indoor pool, with a private dining room, screening room and staff room.
       Two shallow planting beds stand in a sheltered roof garden. The parking spaces are underground.
       <br><br>
       The agreement grants <span class='teal'>use of the suite</span>. You cannot sell it, let it out or pledge it against a loan.
@@ -120,7 +120,7 @@
       Afterwards your card stops working. Clothes left inside are boxed for collection at the lobby desk.
       Any live-in lovers move together to another suitable empty home you hold, or return to their usual accommodation.
     <<option 'CN'>>
-      套房有起居室、厨房、两间卧室、浴室、书房与室内泳池。
+      套房有起居室、厨房、两间卧室、浴室、书房与室内泳池，还有私人餐厅、放映室和雇员房。
       背风的天台花园放着两只浅种植箱，停车位则在地下。
       <br><br>
       协议授予你<span class='teal'>套房使用权</span>，不能出售、出租或抵押。
@@ -148,9 +148,10 @@
     <</if>>
   <</if>>
   <<if _suite.canSign>>
-    <<icon 'company/agreement.png'>><<lanLink ['Sign the accommodation agreement (0:10)', '签署住宿协议 (0:10)'] 'Deadwood Reblooms Company Suite'>>
+    <<icon 'company/agreement.png'>><<lanLink ['Sign the accommodation agreement (0:10)', '签署住宿协议 (0:10)']>>
       <<set $Finance.company.result to maplebirch.get('Finance').company.suite.sign() ? 'suite-signed' : 'suite-failed'>>
-      <<pass 10>>
+      <<if $Finance.company.result is 'suite-signed'>><<pass 10>><</if>>
+      <<run Dynamic.render('deadwood-company-suite-desk')>>
     <</lanLink>><br>
   <<elseif !_suite.occupied and !_suite.eligible>>
     <span class='red'><<lanSwitch 'The current share register does not qualify you for accommodation.' '你目前的持股与任职记录不符合住宿条件。'>></span><br>
@@ -236,7 +237,7 @@
       <<elseif $Finance.company.avery.business_only>>
         "You wanted a quiet drink," <<he>> says. "I'd better let you get back to your evening."
       <<elseif C.npc.Avery.lust gte 60>>
-        Avery watches you over the rim of the glass. "There's more space here than we need." <<He>> leaves the chair beside <<him>> free. You can stay where you are.
+        Avery watches you over the rim of the glass. "There's more space here than we need." <<He>> leaves the chair beside <<him>> free. You keep talking from your own chair.
       <<elseif $averyromance and C.npc.Avery.love gte 60>>
         <<He>> rests a hand over yours before leaving. "We should do this somewhere without a clock on the wall."
       <<else>>
@@ -244,9 +245,10 @@
       <</if>>
     <<elseif $Finance.company.suite.visit_topic is 'boundary'>>
       "You invited me," Avery says. <<He>> watches you for a moment.
-      "But I take your point. I'll ask before I come up."
       <<if C.npc.Avery.rage gte 20>>
-        <<He>> smooths a crease in <<his>> sleeve before turning away.
+        "Have reception call up first, then." <<He>> smooths a crease in <<his>> sleeve before turning away.
+      <<else>>
+        "But I take your point. I'll ask before I come up."
       <</if>>
     <<else>>
       Avery joins you at the window. <<He>> points out the office entrance below, then falls quiet.
@@ -262,7 +264,7 @@
       <<elseif $Finance.company.avery.business_only>>
         “你想安静喝一杯。”<<he>>说。“那我就不占着你的晚上了。”
       <<elseif C.npc.Avery.lust gte 60>>
-        艾弗里隔着杯沿看你。“这里倒挺宽敞。”<<he>>把身旁的座位留着，你可以继续坐在原处。
+        艾弗里隔着杯沿看你。“这里倒挺宽敞。”<<he>>把身旁的座位留着，你仍坐在自己的椅子上，接着聊了下去。
       <<elseif $averyromance and C.npc.Avery.love gte 60>>
         离开前，<<he>>把手覆在你的手上。“下次该找个不用盯着钟的地方。”
       <<else>>
@@ -270,9 +272,10 @@
       <</if>>
     <<elseif $Finance.company.suite.visit_topic is 'boundary'>>
       “是你叫我来的。”艾弗里看了你一会。
-      “不过，我明白你的意思。上来之前，我会先问你。”
       <<if C.npc.Avery.rage gte 20>>
-        <<he>>抚平袖上的一道褶皱，才转过身。
+        “那就让接待处先打个电话吧。”<<he>>抚平袖上的一道褶皱，才转过身。
+      <<else>>
+        “不过，我明白你的意思。上来之前，我会先问你。”
       <</if>>
     <<else>>
       艾弗里与你并肩站在窗前，指了指下方的办公区入口，随后安静下来。

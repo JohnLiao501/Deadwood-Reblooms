@@ -1,0 +1,48 @@
+{
+  "housekeeper": {
+    "name": { "EN": "Housekeeper", "CN": "保洁员" },
+    "weeklyWage": 9000,
+    "shifts": [[8, 16]],
+    "icon": "broom-dustpan.png",
+    "description": {
+      "EN": "A visiting housekeeper cleans the rooms and helps you with the larger chores. The spare bedrooms remain yours.",
+      "CN": "定时上门整理房间，也能帮你处理费时的家务。客房仍留给你和同住者。"
+    }
+  },
+  "cook": {
+    "name": { "EN": "Cook", "CN": "厨师" },
+    "weeklyWage": 16000,
+    "shifts": [
+      [5, 9],
+      [18, 24]
+    ],
+    "icon": "kitchen-pot-clean.png",
+    "description": {
+      "EN": "The cook lays the table and warms dishes from your pantry. Shared meals use the food you have brought home.",
+      "CN": "摆好餐具，帮你热好储存的菜肴。一起吃饭仍需使用你带回家的食物。"
+    }
+  },
+  "steward": {
+    "name": { "EN": "Steward", "CN": "管家" },
+    "weeklyWage": 24000,
+    "shifts": [
+      [10, 14],
+      [18, 22]
+    ],
+    "icon": "property/management.png",
+    "description": { "EN": "The steward checks invitation lists, receives guests and helps keep a private dinner running smoothly.", "CN": "核对邀请名单、接待来客，让私人宴会的安排更从容。" }
+  },
+  "guard": {
+    "name": { "EN": "Night guard", "CN": "门卫" },
+    "weeklyWage": 21000,
+    "shifts": [
+      [0, 8],
+      [20, 24]
+    ],
+    "icon": "property/concierge.png",
+    "description": {
+      "EN": "The guard checks visitors at the gate from eight in the evening until eight in the morning, and keeps uninvited callers away from the rooms.",
+      "CN": "从晚八点到早八点守着门口，核对访客身份，把不请自来的人留在住宅之外。"
+    }
+  }
+}

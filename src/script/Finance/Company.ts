@@ -1,12 +1,10 @@
 // ./src/script/Finance/Company.ts
 
 import CompanyAvery from './CompanyAvery';
-import CompanySuite from './CompanySuite';
 import CompanyAscension from './CompanyAscension';
 
 export default function Company(maplebirch: typeof window.maplebirch): void {
   CompanyAvery(maplebirch);
-  CompanySuite(maplebirch);
   CompanyAscension(maplebirch);
   maplebirch.tool.addTo(
     'CustomLinkZone',

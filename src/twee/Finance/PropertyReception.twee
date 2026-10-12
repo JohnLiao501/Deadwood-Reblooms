@@ -1,0 +1,20 @@
+:: Deadwood Reblooms Property Reception Room
+<<set _estate to maplebirch.get('Finance').realEstate>>
+<<set _reception to _estate.facilities.find(room => room.id === 'reception')>>
+<<if !_reception>>
+  <<getouticon>><<lanLink ['Return to the agency', '返回房产中介'] 'Deadwood Reblooms Property Office'>><</lanLink>><<exit>>
+<</if>>
+<<run _estate.enter('reception')>><<effects>>
+<<deadwood-home-reception-room>><br><br>
+<<set _reception_steward to $per_npc[_estate.staff.key('steward')]>>
+<<if _estate.staff.active('steward') and _reception_steward>>
+  <<language>>
+    <<option 'EN'>>
+      <<print _reception_steward.name>> has left a pencil beside the place cards. You can decide who sits near you, and who receives an invitation at all.
+    <<option 'CN'>>
+      管家<<print _reception_steward.name>>在席位卡旁留了支铅笔。谁坐在你身边，又要给谁发出邀请，都由你来定。
+  <</language>><br><br>
+<</if>>
+<<deadwood-home-life-menu 'reception'>>
+<<deadwood-banquet-link>>
+<br><<deadwood-home-exit 'reception'>>

@@ -1,0 +1,125 @@
+:: Deadwood Reblooms Property Daily Widgets [widget]
+
+<<widget 'deadwood-home-daily-link'>>
+  <<set _day_life to maplebirch.get('Finance').realEstate.life>>
+  <<if _day_life.pending>>
+    <<socialiseicon>><<lanLink `_day_life.daily.kind === 'resident' ? ['See what ' + maplebirch.auto(_day_life.daily.partner) + ' wants', '听听' + maplebirch.auto(_day_life.daily.partner) + '想说什么'] : _day_life.daily.kind === 'staff' ? ['Go over the household handover', '看看雇员的交接记录'] : ['Attend to a small matter at home', '处理家里的一件小事']` 'Deadwood Reblooms Property Daily'>><</lanLink>><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-home-daily-act'>>
+  <<set _day_estate to maplebirch.get('Finance').realEstate>>
+  <<if _args[0] is 'read' and $NPCList[0]?.per isnot _day_estate.staff.key(_day_estate.life.daily?.role)>><<exit>><</if>>
+  <<if !_day_estate.life.finish(_args[0])>><<exit>><</if>>
+  <<set _day_event to _day_estate.life.daily>>
+  <<switch _day_event.choice>>
+    <<case 'join'>>
+      <<npcincr _day_event.partner love 1>><<stress -2>><<pass 10>>
+    <<case 'help'>>
+      <<housekeeping 1 600>><<tiredness 1>><<pass 10>>
+    <<case 'read'>>
+      <<set _day_key to _day_estate.staff.key(_day_event.role)>>
+      <<set $NPCList[0].deadwood_work to $NPCList[0].deadwood_work ?? { chats: 0, last: null, day: -1 }>>
+      <<set $NPCList[0].deadwood_work.last to 'handover', $NPCList[0].deadwood_work.day to _day_event.day>>
+      <<set $NPCList[0].deadwood_work.chats += 1>><<saveNPC 0 _day_key>><<pass 5>>
+  <</switch>>
+<</widget>>
+
+:: Deadwood Reblooms Property Daily
+<<set _estate to maplebirch.get('Finance').realEstate>>
+<<set _day_event to _estate.life.daily>>
+<<if !_estate.life.pending>>
+  <<getouticon>><<lanLink ['Return to the sitting room', '返回起居室'] 'Deadwood Reblooms Property Home'>><</lanLink>><<exit>>
+<</if>>
+<<run _estate.setFloor(1)>><<run _estate.enter()>><<effects>>
+<<switch _day_event.kind>>
+  <<case 'staff'>>
+    <<endevent>><<loadNPC 0 `_estate.staff.key(_day_event.role)`>><<person1>>
+    <<language>>
+      <<option 'EN'>>
+        <<print $NPCList[0].name>> brings the duty book over. <<if $NPCList[0].deadwood_work?.private>>"I've marked the things you asked me to leave alone."<<else>>"A few things for you to check before I hand over."<</if>> <<He>> opens it at today's page.
+      <<option 'CN'>>
+        <<print $NPCList[0].name>>把值班簿拿了过来。<<if $NPCList[0].deadwood_work?.private>>“您上次说别动的东西，我都标好了。”<<else>>“交班之前，有几件事请您过目。”<</if>><<He>>翻到今天那页。
+    <</language>><br><br>
+    <<language>>
+      <<option 'EN'>>
+        <<switch _day_event.role>>
+          <<case 'housekeeper'>>A mark beside the linen cupboard shows where the clean covers were put. Your papers and the things left by the other residents are listed as untouched. "Shall I keep doing it this way?"
+          <<case 'cook'>>The page lists the dishes already in your pantry and the utensils waiting to be washed. "I can get these ready when you want them. Tell me before anyone's food needs changing."
+          <<case 'steward'>>The book separates your visitors from business callers. <<if $Finance.company.name>>A space beside the company papers is left for your signature.<<else>>Unsigned correspondence lies in a separate tray.<</if>> "These stay with you until you decide."
+          <<case 'guard'>><<if _estate.current.id is 'penthouse'>>The guard has noted the service entrance checks separately from the building security log.<<else>>Times are written beside the front and side door checks.<</if>> "If somebody isn't expected, I'll bring the name to you first."
+        <</switch>>
+      <<option 'CN'>>
+        <<switch _day_event.role>>
+          <<case 'housekeeper'>>布草柜旁的记号写明干净罩子放在哪里。你的文件和其他住户留下的物品，都列在未动的清单里。“以后也照这样做吗？”
+          <<case 'cook'>>这一页列着储藏室已有的餐点和等待清洗的器具。“您想吃的时候，我再准备。谁的餐点要改，先告诉我一声。”
+          <<case 'steward'>>记录把私人访客和谈生意的来客分开。<<if $Finance.company.name>>公司文件旁留着你签字的位置。<<else>>尚未签字的信件放在另一只托盘里。<</if>>“这些由您过目后再定。”
+          <<case 'guard'>><<if _estate.current.id is 'penthouse'>>门卫把服务入口的检查另记一页，没有与大楼保安的登记混在一起。<<else>>前门与侧门的检查旁都写着时间。<</if>>“有人没预约，我先把名字报给您。”
+        <</switch>>
+    <</language>><br><br>
+    <<icon 'property/management.png'>><<lanLink ['Read the notes and confirm the arrangement (0:05)', '核对记录，交代工作安排 (0:05)'] 'Deadwood Reblooms Property Daily Finish'>><<deadwood-home-daily-act 'read'>><</lanLink>><br>
+  <<case 'resident'>>
+    <<language>>
+      <<option 'EN'>>
+        <<switch _day_event.partner>>
+          <<case 'Robin'>><<if C.npc.Robin.trauma gte 20>>Robin waits near the doorway, twisting a sleeve. "Can you stay here for a little? I heard something outside."<<elseif _day_event.variant is 0>>Robin has set a second cup beside <<nnpc_his 'Robin'>> own. "I saved you a seat."<<else>>Robin catches your eye and smiles. "I've got a bit of time <<if Time.hour gte 21>>before I turn in<<else>>before I need to go<</if>>. Want some company?"<</if>>
+          <<case 'Whitney'>>Whitney has one boot on and the other lying beside the chair. <<if _day_event.variant is 0>>"Come here. Tell me what you've been up to."<<else>>"You got ten minutes for me, slut?"<</if>> <<nnpc_He 'Whitney'>> nudges the other chair with a foot.
+          <<case 'Kylar'>>Kylar comes out when <<nnpc_he 'Kylar'>> hears you. <<if C.npc.Kylar.rage gte 60>>"Who were you talking to? I wanted to see you." <<nnpc_He 'Kylar'>> looks past your shoulder before asking whether you can sit together.<<else>>"I was hoping you'd be here." <<nnpc_He 'Kylar'>> moves a book from the seat nearest <<nnpc_him 'Kylar'>>.<</if>>
+          <<case 'Sydney'>>Sydney leaves a bookmark between the pages. "I have a little time <<if Time.hour gte 21>>before bed<<else>>before I go<</if>>." <<if _day_event.variant is 0>><<nnpc_He 'Sydney'>> asks what you have been reading.<<else>>"Tell me something about your day?" <<nnpc_He 'Sydney'>> glances at the clock, then gives you <<nnpc_his 'Sydney'>> attention.<</if>>
+        <</switch>>
+      <<option 'CN'>>
+        <<switch _day_event.partner>>
+          <<case 'Robin'>><<if C.npc.Robin.trauma gte 20>>罗宾站在门边，拧着衣袖。“你能在这儿待一会儿吗？我听见外面有声音。”<<elseif _day_event.variant is 0>>罗宾在自己的杯子旁又放了一只。“给你留了座位。”<<else>>罗宾与你对上目光，笑了。“<<if Time.hour gte 21>>睡前<<else>>出门前<</if>>还有一点时间。要不要陪你坐坐？”<</if>>
+          <<case 'Whitney'>>惠特尼穿好一只靴子，另一只还丢在椅子旁。<<if _day_event.variant is 0>>“过来。说说你都干什么了。”<<else>>“有十分钟陪我吗，骚货？”<</if>><<nnpc_he 'Whitney'>>用脚推了推另一把椅子。
+          <<case 'Kylar'>>凯拉尔听见你的声音便走了出来。<<if C.npc.Kylar.rage gte 60>>“你刚才在和谁说话？我一直想见你。”<<nnpc_he 'Kylar'>>朝你身后望了一眼，才问能不能一起坐坐。<<else>>“我还盼着你在这里。”<<nnpc_he 'Kylar'>>挪开最近的座位上的书。<</if>>
+          <<case 'Sydney'>>悉尼把书签夹进书页。“<<if Time.hour gte 21>>睡前<<else>>出门前<</if>>还有一点时间。”<<if _day_event.variant is 0>><<nnpc_he 'Sydney'>>问起你最近在读什么。<<else>>“跟我说说今天的事？”<<nnpc_he 'Sydney'>>看了眼钟，随即认真望向你。<</if>>
+        <</switch>>
+    <</language>><br><br>
+    <<socialiseicon>><<lanLink ['Sit together for a little while (0:10)', '一起坐一会儿 (0:10)'] 'Deadwood Reblooms Property Daily Finish'>><<deadwood-home-daily-act 'join'>><</lanLink>><<glove>><<lstress>><br>
+  <<case 'house'>>
+    <<language>>
+      <<option 'EN'>>
+        <<if _day_event.variant is 0>>The window catch has not seated properly. The curtain keeps lifting, and a little dust has gathered on the sill.
+        <<elseif _day_event.variant is 1>>A pile of blankets and spare covers has slipped from the cupboard. The door catches on the lowest corner whenever you walk past.
+        <<else>>Receipts are scattered across the sitting room table. <<if $Finance.company.name>>The company papers need their own pile.<<else>>The household bills have become mixed with your other notes.<</if>><</if>>
+      <<option 'CN'>>
+        <<if _day_event.variant is 0>>窗扣没合紧，窗帘一阵阵扬起，窗台上也积了一点灰。
+        <<elseif _day_event.variant is 1>>毯子与备用罩子从柜里滑了下来。每次走过，柜门都卡在最底下的一角。
+        <<else>>收据散在起居室的桌上。<<if $Finance.company.name>>公司的文件得另放一叠。<<else>>家里的账单已经和其他笔记混在一起。<</if>><</if>>
+    <</language>><br><br>
+    <<icon 'broom-dustpan.png'>><<lanLink ['Put it in order (0:10)', '动手整理 (0:10)'] 'Deadwood Reblooms Property Daily Finish'>><<deadwood-home-daily-act 'help'>><</lanLink>><<ghousekeeping>><<gtiredness>><br>
+<</switch>>
+<<getouticon>><<lanLink ['Leave it for now', '暂时放着'] 'Deadwood Reblooms Property Daily Finish'>><<deadwood-home-daily-act 'leave'>><</lanLink>>
+
+:: Deadwood Reblooms Property Daily Finish
+<<set _estate to maplebirch.get('Finance').realEstate>>
+<<set _day_event to _estate.life.daily>>
+<<if !_estate.current or !_day_event?.choice or _day_event.property isnot _estate.current.id>>
+  <<getouticon>><<lanLink ['Return to the agency', '返回房产中介'] 'Deadwood Reblooms Property Office'>><</lanLink>><<exit>>
+<</if>>
+<<run _estate.enter()>><<effects>>
+<<language>>
+  <<option 'EN'>>
+    <<if _day_event.choice is 'leave'>>You leave the matter for another time. <<if _day_event.kind is 'resident'>>You tell <<print maplebirch.auto(_day_event.partner)>> before carrying on. The invitation is allowed to end there.<</if>>
+    <<elseif _day_event.choice is 'read'>>You check the entry and confirm which rooms may be used. The handover is left in the duty book for the next shift.
+    <<elseif _day_event.choice is 'help'>>
+      <<if _day_event.variant is 0>>You wipe the sill and pull the window closed. <<if currentSkillValue('housekeeping') gte 500>>One firm push seats the catch.<<else>>It takes a second try to get the catch into place.<</if>> The curtain settles.
+      <<elseif _day_event.variant is 1>><<if currentSkillValue('housekeeping') gte 500>>You fold the covers into neat stacks, leaving room for the cupboard door to close.<<else>>You try the folded covers in a few different piles before the cupboard door closes.<</if>>
+      <<else>><<if currentSkillValue('housekeeping') gte 500>>You sort the receipts by date and put the papers in separate piles.<<else>>You have to spread the papers out before you can see which ones belong together.<</if>> The table is clear again.<</if>>
+    <<elseif _day_event.partner is 'Robin'>>Robin sits beside you. <<if C.npc.Robin.trauma gte 20>>You stay while the noises outside pass. <<nnpc_He 'Robin'>> eventually lets the sleeve fall from <<nnpc_his 'Robin'>> fingers.<<else>>You trade the little things that happened today. Robin leaves the seat close to yours when you finish.<</if>>
+    <<elseif _day_event.partner is 'Whitney'>>Whitney tells you something that happened on the way home, laughing at the least flattering part. "There. Wasn't hard, was it?" <<nnpc_He 'Whitney'>> gets the other boot on before leaving the chair.
+    <<elseif _day_event.partner is 'Kylar'>>Kylar keeps your attention on the conversation. <<if C.npc.Kylar.rage gte 60>>"Next time, tell me when you're coming back." You return to the things that happened today. <<nnpc_He 'Kylar'>> listens, still waiting for you to mention a time.<<else>><<nnpc_He 'Kylar'>> listens closely, then remembers something <<nnpc_he 'Kylar'>> wanted to tell you too.<</if>>
+    <<else>>Sydney listens, sometimes adding a question. When the clock catches <<nnpc_his 'Sydney'>> eye again, <<nnpc_he 'Sydney'>> gathers the book. "I'd better get ready. Thank you." You let <<nnpc_him 'Sydney'>> go.<</if>>
+  <<option 'CN'>>
+    <<if _day_event.choice is 'leave'>>你把这件事留到稍后。<<if _day_event.kind is 'resident'>>继续做自己的事之前，你先告诉了<<print maplebirch.auto(_day_event.partner)>>。这次邀请便到这里为止。<</if>>
+    <<elseif _day_event.choice is 'read'>>你核对了记录，确认哪些房间可以使用。交接内容留在值班簿里，下一班也能看见。
+    <<elseif _day_event.choice is 'help'>>
+      <<if _day_event.variant is 0>>你擦过窗台，将窗扇拉紧。<<if currentSkillValue('housekeeping') gte 500>>稍微用力一推，窗扣就合上了。<<else>>试了两次，窗扣才对准位置。<</if>>窗帘不再扬动。
+      <<elseif _day_event.variant is 1>><<if currentSkillValue('housekeeping') gte 500>>你把罩子叠成整齐的几摞，给柜门留出空间。<<else>>你调整了几次叠好的罩子，柜门终于能够合上。<</if>>
+      <<else>><<if currentSkillValue('housekeeping') gte 500>>你按日期整理收据，把几类文件分别放好。<<else>>你先把文件铺开，才看清哪些该放在一起。<</if>>桌面又清爽了。<</if>>
+    <<elseif _day_event.partner is 'Robin'>>罗宾在你身旁坐下。<<if C.npc.Robin.trauma gte 20>>你陪着<<nnpc_him 'Robin'>>，等屋外的声响过去。过了一会儿，<<nnpc_he 'Robin'>>终于松开揉着衣袖的手。<<else>>你们说起今天的小事，聊完了，罗宾的椅子仍留在你的椅子旁。<</if>>
+    <<elseif _day_event.partner is 'Whitney'>>惠特尼说起回家路上发生的事，说到最损人的一段便笑了。“看吧。又不难。”离开椅子前，<<nnpc_he 'Whitney'>>才穿好另一只靴子。
+    <<elseif _day_event.partner is 'Kylar'>>凯拉尔将你的注意力留在谈话里。<<if C.npc.Kylar.rage gte 60>>“下次，告诉我什么时候回来。”你接着说起今天的事。<<nnpc_he 'Kylar'>>听着，仍在等你提到回来的时间。<<else>><<nnpc_he 'Kylar'>>听得很认真，随后又想起自己也有件事要告诉你。<</if>>
+    <<else>>悉尼听着，偶尔追问一句。再次看见钟时，<<nnpc_he 'Sydney'>>收起书。“得去准备了。谢谢。”你让<<nnpc_him 'Sydney'>>先走。<</if>>
+<</language>><br><br>
+<<getouticon>><<lanLink ['Return to the sitting room', '返回起居室'] 'Deadwood Reblooms Property Home'>><<endevent>><</lanLink>>

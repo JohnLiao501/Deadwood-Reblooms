@@ -98,6 +98,9 @@
 <<widget 'deadwood-reblooms-property-invitation-link'>>
   <<set $_inviteName to _args[0]>>
   <<set $_invitePassage to _args[1]>>
+  <<if ['Orphanage Bedroom', 'Robin Room', 'Whitney Home Enter', 'Kylar Library', 'Kylar Courtyard', 'Kylar Park', 'Temple Sydney', 'Library Rental Counter'].includes($passage)>>
+    <<deadwood-banquet-followup $_inviteName>>
+  <</if>>
   <!-- 是否能当面邀请由原版日程决定，关闭立绘后也照常显示。 -->
   <<if $_inviteName is 'Sydney' and ['Library Rental Counter', 'Science Lesson'].includes($passage)>>
     <<silently>><<sydneySchedule>><</silently>>
@@ -369,6 +372,10 @@
           <<case 'study'>><<set _room_passage to 'Deadwood Reblooms Property Desk'>>
           <<case 'pool'>><<set _room_passage to 'Deadwood Reblooms Property Pool'>>
           <<case 'garage'>><<set _room_passage to 'Deadwood Reblooms Property Garage'>>
+          <<case 'wine_cellar'>><<set _room_passage to 'Deadwood Reblooms Property Wine Cellar'>>
+          <<case 'cinema'>><<set _room_passage to 'Deadwood Reblooms Property Screening Room'>>
+          <<case 'reception'>><<set _room_passage to 'Deadwood Reblooms Property Reception Room'>>
+          <<case 'staff_room'>><<set _room_passage to 'Deadwood Reblooms Property Staff Quarters'>>
         <</switch>>
         <<lanLink `[_facility.name.EN + ' (0:01)', _facility.name.CN + ' (0:01)']` _room_passage>><<pass 1>><</lanLink>><br>
       <</capture>>
@@ -864,10 +871,13 @@
     <span class='red'><<lanSwitch 'The bank has frozen this property.' '银行已经冻结这处房产。'>></span><br>
   <</if>>
   <span class='green'><<lanSwitch 'This is one of your homes.' '这里也是你的住所。'>></span><br><br>
+  <<deadwood-home-staff-presence>>
+  <<deadwood-home-daily-link>>
   <<for _resident range maplebirch.get("Finance").realEstate.household.common>>
     <<capture _resident>>
       <<npc _resident.id>><<person1>>
       <<= lanSwitch(_resident.evening.EN, _resident.evening.CN)>><br><br>
+      <<deadwood-banquet-followup _resident.id>>
       <<switch _resident.id>>
         <<case 'Robin'>>
           <<if C.npc.Robin.trauma gte 20>>
@@ -945,6 +955,11 @@
     <<socialiseicon>><<lanLink ['Invite both lovers to talk (0:20)', '请两位恋人一起聊聊 (0:20)'] 'Deadwood Reblooms Property Household'>><<pass 20>><</lanLink>><br><br>
   <</if>>
   <<deadwood-company-suite-home>>
+  <<if !maplebirch.get('Finance').realEstate.facilities.some(room => room.id === 'lounge' and room.inline and room.floor === 1 and room.access === 'sitting')>>
+    <<deadwood-home-life-menu 'sitting'>>
+  <</if>>
+  <<deadwood-property-staff-entry>>
+  <<deadwood-banquet-link>>
   <<deadwood-blackjack-home-entry 'Deadwood Reblooms Property Home'>>
   <<deadwood-reblooms-property-floor-rooms 1>>
   <<if _property.floors.length gt 1>>
