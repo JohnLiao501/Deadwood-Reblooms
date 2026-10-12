@@ -1,9 +1,7 @@
 // ./src/script/VanillaPlus/PenisSize.ts
 
-// 只补原版缺少第 5 档的 NPC 分支，不改已有的第 5 档或嵌套随机分支。
 export const npc_size_patch = {
-  srcmatchgroup: /(<<switch \$NPCList\[(?:\$mouthtarget|_n|_nn)\]\.penissize>>\s*<<case )((?:3 )?4)(>>)/g,
-  to: '$1$2 5$3'
+  srcmatch: /(<<switch \$NPCList\[(\$mouthtarget|_n|_nn)\]\.penissize>>\s*)(?=<<case (?:3 )?4>>)/
 };
 
 export default function (maplebirch: typeof window.maplebirch) {
@@ -63,7 +61,7 @@ export default function (maplebirch: typeof window.maplebirch) {
     ['main', 'npc-pet-nnpc', 'npc-pet-previous']
   );
 
-  // 原版近景的寄生贞操装置只提供 0–6 号素材；这里仅调整图片索引。
+  // 原版近景的贞操锁寄生虫只提供 0–6 号素材；这里仅调整图片索引。
   maplebirch.char.use(
     'pre',
     options => {
@@ -75,10 +73,10 @@ export default function (maplebirch: typeof window.maplebirch) {
   );
 
   const clamp = { src: 'Math.clamp($player.penissize, 0, 6)', to: 'Math.clamp($player.penissize, 0, 7)', expected: 1 };
-  const sizeSwitch = /<<switch \$player\.penissize>>\s*(?=<<case 6>>)/g;
+  const size = /<<switch \$player\.penissize>>\s*(?=<<case 6>>)/g;
   // 用尺寸分支作锚点，保留原文并避免依赖英文句子。
-  const sceneSwitch = /(<<switch \$player\.penissize>>(?:(?!<<\/switch>>)[\s\S])*?)(<<case 6>>)/;
-  const remainingSizeSix = /(<<switch \$player\.penissize>>(?:(?!<<case 7>>|<<\/switch>>)[\s\S])*?)(<<case 6>>)/g;
+  const scene = /(<<switch \$player\.penissize>>(?:(?!<<\/switch>>)[\s\S])*?)(<<case 6>>)/;
+  const remaining = /(<<switch \$player\.penissize>>(?:(?!<<case 7>>|<<\/switch>>)[\s\S])*?)(<<case 6>>)/g;
   const widgetPassage: typeof maplebirch.tool.zone.widgetPassage = {
     // 设置与名称仍使用原版数据表；现有存档的个人尺寸上限不强制改写。
     'Widgets variablesStatic': [{ srcmatch: /<<set setup\.penisSizes to \[[^\]\n]+\]>>/, applyafter: '<<run setup.penisSizes.push(lanSwitch("gargantuan", "骇人"))>>', expected: 1 }],
@@ -149,47 +147,68 @@ export default function (maplebirch: typeof window.maplebirch) {
     ],
     'Widgets Audience': [
       {
-        srcmatch: sizeSwitch,
+        srcmatch: size,
         applyafter: '<<case 7>><<deadwood-reblooms-size-seven-audience>>',
         expected: 2
       }
     ],
     'Widgets Speech': [clamp, { src: '<<switch Math.clamp($player.penissize, 0, 7)>>', applyafter: '<<case 7>><<deadwood-reblooms-size-seven-speech>>', expected: 1 }],
-    'Widgets Ejaculation-GWYLAN': [{ srcmatch: sizeSwitch, applyafter: '<<case 7>><<deadwood-reblooms-size-seven-gwylan-ejaculation>>', expected: 2 }],
-    'Widgets speech-GWYLAN': [{ srcmatch: sizeSwitch, applyafter: '<<case 7>><<deadwood-reblooms-size-seven-gwylan-speech>>', expected: 1 }],
-    // 下列原版分支已区分 NPC 第 5 档，不再重复改写：
-    // Widgets Effects Vagina : 2 处单插、2 处双插。
-    // Widgets Effects Anus   : 2 处单插、2 处双插。
-    // Widgets Combat Beast   : 2 处主动动作。
-    // NPC 存档尺寸仍为 5；只有侧栏图片索引使用 7。
-
-    // NPC 原版补缺：口腔 1 处、主动动作 11 处、射精落点 9 处。
-    // DoLX 已有独立第 5 档，由 DoLX.ts 跳过下面三组补丁。
-    'Widgets Effects Man': [{ ...npc_size_patch, expected: 1 }],
-    'Widgets Combat Man-Combat': [{ ...npc_size_patch, expected: 11 }],
-    'Widgets Ejaculation': [{ ...npc_size_patch, expected: 9 }],
-
-    'Trash Compare Widgets': [{ srcmatchgroup: sceneSwitch, to: '$1<<case 7>><<deadwood-reblooms-size-seven-trash>>$2', expected: 1 }]
+    'Widgets Ejaculation-GWYLAN': [{ srcmatch: size, applyafter: '<<case 7>><<deadwood-reblooms-size-seven-gwylan-ejaculation>>', expected: 2 }],
+    'Widgets speech-GWYLAN': [{ srcmatch: size, applyafter: '<<case 7>><<deadwood-reblooms-size-seven-gwylan-speech>>', expected: 1 }],
+    'Trash Compare Widgets': [{ srcmatchgroup: scene, to: '$1<<case 7>><<deadwood-reblooms-size-seven-trash>>$2', expected: 1 }]
   };
   const locationPassage: typeof maplebirch.tool.zone.locationPassage = {
     // 无 g 的 srcmatch 只改第一个尺寸分支；后续分支沿用原版大尺寸正文。
     'Gwylan Ritual Sex Gwylan Riding': [
-      { srcmatch: sceneSwitch, to: '$1<<case 7>><<bodyliquid "penis" "goo">><<deadwood-reblooms-size-seven-riding>>$2', expected: 2 },
-      { srcmatchgroup: remainingSizeSix, to: '$1<<case 6 7>>', expected: 1 }
+      { srcmatch: scene, to: '$1<<case 7>><<bodyliquid "penis" "goo">><<deadwood-reblooms-size-seven-riding>>$2', expected: 2 },
+      { srcmatchgroup: remaining, to: '$1<<case 6 7>>', expected: 1 }
     ],
     'Gwylan Ritual Sex Gwylan Doggy': [
-      { srcmatch: sceneSwitch, to: '$1<<case 7>><<deadwood-reblooms-size-seven-doggy>>$2', expected: 2 },
-      { srcmatchgroup: remainingSizeSix, to: '$1<<case 6 7>>', expected: 1 }
+      { srcmatch: scene, to: '$1<<case 7>><<deadwood-reblooms-size-seven-doggy>>$2', expected: 2 },
+      { srcmatchgroup: remaining, to: '$1<<case 6 7>>', expected: 1 }
     ],
-    'Gwylan Ritual Sex Gwylan Riding Nopen': [{ srcmatchgroup: sceneSwitch, to: '$1<<case 7>><<deadwood-reblooms-size-seven-grind>>$2', expected: 1 }],
-    'Gwylan Ritual Inspect': [{ srcmatchgroup: remainingSizeSix, to: '$1<<case 6 7>>', expected: 1 }],
-    'School Infirmary Robin CD Penetrate': [{ srcmatchgroup: sceneSwitch, to: '$1<<case 7>><<deadwood-reblooms-size-seven-robin>>$2', expected: 1 }],
+    'Gwylan Ritual Sex Gwylan Riding Nopen': [{ srcmatchgroup: scene, to: '$1<<case 7>><<deadwood-reblooms-size-seven-grind>>$2', expected: 1 }],
+    'Gwylan Ritual Inspect': [{ srcmatchgroup: remaining, to: '$1<<case 6 7>>', expected: 1 }],
+    'School Infirmary Robin CD Penetrate': [{ srcmatchgroup: scene, to: '$1<<case 7>><<deadwood-reblooms-size-seven-robin>>$2', expected: 1 }],
     'Livestock Penis': [
-      { srcmatch: sceneSwitch, to: '$1<<case 6 7>>', expected: 2 },
-      { srcmatchgroup: remainingSizeSix, to: '$1<<case 7>><<deadwood-reblooms-size-seven-livestock>>$2', expected: 1 }
+      { srcmatch: scene, to: '$1<<case 6 7>>', expected: 2 },
+      { srcmatchgroup: remaining, to: '$1<<case 7>><<deadwood-reblooms-size-seven-livestock>>$2', expected: 1 }
     ],
-    'Livestock Job Harper 3 Obey': [{ srcmatchgroup: remainingSizeSix, to: '$1<<case 6 7>>', expected: 1 }]
+    'Livestock Job Harper 3 Obey': [{ srcmatchgroup: remaining, to: '$1<<case 6 7>>', expected: 1 }]
   };
+
+  for (const [passage, widget, contexts] of [
+    ['Widgets Effects Man', 'deadwood-npc-size-five-effects-man', ['swallow']],
+    [
+      'Widgets Combat Man-Combat',
+      'deadwood-npc-size-five-combat-man',
+      [
+        'vagina-repeat',
+        'vagina-first',
+        'vagina-double-repeat',
+        'vagina-double-first',
+        'anus-obstructed-repeat',
+        'anus-obstructed-first',
+        'anus-repeat',
+        'anus-first',
+        'anus-double-obstructed',
+        'anus-double-repeat',
+        'anus-double-first'
+      ]
+    ],
+    [
+      'Widgets Ejaculation',
+      'deadwood-npc-size-five-ejaculation',
+      ['consensual-vagina', 'consensual-vagina-double', 'consensual-anus', 'consensual-mouthentrance', 'consensual-mouth', 'forced-vagina', 'forced-anus', 'forced-mouthentrance', 'forced-mouth']
+    ]
+  ] as const) {
+    widgetPassage[passage] = contexts.map((context, index) => ({
+      ...npc_size_patch,
+      // 局部变量不跨 widget 继承，阻挡物名称由原版调用处传入。
+      to: `$1<<case 5>><<${widget} $2 '${context}'${context.includes('anus-obstructed') ? ' $_buttplug' : ''}>>\n`,
+      expected: contexts.length - index
+    }));
+  }
 
   // 保留原版大尺寸台词与触发条件；这里只让第 7 档进入已有分支。
   const large = { srcmatchgroup: /\$player\.penissize is 6\b/g, to: '$player.penissize gte 6' };

@@ -1,5 +1,24 @@
 :: Deadwood Reblooms Size Remarks Widgets [widget]
 
+<!-- PC 第 7 档：增长与缩回通知。 -->
+<<widget "deadwood-reblooms-size-seven-change">>
+  <<if $penisgrowthmessage is 7>>
+    <span class="purple"><<lanSwitch 'Your penis has grown to a gargantuan size.' '你的阴茎长到了骇人的尺寸。'>></span><br>
+    <<unset $penisgrowthmessage>>
+  <</if>>
+  <<if $penisshrinkmessage is 6>>
+    <span class="purple">
+      <<if $worn.genitals.name is 'chastity parasite'>>
+        <<lanSwitch 'Your chastity parasite has shrunk, though it still hints at an enormous size.' '你的贞操锁寄生虫缩小了，但仍然显出宏伟的尺寸。'>>
+      <<else>>
+        <<lanSwitch 'Your penis has shrunk, though it remains enormous.' '你的阴茎缩小了，但仍然宏伟。'>>
+      <</if>>
+    </span><br>
+    <<unset $penisshrinkmessage>>
+  <</if>>
+<</widget>>
+
+<!-- PC 第 7 档：围观与通用对白。 -->
 <<widget "deadwood-reblooms-size-seven-masturbation">>
   <<language>>
     <<option 'EN'>>
@@ -81,58 +100,23 @@
         <<if $rng gte 67>>
           “<<pShes>>那把锁都快撑不住了。<<if playerHasStrapon()>>外面还套着一根假的，真是。<</if>>”
         <<elseif $rng gte 33>>
-          “别动。趁还没人让他收起来，让我多看一会儿。”
+          “别动。趁还没人让<<pher>>收起来，让我多看一会儿。”
         <<else>>
           “锁着也是这屋子里唯一值得看的东西。”
         <</if>>
       <<else>>
         <<if $rng gte 67>>
-          “这屋子里没人敢承认自己在想什么。<<if playerHasStrapon()>>更别提他还戴着假的。<</if>>”
+          “这屋子里没人敢承认自己在想什么。<<if playerHasStrapon()>>更别提<<pshe>>还戴着假的。<</if>>”
         <<elseif $rng gte 33>>
           “我一次次告诉自己别盯着看，然后就盯着看了。”
         <<else>>
-          “他平时拿那东西怎么用，我想听。”
+          “<<pshe>>平时拿那东西怎么用，我想听。”
         <</if>>
       <</if>>
   <</language>>
   <<insecurity "penis_big" 1>><<ginsecurity "penis_big">>
 <</widget>>
 
-<<widget "deadwood-reblooms-size-seven-gwylan-ejaculation">>
-  <<language>>
-    <<option 'EN'>>
-      <<if $orgasmdown or $internalejac>>
-        <<He>> keeps working <<his>> throat around you and cannot find the rhythm
-      <<else>>
-        <<He>> forces <<his>> jaw open as far as it will go and still only takes the head
-      <</if>>
-      of your <<penis>>, throat clutching at nothing, spit running down <<his>> chin. <<He>> cannot hold you there even as <<he>> reaches climax, <<his>> own thighs shivering against the floor. Finally, <<he>> pulls off you with a final gasp
-    <<option 'CN'>>
-      <<if $orgasmdown or $internalejac>>
-        这一次<<he>>怎么咽都咽不下去，节奏全乱了
-      <<else>>
-        <<He>>把下颌张到极限，也只含进去一个头
-      <</if>>
-      你的<<penis>>，喉口空缩着，涎水顺着<<his>>下巴淌下来。连自己高潮时<<he>>都含不住你，两条大腿抵在地上直打颤。最后，<<he>>伴随着最后一声喘息把它吐了出来
-  <</language>>
-<</widget>>
-
-<<widget "deadwood-reblooms-size-seven-gwylan-speech">>
-  <<language>>
-    <<option 'EN'>>
-      <<He>> breathes in through <<his>> nose and pushes down — and stops halfway, eyes streaming, spit strung from <<his>> lips down to your shaft. <<He>> pulls off to cough, wipes <<his>> mouth with the back of <<his>> wrist, and goes back down anyway, working <<his>> throat until <<he>> has you wedged in as deep as <<his>> body allows, stretched so wide <<he>> cannot make a sound around you. <<He>> stays like that, swallowing against the head, until you finish. <<He>> comes up gasping, jaw aching, and opens <<his>> mouth to show you — empty. Every drop went down.
-    <<option 'CN'>>
-      <<He>>用鼻子吸了口气往下压——含到一半就停了，眼睛呛得全是水，涎水从嘴角一直连到你身上。<<He>>退出来咳了两声，用手背抹了把嘴，还是又下去了，一路磨着喉咙，直到把你嵌到身体能容的极限，被撑得一点声音都发不出来。<<He>>就这么含着，喉头一下一下地咽，直到你射完。<<He>>抽着气抬起来，下颌酸得合不拢，张开嘴给你看——里面是空的，一滴也没剩。
-  <</language>>
-<</widget>>
-
-<!-- 对应原版 Widgets Speech 里 Math.clamp 尺寸开关的尺寸 6 分支。
-     原版分三档敌人怒气（lte 20 / lte 100 / else），每档一句由 He 加 ?admires 起头的
-     台词，末尾接 penis_big 的不安结算。这里保持同一套三档结构和同一个动词模板，
-     把「大得离谱」再往上推一档。
-
-     PenisSize.ts 把该开关的 clamp 上限从 6 改到 7 并插入 case 7，
-     这个 widget 就是那个 case 要调用的。 -->
 <<widget "deadwood-reblooms-size-seven-speech">>
   <<language>>
     <<option 'EN'>>
@@ -154,7 +138,38 @@
       <</if>>
       <<insecurity "penis_big" 1>><<ginsecurity "penis_big">>
   <</language>>
-<</widget>><!-- 格威岚骑乘：原版尺寸 6 是「润滑之后再试，终于进去了」。尺寸 7 沿用同一条弧线，把过程拉长。 -->
+<</widget>>
+
+<!-- PC 第 7 档：格威岚对白与仪式反应。 -->
+
+<<widget "deadwood-reblooms-size-seven-gwylan-speech">>
+  <<language>>
+    <<option 'EN'>>
+      <<He>> breathes in through <<his>> nose and pushes down — and stops halfway, eyes streaming, spit strung from <<his>> lips down to your shaft. <<He>> pulls off to cough, wipes <<his>> mouth with the back of <<his>> wrist, and goes back down anyway, working <<his>> throat until <<he>> has you wedged in as deep as <<his>> body allows, stretched so wide <<he>> cannot make a sound around you. <<He>> stays like that, swallowing against the head, until you finish. <<He>> comes up gasping, jaw aching, and opens <<his>> mouth to show you — empty. Every drop went down.
+    <<option 'CN'>>
+      <<He>>用鼻子吸了口气往下压——含到一半就停了，眼睛呛得全是水，涎水从嘴角一直连到你身上。<<He>>退出来咳了两声，用手背抹了把嘴，还是又下去了，一路磨着喉咙，直到把你嵌到身体能容的极限，被撑得一点声音都发不出来。<<He>>就这么含着，喉头一下一下地咽，直到你射完。<<He>>抽着气抬起来，下颌酸得合不拢，张开嘴给你看——里面是空的，一滴也没剩。
+  <</language>>
+<</widget>>
+
+<<widget "deadwood-reblooms-size-seven-gwylan-ejaculation">>
+  <<language>>
+    <<option 'EN'>>
+      <<if $orgasmdown or $internalejac>>
+        <<He>> keeps working <<his>> throat around you and cannot find the rhythm
+      <<else>>
+        <<He>> forces <<his>> jaw open as far as it will go and still only takes the head
+      <</if>>
+      of your <<penis>>, throat clutching at nothing, spit running down <<his>> chin. <<He>> cannot hold you there even as <<he>> reaches climax, <<his>> own thighs shivering against the floor. Finally, <<he>> pulls off you with a final gasp
+    <<option 'CN'>>
+      <<if $orgasmdown or $internalejac>>
+        这一次<<he>>怎么咽都咽不下去，节奏全乱了
+      <<else>>
+        <<He>>把下颌张到极限，也只含进去一个头
+      <</if>>
+      你的<<penis>>，喉口空缩着，涎水顺着<<his>>下巴淌下来。连自己高潮时<<he>>都含不住你，两条大腿抵在地上直打颤。最后，<<he>>伴随着最后一声喘息把它吐了出来
+  <</language>>
+<</widget>>
+
 <<widget "deadwood-reblooms-size-seven-riding">>
   <<language>>
     <<option 'EN'>>
@@ -166,7 +181,6 @@
   <</language>>
 <</widget>>
 
-<!-- 后入：原版尺寸 6 是「第一次没进去，扯了扯牵引绳，第二次进去了」。尺寸 7 多失败一次。 -->
 <<widget "deadwood-reblooms-size-seven-doggy">>
   <<language>>
     <<option 'EN'>>
@@ -178,7 +192,6 @@
   <</language>>
 <</widget>>
 
-<!-- 格威岚正面研磨：原版尺寸 6 是「至少不会不小心滑进去」这句贫嘴。尺寸 7 让这句撑不住。 -->
 <<widget "deadwood-reblooms-size-seven-grind">>
   <<language>>
     <<option 'EN'>>
@@ -190,8 +203,8 @@
   <</language>>
 <</widget>>
 
-<!-- 罗宾被插：原版尺寸 6 是「只进去一半多一点，罗宾问『就这些吗』」。
-     尺寸 7 把「还剩多少」写到明面上。 -->
+<!-- PC 第 7 档：罗宾、比较场景与牲畜检查反应。 -->
+
 <<widget "deadwood-reblooms-size-seven-robin">>
   <<language>>
     <<option 'EN'>>
@@ -203,7 +216,6 @@
   <</language>>
 <</widget>>
 
-<!-- 垃圾桶旁比较：原版尺寸 6 是围观者说「他妈的是个怪物」。尺寸 7 让起哄停一拍。 -->
 <<widget "deadwood-reblooms-size-seven-trash">>
   <<language>>
     <<option 'EN'>>
@@ -213,14 +225,11 @@
       这伙人安静下来。有那么一瞬谁都没笑，那个<<trashSelect>><<person>>还看了第二眼。
       “那不叫阴茎。”<<he>>最后说，声音比<<he>>自己想要的要轻。“那是个麻烦。”
   <</language>>
-
   <<set _notInsecure to $acceptance_penis_big gte 1000>>
   <<set _insecurityType to "penis_big">>
   <<set _penisEnvy to !_noFollowUp and $trashCompare.enviousPenisIds.length gte 1 and hasSexStat("deviancy", 4)>>
 <</widget>>
 
-<!-- 牧场体检：原版尺寸 6 是雷米说「这头大得离谱」，然后隔着笼子掂量重量。
-     尺寸 7 把「掂量」这一步写实。 -->
 <<widget "deadwood-reblooms-size-seven-livestock">>
   <<language>>
     <<option 'EN'>>
@@ -234,20 +243,284 @@
   <</language>>
 <</widget>>
 
+<!-- NPC 第 5 档：通用口腔体感；_args[0] 为 NPC 索引，_args[1] 为场景标识。 -->
+<<widget "deadwood-npc-size-five-effects-man">>
+  <<switch _args[1]>>
+    <<case 'swallow'>>
+      <<language>>
+        <<option 'EN'>>
+          Your jaw aches at once and your lips are dragged white around the shaft — it fills your whole mouth, presses against the back of your throat, and you are already swallowing around your own spit.
+        <<option 'CN'>>
+          你的下颌立刻撑得发酸，嘴唇被根部拉得泛白——它塞满你的整张嘴，顶到喉口，你已经开始艰难地咽口水。
+      <</language>>
 
-<<widget "deadwood-reblooms-size-seven-change">>
-  <<if $penisgrowthmessage is 7>>
-    <span class="purple"><<lanSwitch 'Your penis has grown to a gargantuan size.' '你的阴茎长到了骇人的尺寸。'>></span><br>
-    <<unset $penisgrowthmessage>>
-  <</if>>
-  <<if $penisshrinkmessage is 6>>
-    <span class="purple">
-      <<if $worn.genitals.name is 'chastity parasite'>>
-        <<lanSwitch 'Your chastity parasite has shrunk, though it still hints at an enormous size.' '你的寄生贞操装置缩小了，但仍然显出宏伟的尺寸。'>>
+  <</switch>>
+<</widget>>
+
+<!-- NPC 第 5 档：主动动作的体感差分；_args[2] 为原版传入的阻挡物名称。 -->
+<<widget "deadwood-npc-size-five-combat-man">>
+  <<switch _args[1]>>
+    <<case 'vagina-repeat'>>
+      <<language>>
+        <<option 'EN'>>
+          <span class="red"> You whimper as your <<pussy>> is forced to spread around it — it goes deeper than anything before, until the shape of it pushes up beneath your belly, and still <<he>> has more left outside.</span>
+        <<option 'CN'>>
+          <span class="red"> 你呜咽着，<<pussy>>被强行撑开去容纳它——它顶得比任何一次都深，轮廓在你小腹下顶出一块，而<<he>>还有一截留在外面。</span>
+      <</language>>
+
+    <<case 'vagina-first'>>
+      <<language>>
+        <<option 'EN'>>
+          <span class="red"><<His>> $NPCList[_args[0]].penisdesc rams into your virgin <<pussy>> and there is no give to it at all — it tears through your hymen and <<virginitylosttext $NPCList[_args[0]].fullDescription>> You scream as your <<pussy>> is split around a thickness it was never meant to take, and even driven in as far as your body allows, <<he>> still cannot get all the way inside.</span>
+        <<option 'CN'>>
+          <span class="red"><<His>>的$NPCList[_args[0]].penisdesc撞进你未经人事的<<pussy>>，里面没有丝毫退让的余地——它撕开你的处女膜，<<virginitylosttext $NPCList[_args[0]].fullDescription>>你尖叫着，<<pussy>>被从未承受过的粗度劈开，即使已经顶进身体所能容的极限，<<he>>也依然没能整根进去。</span>
+      <</language>>
+      <<violence 200>>
+
+    <<case 'vagina-double-repeat'>>
+      <<language>>
+        <<option 'EN'>>
+          <span class="red"> You whimper as your <<pussy>> is forced to spread around it a second time — the other cock is still buried inside you, there is no room left, and it carves you wider anyway.</span>
+        <<option 'CN'>>
+          <span class="red"> 你呜咽着，<<pussy>>又一次被强行撑开去容纳它——另一根还埋在体内，早已没有半点空隙，它却仍旧把你拓得更宽。</span>
+      <</language>>
+
+    <<case 'vagina-double-first'>>
+      <<language>>
+        <<option 'EN'>>
+          <span class="red"><<His>> $NPCList[_args[0]].penisdesc rams into your virgin <<pussy>> and there is no give to it at all — it tears through your hymen and <<virginitylosttext $NPCList[_args[0]].fullDescription>> You scream as your <<pussy>> is split around a thickness it was never meant to take, and even driven in as far as your body allows, <<he>> still cannot get all the way inside.</span>
+        <<option 'CN'>>
+          <span class="red"><<His>>的$NPCList[_args[0]].penisdesc撞进你未经人事的<<pussy>>，里面没有丝毫退让的余地——它撕开你的处女膜，<<virginitylosttext $NPCList[_args[0]].fullDescription>>你尖叫着，<<pussy>>被从未承受过的粗度劈开，即使已经顶进身体所能容的极限，<<he>>也依然没能整根进去。</span>
+      <</language>>
+      <<violence 200>>
+
+    <<case 'anus-obstructed-repeat'>>
+      <<if $speech_attitude is "meek">>
+        <<language>>
+          <<option 'EN'>>
+            <span class="red"> You moan as your <<bottom>> is forced open around both <<his>> cock and your _args[2] — packed in so tight that you can feel them grinding against each other inside you.</span>
+          <<option 'CN'>>
+            <span class="red"> 你呻吟着，<<bottom>>被强行撑开，同时含住<<his>>的肉棒和你的_args[2]——塞得那么紧，你能感觉到它们在体内互相碾压。</span>
+        <</language>>
       <<else>>
-        <<lanSwitch 'Your penis has shrunk, though it remains enormous.' '你的阴茎缩小了，但仍然宏伟。'>>
+        <<language>>
+          <<option 'EN'>>
+            <span class="red"> You whimper as your <<bottom>> is forced open around both <<his>> cock and your _args[2] — packed in so tight that you can feel them grinding against each other inside you.</span>
+          <<option 'CN'>>
+            <span class="red"> 你呜咽着，<<bottom>>被强行撑开，同时含住<<his>>的肉棒和你的_args[2]——塞得那么紧，你能感觉到它们在体内互相碾压。</span>
+        <</language>>
       <</if>>
-    </span><br>
-    <<unset $penisshrinkmessage>>
-  <</if>>
+
+    <<case 'anus-obstructed-first'>>
+      <<if $speech_attitude is "meek">>
+        <<language>>
+          <<option 'EN'>>
+            <span class="red"> You squeal as your virgin <<bottom>> is torn open around <<his>> cock and your _args[2] at once — every inch of <<him>> drives the plug deeper, and there is nothing left inside you where it used to be.</span>
+          <<option 'CN'>>
+            <span class="red"> 你大叫着，处女<<bottom>>被<<his>>的肉棒和你的_args[2]同时撑开——<<he>>每进一寸都把肛塞顶得更深，你体内没有一处还留在原来的位置。</span>
+        <</language>>
+      <<else>>
+        <<language>>
+          <<option 'EN'>>
+            <span class="red"> You scream as your virgin <<bottom>> is torn open around <<his>> cock and your _args[2] at once — every inch of <<him>> drives the plug deeper, and there is nothing left inside you where it used to be.</span>
+          <<option 'CN'>>
+            <span class="red"> 你发出尖叫，处女<<bottom>>被<<his>>的肉棒和你的_args[2]同时撑开——<<he>>每进一寸都把肛塞顶得更深，你体内没有一处还留在原来的位置。</span>
+        <</language>>
+      <</if>>
+
+    <<case 'anus-repeat'>>
+      <<language>>
+        <<option 'EN'>>
+          <span class="red"> You whimper as your <<bottom>> is forced wider around it — it reaches a depth nothing has touched before, and your hole is pulled into a tight ring around the shaft.</span>
+        <<option 'CN'>>
+          <span class="red"> 你呜咽着，<<bottom>>被强行撑得更开——它顶到从未被触及的深处，穴口被拉成一圈紧紧箍着肉棒。</span>
+      <</language>>
+
+    <<case 'anus-first'>>
+      <<language>>
+        <<option 'EN'>>
+          <span class="red"> You scream as your virgin <<bottom>> is forced open around it, split wider than it can bear, and even buried to your very limit <<he>> still has more to give.</span>
+        <<option 'CN'>>
+          <span class="red"> 你尖叫着，处女<<bottom>>被强行撑开，宽到快要撕裂，即使已经进到你承受的极限，<<he>>还有更多没送进来。</span>
+      <</language>>
+
+    <<case 'anus-double-obstructed'>>
+      <<language>>
+        <<option 'EN'>>
+          <span class="red"> You whimper as your <<bottom>> is stretched around it on top of the cock already buried inside you — no room, no give, both of them grinding deeper until your insides are shapeless around them.</span>
+        <<option 'CN'>>
+          <span class="red"> 你呜咽着，在已经埋着一根的情况下，<<bottom>>又被撑开去含住它——没有空隙，没有退让，两根一起往更深处碾，把你里面顶得不成形状。</span>
+      <</language>>
+
+    <<case 'anus-double-repeat'>>
+      <<language>>
+        <<option 'EN'>>
+          <span class="red"> You whimper as your <<bottom>> is forced wider around it, stretched past the point where it can close, until there is no slack left inside you for anything to move.</span>
+        <<option 'CN'>>
+          <span class="red"> 你呜咽着，<<bottom>>被强行撑得更开，撑到再也合不拢，里面没有半点可以活动的余量。</span>
+      <</language>>
+
+    <<case 'anus-double-first'>>
+      <<language>>
+        <<option 'EN'>>
+          <span class="red"> You scream as your virgin <<bottom>> is forced open around it — split wider than your body wants to allow, every inch dragging the torn edges along with it.</span>
+        <<option 'CN'>>
+          <span class="red"> 你尖叫着，处女<<bottom>>被强行撑开——劈到身体本能抗拒的宽度，每进一寸都拖着被撕开的边缘。</span>
+      <</language>>
+
+  <</switch>>
+<</widget>>
+
+<!-- NPC 第 5 档：落点描写与体液结算；收尾台词与落点结算保留原版执行顺序。 -->
+<<widget "deadwood-npc-size-five-ejaculation">>
+  <<switch _args[1]>>
+    <<case 'consensual-vagina'>>
+      <<language>>
+        <<option 'EN'>>
+          <<He>> convulses and grinds into your crotch as <<he>> cums, and your <<pussy>> cannot hold what <<he>> gives it — thick waves of semen surge deep into you, then come flooding back out around <<his>> $NPCList[_args[0]].penisdesc and run down your thighs.
+        <<option 'CN'>>
+          当<<He>>射精时，<<he>>抽搐着把胯部压进你身上，而你的<<pussy>>根本盛不下<<he>>射出的量——浓稠的精液一波波灌进最深处，又从<<his>>的$NPCList[_args[0]].penisdesc周围溢出来，顺着大腿淌下去。
+      <</language>>
+      <<vaginalejacstat>>
+      <<ejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "vagina" "semen">>
+      <<vaginalentranceejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "vaginaoutside" "semen">>
+      <<thighejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "thigh" "semen">>
+
+    <<case 'consensual-vagina-double'>>
+      <<language>>
+        <<option 'EN'>>
+          <<He>> convulses and <<print either("glides into","grinds into","thrusts deep into","rams into")>> your crotch as <<he>> cums. With the other cock still buried inside you there is nowhere for it to go — the semen is pumped deep into your <<pussy>>, then forced back out around both of them and down your thighs.
+          <<set _postOrgasmSpeech to [`"Look at that. Both of us, and you still took all of it."`,`"You will be feeling us inside you for a week."`,`"Stuffed so full of cum you cannot even close your legs, slut."`].random()>>
+        <<option 'CN'>>
+          <<He>>在高潮时颤抖着<<print either("快速插入","粗暴插入","深深插入","用力插入")>>你的下身。另一根还埋在体内，精液根本无处可去——它被顶着灌进<<pussy>>最深处，又从两根肉棒周围挤出来，顺着大腿流下去。
+          <<set _postOrgasmSpeech to [`“看看你这副样子。两根一起，你居然全吃下了。”`,`“接下来一周你都会觉得我们还在你里面。”`,`“被精液灌得连腿都合不拢了吧，骚货。”`].random()>>
+      <</language>>
+      <<vaginalejacstat>>
+      <<ejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "vagina" "semen">>
+      <<vaginalentranceejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "vaginaoutside" "semen">>
+      <<thighejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "thigh" "semen">>
+
+    <<case 'consensual-anus'>>
+      <<language>>
+        <<option 'EN'>>
+          <<He>> convulses and shoves himself in as far as your <<bottom>> will take it as <<he>> cums, and it is far more than you can hold — thick waves of semen are pumped into you, already spilling back out around <<his>> $NPCList[_args[0]].penisdesc and running down your thighs.
+        <<option 'CN'>>
+          <<He>>颤抖着，把<<his>>的$NPCList[_args[0]].penisdesc顶到<<bottom>>能吃下的最深处才射出来。量远多于你能装下的——浓稠的精液一股股泵进体内，<<he>>还没射完就已经从$NPCList[_args[0]].penisdesc周围溢出来，顺着大腿往下淌。
+      <</language>>
+      <<analejacstat>>
+      <<ejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "anus" "semen">>
+      <<thighejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "thigh" "semen">>
+
+    <<case 'consensual-mouthentrance'>>
+      <<language>>
+        <<option 'EN'>>
+          <<He>> holds <<his>> $NPCList[_args[0]].penisdesc tight, working it while aiming straight at your face, and there is far too much of it to catch — thick ropes of cum cover your face and mouth, cling to your lashes, and drip from your chin onto your chest.
+          <<set _postOrgasmSpeech to `"That is a good look on you. Keep your mouth open."`>>
+        <<option 'CN'>>
+          <<He>>紧紧握住<<his>>的$NPCList[_args[0]].penisdesc，对着你的脸撸动，量大到你根本接不住——浓稠的精液一股股射在你的脸上和嘴里，挂在睫毛上，又从下巴滴到胸口。
+          <<set _postOrgasmSpeech to `"这模样挺适合你。嘴张开，别合上。"`>>
+      <</language>>
+      <<faceejacstat>>
+      <<ejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "face" "semen">>
+      <<oralejacstat>>
+      <<cumswallow `$NPCList[_args[0]].type` null `npcSemenMod($NPCList[_args[0]].penissize)`>>
+
+    <<case 'consensual-mouth'>>
+      <<language>>
+        <<option 'EN'>>
+          <<He>> cups the back of your head and drives himself down your throat as <<he>> cums, and it is more than your throat can swallow — semen is forced down into your stomach and back up into your mouth until your cheeks are full of it.
+        <<option 'CN'>>
+          <<He>>托住你的后脑，在<<he>>射精时把<<his>>的$NPCList[_args[0]].penisdesc整根顶进你的喉咙——量大到根本咽不完，精液被挤进胃里的同时又反涌回口腔，把你的两颊灌得满满的。
+      <</language>>
+      <<oralejacstat>>
+      <<ejacstat>>
+      <<cumswallow `$NPCList[_args[0]].type` null `npcSemenMod($NPCList[_args[0]].penissize)`>>
+
+    <<case 'forced-vagina'>>
+      <<language>>
+        <<option 'EN'>>
+          <<He>> convulses and rams himself in to the base as <<he>> cums, and your <<pussy>> is hammered so full that the excess is driven back out around <<his>> $NPCList[_args[0]].penisdesc with every throb — semen pours out of you and down your legs.
+          <<set _postOrgasmSpeech to `"You cannot even hold it. Look at you leaking."`>>
+        <<option 'CN'>>
+          <<He>>抽搐着把整根撞到底，才在你的<<pussy>>里射出精液。射得又急又多，多到每一次搏动都把多余的部分从<<his>>的$NPCList[_args[0]].penisdesc周围挤出来——精液从你体内一股股涌出，淌满双腿。
+          <<set _postOrgasmSpeech to `"连装都装不住，看看你流成什么样子了。"`>>
+      <</language>>
+      <<vaginalejacstat>>
+      <<ejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "vagina" "semen">>
+      <<vaginalentranceejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "vaginaoutside" "semen">>
+      <<thighejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "thigh" "semen">>
+
+    <<case 'forced-anus'>>
+      <<language>>
+        <<option 'EN'>>
+          <<He>> convulses and drives in with one last brutal shove, and the load that follows is more than your <<bottom>> can hold — thick waves of semen are pumped into you until they spill back out around <<his>> $NPCList[_args[0]].penisdesc and drip down your legs.
+          <<set _postOrgasmSpeech to `"You are going to learn to take something this size. By the end of the week you will not even flinch."`>>
+        <<option 'CN'>>
+          <<He>>颤抖着，用最后一记狠插把<<his>>的$NPCList[_args[0]].penisdesc顶进你的<<bottom>>里射了出来。随后射出的量远多于屁股能装下的——浓稠的精液一股股泵进体内，又从$NPCList[_args[0]].penisdesc周围溢出来，顺着腿往下滴。
+          <<set _postOrgasmSpeech to `"你得学会吃下这个尺寸。到这个周末，我要你连缩都不缩一下。"`>>
+      <</language>>
+      <<analejacstat>>
+      <<ejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "anus" "semen">>
+      <<thighejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "thigh" "semen">>
+
+    <<case 'forced-mouthentrance'>>
+      <<language>>
+        <<option 'EN'>>
+          <<He>> holds <<his>> $NPCList[_args[0]].penisdesc tight, working it while aiming straight at your mouth. <span class="pink">There is too much of it — thick ropes of cum force past your clenched lips, fill your mouth faster than you can spit, and spill down your chin and throat.</span>
+          <<set _postOrgasmSpeech to `"Every drop. Swallow it, <<bitch>>."`>>
+        <<option 'CN'>>
+          <<He>>紧紧握住<<his>>的$NPCList[_args[0]].penisdesc，直冲你的嘴撸动。<span class="pink">量实在太大了——浓稠的精液硬挤开你紧抿的嘴唇，灌进嘴里的速度比你吐出来的还快，从下巴一路淌到脖颈。</span>
+          <<set _postOrgasmSpeech to `"<<bitch>>，一滴都别漏，全咽下去。"`>>
+      <</language>>
+      <<faceejacstat>>
+      <<ejacstat>>
+      <<set $hygiene += 500>>
+      <<bodyliquid "face" "semen">>
+      <<cumswallow `$NPCList[_args[0]].type` null `npcSemenMod($NPCList[_args[0]].penissize)`>>
+
+    <<case 'forced-mouth'>>
+      <<language>>
+        <<option 'EN'>>
+          <<He>> fists your hair and rams himself down your throat as <<he>> cums — <<his>> $NPCList[_args[0]].penisdesc is too thick for it, and the semen is forced straight down, choking you until your throat convulses around the shaft and your eyes stream.
+          <<set _postOrgasmSpeech to `"Choke on it. That is exactly what I wanted."`>>
+        <<option 'CN'>>
+          <<He>>揪紧你的头发，在<<he>>射精的时候把<<his>>的$NPCList[_args[0]].penisdesc整根撞进你的喉咙深处——实在太粗，精液被直接灌进食管，把你呛得喉咙一阵阵抽搐，眼泪都淌了出来。
+          <<set _postOrgasmSpeech to `"呛着吧，这才是我要的样子。"`>>
+      <</language>>
+      <<gstress>>
+      <<gtrauma>>
+      <<gpain>>
+      <<violence 3>>
+      <<bruise neck>>
+      <<hitstat>>
+
+  <</switch>>
 <</widget>>

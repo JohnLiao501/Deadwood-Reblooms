@@ -108,7 +108,7 @@ export default function DoLX(core: MaplebirchCore): void {
     // DoLX 已有独立 NPC 第 5 档；仅移除本模组为原版补缺的三组规则。
     for (const title of ['Widgets Effects Man', 'Widgets Combat Man-Combat', 'Widgets Ejaculation']) {
       const rules = core.tool.zone.widgetPassage[title];
-      if (rules) core.tool.zone.widgetPassage[title] = rules.filter(rule => rule.srcmatchgroup?.source !== npc_size_patch.srcmatchgroup.source || rule.to !== npc_size_patch.to);
+      if (rules) core.tool.zone.widgetPassage[title] = rules.filter(rule => rule.srcmatch?.source !== npc_size_patch.srcmatch.source || !rule.to?.startsWith('$1<<case 5>><<deadwood-npc-size-five-'));
     }
   });
 
