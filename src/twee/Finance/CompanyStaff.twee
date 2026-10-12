@@ -11,11 +11,11 @@
       <<elseif !_staff.working>>
         The files have been stacked away. Nobody has begun the day's calls.
       <<else>>
-        <<if _staff.accountant>>
-          Your accountant has separated the delivery receipts from the invoices. A pencil rests beside a figure that needs checking.
+        <<if _staff.accountant and $per_npc.deadwood_company_accountant>>
+          <<print $per_npc.deadwood_company_accountant.name>>, your accountant, has separated the delivery receipts from the invoices. A pencil rests beside a figure that needs checking.
         <</if>>
-        <<if _staff.sales>>
-          Your sales representative finishes a telephone call and writes a delivery date in the enquiries book.
+        <<if _staff.sales and $per_npc.deadwood_company_sales>>
+          <<print $per_npc.deadwood_company_sales.name>>, your sales representative, finishes a telephone call and writes a delivery date in the enquiries book.
         <</if>>
         <<if !_staff.employed>>
           The telephone sits beside a pile of unanswered enquiries. There is nobody here to take calls while you are away.
@@ -29,11 +29,11 @@
       <<elseif !_staff.working>>
         文件已经收好，今天的电话还没有开始打。
       <<else>>
-        <<if _staff.accountant>>
-          会计把收货回执与账单分开放好。一支铅笔搁在需要核对的数字旁。
+        <<if _staff.accountant and $per_npc.deadwood_company_accountant>>
+          会计<<print $per_npc.deadwood_company_accountant.name>>把收货回执与账单分开放好。一支铅笔搁在需要核对的数字旁。
         <</if>>
-        <<if _staff.sales>>
-          业务员挂断电话，在询价簿里记下一个交货日期。
+        <<if _staff.sales and $per_npc.deadwood_company_sales>>
+          业务员<<print $per_npc.deadwood_company_sales.name>>挂断电话，在询价簿里记下一个交货日期。
         <</if>>
         <<if !_staff.employed>>
           电话旁堆着尚未回复的询价。你不在时，这里没有人接电话。
@@ -46,7 +46,7 @@
 <<deadwood-company-header>><<endevent>>
 <<set _staff to _company.staff>>
 <<if !_company.available or !_company.open or !_company_state.office>><<deadwood-company-return>><<exit>><</if>>
-<h3><<lanSwitch 'Office staff' '办公室职员'>></h3>
+<span class='gold bold'><<lanSwitch 'Office staff' '办公室职员'>></span><br><br>
 <<language>>
   <<option 'EN'>>
     There is room for two more desks against the wall. You unfold a payroll sheet beside the rent receipts. The factory's workers and shift managers remain on their own payroll.
@@ -123,7 +123,7 @@
   <<generateNPC 1 a>><<saveNPC 0 _employee_key>>
 <</if>>
 <<person1>>
-<h3><<lanSwitch `_role === 'accountant' ? 'Accountant' : 'Sales representative'` `_role === 'accountant' ? '会计' : '业务员'`>></h3>
+<span class='gold bold'><<lanSwitch `_role === 'accountant' ? 'Accountant' : 'Sales representative'` `_role === 'accountant' ? '会计' : '业务员'`>></span><br><br>
 <<language>>
   <<option 'EN'>>
     <<if $NPCList[0].name_known is 1>>

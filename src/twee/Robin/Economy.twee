@@ -1082,14 +1082,12 @@
     <<set $NPCList[1].shop_orphan to $RobinExpansion.shop_applicant is 'orphan'>>
     <<set $NPCList[1].name_known to 1>><<saveNPC 1 _robinApplicantKey>>
   <</if>>
-  <<if !$NPCList[1].shop_orphan>>
-    <<language>>
-      <<option 'EN'>>
-        The name at the top of the application is <span class='blue'><<= $NPCList[1].name>></span>.
-      <<option 'CN'>>
-        应聘表最上方写着<span class='blue'><<= $NPCList[1].name>></span>的名字。
-    <</language>><br>
-  <</if>>
+  <<language>>
+    <<option 'EN'>>
+      <<person2>>A <<person>> waits beside the counter, smoothing the creases out of an application. The name at the top is <span class='blue'><<personname>></span>.<<person1>>
+    <<option 'CN'>>
+      <<person2>>一位<<person>>在柜台旁等着，把应聘表上的折痕抚平。表头写着<span class='blue'><<personname>></span>的名字。<<person1>>
+  <</language>><br><br>
   <<if $NPCList[1].shop_orphan>>
     <<language>>
       <<option 'EN'>>
@@ -1182,11 +1180,12 @@
 <<set _robinTrainingExperience to _robinTrainingKey ? ($per_npc[_robinTrainingKey].shop_experience or 0) : 0>>
 <<if maplebirch.get('Robin').shop.trainStaff()>>
   <<loadNPC 1 _robinTrainingKey>>
+  <<set _robinTrainingName to $NPCList[1].name>>
   <<language>>
     <<option 'EN'>>
-      <<if _robinTrainingExperience lt 1>>You rinse cups while Robin shows your fellow orphan how to measure syrup. <<person2>><<He>> frowns at the markings, then sets the cup down to check it on a level surface. The next drink goes straight to a customer.
-      <<elseif _robinTrainingExperience lt 2>>Robin writes three orders on a scrap of paper. You play the customer, handing over different coins. Your fellow orphan counts change into your palm. The third time, there is no glance towards the answer Robin has written on the back.
-      <<else>>You check the cupboard together while Robin takes orders. Your fellow orphan counts the remaining cocoa, then crosses a drink off the specials board before it can be ordered. When Robin looks over, the stock list is already waiting by the till.<</if>>
+      <<if _robinTrainingExperience lt 1>>You rinse cups while Robin shows <<print _robinTrainingName>> how to measure syrup. <<person2>><<He>> frowns at the markings, then sets the cup down to check it on a level surface. The next drink goes straight to a customer.
+      <<elseif _robinTrainingExperience lt 2>>Robin writes three orders on a scrap of paper. You play the customer, handing over different coins. <<print _robinTrainingName>> counts change into your palm. The third time, there is no glance towards the answer Robin has written on the back.
+      <<else>>You check the cupboard together while Robin takes orders. <<print _robinTrainingName>> counts the remaining cocoa, then crosses a drink off the specials board before it can be ordered. When Robin looks over, the stock list is already waiting by the till.<</if>>
       <br><br><<person1>>
       <<if C.npc.Robin.dom lt 60>>
         "That helped," Robin says quietly. "I used to need someone to check everything, too."
@@ -1194,12 +1193,12 @@
         Robin checks the finished orders and nods. "That's it. Next time, I'll leave these to you."
       <</if>>
       <<if $per_npc[_robinTrainingKey].shop_experience is 4>>
-        <br><br><<person2>>"I'll show the others the cups," your fellow orphan says. <<He>> puts the recipe card back where the next helper can see it.
+        <br><br><<person2>>"I'll show the others the cups," <<personname>> says. <<He>> puts the recipe card back where the next helper can see it.
       <</if>>
     <<option 'CN'>>
-      <<if _robinTrainingExperience lt 1>>你帮忙洗杯子，罗宾教你的同伴量糖浆。<<person2>><<He>>皱着眉看刻度，又把量杯放平，蹲下来核对。下一杯做好后，直接递给了客人。
-      <<elseif _robinTrainingExperience lt 2>>罗宾在废纸上写下三张订单。你扮作客人，递出不同面额的零钱。你的同伴把找零数进你掌心。第三次，没有再偷看罗宾写在背面的答案。
-      <<else>>罗宾接单时，你们一起检查储物柜。你的同伴数过剩余的可可，先从特饮板上划掉一款饮料，免得有人点了却做不出来。罗宾看过来时，存货单已经放到收银机旁了。<</if>>
+      <<if _robinTrainingExperience lt 1>>你帮忙洗杯子，罗宾教<<print _robinTrainingName>>量糖浆。<<person2>><<He>>皱着眉看刻度，又把量杯放平，蹲下来核对。下一杯做好后，直接递给了客人。
+      <<elseif _robinTrainingExperience lt 2>>罗宾在废纸上写下三张订单。你扮作客人，递出不同面额的零钱。<<print _robinTrainingName>>把找零数进你掌心。第三次，没有再偷看罗宾写在背面的答案。
+      <<else>>罗宾接单时，你们一起检查储物柜。<<print _robinTrainingName>>数过剩余的可可，先从特饮板上划掉一款饮料，免得有人点了却做不出来。罗宾看过来时，存货单已经放到收银机旁了。<</if>>
       <br><br><<person1>>
       <<if C.npc.Robin.dom lt 60>>
         “帮大忙了。”罗宾轻声说。“我以前也要别人替我检查好多遍。”
@@ -1207,7 +1206,7 @@
         罗宾看过做完的订单，点点头。“就是这样。下次这些交给你。”
       <</if>>
       <<if $per_npc[_robinTrainingKey].shop_experience is 4>>
-        <br><br><<person2>>“杯子的事我教他们。”你的同伴说。<<He>>把配方卡放回其他帮手也能看见的位置。
+        <br><br><<person2>>“杯子的事我教他们。”<<personname>>说。<<He>>把配方卡放回其他帮手也能看见的位置。
       <</if>>
   <</language>><<person1>><<npcincr Robin love 1>><<glove>><<pass 30>>
 <<else>>

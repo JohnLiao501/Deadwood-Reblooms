@@ -349,8 +349,8 @@
   <<set _orchardReport to maplebirch.get('Orchard').workerReport>>
   <<language>>
     <<option 'EN'>>
-      <<if $per_npc.deadwood_orchard_worker.orchard_shifts lt 3>><<person>> puts the watering can down when you approach. "I've been round the trees. Come and have a look."
-      <<else>><<person>> greets you by name. "Come to check on the trees?" <<He>> tucks a pair of gloves into <<his>> pocket and walks along the row with you.<</if>>
+      <<if $per_npc.deadwood_orchard_worker.orchard_shifts lt 3>><<if $NPCList[0].name_known is 1>><<personname>><<else>><<person>><</if>> puts the watering can down when you approach. "I've been round the trees. Come and have a look."
+      <<else>><<if $NPCList[0].name_known is 1>><<personname>><<else>><<person>><</if>> greets you by name. "Come to check on the trees?" <<He>> tucks a pair of gloves into <<his>> pocket and walks along the row with you.<</if>>
       <br><br>
       <<if _orchardReport.irrigation>>"Water's reaching the trees fine. I checked the channels this morning."
       <<elseif _orchardReport.rain>>"The rain saved some work this morning. The soil's wet right through."
@@ -370,8 +370,8 @@
         <br><br><span class='gold'>"We're out of fertiliser. I couldn't finish all the trees, but I've kept them watered."</span>
       <</if>>
     <<option 'CN'>>
-      <<if $per_npc.deadwood_orchard_worker.orchard_shifts lt 3>><<person>>见你走来，放下水壶。“树都看过一遍了。来看看吧。”
-      <<else>><<person>>叫着你的名字打招呼。“来看看树？”<<he>>把手套塞进口袋，陪你沿着树行走过去。<</if>>
+      <<if $per_npc.deadwood_orchard_worker.orchard_shifts lt 3>><<if $NPCList[0].name_known is 1>><<personname>><<else>><<person>><</if>>见你走来，放下水壶。“树都看过一遍了。来看看吧。”
+      <<else>><<if $NPCList[0].name_known is 1>><<personname>><<else>><<person>><</if>>叫着你的名字打招呼。“来看看树？”<<he>>把手套塞进口袋，陪你沿着树行走过去。<</if>>
       <br><br>
       <<if _orchardReport.irrigation>>“水已经通到果树这边了，我早上检查过水道。”
       <<elseif _orchardReport.rain>>“早上的雨省了些事，土已经湿透了。”

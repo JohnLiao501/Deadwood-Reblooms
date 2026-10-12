@@ -237,9 +237,9 @@
   <<if !_gymCoachMet>>
     <<language>>
       <<option 'EN'>>
-        The coach introduces <<himself>> as <<print $NPCList[0].name>> and starts a training card for you.
+        The coach, a <<person>>, introduces <<himself>> as <<personname>> and starts a training card for you.
       <<option 'CN'>>
-        教练告诉你<<he>>叫<<print $NPCList[0].name>>，又替你填好一张训练记录卡。
+        一位<<person>>从器械旁走过来，告诉你<<he>>叫<<personname>>，又替你填好一张训练记录卡。
     <</language>><br><br>
   <</if>>
   <<set $LifeSimulation.gym.sessions_today += 1>>
@@ -308,17 +308,17 @@
   <<if maplebirch.get('LifeSimulation').coach.advise()>>
     <<language>>
       <<option 'EN'>>
-        <<if !_gymCoachMet>>The coach introduces <<himself>> as <<print $NPCList[0].name>>, then asks what you usually do for exercise.
-        <<elseif (_gymCoachTraining?.weights ?? 0) + (_gymCoachTraining?.run ?? 0) + (_gymCoachTraining?.stretch ?? 0) lt 3>><<person>> finds your card. "Still getting used to the equipment? Let's make sure you're comfortable with it."
-        <<else>><<person>> finds your card without asking your name. <<He>> runs a finger down your previous sessions before choosing an exercise.<</if>>
+        <<if !_gymCoachMet>>The coach, a <<person>>, introduces <<himself>> as <<personname>>, then asks what you usually do for exercise.
+        <<elseif (_gymCoachTraining?.weights ?? 0) + (_gymCoachTraining?.run ?? 0) + (_gymCoachTraining?.stretch ?? 0) lt 3>><<personname>> finds your card. "Still getting used to the equipment? Let's make sure you're comfortable with it."
+        <<else>><<personname>> finds your card without asking your name. <<He>> runs a finger down your previous sessions before choosing an exercise.<</if>>
         <br><br>
         <<if _gymCoachPlan is 'stretch'>>"<<if _gymCoachAway>>Haven't seen you in a while. Ease yourself back into it.<<else>>Take it easy today. Loosen up first, and don't force anything that hurts.<</if>>" <<He>> sets a mat out and shows you where to rest your weight.
         <<elseif _gymCoachPlan is 'run'>>"You've been spending more time with the weights. Try a steady run today." <<He>> shows you how to start slowly and ease off at the end.
         <<else>>"Let's spend some time on the weights. Start with what you can lift comfortably." <<He>> adjusts your grip, then waits while you try a slow repetition.<</if>>
       <<option 'CN'>>
-        <<if !_gymCoachMet>>教练自我介绍，告诉你<<he>>叫<<print $NPCList[0].name>>，随后问起你平时怎样锻炼。
-        <<elseif (_gymCoachTraining?.weights ?? 0) + (_gymCoachTraining?.run ?? 0) + (_gymCoachTraining?.stretch ?? 0) lt 3>><<person>>找出你的记录卡。“还在熟悉器械？先看看你用得顺不顺手。”
-        <<else>><<person>>没再问你的名字，直接找出了记录卡。<<he>>用手指顺着之前的训练记录划了几行，才选好项目。<</if>>
+        <<if !_gymCoachMet>>一位<<person>>从器械旁走过来，告诉你<<he>>叫<<personname>>，随后问起你平时怎样锻炼。
+        <<elseif (_gymCoachTraining?.weights ?? 0) + (_gymCoachTraining?.run ?? 0) + (_gymCoachTraining?.stretch ?? 0) lt 3>><<personname>>找出你的记录卡。“还在熟悉器械？先看看你用得顺不顺手。”
+        <<else>><<personname>>没再问你的名字，直接找出了记录卡。<<he>>用手指顺着之前的训练记录划了几行，才选好项目。<</if>>
         <br><br>
         <<if _gymCoachPlan is 'stretch'>>“<<if _gymCoachAway>>好些天没见到你了。先慢慢找回感觉。<<else>>今天轻松点。先活动开，疼的地方别硬拉。<</if>>”<<he>>铺好软垫，示范该怎样支撑身体。
         <<elseif _gymCoachPlan is 'run'>>“你最近举重比较多，今天试试匀速跑。”<<he>>示范怎样慢慢起跑，又该如何在最后放缓脚步。

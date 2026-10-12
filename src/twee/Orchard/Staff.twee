@@ -243,7 +243,7 @@
     <<if _crew.state.status is 'quit'>>
       <<print $NPCList[0].name>> notices the net in your bag and shakes <<his>> head. "I handed the keys back. Ask somebody else."
     <<else>>
-      A coil of rope occupies the chair beside <<print $NPCList[0].name>>. <<He>> moves it so you can sit, then listens to your description of the cages.
+      <<if $NPCList[0].name_known is 1>>You find <<personname>> at the table again.<<else>>A <<person>> introduces <<himself>> as <<personname>> when you ask about trapping work.<</if>> A coil of rope occupies the next chair. <<He>> moves it so you can sit, then listens to your description of the cages.
       <br><br>
       "A week's wages in advance. I check the farm, bring back what I can catch. Nothing in the net, you still pay for my time." <<He>> draws a finger along a scar on <<his>> hand. "If you want the moor searched, say so. And pay somebody to watch my back. A torn net is cheaper than a missing person."
     <</if>>
@@ -251,7 +251,7 @@
     <<if _crew.state.status is 'quit'>>
       <<print $NPCList[0].name>>看到你包里的网，摇了摇头。“钥匙我已经还了。找别人吧。”
     <<else>>
-      <<print $NPCList[0].name>>旁边的椅子上放着一卷绳子。<<He>>挪开绳子让你坐，听你说起那些笼子。
+      <<if $NPCList[0].name_known is 1>>你又在那张桌子旁找到<<personname>>。<<else>>你问起捕捉的活，一位<<person>>告诉你自己叫<<personname>>。<</if>>旁边的椅子上放着一卷绳子。<<He>>挪开绳子让你坐，听你说起那些笼子。
       <br><br>
       “一周的工资先付。我去农场查看，能抓到的带回来。网里没东西，也得付我花掉的时间。”<<He>>用手指摸了摸手上的疤。“想去荒原找，就先说清楚。再付钱找个人接应。网破了，总比人没了便宜。”
     <</if>>
@@ -289,11 +289,11 @@
 <</if>><<person1>>
 <<language>>
   <<option 'EN'>>
-    <<print $NPCList[0].name>> sets an empty crate beneath the bench. "Glass bottles? Seal them, put them upright, and write the address down. I'll take them after the fruit. I'm not carrying live creatures, and I'm not driving through a fight."
+    <<if $NPCList[0].name_known is 1>><<personname>> sets an empty crate beneath the bench.<<else>>A <<person>> sets an empty crate beneath the bench and gives you <<his>> name: <<personname>>.<</if>> "Glass bottles? Seal them, put them upright, and write the address down. I'll take them after the fruit. I'm not carrying live creatures, and I'm not driving through a fight."
     <br><br>
     <<He>> pats the receipt book. "The receiving factory pays for the load. If they've spent the delivery money, it stays here."
   <<option 'CN'>>
-    <<print $NPCList[0].name>>把空筐放到工作台下面。“玻璃瓶？封好，竖着放，地址写清楚。水果送完再拉这些。活物我不运，有人打架，我也不会开车硬闯。”
+    <<if $NPCList[0].name_known is 1>><<personname>>把空筐放到工作台下面。<<else>>一位<<person>>把空筐放到工作台下面，告诉你自己叫<<personname>>。<</if>>“玻璃瓶？封好，竖着放，地址写清楚。水果送完再拉这些。活物我不运，有人打架，我也不会开车硬闯。”
     <br><br>
     <<He>>拍拍收据本。“运费收货的厂房出。那边把运费花掉了，东西就留在这里。”
 <</language>><br><br>
@@ -307,6 +307,12 @@
   <<getouticon>><<lanLink ['Return to the work book', '返回工作名册'] 'Deadwood Orchard Staff'>><</lanLink>><<exit>>
 <</if>>
 <<loadNPC 0 'deadwood_orchard_trapper'>><<person1>>
+<<language>>
+  <<option 'EN'>>
+    <<personname>> turns towards you when you come over to the workbench. The bag and net are within reach.
+  <<option 'CN'>>
+    你走近工作台时，<<personname>>转过身来。袋子和网都放在伸手可及的地方。
+<</language>><br><br>
 <<language>>
   <<option 'EN'>>
     <<if _crew.state.status is 'injured'>>
