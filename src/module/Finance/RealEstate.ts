@@ -484,6 +484,17 @@ class RealEstate {
     return (this.state.management[id] ??= RealEstate.newManagement());
   }
 
+  /** 原版家具数据可能来自中文本体；按稳定 ID 读取当前语言，保留未识别的其他模组家具。 */
+  private furnitureText(id: string, item: PropertyFurniture): PropertyFurniture {
+    const result = { ...item };
+    for (const field of ['nameCap', 'description'] as const) {
+      const key = `deadwood-reblooms:finance:furniture:${id}:${field}`;
+      if (this.core.services.translator.has(key)) result[field] = this.core.t(key);
+      else if (result[field]) result[field] = this.core.auto(result[field]);
+    }
+    return result;
+  }
+
   public furniture(id: PropertyId, kind: FurnitureKind): PropertyFurniture | null {
     const property = this.properties.find(item => item.id === id);
     if (!property) return null;
@@ -507,7 +518,7 @@ class RealEstate {
       state.furnishings?.[kind] ?? (kind === 'bed' ? (state.bed_id ?? property.bed_id) : kind === 'wardrobe' ? (state.wardrobe_id ?? property.wardrobe_id) : kind === 'desk' && desk ? 'desk' : null);
     if (!installed) return null;
     const item = window.Furniture.get(installed, true);
-    return item ? { ...item, id: installed, category: [] } : null;
+    return item ? { ...this.furnitureText(installed, item as PropertyFurniture), id: installed, category: [] } : null;
   }
 
   public furnished(id: PropertyId): boolean {
@@ -566,7 +577,7 @@ class RealEstate {
     return Array.from(stock.entries())
       .filter(([key, item]) => item.category.includes(kind) && !item.type.includes('starter') && key !== current?.id && item.showCheck !== 'disabled')
       .filter(([, item]) => item.showCheck !== 'isWardrobeHigherTier' || (item.tier ?? 0) > (current?.tier ?? 0))
-      .map(([key, item]) => ({ id: key, item, cost: window.Furniture.setPrice(item.cost) }));
+      .map(([key, item]) => ({ id: key, item: this.furnitureText(key, item), cost: window.Furniture.setPrice(item.cost) }));
   }
 
   public installFurniture(id: PropertyId, kind: FurnitureKind, itemId: string, design?: string): boolean {

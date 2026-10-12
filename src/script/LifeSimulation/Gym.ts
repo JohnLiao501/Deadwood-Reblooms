@@ -50,7 +50,7 @@ export default function Gym(maplebirch: typeof window.maplebirch): void {
         {
           src: '<<case "Farm Wardrobe">>',
           applybefore:
-            '<<case "Deadwood Reblooms Life Simulation Gym Wardrobe">>\n\t\t\t<<lanLink "关上储物柜" "Deadwood Reblooms Life Simulation Gym Changing Room">><<cleanupOnWardrobeExit>><</lanLink>>\n\t\t',
+            '<<case "Deadwood Reblooms Life Simulation Gym Wardrobe">>\n\t\t\t<<lanLink ["Close the locker", "关上储物柜"] "Deadwood Reblooms Life Simulation Gym Changing Room">><<cleanupOnWardrobeExit>><</lanLink>>\n\t\t',
           expected: 1
         }
       ]
