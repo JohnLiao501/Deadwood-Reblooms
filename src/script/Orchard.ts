@@ -6,6 +6,11 @@ import type { MacroDefinition } from 'twine-sugarcube';
 
 export default function Orchard(maplebirch: typeof window.maplebirch): void {
   maplebirch.tool.addTo('BeforeLinkZone', { widget: 'deadwood-remy-school-link', passage: 'Riding School' }, { widget: 'deadwood-remy-captivity', passage: 'Livestock Cell Remy' });
+  maplebirch.tool.addTo(
+    'BeforeLinkZone',
+    { widget: 'deadwood-remy-birth-reflection', passage: 'Pregnancy Birth Hospital 4' },
+    { widget: 'deadwood-remy-paternity-link', passage: 'Hospital Paternity Test' }
+  );
   maplebirch.tool.addTo('Journal', 'deadwood-orchard-staff-journal');
 
   maplebirch.tool.addTo(

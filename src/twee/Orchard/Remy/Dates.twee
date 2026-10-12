@@ -1,0 +1,105 @@
+:: Deadwood Remy Dates [nobr]
+<<effects>><<set _remy to maplebirch.get('Orchard')?.remy>>
+<<if _remy?.canDate>>
+  <<npc Remy>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      Remy checks the next lesson before answering. "We have three quarters of an hour. Where would you like to spend it?"
+    <<option 'CN'>>
+      雷米先看了看下一节课，才回答。“有三刻钟。你想在哪里待？”
+  <</language>><br><br>
+  <<for _remyDate range _remy.dateOptions>>
+    <<capture _remyDate>>
+      <<socialiseicon 'friendly'>><<lanLink `({ tea: ['Tea in the office (0:45)', '在办公室喝茶 (0:45)'], walk: ['Walk beside the paddock (0:45)', '沿着牧场散步 (0:45)'], picnic: ['Have lunch beside the paddock (0:45)', '在牧场边一起用餐 (0:45)'] })[_remyDate]` 'Deadwood Remy Date'>>
+        <<if !maplebirch.get('Orchard')?.remy.startDate(_remyDate)>>
+          <<set $Orchard.remy.date_kind to 'tea'>>
+        <</if>>
+      <</lanLink>><br>
+    <</capture>>
+  <</for>>
+<<else>>
+  <<language>>
+    <<option 'EN'>>
+      There is no long break available today. You can come back when Remy has time before closing.
+    <<option 'CN'>>
+      今天已经没有长些的休息时间。可以在雷米关门前有空时再来。
+  <</language>>
+<</if>>
+<<deadwood-remy-return>>
+
+:: Deadwood Remy Date Detail Widgets [widget nobr]
+<<widget 'deadwood-remy-date-details'>>
+  <<set _remy to maplebirch.get('Orchard')?.remy>>
+  <<if _remy.state.date_kind is 'picnic' and !_remy_indoors>>
+    <<language>>
+      <<option 'EN'>>
+        A worker leaves a covered lunch tray on the bench and returns to the yard. Remy takes the place facing the track. "Someone will find me if they need me." You ask <<him>> to finish the meal before getting up. <<He>> looks back at the yard once, then opens the cover.
+      <<option 'CN'>>
+        工人把盖好的午餐盘放在长椅上，回到庭院。雷米坐在面向跑道的位置。“有事，他们会来找我。”你请<<him>>先吃完再起身。<<He>>又看了庭院一眼，才揭开盖子。
+    <</language>><br><br>
+  <<elseif _remy_indoors and _remy.state.date_kind is 'tea'>>
+    <<language>>
+      <<option 'EN'>>
+        Remy asks you to move the tray while <<he>> clears the table. <<if $Orchard.remy.dates gte 5>>The chair no longer has papers on it. "I knew which one you would want."<<else>>There are papers on both chairs. <<He>> moves them onto <<his>> own lap until you remind <<him>> where the tea will go.<</if>>
+      <<option 'CN'>>
+        雷米收拾桌子，让你帮着挪动茶盘。<<if $Orchard.remy.dates gte 5>>椅子上已经没有文件。“我知道你会坐哪一张。”<<else>>两张椅子上都有文件。<<He>>先把它们放在自己膝上，直到你提醒<<him>>，还得放茶杯。<</if>>
+    <</language>><br><br>
+  <<elseif !_remy_indoors>>
+    <<language>>
+      <<option 'EN'>>
+        <<if currentSkillValue('thighskill') gte 600>>You notice a rider carrying their weight unevenly before Remy points it out. <<He>> waits for your explanation, then asks what you would tell the pupil.<<else>>Remy identifies the horses as you pass. One turns towards <<his>> voice, then loses interest when no feed appears.<</if>> The conversation follows you along the fence instead of returning to the office.
+      <<option 'CN'>>
+        <<if currentSkillValue('thighskill') gte 600>>雷米还没指出来，你就注意到一名学员重心不稳。<<He>>等你讲完，问你会怎样跟对方说。<<else>>每经过一匹马，雷米便说起它的名字。其中一匹听见<<his>>声音转过来，没见到饲料，又失去了兴趣。<</if>> 你们的谈话沿着围栏继续，没有又绕回办公室。
+    <</language>><br><br>
+  <</if>>
+  <<if _remy.pregnancyTopic>><<deadwood-remy-family-smalltalk>><br><br><</if>>
+  <<set _remyDetail to (Time.days + $Orchard.remy.dates) % 3>>
+  <<switch _remyDetail>>
+    <<case 0>>
+      <<language>>
+        <<option 'EN'>>
+          An instructor starts towards you, catches Remy’s expression and takes the question to a worker instead. Remy notices you watching. "They do know how to manage without me."
+        <<option 'CN'>>
+          教练朝你们走过来，看见雷米的表情，便转去问工人。雷米注意到你的目光。“他们也知道怎么自己处理。”
+      <</language>>
+    <<case 1>>
+      <<language>>
+        <<option 'EN'>>
+          A pony noses at the nearest bag. Remy moves it out of reach. "You remember that lesson, at least." <<He>> looks at you as though expecting you to take the remark personally.
+        <<option 'CN'>>
+          一匹小马用鼻子拱最近的包。雷米把包挪远。“至少，这个倒是学会了。”<<He>>看着你，像是在等你把这句话也当成说给自己听的。
+      <</language>>
+    <<case 2>>
+      <<language>>
+        <<option 'EN'>>
+          The yard bell rings early. Remy checks the clock rather than standing up. "They can wait until the time we agreed." <<He>> returns to your conversation.
+        <<option 'CN'>>
+          庭院里的铃提前响了。雷米看了看钟，没有起身。“等到约好的时间再说。”<<He>>继续听你说话。
+      <</language>>
+  <</switch>>
+<</widget>>
+
+<<widget 'deadwood-remy-date-new-topic'>>
+  <<set _remy to maplebirch.get('Orchard')?.remy>>
+  <<if !_remy?.state.romance>><<exit>><</if>>
+  <<lanLink ['Ask how Remy feels about being seen together', '问雷米怎么看待别人见到你们在一起']>>
+    <<if maplebirch.get('Orchard')?.remy.dateTopic()>>
+      <<replace '#deadwood-remy-date-talk'>>
+        <<language>>
+          <<option 'EN'>>
+            Remy looks towards the office door. "People already see you here." You ask whether <<he>> minds them noticing why.
+            <br><br>
+            <<if C.npc.Remy.dom gte 60>>"Let them notice." <<He>> moves <<his>> chair closer, then waits for you to do the same. You decide how close you want to sit.<<elseif _remy.stage is 'close'>>"I am not hiding you." <<He>> looks back at you. "I would rather they did not waste our time asking."<<else>>"They may ask rather more questions than you expect." You ask whether that is a reason to stop coming. Remy says no, after a short pause.<</if>>
+            <br><br>
+            <<if _remy.farmConflict>>"Alex will have an opinion," <<he>> adds. You tell <<him>> you will decide what to say at the farm yourself.<<else>>A passing pupil wishes you both a good afternoon. Remy returns the greeting and continues talking to you.<</if>>
+          <<option 'CN'>>
+            雷米望向办公室门。“他们本来就看得见你来这里。”你问<<he>>是否介意别人留意到原因。
+            <br><br>
+            <<if C.npc.Remy.dom gte 60>>“让他们看见。”<<He>>把椅子挪近，等着你也这样做。你决定自己想坐多近。<<elseif _remy.stage is 'close'>>“我没把你藏起来。”<<He>>看回你。“只是，不想让他们拿提问占用我们的时间。”<<else>>“他们问的，可能比你想的还多。”你问，这是不是不该再来的理由。雷米停了一下，说不是。<</if>>
+            <br><br>
+            <<if _remy.farmConflict>>“艾利克斯肯定有话说。”<<he>>补了一句。你告诉<<him>>，到农场怎么说，由你自己决定。<<else>>经过的学员向你们问好。雷米回应过，继续跟你说话。<</if>>
+        <</language>>
+      <</replace>>
+    <</if>>
+  <</lanLink>><br>
+<</widget>>

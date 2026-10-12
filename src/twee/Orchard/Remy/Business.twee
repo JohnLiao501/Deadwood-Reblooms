@@ -111,8 +111,10 @@
   </div>
 <<else>>
   <<language>>
-    <<option 'EN'>>Remy has returned to work. You find no chance for another conversation today.
-    <<option 'CN'>>雷米已经回去做事了。今天没有机会再谈了。
+    <<option 'EN'>>
+      Remy has returned to work. You find no chance for another conversation today.
+    <<option 'CN'>>
+      雷米已经回去做事了。今天没有机会再谈了。
   <</language>>
 <</if>>
 <<deadwood-remy-return>>

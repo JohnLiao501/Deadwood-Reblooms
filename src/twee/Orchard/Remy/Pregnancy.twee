@@ -1,0 +1,604 @@
+:: Deadwood Remy Pregnancy Widgets [widget nobr]
+<<widget 'deadwood-remy-pregnancy-context'>>
+  <<set _remyPregnancy to maplebirch.get('Orchard')?.remy>>
+  <<set _remyPregnancyPresent to !!_remyPregnancy and (_remyPregnancy.available or _remyPregnancy.captive) and !$statFreeze and !$replayScene and $combat isnot 1>>
+  <<set _remyPregnancies to []>>
+  <<if _remyPregnancyPresent>>
+    <<set _remyPregnancies to $pregnancies.filter(record => record.carrier !== 'cleared' && (
+      record.carrier === 'Remy' && (knowsPregnancy(record.pregnancyId, 'pc') || knowsPregnancy(record.pregnancyId, 'Remy') || (record.deliveredDate === null && npcBellyVisible('Remy')))
+      || record.carrier === 'pc' && knowsPregnancy(record.pregnancyId, 'pc') && (couldBeDonor(record, 'Remy') || $Orchard.remy.romance || $Orchard.remy.pregnancy.records[record.pregnancyId]?.disclosed)
+    ) && (record.deliveredDate === null || $Orchard.remy.pregnancy.records[record.pregnancyId]?.disclosed || knowsPregnancy(record.pregnancyId, 'pc')))>>
+  <</if>>
+  <<set _remyRecord to _remyPregnancies.find(record => record.pregnancyId === $Orchard?.remy?.pregnancy.id)>>
+  <<set _remyEntry to _remyRecord and $Orchard.remy.pregnancy.records[_remyRecord.pregnancyId]>>
+  <<set _remyContext to _remyPregnancyPresent and !!_remyRecord and $passage is $Orchard.remy.pregnancy.origin and $location is $Orchard.remy.pregnancy.location>>
+<</widget>>
+
+<<widget 'deadwood-remy-pregnancy-links'>>
+  <<deadwood-remy-pregnancy-context>>
+  <<deadwood-remy-pregnancy-ended>>
+  <<if _remyPregnancyPresent and _remyPregnancies.length>>
+    <div id='deadwood-remy-pregnancy'>
+      <<for _remyCandidate range _remyPregnancies>>
+        <<capture _remyCandidate>>
+          <<socialiseicon 'ask'>><<lanLink `_remyCandidate.carrier === 'pc' ? (_remyCandidate.deliveredDate === null ? ['Talk about your pregnancy', '谈谈你的怀孕'] : ['Talk about your children', '谈谈你的孩子']) : (_remyCandidate.deliveredDate === null ? ["Talk about Remy's pregnancy", '谈谈雷米的怀孕'] : ["Ask about Remy's children", '问问雷米的孩子'])`>>
+            <<deadwood-remy-pregnancy-context>>
+            <<if _remyPregnancies.some(record => record.pregnancyId === _remyCandidate.pregnancyId)>>
+              <<set $Orchard.remy.pregnancy.id to _remyCandidate.pregnancyId>>
+              <<set $Orchard.remy.pregnancy.origin to $passage>>
+              <<set $Orchard.remy.pregnancy.location to $location>>
+              <<set $Orchard.remy.pregnancy.records[_remyCandidate.pregnancyId] to $Orchard.remy.pregnancy.records[_remyCandidate.pregnancyId] ?? { disclosed: false, plan: '', day: -1, topics: [], place: $location }>>
+              <<replace '#deadwood-remy-pregnancy'>><<deadwood-remy-pregnancy-panel 'opening'>><</replace>>
+            <</if>>
+          <</lanLink>><br>
+        <</capture>>
+      <</for>>
+    </div>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-remy-pregnancy-action'>>
+  <<deadwood-remy-pregnancy-context>>
+  <<set _remyReward to false>>
+  <<if _remyContext and _remyEntry and _remyEntry.day isnot Time.days>>
+    <<set _remyEntry.day to Time.days>><<set _remyEntry.topics to []>>
+  <</if>>
+  <<if _remyContext and _remyEntry and !_remyEntry.topics.includes(_args[0])>>
+    <<set _remyReward to !_remyEntry.topics.some(topic => topic !== 'sample') and !_remyPregnancy.captive and _args[0] isnot 'sample'>>
+    <<run _remyEntry.topics.push(_args[0])>>
+    <<if _remyReward>><<npcincr Remy love 1>><<stress -2>><</if>>
+    <<pass 10>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-remy-pregnancy-panel'>>
+  <<deadwood-remy-pregnancy-context>>
+  <<if !_remyContext or !_remyEntry>>
+    <<language>>
+      <<option 'EN'>>
+        There is no opportunity to continue this conversation.
+      <<option 'CN'>>
+        现在没机会继续这次谈话。
+    <</language>>
+    <<exit>>
+  <</if>>
+  <<npc Remy>><<person1>>
+  <<if _remyPregnancy.available>><<set $Orchard.remy.last_meeting_day to Time.days>><</if>>
+  <<set _remyTopic to _args[0]>>
+  <<if _remyTopic is 'opening' and !_remyEntry.disclosed>>
+    <<run setKnowsPregnancy(_remyRecord.pregnancyId, 'pc')>>
+    <<run setKnowsPregnancy(_remyRecord.pregnancyId, 'Remy')>>
+    <<run markTalkedAbout(_remyRecord.pregnancyId, _remyRecord.carrier === 'pc' ? 'Remy' : 'pc')>>
+    <<set _remyEntry.disclosed to true>>
+    <<deadwood-remy-pregnancy-opening>>
+  <<elseif _remyTopic is 'opening'>>
+    <<deadwood-remy-pregnancy-progress>>
+  <<else>>
+    <<deadwood-remy-pregnancy-topic _remyTopic>>
+  <</if>>
+  <br><br>
+  <<if knowsDonor(_remyRecord.pregnancyId, 'pc')>>
+    <<if _remyRecord.donor is (_remyRecord.carrier is 'pc' ? 'Remy' : 'pc')>>
+      <<language>>
+        <<option 'EN'>>
+          You already know you share the child's parentage.
+        <<option 'CN'>>
+          你已经知道，你们都是孩子的亲生父母。
+      <</language>>
+      <<run setKnowsDonor(_remyRecord.pregnancyId, 'Remy')>>
+    <<else>>
+      <<language>>
+        <<option 'EN'>>
+          You explain what you know about the other parent. Remy listens without offering a promise.
+        <<option 'CN'>>
+          你说出自己所知的亲子关系。雷米听着，没有作出承诺。
+      <</language>>
+    <</if>>
+  <<elseif couldBeDonor(_remyRecord, _remyRecord.carrier is 'pc' ? 'Remy' : 'pc')>>
+    <<language>>
+      <<option 'EN'>>
+        You could share the child's parentage. Neither a guess nor Remy's confidence settles it; you can ask the hospital about a paternity test.
+      <<option 'CN'>>
+        你们可能都是孩子的亲生父母。猜测和雷米的笃定都不能当作答案，你可以向医院询问亲子鉴定。
+    <</language>>
+  <</if>><br><br>
+  <<set _remyTopics to _remyRecord.deliveredDate is null ? ['comfort', 'arrangements', 'boundaries', 'names'] : ['children', 'arrangements', 'boundaries', 'names']>>
+  <<if _remyRecord.deliveredDate is null and !_remyPregnancy.captive and !knowsDonor(_remyRecord.pregnancyId, 'pc') and !_remyEntry.sample and !_remyEntry.tested and couldBeDonor(_remyRecord, _remyRecord.carrier is 'pc' ? 'Remy' : 'pc')>>
+    <<run _remyTopics.push('sample')>>
+  <</if>>
+  <<if _remyEntry.day isnot Time.days>><<set _remyEntry.topics to []>><</if>>
+  <<for _remyAction range _remyTopics>>
+    <<if !_remyEntry.topics.includes(_remyAction)>>
+      <<capture _remyAction>>
+        <<socialiseicon 'ask'>><<lanLink `({ sample: ['Ask for a paternity test sample (0:10)', '询问是否愿意提供鉴定样本 (0:10)'], comfort: ['Sit together (0:10)', '一起坐一会儿 (0:10)'], arrangements: ['Discuss the arrangements (0:10)', '商量接下来的安排 (0:10)'], boundaries: ['Say what you want to decide yourself (0:10)', '说清哪些事要由你自己决定 (0:10)'], names: ['Talk about names (0:10)', '聊聊名字 (0:10)'], children: ['Ask about caring for the children (0:10)', '聊聊照料孩子 (0:10)'] })[_remyAction]`>>
+          <<deadwood-remy-pregnancy-context>>
+          <<if _remyContext>>
+            <<deadwood-remy-pregnancy-action _remyAction>>
+            <<replace '#deadwood-remy-pregnancy'>><<deadwood-remy-pregnancy-panel _remyAction>><</replace>>
+          <</if>>
+        <</lanLink>><br>
+      <</capture>>
+    <</if>>
+  <</for>>
+  <<if _remyRecord.carrier is 'Remy' and npcPregnancyEnding('Remy') and !_remyPregnancy.captive>>
+    <<icon 'medicine/ambulance.png'>><<lanLink ['Offer to call an ambulance (0:20)', '提出叫救护车 (0:20)'] 'Deadwood Remy Pregnancy Hospital'>>
+      <<deadwood-remy-pregnancy-context>>
+      <<if _remyContext and _remyRecord.carrier is 'Remy' and npcPregnancyEnding('Remy')>>
+        <<set $Orchard.remy.pregnancy.origin to 'Deadwood Remy Pregnancy Hospital'>>
+        <<set $Orchard.remy.pregnancy.location to 'hospital'>>
+        <<pass 20>>
+      <</if>>
+    <</lanLink>><br>
+  <</if>>
+  <<lanLink ['Put the conversation aside', '暂且结束话题']>>
+    <<replace '#deadwood-remy-pregnancy'>><</replace>>
+  <</lanLink>>
+<</widget>>
+
+<<widget 'deadwood-remy-pregnancy-opening'>>
+<<if _remyRecord.deliveredDate isnot null>>
+  <<deadwood-remy-pregnancy-progress>>
+  <<exit>>
+<</if>>
+<<if _remyRecord.carrier is 'pc'>>
+<<language>>
+  <<option 'EN'>>
+    You tell Remy you are pregnant. For a moment the glove stays half pulled over <<his>> fingers. "How long have you known?" <<He>> asks. <<if $speech_attitude is 'bratty'>>You tell <<him>> this is a conversation, not an interrogation.<<elseif $speech_attitude is 'meek'>>You ask <<him>> to let you finish before asking anything else.<<else>>You tell <<him>> what you actually know.<</if>>
+  <<option 'CN'>>
+    你告诉雷米，自己怀孕了。手套套到一半，停在<<his>>指间。“什么时候知道的？”<<He>>问。<<if $speech_attitude is 'bratty'>>你提醒<<him>>，这是交谈，不是盘问。<<elseif $speech_attitude is 'meek'>>你请<<him>>先让你把话说完。<<else>>你把自己确实知道的事说出来。<</if>>
+<</language>>
+<<else>>
+<<language>>
+  <<option 'EN'>>
+    Remy shuts the register. "I have had some news." <<He>> pauses when someone passes the door, then tells you <<he>> is pregnant. "I'd prefer that you heard it from me." <<His>> hand remains on the closed book.
+  <<option 'CN'>>
+    雷米合上登记簿。“有件事。”有人经过门口时，<<he>>停了一下，才告诉你，<<he>>怀孕了。“还是由我亲口告诉你比较好。”<<His>>手一直按在合起的本子上。
+<</language>>
+<</if>><br><br>
+<<if _remyPregnancy.captive>>
+<<language>>
+  <<option 'EN'>>
+    "We'll have someone check," Remy says. You look at the keys on <<his>> belt. <<He>> follows your gaze. "One thing at a time." The gate stays shut.
+  <<option 'CN'>>
+    “会找人来检查。”雷米说。你望向<<his>>腰间的钥匙。<<He>>顺着你的视线看去。“一件一件来。”栏门仍关着。
+<</language>>
+<<elseif $Orchard.remy.romance and C.npc.Remy.love gte 50 and $Orchard.remy.dates gte 5>>
+<<language>>
+  <<option 'EN'>>
+    Remy moves the lesson register off the spare chair. "Sit down. I need to think." When you reach for the chair, <<he>> adds, "You can talk while I do." For once, <<he>> lets the silence last until you are ready.
+  <<option 'CN'>>
+    雷米把空椅子上的课程登记簿拿开。“坐吧。我得想想。”你伸手拉椅子时，<<he>>又补了一句：“你可以接着说。”这一次，<<he>>没有急着打破沉默，等你准备好再开口。
+<</language>>
+<<else>>
+<<language>>
+  <<option 'EN'>>
+    Remy puts the register to one side. "What are you asking of me?" <<He>> sounds as though <<he>> is waiting for a price. You ask <<him>> to hear the rest first.
+  <<option 'CN'>>
+    雷米把登记簿放到一旁。“你想让我做什么？”<<His>>语气像是在等你报价。你让<<him>>先把余下的话听完。
+<</language>>
+<</if>>
+<</widget>>
+
+<<widget 'deadwood-remy-pregnancy-progress'>>
+<<if _remyPregnancy.captive>>
+  <<language>>
+    <<option 'EN'>>
+      You call Remy back to the gate. The keys stop jingling as <<he>> turns. "What is it this time?"
+    <<option 'CN'>>
+      你叫住栏门外的雷米。<<He>>转过身，钥匙声停下来。“这次又怎么了？”
+  <</language>>
+  <<exit>>
+<</if>>
+<<if _remyRecord.deliveredDate isnot null>>
+<<language>>
+  <<option 'EN'>>
+    The conversation is no longer about a date somewhere ahead. Remy asks how things have gone since the birth, checking each answer before asking another question.
+  <<option 'CN'>>
+    这次谈话，不再围绕将来的某个日子。雷米问起分娩之后的事，听清一个答案，再接着问下一个。
+<</language>>
+<<elseif _remyRecord.carrier is 'Remy' and npcPregnancyEnding('Remy')>>
+<<language>>
+  <<option 'EN'>>
+    Remy stops in the middle of a sentence and grips the desk. "Get someone to cover the lesson." <<He>> waits for the pain to ease before speaking again. "And the hospital number."
+  <<option 'CN'>>
+    雷米说到一半，忽然停下，抓住桌沿。“找个人代课。”<<He>>等那阵疼痛缓过去，才继续说：“还有医院的电话。”
+<</language>>
+<<elseif pregnancyProgress(_remyRecord) gte 0.8>>
+<<language>>
+  <<option 'EN'>>
+    There is a folded appointment slip beside the register. Remy keeps checking the date, although <<he>> clearly remembers it. "Have you decided what to take?"
+  <<option 'CN'>>
+    登记簿旁放着折好的预约单。雷米明明记得日期，却还是又看了一遍。“要带的东西，想好了吗？”
+<</language>>
+<<elseif pregnancyProgress(_remyRecord) gte 0.4>>
+<<language>>
+  <<option 'EN'>>
+    Remy notices the pause before you sit down. <<if _remyRecord.carrier is 'Remy'>><<He>> takes the other chair, more slowly than usual.<<else>><<He>> pushes the spare chair out with <<his>> foot.<</if>> "We have ten minutes before the next group."
+  <<option 'CN'>>
+    雷米注意到你坐下前的迟疑。<<if _remyRecord.carrier is 'Remy'>><<He>>在另一张椅子上落座，动作比平时慢些。<<else>><<He>>用脚把空椅子推出来。<</if>>“下一批学员来之前，还有十分钟。”
+<</language>>
+<<else>>
+<<language>>
+  <<option 'EN'>>
+    Remy puts a pencil across the register to mark <<his>> place. "Go on." Outside, a pupil is arguing with a reluctant pony. Neither of you answers the interruption straight away.
+  <<option 'CN'>>
+    雷米在登记簿上横放一支铅笔，记着读到的位置。“说吧。”外面，一名学员正跟不肯挪步的小马较劲。你们谁也没立刻应声。
+<</language>>
+<</if>>
+<</widget>>
+
+<<widget 'deadwood-remy-pregnancy-topic'>>
+<<switch _args[0]>>
+<<case 'sample'>>
+  <<if !_remyPregnancy.captive and _remyRecord.deliveredDate is null and !knowsDonor(_remyRecord.pregnancyId, 'pc') and couldBeDonor(_remyRecord, _remyRecord.carrier is 'pc' ? 'Remy' : 'pc')>>
+    <<if $Orchard.remy.romance or C.npc.Remy.love gte 20>>
+      <<set _remyEntry.sample to true>>
+      <<language>>
+        <<option 'EN'>>
+          Remy takes the sample kit from the desk. "If we are doing this, get an answer properly." <<He>> seals the sample and writes the details on the envelope. You can take it to the hospital for testing.
+        <<option 'CN'>>
+          雷米从桌上拿过采样包。“既然要查，就把结果查清楚。”<<He>>封好样本，把资料写在信封上。你可以带到医院申请鉴定。
+      <</language>>
+    <<else>>
+      <<language>>
+        <<option 'EN'>>
+          Remy puts the kit aside. "Not today." <<He>> has not agreed to provide a sample. You leave the question unsettled.
+        <<option 'CN'>>
+          雷米把采样包放到一旁。“今天不行。”<<He>>没有同意提供样本，你没能把问题定下来。
+      <</language>>
+    <</if>>
+  <</if>>
+<<case 'comfort'>>
+<<if _remyPregnancy.captive>>
+<<language>>
+  <<option 'EN'>>
+    You ask for somewhere more comfortable to rest. Remy looks at the straw, then tells a worker to check the bedding. "Anything else?" <<He>> stays outside the gate. You keep your answer short; the worker is still listening.
+  <<option 'CN'>>
+    你要求能舒服些地休息。雷米看看稻草，吩咐工人检查铺垫。“还有呢？”<<He>>仍站在栏门外。工人还在听，你把回答说得很简短。
+<</language>>
+<<elseif $Orchard.remy.romance>>
+<<language>>
+  <<option 'EN'>>
+    Remy begins to list things that need organising. You ask <<him>> to leave the register closed for a while. <<if C.npc.Remy.love gte 50>><<He>> turns the pencil between <<his>> fingers, then puts it down. "All right. Tell me about today."<<else>>"We will have to discuss it." You agree, but ask for these few minutes first. <<He>> finally leaves the pencil alone.<</if>>
+  <<option 'CN'>>
+    雷米开始罗列需要安排的事。你请<<him>>先别打开登记簿。<<if C.npc.Remy.love gte 50>><<He>>转了转手里的铅笔，终于把它放下。“好吧。说说今天。”<<else>>“总得商量的。”你同意，但先要这几分钟。<<He>>终于不再摆弄那支铅笔。<</if>>
+<</language>>
+<<else>>
+<<language>>
+  <<option 'EN'>>
+    Remy offers the chair nearest the door. Your conversation stays cautious. When a pupil knocks, <<he>> tells them to wait, but keeps an eye on the clock.
+  <<option 'CN'>>
+    雷米让你坐靠近门的椅子。你们的交谈仍很谨慎。学员敲门时，<<he>>让对方稍等，目光却还留意着钟。
+<</language>>
+<</if>>
+<<case 'arrangements'>>
+<<if _remyPregnancy.captive>>
+<<language>>
+  <<option 'EN'>>
+    Remy offers to have everything arranged. You ask who will explain the arrangements to you. "The person doing the examination," <<he>> says. You ask to hear from them yourself. <<He>> dislikes the repetition, but the request stays in the conversation.
+  <<option 'CN'>>
+    雷米说，事情都能安排好。你问，谁会把安排讲给你听。“负责检查的人。”<<he>>说。你要求亲自听对方解释。重复追问让<<he>>有些不耐烦，但你没有把要求收回。
+<</language>>
+<<elseif _remyRecord.deliveredDate isnot null>>
+<<language>>
+  <<option 'EN'>>
+    Remy asks for the visiting times, rather than another vague assurance that someone is helping. You agree to check the arrangements where the children are actually being cared for. <<He>> writes down the question before proposing a time.
+  <<option 'CN'>>
+    雷米问起探望时间，没有满足于“有人帮忙”这样的笼统答复。你们决定，先到孩子实际被照料的地方问清安排。<<He>>把要问的事记下来，再提出一个时间。
+<</language>>
+<<else>>
+<<language>>
+  <<option 'EN'>>
+    You separate appointments from work on a sheet of paper. <<if _remyRecord.carrier is 'Remy'>>Remy crosses out one lesson, then tries to move it elsewhere. "Someone still has to teach it."<<else>>Remy asks how you intend to get to the hospital and who else knows.<</if>> <<if $science gte 400>>You use what you learned in science to organise the questions, leaving the diagnosis to the staff.<<else>>You write down what needs asking instead of guessing at the answers.<</if>> Remy keeps the list beside the register.
+  <<option 'CN'>>
+    你在纸上把检查和工作分开。<<if _remyRecord.carrier is 'Remy'>>雷米划掉一节课，又想把它挪到别处。“总得有人教。”<<else>>雷米问，你打算怎么去医院，还有谁知道这件事。<</if>> <<if $science gte 400>>你用科学课学到的知识整理问题，把诊断留给医护人员。<<else>>你记下需要问的事，没有猜答案。<</if>> 雷米把单子放在登记簿旁。
+<</language>>
+<</if>>
+<<case 'boundaries'>>
+<<language>>
+  <<option 'EN'>>
+    You say that appointments, where you live and who cares for the children must be discussed with you. Remy taps the pencil against the desk. "You think I cannot make arrangements?" You tell <<him>> that making them and deciding for you are different things.
+  <<option 'CN'>>
+    你说，检查、住在哪里，以及由谁照料孩子，都得跟你商量。雷米用铅笔敲着桌面。“你觉得我安排不了？”你告诉<<him>>，安排事情和替你作决定是两回事。
+<</language>>
+<br><br>
+<<if _remyPregnancy.captive>>
+<<language>>
+  <<option 'EN'>>
+    "You're here now," <<he>> says. You ask again to be included in the decisions. Remy calls a worker over instead of opening the gate. You have made your objection clear; <<he>> has not agreed to release you.
+  <<option 'CN'>>
+    “你现在就在这里。”<<he>>说。你再次要求参与决定。雷米叫来一名工人，没有打开栏门。你已经说清反对的理由，<<he>>却没有答应放你离开。
+<</language>>
+<<elseif $Orchard.remy.romance and C.npc.Remy.love gte 50>>
+<<language>>
+  <<option 'EN'>>
+    Remy sets the pencil down. "Then tell me which arrangements you want." It is an answer you can work with, although <<he>> still expects one immediately.
+  <<option 'CN'>>
+    雷米把铅笔放下。“那就告诉我，你想怎么安排。”这个答复还算能接着谈，尽管<<he>>仍等着你立刻给出答案。
+<</language>>
+<<else>>
+<<language>>
+  <<option 'EN'>>
+    "Then we have rather more to discuss," Remy says. You leave the question open instead of accepting an offer you have not heard in full.
+  <<option 'CN'>>
+    “那要谈的可就多了。”雷米说。你没有接受尚未听完整的提议，把问题留着继续谈。
+<</language>>
+<</if>>
+<<set _remyEntry.plan to 'discuss_together'>>
+<<if _remyPregnancy.farmConflict>><br><br>
+<<language>>
+  <<option 'EN'>>
+    When you mention Alex's farm, Remy's voice turns flat. "That is another matter." You cannot mistake the answer for a truce.
+  <<option 'CN'>>
+    你提到艾利克斯的农场时，雷米的声音冷下来。“那是另一回事。”你没有把这个答复当成停战。
+<</language>>
+<</if>>
+<<case 'names'>>
+<<if _remyRecord.deliveredDate isnot null>>
+<<set _remyChildren to getChildrenOf(_remyRecord.pregnancyId).filter(child => knowsChild(child.childId, 'pc') && childIsBorn(child))>>
+<<if _remyChildren.length and _remyChildren.every(child => child.name)>>
+<<language>>
+  <<option 'EN'>>
+    You repeat the names already chosen. Remy tries one aloud, less formally the second time. "It sounds different when there is someone to answer it."
+  <<option 'CN'>>
+    你念起已经取好的名字。雷米试着叫了一声，第二遍没那么郑重。“真有人会应声，听起来就不一样了。”
+<</language>>
+<<else>>
+<<language>>
+  <<option 'EN'>>
+    You ask which names have been chosen. Remy does not supply details you have yet to learn from the carers. You leave it as a question for your next visit.
+  <<option 'CN'>>
+    你问起取了什么名字。雷米没有补上那些你还得向照料人员问清的细节。你把问题留到下次探望。
+<</language>>
+<</if>>
+<<else>>
+<<language>>
+  <<option 'EN'>>
+    Remy proposes a name as though it ought to settle the question. You try it aloud, then suggest another. <<if $english gte 400>>You point out how the shortened form will sound; <<he>> repeats it, testing the difference.<<else>><<He>> asks you to repeat yours, slowly.<</if>> Nothing is entered on the register. There is still time to choose.
+  <<option 'CN'>>
+    雷米提出一个名字，仿佛这样就能定下来。你试着念了一遍，又提了另一个。<<if $english gte 400>>你说起简称叫起来会是什么样；<<he>>跟着念了一遍，比较两者的区别。<<else>><<He>>让你把那个名字再慢慢念一遍。<</if>> 登记簿上还没有写下什么，仍有时间再选。
+<</language>>
+<</if>>
+<<case 'children'>>
+<<if _remyEntry.reflection is 'care'>>
+  <<language>>
+    <<option 'EN'>>
+      You ask which visits Remy can make in person. "Give me the times," <<he>> says. You keep asking until the answer names a day rather than an assistant.
+    <<option 'CN'>>
+      你问雷米能亲自来哪些次。“告诉我时间。”<<he>>说。你接着问，直到答案落在某一天，而不是某个助理身上。
+  <</language>>
+  <br><br>
+<<elseif _remyEntry.reflection is 'independent'>>
+  <<language>>
+    <<option 'EN'>>
+      You tell Remy you will check the care arrangements yourself. "Then keep me informed." You agree to another conversation, not to hand over the decisions.
+    <<option 'CN'>>
+      你告诉雷米，照料安排会由你自己问清。“那就告诉我进展。”你答应还会继续谈，没有交出决定权。
+  <</language>>
+  <br><br>
+<</if>>
+<<set _remyChildren to getChildrenOf(_remyRecord.pregnancyId).filter(child => knowsChild(child.childId, 'pc') && childIsBorn(child))>>
+<<if _remyChildren.length>>
+<<language>>
+  <<option 'EN'>>
+    Remy starts with the costs. You ask about feeding and sleeping before returning to the figures. <<if _remyChildren.length gt 1>>With more than one child, you discuss how to share the work instead of treating every waking as the same child's.<<else>>You ask what happens when the child wakes in the night.<</if>> <<if $Orchard.remy.romance and C.npc.Remy.love gte 50>>"I heard you the first time," <<he>> says, then moves the figures aside long enough to answer.<<else>>Remy looks at the clock. "You'll need to ask the person on duty as well."<</if>>
+  <<option 'CN'>>
+    雷米先说起开销。你让<<him>>先谈喂食和睡觉，再回头算账。<<if _remyChildren.length gt 1>>孩子不止一个，你们商量怎么分担，没把每次夜里醒来都当成同一个孩子的事。<<else>>你问起孩子半夜醒了该怎么办。<</if>> <<if $Orchard.remy.romance and C.npc.Remy.love gte 50>>“第一遍就听见了。”<<he>>说，却还是把账目放到一边，先回答你的问题。<<else>>雷米看了眼钟。“还得问当班的人。”<</if>>
+<</language>>
+<<else>>
+<<language>>
+  <<option 'EN'>>
+    You ask how to find out about the children. Remy gives no account of a visit you have not made. You agree to ask where they are being cared for before making plans around them.
+  <<option 'CN'>>
+    你问起怎样了解孩子的近况。雷米没有把你尚未经历的探望说成既成事实。你们决定，先问清孩子在哪里被照料，再安排后面的事。
+<</language>>
+<</if>>
+<</switch>>
+<</widget>>
+
+
+<<widget 'deadwood-remy-pregnancy-ended'>>
+  <<if !_remyPregnancyPresent>><<exit>><</if>>
+  <<for _remyPast range Object.keys($Orchard.remy.pregnancy.records).map(Number)>>
+    <<if $Orchard.remy.pregnancy.records[_remyPast].disclosed and $pregnancies[_remyPast]?.carrier is 'cleared' and $Orchard.remy.pregnancy.records[_remyPast].ended_day isnot Time.days>>
+      <<capture _remyPast>>
+        <div @id="'deadwood-remy-ended-' + _remyPast">
+          <<socialiseicon 'ask'>><<lanLink ['Talk about the pregnancy that ended (0:10)', '谈起已经结束的那次怀孕 (0:10)']>>
+            <<deadwood-remy-pregnancy-context>>
+            <<if _remyPregnancyPresent and $pregnancies[_remyPast]?.carrier is 'cleared' and $Orchard.remy.pregnancy.records[_remyPast]?.disclosed and $Orchard.remy.pregnancy.records[_remyPast].ended_day isnot Time.days>>
+              <<set $Orchard.remy.pregnancy.records[_remyPast].ended_day to Time.days>>
+              <<replace `'#deadwood-remy-ended-' + _remyPast`>>
+                <<npc Remy>><<person1>>
+                <<language>>
+                  <<option 'EN'>>
+                    You tell Remy the pregnancy has ended. <<He>> reaches for the old appointment slip, then stops. "What do you want to do with this?" You ask <<him>> to leave it aside while you speak. <<if _remyPregnancy.captive>>A worker looks over from the next pen. You lower your voice; Remy stays outside the gate.<<elseif $Orchard.remy.romance and C.npc.Remy.love gte 50>><<He>> leaves the register closed and waits for you to continue.<<else>><<He>> looks uncomfortable with a conversation that has no timetable to settle.<</if>>
+                  <<option 'CN'>>
+                    你告诉雷米，那次怀孕已经结束。<<He>>伸手去拿旧预约单，又停住。“这个，你想怎么处理？”你请<<him>>先放到一旁，听你说。<<if _remyPregnancy.captive>>隔壁栏位的工人望过来。你压低声音；雷米仍在门外。<<elseif $Orchard.remy.romance and C.npc.Remy.love gte 50>><<He>>没有打开登记簿，等着你继续说。<<else>>这场谈话没有什么待排的时间表，<<he>>显得有些不自在。<</if>>
+                <</language>>
+                <<pass 10>>
+              <</replace>>
+            <</if>>
+          <</lanLink>><br>
+        </div>
+      <</capture>>
+    <</if>>
+  <</for>>
+<</widget>>
+
+<<widget 'deadwood-remy-birth-reflection'>>
+  <<set _remyBirthRecord to $pregnancies[$recentBirthId]>>
+  <<set _remyBirthEntry to $Orchard?.remy?.pregnancy.records[_remyBirthRecord?.pregnancyId]>>
+  <<if !maplebirch.get('Orchard') or $statFreeze or $replayScene or $combat is 1 or _remyBirthRecord?.carrier isnot 'pc' or _remyBirthRecord.deliveredDate is null or !_remyBirthEntry?.disclosed>><<exit>><</if>>
+  <div id='deadwood-remy-birth-reflection'>
+    <<socialiseicon 'ask'>><<lanLink ['Think about what to tell Remy', '想想该怎么告诉雷米']>>
+      <<if maplebirch.get('Orchard') and !$statFreeze and !$replayScene and $recentBirthId is _remyBirthRecord.pregnancyId>>
+        <<replace '#deadwood-remy-birth-reflection'>>
+          <<language>>
+            <<option 'EN'>>
+              You remember your conversation with Remy <<if _remyBirthEntry.place is 'riding_school'>>at the school<<else>>across the farm gate<</if>>, and Remy's questions about arrangements. Now there is someone sleeping beside you. The next conversation will need more than a date on the register.
+            <<option 'CN'>>
+              你想起<<if _remyBirthEntry.place is 'riding_school'>>在学校<<else>>隔着农场栏门<</if>>的那次交谈，以及雷米对后续安排的追问。如今，身旁已经有人安静地睡着。下一次见面，要谈的不会只是登记簿上的一个日期。
+          <</language>>
+          <br><br>
+          <<lanLink ['Decide to ask for a share of the care', '准备提出一起分担照料']>>
+            <<set _remyBirthEntry.reflection to 'care'>>
+            <<replace '#deadwood-remy-birth-reflection'>>
+              <<language>>
+                <<option 'EN'>>
+                  You decide to ask what time Remy can actually make available, rather than accepting that everything will be arranged.
+                <<option 'CN'>>
+                  你决定问问雷米，究竟能腾出哪些时间，不接受一句“都会安排好”就算了。
+              <</language>>
+            <</replace>>
+          <</lanLink>><br>
+          <<lanLink ['Decide to keep the arrangements in your hands', '准备把安排留在自己手里']>>
+            <<set _remyBirthEntry.reflection to 'independent'>>
+            <<replace '#deadwood-remy-birth-reflection'>>
+              <<language>>
+                <<option 'EN'>>
+                  You decide to hear the carers' arrangements before agreeing to anything Remy proposes.
+                <<option 'CN'>>
+                  你决定先听清照料人员的安排，再考虑雷米的提议。
+              <</language>>
+            <</replace>>
+          <</lanLink>>
+        <</replace>>
+      <</if>>
+    <</lanLink>><br>
+  </div>
+<</widget>>
+
+<<widget 'deadwood-remy-paternity-link'>>
+  <<if !maplebirch.get('Orchard') or $statFreeze or $replayScene or $combat is 1>><<exit>><</if>>
+  <<for _remyTest range $pregnancies.filter(record => ['pc', 'Remy'].includes(record.carrier) && record.deliveredDate === null && knowsPregnancy(record.pregnancyId, 'pc') && !knowsDonor(record.pregnancyId, 'pc') && $Orchard.remy.pregnancy.records[record.pregnancyId]?.sample && !$Orchard.remy.pregnancy.records[record.pregnancyId]?.tested)>>
+    <<capture _remyTest>>
+      <<if $money gte 500000>>
+        <<procedureicon 'paternity'>><<lanLink `_remyTest.carrier === 'pc' ? ['Test whether Remy is the other parent (£5,000, 1:00)', '鉴定雷米是否为另一位亲生父母 (£5,000, 1:00)'] : ['Test whether you are the other parent (£5,000, 1:00)', '鉴定你是否为另一位亲生父母 (£5,000, 1:00)']` 'Deadwood Remy Paternity Result'>>
+          <<set _remyActualTest to $pregnancies[_remyTest.pregnancyId]>>
+          <<set _remyActualEntry to $Orchard?.remy?.pregnancy.records[_remyTest.pregnancyId]>>
+          <<if maplebirch.get('Orchard') and !$statFreeze and !$replayScene and $money gte 500000 and _remyActualTest.deliveredDate is null and ['pc', 'Remy'].includes(_remyActualTest.carrier) and _remyActualEntry?.sample and !_remyActualEntry.tested and !knowsDonor(_remyTest.pregnancyId, 'pc')>>
+            <<set $Orchard.remy.pregnancy.testId to _remyTest.pregnancyId>>
+            <<set _remyActualEntry.tested to true>><<set _remyActualEntry.sample to false>>
+            <<money -500000 'hospitalPaternityTest'>>
+            <<set _remyTestParent to _remyActualTest.carrier is 'pc' ? 'Remy' : 'pc'>>
+            <<if _remyActualTest.donor is _remyTestParent>>
+              <<run setKnowsDonor(_remyTest.pregnancyId, 'pc')>>
+              <<run setKnowsDonor(_remyTest.pregnancyId, 'Remy')>>
+            <<else>>
+              <<set _remyActualTest.possibleDonors to _remyActualTest.possibleDonors.filter(donor => donor.name !== _remyTestParent)>>
+              <<run resolvePaternity(_remyTest.pregnancyId)>>
+            <</if>>
+            <<pass 60>>
+          <<else>>
+            <<set $Orchard.remy.pregnancy.testId to -1>>
+          <</if>>
+        <</lanLink>><br>
+      <<else>>
+        <span class='blue'>
+        <<language>>
+          <<option 'EN'>>
+            You have Remy's sample. The test costs £5,000.
+          <<option 'CN'>>
+            你带着雷米的样本，鉴定需要 £5,000。
+        <</language>>
+        </span><br>
+      <</if>>
+    <</capture>>
+  <</for>>
+<</widget>>
+
+:: Deadwood Remy Pregnancy Hospital [nobr]
+<<set $outside to 0>><<set $location to 'hospital'>><<effects>>
+<<set _remyBirth to $pregnancies[$Orchard?.remy?.pregnancy.id]>>
+<<if maplebirch.get('Orchard') and !$statFreeze and !$replayScene and $combat isnot 1 and C.npc.Remy.init is 1 and C.npc.Remy.state is 'active'
+  and $Orchard.remy.pregnancy.origin is $passage and _remyBirth?.carrier is 'Remy' and _remyBirth.deliveredDate is null and npcPregnancyEnding('Remy')>>
+  <<npc Remy>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      Remy gives the nurse instructions until she asks <<him>> to let her finish. <<He>> falls silent, watching the door. You take the chair she offers. "Stay where I can see you," <<he>> says. The nurse explains what will happen next to both of you.
+    <<option 'CN'>>
+      雷米一直吩咐护士，直到她请<<him>>先让自己说完。<<He>>安静下来，望着门口。你在护士搬来的椅子上坐下。“待在我看得见的地方。”<<he>>说。护士向你们一起讲解接下来的安排。
+  <</language>>
+  <br><br>
+  <<birthUi 'Remy' 'hospital' 'home' 'Deadwood Remy Pregnancy After' 180>>
+<<else>>
+  <<language>>
+    <<option 'EN'>>
+      The staff have already taken over. You can ask Remy about it when you next meet.
+    <<option 'CN'>>
+      医护人员已经接手。下次见到雷米时，你可以问问近况。
+  <</language>>
+  <br><br>
+  <<getouticon>><<lanLink ['Leave', '离开'] 'Hospital'>><</lanLink>>
+<</if>>
+
+:: Deadwood Remy Pregnancy After [nobr]
+<<set $outside to 0>><<set $location to 'hospital'>><<effects>>
+<<set _remyBirth to $pregnancies[$recentBirthId]>>
+<<if maplebirch.get('Orchard') and !$statFreeze and !$replayScene and _remyBirth?.carrier is 'Remy' and _remyBirth.pregnancyId is $Orchard.remy.pregnancy.id and _remyBirth.deliveredDate isnot null>>
+  <<npc Remy>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      The register and appointments have finally been left outside. Remy looks exhausted. <<if $Orchard.remy.romance and C.npc.Remy.love gte 50>>When you move the chair, <<he>> catches your sleeve. "Not yet." It is much quieter than <<his>> usual instructions.<<else>><<He>> asks the nurse about discharge, then loses the next question halfway through.<</if>> You wait while she repeats the arrangements.
+    <<option 'CN'>>
+      登记簿和预约终于被留在了外面。雷米显得很疲惫。<<if $Orchard.remy.romance and C.npc.Remy.love gte 50>>你挪动椅子时，<<he>>拉住你的袖子。“先别走。”声音比平时的吩咐轻得多。<<else>><<He>>问护士什么时候能出院，下一个问题却说到一半就忘了。<</if>> 你等护士再讲一遍后续安排。
+  <</language>>
+  <br><br>
+  <<language>>
+    <<option 'EN'>>
+      The nursery will handle care under the usual arrangements. You can visit there.
+    <<option 'CN'>>
+      育儿室会按既有安排照料孩子，你可以前去探望。
+  <</language>>
+  <br><br>
+<</if>>
+<<getouticon>><<lanLink ['Let Remy rest and leave', '让雷米休息，离开'] 'Hospital'>><</lanLink>>
+
+
+:: Deadwood Remy Paternity Result [nobr]
+<<set $outside to 0>><<set $location to 'hospital'>><<effects>>
+<<set _remyTestResult to $pregnancies[$Orchard?.remy?.pregnancy.testId]>>
+<<if maplebirch.get('Orchard') and !$statFreeze and !$replayScene and ['pc', 'Remy'].includes(_remyTestResult?.carrier) and $Orchard.remy.pregnancy.records[_remyTestResult.pregnancyId]?.tested>>
+  <<language>>
+    <<option 'EN'>>
+      A member of staff hands you the report. The conclusion is printed beneath the details of the samples.
+    <<option 'CN'>>
+      医护人员把报告交给你。样本资料的下面，印着鉴定结论。
+  <</language>>
+  <br><br>
+  <<if _remyTestResult.donor is (_remyTestResult.carrier is 'pc' ? 'Remy' : 'pc')>>
+    <span class='pink'>
+    <<language>>
+      <<option 'EN'>>
+        The test confirms that you and Remy share the child's parentage.
+      <<option 'CN'>>
+        鉴定确认，你和雷米都是孩子的亲生父母。
+    <</language>>
+    </span>
+  <<else>>
+    <span class='blue'>
+    <<language>>
+      <<option 'EN'>>
+        The test rules out the proposed parentage between you and Remy.
+      <<option 'CN'>>
+        鉴定排除了你与雷米之间推测的亲子关系。
+    <</language>>
+    </span>
+  <</if>><br><br>
+  <<language>>
+    <<option 'EN'>>
+      You keep the report for your next conversation.
+    <<option 'CN'>>
+      你收好报告，留到下次交谈时说明。
+  <</language>>
+  <br><br>
+<<else>>
+  <<language>>
+    <<option 'EN'>>
+      There is no new report to collect.
+    <<option 'CN'>>
+      现在没有可领取的新报告。
+  <</language>>
+  <br><br>
+<</if>>
+<<getouticon>><<lanLink ['Return to reception', '返回接待处'] 'Hospital Foyer'>><</lanLink>>

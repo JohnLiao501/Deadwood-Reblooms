@@ -1,74 +1,7 @@
-:: Deadwood Remy Gift []
-<<effects>>
-<<set $_remy to maplebirch.get('Orchard')?.remy>>
-<<set $_farm_apple to $_remy?.farmConflict and $Orchard.unlocked.farm and $Orchard.farm.some(tree => tree?.species is 'apple' and tree.harvests gt 0)>>
-<<if $_remy?.act('gift')>>
-  <<npc Remy>><<person1>>
-  <<if !$_farm_apple>><<npcincr Remy love 2>><</if>>
-  <<language>>
-    <<option 'EN'>>
-      Remy takes the apple, turning it in <<his>> palm before polishing it on a clean handkerchief. "For me?" <<He>> asks. "Usually people bring these for the horses."
-    <<option 'CN'>>
-      雷米接过苹果，在掌心转了一圈，再拿干净的手帕擦了擦。“给我的？”<<He>>问道。“一般他们都是带来喂马的。”
-  <</language>><br><br>
-  <<if $remySeen.includes('livestock')>>
-    <<language>>
-      <<option 'EN'>>
-        <<He>> offers it back for a moment. "Would you rather have it yourself?" You shake your head. Remy lowers <<his>> hand. <span class='purple'>You remember another apple held just out of reach.</span> A pupil calls to <<him>> from the yard, and the moment passes.
-      <<option 'CN'>>
-        <<He>>把苹果朝你递回来一点。“还是你自己想吃？”你摇头，雷米便收回了手。<span class='purple'>你想起另一个被拿在手里、够不着的苹果。</span>庭院里的学员叫了<<him>>一声，打断了这个瞬间。
-    <</language>><br><br>
-  <</if>>
-  <<if $_farm_apple>>
-    <<language>>
-      <<option 'EN'>>
-        You mention your own harvest. "From Alex's land?" Remy puts the apple on the sill. "I hope you kept something for yourself." <span class='purple'><<He>> leaves it beside the feed box, rather than in <<his>> pocket.</span>
-      <<option 'CN'>>
-        你说起自己种出的收成。“艾利克斯地里长的？”雷米把苹果放在窗台上。“希望你还给自己留了点。”<span class='purple'><<He>>把它留在饲料箱旁，没有放进口袋。</span>
-    <</language>>
-  <<elseif $Orchard.remy.romance>>
-    <<language>>
-      <<option 'EN'>>
-        "I'll save it for later," <<he>> says. A horse reaches over the stable door. Remy shifts the apple out of its reach and slips it into <<his>> pocket. "This one isn't for you." <<He>> looks back at you, smiling.
-      <<option 'CN'>>
-        “我留着晚点吃。”<<He>>说。一匹马从厩门上探过头来，雷米将苹果挪开，放进口袋。“这个可不是给你的。”<<He>>回头朝你笑了笑。
-    <</language>>
-  <<else>>
-    <<language>>
-      <<option 'EN'>>
-        "Thank you." <<He>> sets it on the office windowsill, apart from the box of feed apples. "I will keep that in mind."
-      <<option 'CN'>>
-        “谢谢。”<<He>>把它放在办公室窗台上，与那箱喂马的苹果分开放着。“我会记住的。”
-    <</language>>
-  <</if>>
-  <<if !maplebirch.get('Orchard').remy.farmConflict and $Orchard.unlocked.farm and $Orchard.farm.some(tree => tree?.species is 'apple' and tree.harvests gt 0)>>
-    <br><br><<language>>
-      <<option 'EN'>>
-        You mention your own harvest. "Is that so?" Remy weighs the apple again. "Then I'd better give it a fair tasting."
-      <<option 'CN'>>
-        你说起自己种出的收成。“是吗？”雷米又掂了掂苹果。“那我可得认真尝尝了。”
-    <</language>>
-  <</if>>
-  <<if $_farm_apple>>
-    <br><br><<language>>
-      <<option 'EN'>><span class='purple'>The gift has not softened <<his>> attitude towards the farm.</span>
-      <<option 'CN'>><span class='purple'>这个礼物没有让<<he>>对农场软化态度。</span>
-    <</language>>
-  <<else>><<glove 'Remy'>><</if>>
-<<else>>
-  <<language>>
-    <<option 'EN'>>
-      You cannot give Remy an apple now. Fruit set aside in your orchard accounts stays with you.
-    <<option 'CN'>>
-      现在没法把苹果交给雷米。果园账目里留给自己的水果不会被送出去。
-  <</language>>
-<</if>>
-<<deadwood-remy-return>>
-
 :: Deadwood Remy Date []
 <<effects>>
 <<if maplebirch.get('Orchard')?.remy.act('date')>>
-  <<set _remy_indoors to Weather.precipitation is 'rain' or Time.season is 'winter'>>
+  <<set _remy_indoors to $Orchard.remy.date_kind is 'tea' or ['rain', 'snow'].includes(Weather.precipitation) or Time.season is 'winter'>>
   <<set $outside to _remy_indoors ? 0 : 1>>
   <<npc Remy>><<person1>><<npcincr Remy love 3>><<pass 45>>
   <<if _remy_indoors>>
@@ -86,9 +19,12 @@
         雷米陪你沿牧场围栏走了一段。每过一道门，<<he>>都会在你身后关好，再拉一下门闩。马朝你的衣袖凑过来时，<<he>>咂了下舌，把它的注意力引走。“它们很快就能记住哪些客人会带吃的。”
     <</language>><br><br>
   <</if>>
+  <<deadwood-remy-date-details>>
   <<language>>
     <<option 'EN'>>
-    <<if $Orchard.remy.dates is 1>>
+    <<if $Orchard.remy.ended>>
+      "We can still talk about the school," Remy says. You agree. The conversation stays on today's lessons rather than the evenings you once planned together.
+    <<elseif $Orchard.remy.dates is 1>>
       Remy asks why you wanted <<his>> company. <<if $speech_attitude is 'bratty'>>"Someone ought to make sure you take a break." "How considerate," <<he>> replies.<<elseif $speech_attitude is 'meek'>>You admit that you wanted to know <<him>> better. "Well. Here I am."<<else>>You say you were curious about what <<he>> does between lessons. "Usually, I prepare for the next one."<</if>> <<He>> checks the yard before returning <<his>> attention to you.
     <<elseif $Orchard.remy.romance and C.npc.Remy.love gte 50 and $Orchard.remy.dates gte 5>>
       "I moved a lesson earlier," <<he>> says. "We have a little longer today." <<He>> checks the courtyard as <<he>> speaks, then notices you watching. "You could try looking pleased."
@@ -98,7 +34,9 @@
       "You keep finding reasons to come back," <<he>> says. "I'm beginning to suspect the school isn't the attraction." <<He>> lets the remark hang for a moment before turning back to you.
     <</if>>
     <<option 'CN'>>
-    <<if $Orchard.remy.dates is 1>>
+    <<if $Orchard.remy.ended>>
+      “学校的事，仍可以谈。”雷米说。你同意。你们说起今天的课程，没有再提从前一起安排的那些晚上。
+    <<elseif $Orchard.remy.dates is 1>>
       雷米问你，为什么想找<<him>>单独待一会儿。<<if $speech_attitude is 'bratty'>>“总得有人盯着你休息吧。”“真体贴。”<<He>>回答。<<elseif $speech_attitude is 'meek'>>你承认自己想多了解<<him>>一些。“好吧，我就在这里。”<<else>>你说自己好奇<<he>>课间都做些什么。“一般是准备下一节课。”<</if>> <<He>>看了眼庭院，又将注意力转回你身上。
     <<elseif $Orchard.remy.romance and C.npc.Remy.love gte 50 and $Orchard.remy.dates gte 5>>
       “有节课，我提前上了。”<<He>>说。“今天能多待一会儿。”<<He>>说话时还看了眼庭院，随后发现你正盯着<<him>>。“你可以试着表现得高兴一点。”
@@ -110,13 +48,16 @@
   <</language>><<glove 'Remy'>>
   <<if $remySeen.includes('livestock')>>
     <br><br><<language>>
-      <<option 'EN'>>A key knocks against <<his>> belt as <<he>> moves. <span class='purple'>You recognise the sound before you look.</span>
-      <<option 'CN'>>一把钥匙随着<<his>>动作碰在腰带上。<span class='purple'>还没低头，你就认出了那个声音。</span>
+      <<option 'EN'>>
+        A key knocks against <<his>> belt as <<he>> moves. <span class='purple'>You recognise the sound before you look.</span>
+      <<option 'CN'>>
+        一把钥匙随着<<his>>动作碰在腰带上。<span class='purple'>还没低头，你就认出了那个声音。</span>
     <</language>>
   <</if>>
   <br><br>
   <<capture _remy_indoors>>
     <div id='deadwood-remy-date-talk'>
+      <<deadwood-remy-date-new-topic>>
       <<if maplebirch.get('Orchard').remy.farmConflict>>
         <<lanLink ['Ask whether this changes anything for Alex', '问这是否能改变艾利克斯的处境']>>
           <<replace '#deadwood-remy-date-talk'>>

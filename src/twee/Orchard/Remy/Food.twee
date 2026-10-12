@@ -1,0 +1,153 @@
+:: Deadwood Remy Gift [nobr]
+<<effects>><<set _remy to maplebirch.get('Orchard')?.remy>>
+<<if _remy?.canGift>>
+  <<npc Remy>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      Remy looks up from the register. "For me, or the horses?" You tell <<him>> you brought something to eat.
+    <<option 'CN'>>
+      雷米从登记簿上抬起头。“给我的，还是给马的？”你告诉<<him>>，带了些吃的。
+  <</language>><br><br>
+  <div id='deadwood-remy-gift-panel'>
+    <<for _remyFood range _remy.giftTypes>>
+      <<capture _remyFood>>
+        <<foodstufficon _remyFood>><<lanLink `setup.foodstuff[_remyFood].singular`>>
+          <<if maplebirch.get('Orchard')?.remy.giveFood(_remyFood)>>
+            <<pass 5>>
+            <<replace '#deadwood-remy-gift-panel'>><<deadwood-remy-food-response _remyFood>><</replace>>
+          <</if>>
+        <</lanLink>> × 1
+        <<if $foodstuff[_remyFood]?.knownFavorite?.includes('Remy')>>
+          <span class='gold'>
+          <<language>>
+            <<option 'EN'>>
+              — a favourite
+            <<option 'CN'>>
+              ——喜欢的食物
+          <</language>>
+          </span>
+        <</if>>
+        <<if _remy.ownHarvest(_remyFood)>>
+          | <<lanLink ['Mention your farm harvest as you give it', '送出时提起农场的收成']>>
+            <<if maplebirch.get('Orchard')?.remy.giveFood(_remyFood, true)>>
+              <<pass 5>>
+              <<replace '#deadwood-remy-gift-panel'>><<deadwood-remy-food-response _remyFood>><</replace>>
+            <</if>>
+          <</lanLink>>
+        <</if>><br>
+      <</capture>>
+    <</for>>
+  </div>
+<<else>>
+  <<language>>
+    <<option 'EN'>>
+      There is nothing you can offer now. Food kept aside in the orchard accounts stays with you.
+    <<option 'CN'>>
+      现在没有能送出的食物。果园账目里留给自己的份额仍归你。
+  <</language>>
+<</if>>
+<<deadwood-remy-return>>
+
+:: Deadwood Remy Food Widgets [widget nobr]
+<<widget 'deadwood-remy-food-response'>>
+  <<set _remyFood to _args[0]>><<set _remy to maplebirch.get('Orchard')?.remy>>
+  <<npc Remy>><<person1>>
+  <<set _remyTaste to _remy.preference(_remyFood)>>
+  <<if _remy.state.gift_from_farm and _remy.farmConflict>>
+    <<language>>
+      <<option 'EN'>>
+        "Alex’s land?" Remy asks when you mention the harvest. <<He>> places the fruit beside the feed box, away from the cup on <<his>> desk. "Then I hope you kept some for yourself." A pupil calls from the track; <<he>> answers them before saying anything else.
+      <<option 'CN'>>
+        你提起收成时，雷米问：“艾利克斯的地？”<<He>>把水果放在饲料箱旁，离桌上的杯子有些远。“那希望你还给自己留了点。”跑道上的学员叫了<<him>>一声，<<he>>先去回答对方，没有再说什么。
+    <</language>>
+  <<elseif _remyTaste is 'favourite'>>
+    <<npcincr Remy love 3>><<saveFavoriteFood 'Remy' _remyFood>>
+    <<language>>
+      <<option 'EN'>>
+        Remy puts the register away before you have finished explaining. "Scones. That was a good choice." <<He>> breaks off a piece, keeping the crumbs over the plate. "I can eat these before a lesson without needing the whole afternoon." <<if _remy.stage is 'close'>>Another piece lands on the edge nearest you. "You remembered."<<else>>You notice that <<he>> has stopped watching the clock.<</if>>
+      <<option 'CN'>>
+        你还没介绍完，雷米就把登记簿收起来。“司康饼。选得不错。”<<He>>掰下一块，把碎屑留在盘子里。“课前就能吃完，不必搭上一整个下午。”<<if _remy.stage is 'close'>>另一块被放到靠近你的盘沿。“你记住了。”<<else>>你发现，<<he>>没再盯着钟看。<</if>>
+    <</language>>
+    <<gglove 'Remy'>>
+  <<elseif _remyTaste is 'spicy'>>
+    <<language>>
+      <<option 'EN'>>
+        Remy tries a little, then reaches for the water. "I still have people to speak to." <<He>> pushes the plate aside and wipes <<his>> mouth. "Something milder next time." <<if $speech_attitude is 'bratty'>>You ask whether the pupils would notice a difference. <<He>> gives you a level look over the glass. "I would."<</if>>
+      <<option 'CN'>>
+        雷米尝了一点，就伸手拿水。“我还有人要见。”<<He>>把盘子推到一旁，擦了擦嘴。“下次淡一些。”<<if $speech_attitude is 'bratty'>>你问，学员能不能听出区别。<<He>>隔着杯子平静地看你。“我能。”<</if>>
+    <</language>>
+  <<elseif _remyTaste is 'sour'>>
+    <<language>>
+      <<option 'EN'>>
+        Remy tastes the fruit and stops. "This belongs in something." <<He>> sets the rest down beside the kettle. "Preferably with sugar." You have found something <<he>> does not enjoy eating on its own.
+      <<option 'CN'>>
+        雷米尝了水果，停下来。“这个该加进别的东西里。”<<He>>把余下的放在水壶旁。“最好加点糖。”你发现，<<he>>不喜欢把它直接当水果吃。
+    <</language>>
+  <<elseif _remyTaste is 'alcohol'>>
+    <<npcincr Remy love 1>>
+    <<language>>
+      <<option 'EN'>>
+        Remy checks what you brought, then puts it out of reach of the lesson register. "After work." A pupil calls from the yard. "I would rather they found me able to answer." <<He>> leaves it closed for later.
+      <<option 'CN'>>
+        雷米看看你带来的东西，把它放到离课程登记簿远些的地方。“下班以后再说。”庭院里的学员叫了<<him>>一声。“我还是希望他们来找我时，能听见个清楚的回答。”<<He>>没有打开，留到之后再享用。
+    <</language>><<glove 'Remy'>>
+  <<elseif _remyTaste is 'drink'>>
+    <<npcincr Remy love 1>>
+    <<language>>
+      <<option 'EN'>>
+        Remy takes the drink by the rim and moves the paperwork out of reach. "Thank you." <<if Time.season is 'summer'>>A pupil returns flushed from the track. Remy glances at them before taking a longer drink. "I should remind them to take a break too."<<else>>The cup sits between <<his>> hands while <<he>> listens to you.<</if>>
+      <<option 'CN'>>
+        雷米捏住杯沿，先把文件挪开。“谢谢。”<<if Time.season is 'summer'>>一名学员从跑道上回来，脸颊通红。雷米看了对方一眼，才多喝了几口。“也该提醒他们歇一会儿。”<<else>>你说话时，杯子一直握在<<his>>双手之间。<</if>>
+    <</language>>
+    <<glove 'Remy'>>
+  <<else>>
+    <<npcincr Remy love 2>>
+    <<language>>
+      <<option 'EN'>>
+        Remy clears a space beside the kettle. <<if _remyFood is 'apple'>>"Usually these are for the horses." <<He>> polishes the apple on a handkerchief before setting it apart from the feed.<<else>>"You came prepared." <<He>> tastes the food, then asks where you got it.<</if>> <<if _remy.stage is 'former'>>"Thank you," <<he>> adds, carefully polite.<<elseif _remy.state.romance>>"Next time, let me know. I can leave a little longer between lessons."<<else>>"I will remember that."<</if>>
+      <<option 'CN'>>
+        雷米在水壶旁腾出一点地方。<<if _remyFood is 'apple'>>“一般这些都是给马的。”<<He>>拿手帕擦了擦苹果，再把它与饲料分开放好。<<else>>“准备得挺周全。”<<He>>尝过食物，问你从哪里弄来的。<</if>> <<if _remy.stage is 'former'>>“谢谢。”<<he>>补了一句，客气得很谨慎。<<elseif _remy.state.romance>>“下次提前说一声。我能把课间留长一点。”<<else>>“我会记住的。”<</if>>
+    <</language>>
+    <<glove 'Remy'>>
+  <</if>>
+  <<if _remy.pregnancyTopic>>
+    <br><br><<deadwood-remy-family-smalltalk>>
+  <</if>>
+  <<if $remySeen.includes('livestock') and _remyFood is 'apple'>>
+    <br><br>
+    <<language>>
+      <<option 'EN'>>
+        The apple turns in <<his>> glove. You remember one held beyond your reach, and keep your attention on the open courtyard door.
+      <<option 'CN'>>
+        苹果在<<his>>手套里转了一圈。你想起那个被拿在手里、够不着的苹果，留意着敞开的庭院门。
+    <</language>>
+  <</if>><br><br>
+  <<if !(_remy.state.gift_from_farm and _remy.farmConflict) and !['spicy', 'sour', 'alcohol'].includes(_remyTaste)>>
+    <<lanLink ['Ask to share it (0:05)', '问能否一起吃 (0:05)']>>
+      <<if maplebirch.get('Orchard')?.remy.finishGift()>>
+        <<stress -2>><<pass 5>>
+        <<replace '#deadwood-remy-gift-panel'>>
+          <<language>>
+            <<option 'EN'>>
+              <<if maplebirch.get('Orchard').remy.preference($Orchard.remy.last_gift_type) is 'drink'>>Remy fetches a clean cup and pours you some. "Leave me a little."<<else>>"Leave me some," Remy says, moving the plate towards you.<</if>> <<if _remy.stage is 'close'>>Your chair is already beside <<his>>. <<He>> leaves the register shut while you eat.<<elseif _remy.stage is 'former'>><<He>> keeps the conversation on the lessons outside.<<else>>You take a little. <<He>> asks whether you have eaten today, then catches <<himself>> checking the clock.<</if>>
+            <<option 'CN'>>
+              <<if maplebirch.get('Orchard').remy.preference($Orchard.remy.last_gift_type) is 'drink'>>雷米拿来一只干净杯子，给你倒了一些。“给我留点。”<<else>>“给我留一点。”雷米说，把盘子往你这边移。<</if>><<if _remy.stage is 'close'>>你的椅子已经挨在<<his>>旁边。你们吃东西时，<<he>>没有翻开登记簿。<<elseif _remy.stage is 'former'>><<He>>只谈起外面的课程。<<else>>你拿了一点。<<He>>问你今天有没有吃过东西，随后发现自己又在看钟。<</if>>
+          <</language>>
+          <<lstress>>
+        <</replace>>
+      <</if>>
+    <</lanLink>><br>
+  <</if>>
+  <<lanLink ['Leave it for Remy', '留给雷米']>>
+    <<if maplebirch.get('Orchard')?.remy.finishGift()>>
+      <<replace '#deadwood-remy-gift-panel'>>
+        <<language>>
+          <<option 'EN'>>
+            You leave the food where <<he>> put it. Remy returns to the register, then glances up once more before you leave.
+          <<option 'CN'>>
+            你把食物留在<<he>>放好的地方。雷米继续看登记簿，又在你离开前抬头看了一眼。
+        <</language>>
+      <</replace>>
+    <</if>>
+  <</lanLink>>
+<</widget>>

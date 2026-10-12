@@ -171,7 +171,7 @@ Deliveries share the manual delivery price (70% of the vanilla price) and the co
 Remy relationships and captivity dialogue are part of Orchard. Opening orchard land is not required. After the vanilla riding school introduction, **Approach Remy** appears in the normal daytime menu. Closing time, night, combat, fainting and compulsory scenes block the entrance.
 
 - **Conversation:** once daily, ten minutes. Discuss teaching and care after lessons, with vanilla riding skill and speech attitude differences. After witnessing the vanilla farm conflict, challenge Remy's pressure on Alex; planted fruit trees add a response. This costs a little affection and does not count towards courtship conversations. The vanilla mask event unlocks a mask question; captivity unlocks questions about the barn. Enabled, displayed horse ears unlock another topic. Mask, barn and business topics grant no affection. All topics share the daily opportunity.
-- **Apple:** give one unreserved apple from vanilla food storage each day. Ordinary gifts grant a little affection. Mentioning apples grown on Alex's farm after witnessing the conflict grants none. Gifts do not count as conversations or directly unlock romance.
+- **Food gifts:** offer one dish or fruit daily, using native food inventory and the daily gift record. Orchard reserves stay with PC. In this expansion Remy favours scones; giving them reveals the preference through the native system. Ordinary food grants two affection, drinks one and scones three; spicy food and raw lemons grant none. Food containing alcohol grants one and is kept for after work. Mentioning your farm harvest is optional, and grants no affection after witnessing the conflict with Alex. Gifts do not unlock romance directly.
 - **Time together:** after three conversations and twenty vanilla affection, ask for forty-five minutes together. Once daily, with enough time before closing. The weather determines whether you have tea in the office or walk beside the paddock. Talk about the school or enjoy the quiet; after confirming a relationship you may offer your hand. First, later and romantic visits have different dialogue. Responses within the scene spend no additional time and grant no additional affection.
 - **Relationship:** after five conversations, two private visits and thirty affection, you can discuss what you want. Only explicitly accepting the relationship unlocks Remy as a candidate through the framework. Select Remy in Attitudes afterwards if you wish.
 - **Ending the relationship:** available during public visits and captivity visits, with confirmation. This also removes Remy from your selected love interests.
@@ -196,4 +196,26 @@ School visits preserve PC's memories without deciding whether Remy recognises th
 
 ### Reference
 
-The relationship direction draws on `C1.2_Remy.Love.Mod.mod_v0.5.10-1.zip`. Entrances, state and bilingual dialogue are rewritten for the current game and framework. The old package's pregnancy, items and full passage replacements are not imported. Original author: 查查查茶子.
+The relationship direction draws on `C1.2_Remy.Love.Mod.mod_v0.5.10-1.zip`. Entrances, state and bilingual dialogue are rewritten for the current game and framework. Pregnancy scenes are reconstructed around native pregnancy and child records; old items and full passage replacements are not imported. Original author: 查查查茶子.
+
+### Remy: pregnancy and children
+
+School conversations and conversations across the farm gate support both PC and Remy pregnancies. Native records govern progression, paternity tests, birth and child care. Framework pregnancy registration retains native conception rules and game settings.
+
+- **Disclosure:** both carriers have separate conversations, including simultaneous pregnancies. Possible parentage remains uncertain until native knowledge confirms it; consult the hospital about testing.
+- **Time together:** early, middle, late and labour stages have different openings. Sit together, organise arrangements, discuss names or express your choices. Science and English skills affect the preparation and naming conversations. Each topic takes ten minutes; the first interaction per pregnancy per day gives one affection and stress relief. Captivity conversations grant neither.
+- **Relationships:** established courtship and deeper familiarity affect Remy's response. Ending courtship and captivity retain distinct reactions. Pregnancy does not end captivity or attacks on Alex's farm.
+- **Birth:** offer an ambulance when Remy is in labour at the school, using the native birth and naming interface. Offscreen births retain native handling. PC birth scenes stay native; discuss the children when you next meet.
+- **Afterwards:** care, visits and names read actual births and PC knowledge, including multiple children. Native systems retain custody, child locations and fees.
+
+After a PC hospital birth, choose what to ask Remy at your next meeting: shared care or keeping the arrangements in your own hands. An ended pregnancy has its own conversation without assuming why it ended.
+
+Ask Remy at the school for a voluntary sample, then apply at the hospital paternity desk. Testing costs £5,000 in cash and takes an hour. Positive results confirm parentage; negative results remove that candidate. Samples and results belong to each pregnancy separately.
+
+### Remy: daily company and dates
+
+After becoming familiar with the school, spend fifteen minutes together once a day: rest between lessons, check tack, review the rota, or discuss time together and contact after a breakup. Hand, riding and maths skills affect dialogue. Rest gives modest stress and fatigue relief. Breakup-boundary conversations grant no affection.
+
+Choose office tea or a paddock walk. After confirming the relationship and spending time together twice, a picnic is available in fair, warm weather. Rain, snow and winter keep the office tea option. Dates retain the daily forty-five-minute opportunity and three affection. Familiarity, dominance, absence and the conflict with Alex affect reactions.
+
+Disclosed pregnancies and child-care discussions carry into gifts, company and dates. Hidden pregnancy records do not reveal parentage. After a breakup, ordinary visits and food gifts remain available; restarting the relationship requires an explicit choice.

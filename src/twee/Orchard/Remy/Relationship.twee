@@ -2,6 +2,14 @@
 <<effects>>
 <<if maplebirch.get('Orchard')?.remy.canCourt>>
   <<npc Remy>><<person1>>
+  <<if $Orchard.remy.ended>>
+    <<language>>
+      <<option 'EN'>>
+        "I remember how we left it," Remy says. You tell <<him>> you want to discuss starting again, rather than pretending the previous agreement never ended. <<He>> waits until you have finished before opening the office door.
+      <<option 'CN'>>
+        “我记得上次怎么说的。”雷米说。你告诉<<him>>，这次想谈重新开始，没有打算装作从前的约定从未结束。<<He>>等你把话说完，才打开办公室的门。
+    <</language>><br><br>
+  <</if>>
   <<language>>
     <<option 'EN'>>
       Remy holds the office door while you step inside. <<He>> closes the register, leaving a finger between the pages. "You wanted to discuss something?"

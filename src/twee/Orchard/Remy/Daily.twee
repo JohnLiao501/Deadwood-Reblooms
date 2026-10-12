@@ -1,0 +1,161 @@
+:: Deadwood Remy Daily [nobr]
+<<effects>><<set _remy to maplebirch.get('Orchard')?.remy>>
+<<if _remy?.canDaily>>
+  <<npc Remy>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      The next group is still gathering their helmets. Remy puts a pencil across the register. "What did you have in mind?"
+    <<option 'CN'>>
+      下一批学员还在拿头盔。雷米把铅笔横放在登记簿上。“你想做什么？”
+  <</language>><br><br>
+  <div id='deadwood-remy-daily'>
+    <<for _remyActivity range ['rest', 'tack', 'rota', 'relationship']>>
+      <<if (_remyActivity isnot 'tack' or !pcAreArmsBound('both')) and (_remyActivity isnot 'relationship' or _remy.state.romance or _remy.state.ended)>>
+        <<capture _remyActivity>>
+          <<socialiseicon 'friendly'>><<lanLink `({ rest: ['Keep Remy company between lessons (0:15)', '课间陪雷米待一会儿 (0:15)'], tack: ['Help check the tack (0:15)', '帮忙检查马具 (0:15)'], rota: ['Look over the lesson rota together (0:15)', '一起看看课程安排 (0:15)'], relationship: _remy.state.ended ? ['Discuss how to meet after the breakup (0:15)', '谈谈分手后如何来往 (0:15)'] : ['Talk about making time for each other (0:15)', '商量怎样给彼此留时间 (0:15)'] })[_remyActivity]`>>
+            <<if maplebirch.get('Orchard')?.remy.daily(_remyActivity)>>
+              <<if _remyActivity isnot 'relationship' or !$Orchard.remy.ended>><<npcincr Remy love 1>><</if>>
+              <<if _remyActivity is 'rest'>><<stress -4>><<tiredness -20>><</if>>
+              <<pass 15>>
+              <<replace '#deadwood-remy-daily'>><<deadwood-remy-daily-response _remyActivity>><</replace>>
+            <</if>>
+          <</lanLink>><br>
+        <</capture>>
+      <</if>>
+    <</for>>
+  </div>
+<<else>>
+  <<language>>
+    <<option 'EN'>>
+      The break is over. You can arrange another visit when there is time between lessons.
+    <<option 'CN'>>
+      课间休息已经结束。下次课程之间有空时，可以再来相处。
+  <</language>>
+<</if>>
+<<deadwood-remy-return>>
+
+:: Deadwood Remy Daily Widgets [widget nobr]
+<<widget 'deadwood-remy-daily-response'>>
+  <<set _remy to maplebirch.get('Orchard')?.remy>>
+  <<npc Remy>><<person1>>
+  <<switch _args[0]>>
+    <<case 'rest'>>
+      <<language>>
+        <<option 'EN'>>
+          You sit beside the office window. <<if Weather.precipitation is 'rain'>>Rain drums on the sill. A muddy pupil stops outside and thinks better of bringing their boots indoors. Remy points them towards the scraper.<<elseif Time.season is 'winter'>>The glass has misted over. Remy clears a circle with <<his>> glove to check the track, then turns back to you.<<else>>Someone drops a bucket in the yard. Remy listens for a moment, then leaves the worker to pick it up.<</if>>
+          <br><br>
+          <<if _remy.stage is 'close'>>"You can stop watching the clock. That is my job." <<He>> leaves the pencil down until a knock finally calls <<him>> away.<<elseif _remy.stage is 'former'>>You talk about the yard rather than the evenings you used to spend together. Remy lets the silences stand.<<else>>"A quiet visitor. That makes a change." You ask whether <<he>> would prefer another complaint about the horses. "Not particularly."<</if>>
+        <<option 'CN'>>
+          你坐在办公室窗边。<<if Weather.precipitation is 'rain'>>雨点敲着窗台。一名满身泥的学员停在门外，没有把靴子带进屋。雷米指了指刮泥的地方。<<elseif Time.season is 'winter'>>玻璃上起了一层雾。雷米用手套擦出一个圈，看看跑道，再转回你这里。<<else>>有人在庭院里弄翻了桶。雷米听了一会儿，把捡拾的事留给工人。<</if>>
+          <br><br>
+          <<if _remy.stage is 'close'>>“你可以不盯着钟。那是我的活。”<<He>>没再拿起铅笔，直到敲门声终于把<<him>>叫走。<<elseif _remy.stage is 'former'>>你们谈着庭院里的事，没有提起从前一起度过的晚上。雷米任由话间的沉默留着。<<else>>“安静的客人。倒挺难得。”你问，难道<<he>>更想再听一遍关于马的抱怨。“倒也没有。”<</if>>
+      <</language>>
+      <<lstress>><<ltiredness>>
+    <<case 'tack'>>
+      <<language>>
+        <<option 'EN'>>
+          Remy lays a bridle on the desk and asks you to look at the stitching. <<if currentSkillValue('handskill') gte 400>>You turn the leather to expose a loose thread and show <<him>> where it is beginning to pull. "Good eye." <<He>> puts it aside for repair instead of sending it back out.<<else>>You miss a loosened seam. Remy turns it over and shows you how the thread lifts when the strap bends. "Look at it under strain as well."<</if>>
+          <br><br>
+          <<if currentSkillValue('thighskill') gte 600>>You explain where it rubs while riding. <<He>> asks which gait made it worse, listening to the answer before taking the next piece.<<else>>A pupil comes in looking for a saddle. Remy makes them wait while <<he>> checks the fastening.<</if>> <<if _remy.state.romance>>"You have a reason to stay other than my company, then." You ask whether <<he>> objects. "I did not say that."<</if>>
+        <<option 'CN'>>
+          雷米把一副缰具放到桌上，请你看看缝线。<<if currentSkillValue('handskill') gte 400>>你翻过皮带，找出一根松线，指给<<him>>看它正从哪里脱开。“眼力不错。”<<He>>把它放到待修的一边，没有再送出去用。<<else>>你漏看了一道松开的接缝。雷米翻过来，示范皮带弯曲时，线会怎样翘起。“受力时也要看。”<</if>>
+          <br><br>
+          <<if currentSkillValue('thighskill') gte 600>>你说起骑乘时哪里会磨擦。<<He>>问，在哪种步法里更明显，听完答复才拿下一件。<<else>>一名学员进来找马鞍。雷米检查完扣件，才让对方拿走。<</if>> <<if _remy.state.romance>>“看来，除了找我，你又有个留下来的理由了。”你问<<he>>介不介意。“我可没这样说。”<</if>>
+      <</language>>
+    <<case 'rota'>>
+      <<language>>
+        <<option 'EN'>>
+          Remy turns the timetable towards you. There is an empty space between two group lessons. <<if $maths gte 400>>You compare the numbers of riders and horses and point out that the apparent gap includes a change of tack. Remy moves an entry instead of filling it. "That is why I leave margins."<<else>>You suggest filling the gap. Remy asks which horses will be ready. When you look again, the break no longer seems so empty.<</if>>
+          <br><br>
+          <<if _remy.stage is 'close'>>At the edge of the page, <<he>> leaves another gap. "That one is for us. Tell me before I put somebody else in it."<<elseif _remy.state.romance>>"Ask before turning up," <<he>> says. "It is easier to make time while the page is still blank."<<else>>Remy folds the timetable and returns it to the register. "You can see why I do not promise an afternoon at a moment's notice."<</if>>
+        <<option 'CN'>>
+          雷米把时间表转向你。两节团体课之间留着一处空白。<<if $maths gte 400>>你对照学员和马的数量，指出这段看似空着的时间还得换马具。雷米挪动了一项，没有把空白填满。“所以才要留余地。”<<else>>你提议把空档填上。雷米问，哪几匹马到时能准备好。你再看一遍，才发现这段休息没那么空。<</if>>
+          <br><br>
+          <<if _remy.stage is 'close'>>在纸页边上，<<he>>又留了一处空档。“这个留给我们。别等我填了别人，再来告诉我。”<<elseif _remy.state.romance>>“过来之前，先问问。”<<he>>说。“纸上还空着时，比较容易腾出时间。”<<else>>雷米折好时间表，放回登记簿。“现在你该知道，为什么我不能让人临时叫走一下午了。”<</if>>
+      <</language>>
+    <<case 'relationship'>>
+      <<if _remy.state.ended>>
+        <<language>>
+          <<option 'EN'>>
+            "We agreed it was over," Remy says. You tell <<him>> you still intend to use the school, and would like to know what to expect. <<He>> straightens the register. "Lessons are lessons." You agree to keep visits clear, rather than treating the meal or the break as a promise to begin again.
+          <<option 'CN'>>
+            “我们已经说好结束了。”雷米说。你告诉<<him>>，自己还要来学校，希望知道该怎么相处。<<He>>理正登记簿。“上课就是上课。”你们决定把来意说清，没有把送食物或课间陪伴当成重新开始的承诺。
+        <</language>>
+      <<else>>
+        <<language>>
+          <<option 'EN'>>
+            Remy asks how often you intend to come. You ask what time <<he>> will make available. "You want an appointment?" <<He>> looks amused until you remind <<him>> how often the register interrupts.
+            <br><br>
+            <<if _remy.stage is 'close'>>"Fair enough." <<He>> shows you a gap instead of asking you to fit around every lesson.<<else>>"Tell me beforehand. I cannot promise to drop everything." You ask <<him>> to tell you when the plans change too.<</if>> <<if _remy.farmConflict>>When the talk reaches Alex's farm, <<his>> hand stops on the page. "You know what I think of that." The question remains between you.<</if>>
+          <<option 'CN'>>
+            雷米问，你打算多久来一次。你反问<<he>>会留出哪些时间。“要预约吗？”<<He>>觉得有些好笑，直到你提醒<<him>>，登记簿已经打断你们多少回。
+            <br><br>
+            <<if _remy.stage is 'close'>>“也有道理。”<<He>>指给你看一处空档，没有让你围着每一节课转。<<else>>“提前告诉我。我不能保证随时停下所有事。”你要求<<him>>临时改计划时，也告诉你一声。<</if>> <<if _remy.farmConflict>>谈到艾利克斯的农场时，<<his>>手停在纸上。“你知道我怎么想。”这个问题仍留在你们之间。<</if>>
+        <</language>>
+      <</if>>
+  <</switch>>
+  <<if _args[0] isnot 'relationship' or !_remy.state.ended>><<glove 'Remy'>><</if>>
+  <<if _remy.pregnancyTopic>><br><br><<deadwood-remy-family-smalltalk>><</if>>
+<</widget>>
+
+<<widget 'deadwood-remy-family-smalltalk'>>
+  <<set _remy to maplebirch.get('Orchard')?.remy>>
+  <<switch _remy?.pregnancyTopic>>
+    <<case 'pc'>>
+      <<language>>
+        <<option 'EN'>>
+          Remy asks whether you need the chair moved. <<if _remy.stage is 'close'>>"You do not have to wait for the next lesson to finish before asking." <<He>> moves the paperwork instead of making you stand beside it.<<else>>You explain what would make the visit easier, leaving the medical questions for your appointment.<</if>>
+        <<option 'CN'>>
+          雷米问，要不要把椅子挪过来。<<if _remy.stage is 'close'>>“想坐就说，不必等下一节课上完。”<<He>>把文件挪开，没有让你一直站在旁边。<<else>>你说清怎样安排会让相处容易些，把医疗问题留到检查时再问。<</if>>
+      <</language>>
+    <<case 'Remy'>>
+      <<language>>
+        <<option 'EN'>>
+          Remy sits down before returning to the register. <<He>> starts to call a worker, then asks you to stay while they fetch what is needed. "I can manage the figures from here."
+        <<option 'CN'>>
+          雷米先坐下，才继续看登记簿。<<He>>刚想叫工人，又让你留在旁边，等对方去拿需要的东西。“账目在这里也能看。”
+      <</language>>
+    <<case 'children'>>
+      <<language>>
+        <<option 'EN'>>
+          You compare a possible visit with the lesson times. Remy begins with "someone can arrange it," then you ask which time <<he>> means. The conversation finally produces a question you can take to the carers.
+        <<option 'CN'>>
+          你们把可能的探望时间与课表放在一起看。雷米起初说“找人安排就行”，你接着问，具体是哪个时间。终于，你们整理出一个可以拿去问照料人员的问题。
+      <</language>>
+  <</switch>>
+<</widget>>
+
+<<widget 'deadwood-remy-arrival'>>
+  <<set _remy to maplebirch.get('Orchard')?.remy>>
+  <<if !_remy?.available or !(_remy.stage is 'former' or (!_remy.state.romance and _remy.daysAway gte 7) or ['courting', 'familiar'].includes(_remy.stage))>><<exit>><</if>>
+  <<if _remy.stage is 'former'>>
+    <<language>>
+      <<option 'EN'>>
+        Remy asks whether you are here for a lesson. <<He>> keeps the spare chair tucked under the desk until you ask to talk. Neither of you treats the visit as renewing your old agreement.
+      <<option 'CN'>>
+        雷米问，你是不是来上课的。你开口说想交谈后，<<he>>才把桌下的空椅子拉出来。你们谁也没有把这次来访当成重续旧约。
+    <</language>>
+  <<elseif !_remy.state.romance and _remy.daysAway gte 7>>
+    <<language>>
+      <<option 'EN'>>
+        "A while since I saw you." Remy pauses over the register. <<if _remy.state.romance>>"Tell me when you are coming next time." You remind <<him>> that plans can change on your side too.<<else>>"The school is still here, as you can see." <<He>> asks whether you remembered your riding boots.<</if>>
+      <<option 'CN'>>
+        “有阵子没见你了。”雷米看登记簿的动作停下来。<<if _remy.state.romance>>“下次来，提前说一声。”你提醒<<him>>，你那边的计划也可能有变。<<else>>“学校还在，就像你看到的。”<<He>>问你有没有记得带骑马的靴子。<</if>>
+    <</language>>
+  <<elseif _remy.stage is 'courting'>>
+    <<language>>
+      <<option 'EN'>>
+        Remy sets the pencil down when <<he>> sees you. "A lesson, or another excuse to keep me from working?" <<He>> leaves the spare chair clear.
+      <<option 'CN'>>
+        雷米看见你，便放下铅笔。“来上课，还是又找个理由不让我干活？”<<He>>把空椅子留着。
+    <</language>>
+  <<elseif _remy.stage is 'familiar'>>
+    <<language>>
+      <<option 'EN'>>
+        Remy recognises you before you speak. "You know where to find me now." <<He>> checks that the next group is still with the instructor.
+      <<option 'CN'>>
+        你还没开口，雷米就认出了你。“现在知道到哪里找我了。”<<He>>看了眼下一批学员，确认他们还跟着教练。
+    <</language>>
+  <</if>>
+  <br><br>
+<</widget>>

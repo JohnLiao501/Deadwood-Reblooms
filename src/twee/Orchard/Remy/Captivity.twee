@@ -24,14 +24,17 @@
         你听过这个声音指导学员。你想起课程登记簿，以及水壶旁的一排杯子。<span class='purple'>在这里，<<he>>没有问过你想不想留下。</span>
     <</language>><br><br>
   <</if>>
+  <<deadwood-remy-pregnancy-links>>
   <div id='deadwood-remy-cell-talk'>
     <<if $_remy.canTalk>>
       <<lanLink ['Call after Remy', '叫住雷米']>>
         <<if maplebirch.get('Orchard')?.remy.captive and maplebirch.get('Orchard')?.remy.canTalk>>
           <<replace '#deadwood-remy-cell-talk'>>
             <<language>>
-              <<option 'EN'>>The footsteps stop. "What is it?" Remy asks from beyond the gate. <<He>> stays on the other side.
-              <<option 'CN'>>脚步声停了。“怎么了？”雷米在栏门外问道。<<He>>没有回来开门。
+              <<option 'EN'>>
+                The footsteps stop. "What is it?" Remy asks from beyond the gate. <<He>> stays on the other side.
+              <<option 'CN'>>
+                脚步声停了。“怎么了？”雷米在栏门外问道。<<He>>没有回来开门。
             <</language>><br><br>
             <<lanLink ['Ask to leave', '要求离开']>>
               <<if maplebirch.get('Orchard')?.remy.captive and maplebirch.get('Orchard')?.remy.canTalk>>
@@ -48,8 +51,10 @@
                     <<if $livestock.obey gte 80>>“你明明适应得很好，何必弄成这样？”<<He>>看向工人。“到时候，会带你跟其他的一起出去。”<<else>>“非得把事情弄得这么难办。到了时候，自然有人带你出去。”<<He>>等了一下，仿佛还等着你道谢。<</if>> 你还没来得及回答，<<he>>便走远了。
                   <</language>><br><br>
                   <<language>>
-                    <<option 'EN'>><span class='red'>Remy has refused to let you leave.</span>
-                    <<option 'CN'>><span class='red'>雷米没有答应放你离开。</span>
+                    <<option 'EN'>>
+                      <span class='red'>Remy has refused to let you leave.</span>
+                    <<option 'CN'>>
+                      <span class='red'>雷米没有答应放你离开。</span>
                   <</language>>
                 <</replace>>
               <</if>>
@@ -70,8 +75,10 @@
                       <<He>>顺着你的目光看向栏门。“这里有你的位置，什么都给你安排好了。”你问，在学校里，<<he>>也会这样跟你说话吗。一名工人望过来。雷米等对方转开视线，才说：“别把事情弄得太难办。”<<He>>走开时，皮靴擦过稻草。
                     <</language>><br><br>
                     <<language>>
-                      <<option 'EN'>><span class='purple'>The keys stay on <<his>> belt.</span>
-                      <<option 'CN'>><span class='purple'>钥匙仍挂在<<his>>腰带上。</span>
+                      <<option 'EN'>>
+                        <span class='purple'>The keys stay on <<his>> belt.</span>
+                      <<option 'CN'>>
+                        <span class='purple'>钥匙仍挂在<<his>>腰带上。</span>
                     <</language>>
                   <</replace>>
                 <</if>>
@@ -136,15 +143,19 @@
       <<lanLink ['Say the relationship is over', '提出结束关系']>>
         <<replace '#deadwood-remy-cell-break'>>
           <<language>>
-            <<option 'EN'>>You can end the agreement you made outside. <span class='red'>Remy still runs the farm.</span>
-            <<option 'CN'>>你可以结束在外面作出的约定。<span class='red'>雷米仍管着这座农场。</span>
+            <<option 'EN'>>
+              You can end the agreement you made outside. <span class='red'>Remy still runs the farm.</span>
+            <<option 'CN'>>
+              你可以结束在外面作出的约定。<span class='red'>雷米仍管着这座农场。</span>
           <</language>><br>
           <<lanLink ['End the relationship', '结束关系']>>
             <<if maplebirch.get('Orchard')?.remy.act('break')>>
               <<replace '#deadwood-remy-cell-break'>>
                 <<language>>
-                  <<option 'EN'>>"Then we're finished," you call. Remy pauses. "Suit yourself." The keys jingle as <<he>> continues down the barn. <span class='blue'>You no longer consider <<him>> your partner.</span>
-                  <<option 'CN'>>“我们结束了。”你喊道。雷米停了一下。“随你。”钥匙叮当作响，<<he>>继续朝谷仓深处走去。<span class='blue'>你不再把<<him>>当作恋人。</span>
+                  <<option 'EN'>>
+                    "Then we're finished," you call. Remy pauses. "Suit yourself." The keys jingle as <<he>> continues down the barn. <span class='blue'>You no longer consider <<him>> your partner.</span>
+                  <<option 'CN'>>
+                    “我们结束了。”你喊道。雷米停了一下。“随你。”钥匙叮当作响，<<he>>继续朝谷仓深处走去。<span class='blue'>你不再把<<him>>当作恋人。</span>
                 <</language>>
               <</replace>>
             <</if>>
