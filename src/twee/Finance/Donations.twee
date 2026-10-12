@@ -19,21 +19,7 @@
   <</for>>
 <</widget>>
 
-<<widget 'deadwood-finance-donation-receipts'>>
-  <<if $Finance.donations.receipts.length gt 0>>
-    <<deadwood-card 'Recent donation receipts' '近期捐赠收据'>>
-      <ul class='journal'>
-        <<for _donation_receipt range $Finance.donations.receipts.slice(-4).reverse()>>
-          <li>
-            <<print maplebirch.t('deadwood-reblooms:donations:' + _donation_receipt.fund)>>:
-            <<deadwood-reblooms-finance-money _donation_receipt.amount>>
-            <<if _donation_receipt.anonymous>><i><<lanSwitch ' (anonymous)' '（匿名）'>></i><</if>>
-          </li>
-        <</for>>
-      </ul>
-    <</deadwood-card>>
-  <</if>>
-<</widget>>
+
 
 :: Deadwood Reblooms Donations
 <<set $outside to 0>><<set $location to 'townhall'>><<effects>>

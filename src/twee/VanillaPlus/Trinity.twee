@@ -30,19 +30,6 @@
   <br>
 <</widget>>
 
-<<widget 'deadwood-trinity-journal'>>
-  <<if $VanillaPlus.divineTransformations.trinity>>
-    <h2 class='deadwood-trinity'><<lanSwitch 'Trinity' '三位一体'>></h2>
-    <ul class='journal'>
-      <li><<lanSwitch 'After the voices faded, the familiar warmth remained alongside the hollow and your desires. You have begun learning how they feel together.' '那些声音消退后，熟悉的温暖仍与空洞、欲念一同留了下来。你开始辨认它们共存时的感觉。'>></li>
-      <li><<lanSwitch 'The prayer chamber gave you an experience to remember. You still do not know what answered, or why.' '你记住了祈祷室里的经历，却还不知道回应你的是什么，又为何回应。'>></li>
-      <<if $Finance?.company?.ascension?.ascended>>
-        <li><<lanSwitch 'The wound from the tower feels different. Remembering which change came first may help you describe both experiences.' '塔楼留下的伤痕，是另一种感觉。记清变化的先后，也许能帮你说清这两段经历。'>></li>
-      <</if>>
-    </ul>
-  <</if>>
-<</widget>>
-
 :: Deadwood Reblooms Trinity Embrace
 
 <<temple_effects>><<effects>>

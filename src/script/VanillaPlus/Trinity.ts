@@ -1,8 +1,6 @@
 // ./src/script/VanillaPlus/Trinity.ts
 
 export default function (maplebirch: typeof window.maplebirch) {
-  maplebirch.tool.addTo('Journal', 'deadwood-trinity-journal');
-
   // 复用原版本次祈祷的 $rng。81–90 共十个结果，保留三种原版存在的区间。
   maplebirch.tool.inject({
     locationPassage: {

@@ -68,5 +68,5 @@ export default function Transport(maplebirch: typeof window.maplebirch): void {
   maplebirch.tool.addTo('BeforeLinkZone', { widget: 'deadwood-transport-avery-link', passage: 'Oxford Street' });
   maplebirch.tool.addTo('Header', { widget: 'deadwood-transport-header', match: /^Deadwood Transport (?:Menu|Travel|Taxi (?:Dispatch|Pickup))$/ });
   maplebirch.tool.addTo('SkillsBox', 'deadwood-transport-skill');
-  maplebirch.tool.addTo('Journal', 'deadwood-transport-journal');
+  maplebirch.tool.addTo('Journal', 'deadwood-transport-journal', 'deadwood-driving-school-journal');
 }

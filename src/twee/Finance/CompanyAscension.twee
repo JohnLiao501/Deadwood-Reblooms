@@ -225,67 +225,6 @@
   <</if>>
 <</widget>>
 
-<<widget 'deadwood-ascension-journal'>>
-  <<deadwood-ascension-header>>
-  <<if _ascension_state.ascended>>
-    <h2 class='purple'>
-      <<if _ascension_state.recognized>>
-        <<lanSwitch 'Night Raven' '夜渡鸦'>>
-      <<else>>
-        <<lanSwitch 'Ascended' '飞升'>>
-      <</if>>
-    </h2>
-    <ul class='journal'>
-      <li>
-        <<language>>
-          <<option 'EN'>>
-            You shared in Avery's ascension.
-            <<if _ascension_state.recognized>>
-              Remy and Harper acknowledged a fourth place among them, and called you the Night Raven.
-            <<else>>
-              You feel something steady beneath the new wound. The room has fallen silent.
-            <</if>>
-            The wound above your heart remains, but its lingering ache no longer keeps adding to your trauma as time passes.
-            Tension and fatigue gradually ease. Other suffering can still leave its mark on you.
-          <<option 'CN'>>
-            你与艾弗里一同完成升华。
-            <<if _ascension_state.recognized>>
-              雷米与哈珀承认了第四个位置，称你为夜渡鸦。
-            <<else>>
-              新伤口底下，有股稳定的感觉。四周安静了下来。
-            <</if>>
-            心口的伤痕仍在，余痛却不再随时间不断加深你的创伤。
-            紧绷与疲惫会慢慢散去，别的痛苦仍然会留下伤害。
-        <</language>>
-      </li>
-      <<if !_ascension_state.jordan_told>>
-        <li><<lanSwitch 'You could ask Jordan about what happened to you, if you wish to disclose it.' '如果愿意说出这件事，可以向约旦询问自身的变化。'>></li>
-      <</if>>
-      <<if _ascension_state.audience is 'avery'>>
-        <li><<lanSwitch 'Avery expects you at the next company meeting. Your new place has made your plans a matter of shared interest.' '艾弗里仍等你参加下一次公司会议。你的新位置，也让你的打算牵涉到彼此的利益。'>></li>
-      <<elseif _ascension_state.audience is 'harper'>>
-        <li><<lanSwitch 'Harper asked you to keep track of the changes and speak to Harper again if they differ.' '哈珀让你留意身体的变化，有了不同的感觉再去找哈珀。'>></li>
-      <<elseif _ascension_state.audience is 'remy'>>
-        <li><<lanSwitch 'Remy is interested in what your business can supply. Any arrangement still needs its own terms.' '雷米在意你的企业能提供什么。具体的合作，仍要另谈条件。'>></li>
-      <</if>>
-    </ul>
-  <<elseif _ascension_state.prepared_day gte 0 and !$avery_fate>>
-    <h2 class='purple'><<lanSwitch 'Your terms for the ceremony' '参与仪式的条件'>></h2>
-    <ul class='journal'>
-      <li>
-        <<language>>
-          <<option 'EN'>>
-            Avery agreed to pass your request to Harper. From the following day, if your business position still carries weight, you can raise it before entering the lift at the blood-moon gathering.
-            The outcome remains uncertain.
-          <<option 'CN'>>
-            艾弗里答应把你的要求交给哈珀。从次日起，如果你在生意上仍有足够分量，可以在血月聚会乘电梯之前提出条件。
-            最后的结果仍然无法保证。
-        <</language>>
-      </li>
-    </ul>
-  <</if>>
-<</widget>>
-
 :: Deadwood Reblooms Company Ascension Preparation
 <<deadwood-company-header>><<endevent>><<deadwood-ascension-header>>
 <<if _ascension_state.prepared_day lt 0>><<deadwood-shareholder-return>><<exit>><</if>>

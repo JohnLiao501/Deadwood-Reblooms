@@ -121,7 +121,7 @@ With the real stones and a successful ending, you change alongside Avery in **th
 
 - Ascended prevents the daily trauma increase from the elk scar. The scar remains, and other sources of trauma retain their effects.
 - As time actually passes, stress falls by an additional **60 points per hour** and fatigue by **15 points per hour**. Short actions receive proportional recovery. Replays and frozen stats receive none.
-- The scar's effects on awareness, purity and allure remain, as do the native consequences for world corruption and Gwylan.
+- The scar's effects on awareness and purity remain, as do the native consequences for world corruption and Gwylan.
 
 After recognition, arrange private conversations through the office-building lobby on weekdays. Avery meets in person, while Harper and Remy speak by telephone. One conversation is available per day and takes fifteen minutes. Selling shares does not remove the title or trait. Neither exempts the business from unpaid wages, office rent or supply-agreement conditions. Penthouse accommodation and company voting rights retain their own share requirements. You may also tell Jordan about the tower, or discuss the change during Gwylan's existing scar conversation.
 

@@ -92,19 +92,6 @@
   <<characteristic-box `{name: lanSwitch('Driving', '驾驶'), currentValue: maplebirch.get('Transport').state.driving, displayType: 'grade', modifier: 100, modTypes: {good: [], bad: []}, states: [{requiredValue: 0, level: lanSwitch('None', '无'), color: 'red'}, {requiredValue: 1, level: 'F', color: 'red'}, {requiredValue: 100, level: 'E', color: 'pink'}, {requiredValue: 200, level: 'D', color: 'purple'}, {requiredValue: 400, level: 'C', color: 'lblue'}, {requiredValue: 600, level: 'B', color: 'blue'}, {requiredValue: 800, level: 'A', color: 'teal'}, {requiredValue: 1000, level: 'S', color: 'green'}]}`>>
 <</widget>>
 
-<<widget 'deadwood-transport-journal'>>
-  <<set _transport to maplebirch.get('Transport')>>
-  <<deadwood-taxi-journal>>
-  <<if _transport.state.vehicles.length>>
-    <h3><<lanSwitch 'Vehicles' '载具'>></h3>
-    <div class='deadwood-card-grid deadwood-transport-records'>
-      <<for _owned range _transport.state.vehicles>>
-        <<deadwood-transport-vehicle-record _owned>>
-      <</for>>
-    </div>
-  <</if>>
-<</widget>>
-
 <<widget 'deadwood-transport-notice'>>
   <<set _transport_state to maplebirch.get('Transport').state>>
   <<switch _transport_state.notice>>
@@ -238,13 +225,7 @@
   <<if _status_vehicle.arrears gt 0>><span><<lanSwitch 'Unpaid upkeep' '保养欠费'>></span><span class='red'><<= formatMoney(_status_vehicle.arrears)>></span><</if>>
 <</widget>>
 
-<<widget 'deadwood-transport-vehicle-record'>>
-  <<set _record_vehicle to _args[0], _record_model to maplebirch.get('Transport').catalog.models.find(model => model.id === _record_vehicle.model)>>
-  <<set _record_title to '<<icon "transport/' + _record_model.id + '.png">>' + maplebirch.t(_record_model.name)>>
-  <<deadwood-card _record_title _record_title>>
-    <div class='dr-finance-summary'><<deadwood-transport-vehicle-status _record_model _record_vehicle>></div>
-  <</deadwood-card>>
-<</widget>>
+
 
 <<widget 'deadwood-transport-vehicle-card' 'container'>>
   <<set _card_model to _args[0], _card_vehicle to _args[1] ?? null, _card_actions to _contents>>

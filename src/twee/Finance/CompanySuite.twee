@@ -32,34 +32,6 @@
   <</if>>
 <</widget>>
 
-<<widget 'deadwood-company-suite-journal'>>
-  <<set _suite to maplebirch.get('Finance').company.suite>>
-  <<if _suite.state.signed>>
-    <<if _suite.occupied>>
-      <<language>>
-        <<option 'EN'>>
-          You hold an accommodation agreement for a private suite in the skyscraper on <span class='teal'>Elk Street</span>.
-          The residents' lift is in the lobby. Weekly upkeep is <<printmoney _suite.upkeep>>.
-        <<option 'CN'>>
-          你签有<span class='teal'>麋鹿街摩天大楼</span>私人套房的住宿协议，住户电梯在大厅里。
-          每周维护费为<<printmoney _suite.upkeep>>。
-      <</language>><br>
-      <<if _suite.state.notice_day isnot null>>
-        <span class='red'>
-          <<lanSwitch 'Vacate by ' '搬离期限：'>>
-          <<deadwood-reblooms-finance-date `_suite.state.notice_day + 7`>>
-        </span><br>
-      <</if>>
-    <<else>>
-      <<lanSwitch 'Your agreement no longer grants access to the suite. Any stored clothes can be collected through the lobby desk.' '套房的住宿权限已撤销。留存的衣物可通过大厅接待处领取。'>><br>
-    <</if>>
-    <<if _suite.state.arrears gt 0>>
-      <span class='red'><<lanSwitch 'Unpaid upkeep: ' '未付维护费：'>><<printmoney _suite.state.arrears>></span><br>
-    <</if>>
-    <br>
-  <</if>>
-<</widget>>
-
 <<widget 'deadwood-company-suite-expired'>>
   <<set $outside to 0>><<set $location to 'avery_skyscraper'>><<effects>>
   <<language>>

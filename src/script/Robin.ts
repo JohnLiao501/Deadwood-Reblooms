@@ -1,6 +1,7 @@
 // ./src/script/Robin.ts
 
 export default function (maplebirch: typeof window.maplebirch): void {
+  maplebirch.tool.addTo('Journal', 'deadwood-robin-shop-journal', 'deadwood-robin-asylum-journal');
   // 饮品店使用独立地点，开店前查看空铺时仍显示原版街景。
   maplebirch.tool.patch.location.configure(
     'deadwood_robin_shop',

@@ -378,21 +378,3 @@
     <</lanLink>><br><br>
   <</if>>
 <</widget>>
-
-<<widget 'deadwood-taxi-journal'>>
-  <<set _journal_taxi to maplebirch.get('Transport').taxi>>
-  <<if _journal_taxi.state.registered>>
-    <<deadwood-card 'Taxi work' '出租车工作'>>
-      <div class='dr-finance-summary'>
-        <span><<lanSwitch 'Completed bookings' '已完成订单'>></span><span class='teal'><<print _journal_taxi.state.completed>></span>
-        <span><<lanSwitch 'Total pay received' '累计实收'>></span><span><<deadwood-transport-money _journal_taxi.state.earnings>></span>
-        <<if _journal_taxi.active>>
-          <span><<lanSwitch 'This shift' '本班车辆'>></span><span><<lanSwitch `_journal_taxi.state.shift.mode is 'fleet' ? 'Company car' : 'Own car'` `_journal_taxi.state.shift.mode is 'fleet' ? '车行营运车' : '自备汽车'`>></span>
-          <<if _journal_taxi.state.shift.mode is 'fleet'>>
-            <span><<lanSwitch 'Awaiting collection' '待结算收入'>></span><span><<deadwood-transport-money _journal_taxi.state.shift.earned>></span>
-          <</if>>
-        <</if>>
-      </div>
-    <</deadwood-card>>
-  <</if>>
-<</widget>>

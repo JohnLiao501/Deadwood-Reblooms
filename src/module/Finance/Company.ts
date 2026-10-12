@@ -41,7 +41,7 @@ export default class Company {
   public readonly terms = terms;
   public readonly shareholders = new Shareholders(this);
   public readonly staff = new CompanyStaff(this);
-  public readonly avery = new CompanyAvery(this);
+  public readonly avery: CompanyAvery;
   public readonly suite = new CompanySuite(this);
   public readonly ascension = new CompanyAscension(this);
   public static readonly defaults: CompanyState = {
@@ -64,7 +64,9 @@ export default class Company {
     contract: null
   };
 
-  public constructor(public readonly finance: Finance) {}
+  public constructor(public readonly finance: Finance) {
+    this.avery = new CompanyAvery(this);
+  }
 
   public get state(): CompanyState {
     return this.finance.state.company;

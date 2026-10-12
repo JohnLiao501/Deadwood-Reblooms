@@ -10,6 +10,7 @@ import Work from './Sydney/Work';
 import Baths from './Sydney/Baths';
 
 export default function (maplebirch: typeof window.maplebirch): void {
+  maplebirch.tool.addTo('Journal', 'deadwood-sydney-journal');
   Festivals(maplebirch);
   SydneyChastity(maplebirch);
   SydneyConfession(maplebirch);
