@@ -64,7 +64,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Kylar Pregnancy [nobr]
+:: Deadwood Reblooms Kylar Pregnancy
 <<deadwood-pregnancy-context 'Kylar'>>
 <<if !_pregnancy_context or (!_pregnancy_reveal and !_pregnancy_birth)>>
   <<deadwood-pregnancy-unavailable 'Kylar'>>
@@ -130,7 +130,7 @@
   <<deadwood-pregnancy-answer-links 'Deadwood Reblooms Kylar Pregnancy Care'>>
 <</if>>
 
-:: Deadwood Reblooms Kylar Pregnancy Care [nobr]
+:: Deadwood Reblooms Kylar Pregnancy Care
 <<deadwood-pregnancy-context 'Kylar'>>
 <<if !_pregnancy_context or !_pregnancy_known>>
   <<deadwood-pregnancy-unavailable 'Kylar'>>
@@ -204,7 +204,7 @@
   <<deadwood-pregnancy-care-links 'Deadwood Reblooms Kylar Pregnancy Care' _pregnancy_topics>>
 <</if>>
 
-:: Deadwood Reblooms Kylar Birth [nobr]
+:: Deadwood Reblooms Kylar Birth
 <<deadwood-pregnancy-context 'Kylar'>>
 <<if !_pregnancy_context or !_pregnancy_birth>>
   <<deadwood-pregnancy-unavailable 'Kylar'>>

@@ -36,6 +36,7 @@
 <br>
 <<lanLink ["Hunt the whole group", "狩猎一整群"] "Deadwood BirdTower Hunt Lurkers Lot Group">><</lanLink>><<dancedifficulty 600 1200>><<tendingdifficulty 1 700>>
 <br>
+
 :: Deadwood BirdTower Hunt Lurkers Lot Single
 <<effects>>
 <<language>>
@@ -243,6 +244,7 @@
 <br>
 <<lanLink ["Chase", "追赶"] "Deadwood BirdTower Hunt Lurkers Few Chase">><</lanLink>><<athleticsdifficulty _athlDiffMin _athlDiffMax>>
 <br>
+
 :: Deadwood BirdTower Hunt Lurkers Few PokemonGo
 <<switch $speech_attitude>>
   <<case "bratty">>

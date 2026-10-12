@@ -58,6 +58,7 @@
 <br><br>
 <<lanLink ['Refuse', '拒绝'] 'Deadwood BirdTower Masturbation Help Refuse'>><</lanLink>>
 <br>
+
 :: Deadwood BirdTower Masturbation Help Refuse
 <<effects>>
 <<switch $speech_attitude>>
@@ -110,6 +111,7 @@
   <<set $masturbationstart to 1>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower Bird Tower Masturbation
 <<effects>>
 <<set _enableSexToys to true>>
@@ -454,6 +456,7 @@
   <<bird_pass 20>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower Masturbation Help End
 <<effects>>
 <<language>>

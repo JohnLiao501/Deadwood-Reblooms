@@ -51,7 +51,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Return', '返回'] 'Deadwood Reblooms Financial Centre Bank Loan'>><</lanLink>>
 
-:: Deadwood Reblooms Property Tenant [nobr]
+:: Deadwood Reblooms Property Tenant
 <<set $outside to 0>><<set $location to 'financial_centre'>><<effects>><<endevent>>
 <<set $_estate to maplebirch.get('Finance').realEstate>>
 <<set $_id to $Finance.real_estate.tenant_property>>

@@ -1,4 +1,4 @@
-:: Deadwood Transport Road Fight [nobr]
+:: Deadwood Transport Road Fight
 <<set _road_events to maplebirch.get('Transport').events>>
 <<if _road_events.combatPending>>
   <<set _cab_encounter to $Transport.trip.event.kind is 'molestation'>>
@@ -45,7 +45,7 @@
   <<getouticon>><<lanLink ['Continue', '继续'] 'Deadwood Transport Travel'>><</lanLink>>
 <</if>>
 
-:: Deadwood Transport Road Fight Finish [nobr]
+:: Deadwood Transport Road Fight Finish
 <<set _road_events to maplebirch.get('Transport').events>>
 <<if _road_events.inCombat and $combat>>
   <<effects>>

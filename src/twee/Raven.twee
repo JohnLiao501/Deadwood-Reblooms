@@ -42,7 +42,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Raven [nobr]
+:: Deadwood Reblooms Raven
 <<set $outside to 1>><<set $location to 'forest'>><<effects>>
 <<set _raven to maplebirch.get('MoreTransformations')?.Raven>>
 <<if _raven and _raven.met>>

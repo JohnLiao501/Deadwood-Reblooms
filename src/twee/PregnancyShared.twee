@@ -220,7 +220,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Pregnancy Hospital [nobr]
+:: Deadwood Pregnancy Hospital
 <<set _pregnancy_name to $deadwood_pregnancy?.npc>>
 <<deadwood-pregnancy-context _pregnancy_name>>
 <<set $outside to 0>><<set $location to 'hospital'>><<effects>>
@@ -246,7 +246,7 @@
   <<birthUi _pregnancy_name 'hospital' 'home' 'Deadwood Pregnancy After' 180>>
 <</if>>
 
-:: Deadwood Pregnancy After [nobr]
+:: Deadwood Pregnancy After
 <<set _pregnancy_name to $deadwood_pregnancy?.npc>>
 <<set _birth_record to $pregnancies[$recentBirthId]>>
 <<set $outside to 0>><<set $location to 'hospital'>><<effects>>

@@ -508,7 +508,7 @@
 <br>
 <<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris School Project [nobr]
+:: Deadwood Reblooms Sirris School Project
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !maplebirch.get('LifeSimulation') or $LifeSimulation.school.role is 'student' or (!_sirrisAtEstate and !_sydneyAtEstate)>>
@@ -854,7 +854,7 @@
 <br><br>
 <<getouticon>><<lanLink ['Return to the glasshouse', '返回温室'] 'Deadwood Reblooms Sirris Estate Garden'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Room [nobr]
+:: Deadwood Reblooms Sirris Estate Sydney Room
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if _sydneyAtEstate>>
@@ -951,7 +951,7 @@
   <br>
   <<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Mirror [nobr]
+:: Deadwood Reblooms Sirris Estate Sydney Mirror
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !$SydneyExpansion.estate.invited or !isLoveInterest('Sydney') or !_sydneyAtEstate>>

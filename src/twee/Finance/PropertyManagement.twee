@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Property Manager [nobr]
+:: Deadwood Reblooms Property Manager
 <<set $outside to 0>><<set $location to 'financial_centre'>><<effects>><<endevent>>
 <<set _estate to maplebirch.get('Finance').realEstate>>
 <<if !_estate.properties.some(property => _estate.owns(property.id)) or $exposed gt 0 or $stress gte $stressmax>>

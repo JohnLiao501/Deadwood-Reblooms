@@ -1,4 +1,4 @@
-:: Deadwood Robin Shop Partnership [nobr]
+:: Deadwood Robin Shop Partnership
 <<set $outside to 0>><<effects>>
 <<deadwood-dynamicblock 'deadwood-shop-partnership'>>
   <<set _investment to maplebirch.get('Robin').shop.investment>>
@@ -29,7 +29,7 @@
 <</deadwood-dynamicblock>>
 <<getouticon>><<lanLink ['Return to the shop', '返回店内'] 'Deadwood Robin Shop'>><</lanLink>>
 
-:: Deadwood Reblooms Shop Investment [nobr]
+:: Deadwood Reblooms Shop Investment
 <<set $outside to 0>><<set $location to 'financial_centre'>><<effects>>
 <<deadwood-reblooms-adrian-greeting 'financial_centre_bank'>>
 <<if Time.weekDay lt 2 or Time.weekDay gt 6 or Time.hour lt 9 or Time.hour gte 17>>

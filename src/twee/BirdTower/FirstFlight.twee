@@ -241,6 +241,7 @@
   <<bird_pass 10>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower FirstFlight Back
 <<childSelect $BirdTower.scene.actors[0]>>
 <<language>>
@@ -284,6 +285,7 @@
   <<bird_pass 10>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower FirstFlight End
 <<if $monster is 1>>
   <<language>>

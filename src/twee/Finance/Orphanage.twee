@@ -148,7 +148,7 @@
 <</if>>
 <<getouticon>><<lanLink ["Return to Robin's room", '返回罗宾的房间'] 'Robin Options'>><<endevent>><</lanLink>><br>
 
-:: Deadwood Reblooms Orphanage Buyout Finish [nobr]
+:: Deadwood Reblooms Orphanage Buyout Finish
 <<set $outside to 0>><<set $location to 'home'>><<effects>><<npc Bailey>><<person1>>
 <<if maplebirch.get('Finance').orphanage.buyout($Finance.orphanage.choice)>>
   <<pass 10>>

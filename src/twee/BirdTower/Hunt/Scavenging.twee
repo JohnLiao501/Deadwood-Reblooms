@@ -73,6 +73,7 @@
   <<bird_pass _time>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower Hunt Scavenge
 <<effects>>
 <<endevent>>
@@ -575,6 +576,7 @@
   <<endevent>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower Hunt Camp 2
 <<effects>><<childSelect $BirdTower.hunt.leader>>
 <<switch $phase>>
@@ -701,6 +703,7 @@
   <<set $phase to 2>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower Hunt Dead Tree 2
 <<effects>><<childSelect $BirdTower.hunt.leader>>
 <<if $phase is 1>>
@@ -913,6 +916,7 @@
 <br>
 <<lanLink ["Take them", "拿上它们"] "Deadwood BirdTower Hunt Sticks 2">><</lanLink>>
 <br>
+
 :: Deadwood BirdTower Hunt Sticks 2
 <<language>>
   <<option 'EN'>>
@@ -1102,6 +1106,7 @@
   <<set $phase to 2>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower Hunt Underbrush 2
 <<effects>>
 <<switch $phase>>
@@ -1541,6 +1546,7 @@
 <</if>>
 <<lanLink ["Leave", "离开"] "Deadwood BirdTower Hunt Flowers Leave">><</lanLink>>
 <br>
+
 :: Deadwood BirdTower Hunt Flowers Leave
 <<effects>>
 <<babyhawk_hunt_return>>
@@ -2051,6 +2057,7 @@
   <<set $phase to 2>>
 <</lanLink>><<swimmingdifficulty 600 900>>
 <br>
+
 :: Deadwood BirdTower Hunt Pond Dive 2
 <<effects>>
 <<unset $swimmingSuccess>>

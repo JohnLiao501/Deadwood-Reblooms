@@ -1,4 +1,4 @@
-:: Deadwood Remy Daily [nobr]
+:: Deadwood Remy Daily
 <<effects>><<set _remy to maplebirch.get('Orchard')?.remy>>
 <<if _remy?.canDaily>>
   <<npc Remy>><<person1>>

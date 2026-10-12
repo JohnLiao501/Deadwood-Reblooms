@@ -73,7 +73,7 @@
 <</widget>>
 
 <!-- 原版中英文使用相同状态入口，名单同时覆盖阴道与肛门双插。 -->
-<<widget 'deadwood-reblooms-double-leglock-targets'>><<nobr>>
+<<widget 'deadwood-reblooms-double-leglock-targets'>>
   <<set _NPCDoubleLegLockTargets to _args[0]>>
   <<for _NPCDoubleLegLockIndex = 0; _NPCDoubleLegLockIndex lt _NPCDoubleLegLockTargets.length; _NPCDoubleLegLockIndex++>>
     <<if _NPCDoubleLegLockIndex gt 0>>
@@ -85,7 +85,7 @@
     <</if>>
     <<personselect _NPCDoubleLegLockTargets[_NPCDoubleLegLockIndex]>><<combatperson>>
   <</for>>
-<</nobr>><</widget>>
+<</widget>>
 
 <!-- 双腿锁定、持续和解除操作全部插入者，并沿用原版腿部技能与性行为控制判定。 -->
 <<widget 'deadwood-reblooms-double-leglock-effect'>>

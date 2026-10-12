@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Casino Marlow Talk [nobr]
+:: Deadwood Reblooms Casino Marlow Talk
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<npc 'Marlow'>><<person1>>
 <<if maplebirch.get('LifeSimulation').casino.canTalk>>
@@ -26,7 +26,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Return to Marlow', '返回马洛身旁'] 'Deadwood Reblooms Casino Dealer'>><</lanLink>><br>
 
-:: Deadwood Reblooms Casino Marlow Conversation [nobr]
+:: Deadwood Reblooms Casino Marlow Conversation
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<npc 'Marlow'>><<person1>>
 <<set _marlow to maplebirch.get('LifeSimulation').casino.state>>

@@ -44,6 +44,7 @@
   <<set $phase to 2>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower Hunt Trespasser 2
 <<effects>>
 <<if $phase is 1>>
@@ -117,6 +118,7 @@
 <br>
 <<lanLink ["Descend to the base of the tower", "降落到塔底"] "Deadwood BirdTower Hunt Trespasser 3">><</lanLink>>
 <br>
+
 :: Deadwood BirdTower Hunt Trespasser 3
 <<effects>>
 <<language>>
@@ -211,6 +213,7 @@
   <<npcincr "Great Hawk" love -1>><<npcincr "Great Hawk" dom -3>>
 <</lanLink>><<llove>><<lldom>>
 <br>
+
 :: Deadwood BirdTower Hunt Trespasser 4
 <<effects>>
 <<set $outside to 0>>

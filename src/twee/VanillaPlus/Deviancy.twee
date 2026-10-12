@@ -80,7 +80,7 @@
 <br><br>
 <<lanLink ["Continue","继续"] 'Temple Bunk'>><</lanLink>>
 
-:: Deadwood Reblooms Deviancy Mirror Sirris [nobr]
+:: Deadwood Reblooms Deviancy Mirror Sirris
 <<if !maplebirch.get('Sydney') or !$SydneyExpansion.estate.invited or !isLoveInterest('Sydney')>>
   <<language>>
     <<option 'EN'>>
@@ -168,7 +168,7 @@
   <</if>>
 <</if>>
 
-:: Deadwood Reblooms Sirris Estate Mirror Night Visit [nobr]
+:: Deadwood Reblooms Sirris Estate Mirror Night Visit
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !_sydneyAtEstate or !isLoveInterest('Sydney')>>
@@ -208,7 +208,7 @@
     <<bedicon>><<link '留在悉尼身边' 'Deadwood Reblooms Sirris Estate Sydney Room'>><</link>>
 <</language>>
 
-:: Deadwood Reblooms Deviancy Mirror Kylar [nobr]
+:: Deadwood Reblooms Deviancy Mirror Kylar
 <<if !maplebirch.get('Kylar') or !$KylarExpansion.stay_invited or !isLoveInterest('Kylar')
   or C.npc.Kylar.state isnot 'active'
   or (Time.hour lt 18 and getKylarLocation().area isnot 'manor_bedroom')

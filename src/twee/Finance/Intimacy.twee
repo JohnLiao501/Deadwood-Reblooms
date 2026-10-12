@@ -90,7 +90,7 @@
   <</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Property Intimacy [nobr]
+:: Deadwood Reblooms Property Intimacy
 <!-- 入口已从当晚在家的同住者中选人。战斗回合跨过起床时间后，继续使用当前存档里选中的同一人。 -->
 <<set _estate to maplebirch.get("Finance").realEstate>>
 <<set _property to _estate.current>>

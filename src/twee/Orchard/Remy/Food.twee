@@ -1,4 +1,4 @@
-:: Deadwood Remy Gift [nobr]
+:: Deadwood Remy Gift
 <<effects>><<set _remy to maplebirch.get('Orchard')?.remy>>
 <<if _remy?.canGift>>
   <<npc Remy>><<person1>>

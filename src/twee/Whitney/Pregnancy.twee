@@ -85,7 +85,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Whitney Pregnancy [nobr]
+:: Deadwood Whitney Pregnancy
 <<deadwood-pregnancy-context 'Whitney'>>
 <<if !_pregnancy_context or (!_pregnancy_reveal and !_pregnancy_birth)>>
   <<deadwood-pregnancy-unavailable 'Whitney'>>
@@ -144,7 +144,7 @@
   <<deadwood-pregnancy-answer-links 'Deadwood Whitney Pregnancy Care'>>
 <</if>>
 
-:: Deadwood Whitney Pregnancy Care [nobr]
+:: Deadwood Whitney Pregnancy Care
 <<deadwood-pregnancy-context 'Whitney'>>
 <<if !_pregnancy_context or !_pregnancy_known>>
   <<deadwood-pregnancy-unavailable 'Whitney'>>
@@ -206,7 +206,7 @@
   <<deadwood-pregnancy-care-links 'Deadwood Whitney Pregnancy Care' _pregnancy_topics>>
 <</if>>
 
-:: Deadwood Whitney Birth [nobr]
+:: Deadwood Whitney Birth
 <<deadwood-pregnancy-context 'Whitney'>>
 <<if !_pregnancy_context or !_pregnancy_birth>>
   <<deadwood-pregnancy-unavailable 'Whitney'>>

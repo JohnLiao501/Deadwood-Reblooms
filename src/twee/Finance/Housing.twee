@@ -227,7 +227,7 @@
   <</switch>>
 <</widget>>
 
-:: Deadwood Reblooms Property Extensions [nobr]
+:: Deadwood Reblooms Property Extensions
 <<set _estate to maplebirch.get('Finance').realEstate>>
 <<set _property to _estate.properties.find(property => property.id === $Finance.real_estate.furniture_property)>>
 <<if !_property or !_estate.owns(_property.id)>>
@@ -290,7 +290,7 @@
 <</if>>
 <<deadwood-home-facilities 'lounge' _facility.floor>><br><<deadwood-home-exit 'lounge'>>
 
-:: Deadwood Reblooms Property Lounge Rest [nobr]
+:: Deadwood Reblooms Property Lounge Rest
 <<if !maplebirch.get('Finance').realEstate.facilities.some(facility => facility.id === 'lounge')>><<lanLink ['Return to the agency', '返回房产中介'] 'Deadwood Reblooms Property Office'>><</lanLink>><<exit>><</if>>
 <<run maplebirch.get('Finance').realEstate.enter('lounge')>><<effects>>
 <<language>>
@@ -420,7 +420,7 @@
   <<elseif $Finance.real_estate.pool_clothing is 'swimwear'>><<run maplebirch.get('Finance').realEstate.openWardrobe()>><<storeon 'Deadwood Property Pool'>><<set $wear_outfit to 'none'>><</if>>
 <</lanLink>>
 
-:: Deadwood Reblooms Property Garage [nobr]
+:: Deadwood Reblooms Property Garage
 <<set _estate to maplebirch.get('Finance').realEstate>>
 <<set _facility to _estate.facilities.find(facility => facility.id === 'garage')>>
 <<if !_facility>><<lanLink ['Return to the agency', '返回房产中介'] 'Deadwood Reblooms Property Office'>><</lanLink>><<exit>><</if>>

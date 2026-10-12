@@ -201,6 +201,7 @@
 <</lanLink>><br>
 
 <!-- 凯拉尔闹翻后的收场。派对已被 breakUp 终止，这里只负责把 PC 送出去。 -->
+
 :: Deadwood Reblooms Pool Party Broke Up
 <<set $outside to 1>><<set $location to 'school'>><<schooleffects>><<effects>>
 <<set _pool to maplebirch.get('LifeSimulation').pool_party>>

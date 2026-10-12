@@ -75,6 +75,7 @@
   <<endevent>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower Hunt Refuse
 <<language>>
   <<option 'EN'>>
@@ -87,6 +88,7 @@
   <<HuntTogetherClean>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower Hunt Goal
 <<set $outside to 1>>
 <<set $location to "moor">>
@@ -381,7 +383,7 @@
     <</language>>
     <br><br>
     <<if maplebirch.get('BirdTower').selectTrait("sympathy")>>
-      <<childrenNames _tempIDs[0]>><<lanSwitch ' stare curiously at the burning tents. You pat ' '好奇地盯着燃烧着的帐篷。你拍了拍'>><<childhis _tempIDs[0]>><<lanSwitch ' on the head.' '的脑袋。'>>
+      <<childname _tempIDs[0]>><<lanSwitch ' stares curiously at the burning tents. You pat ' '好奇地盯着燃烧着的帐篷。你拍了拍'>><<childhim _tempIDs[0]>><<lanSwitch ' on the head.' '的脑袋。'>>
       <br><br>
     <</if>>
     <<endevent>>

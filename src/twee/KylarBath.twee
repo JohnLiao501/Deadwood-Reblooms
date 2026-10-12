@@ -5,7 +5,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Kylar Manor Bathroom [nobr]
+:: Deadwood Reblooms Kylar Manor Bathroom
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>>
 <<if !$KylarExpansion.stay_invited>>
   <<lanSwitch 'You leave the closed bathroom door alone.' '你没有擅自推开紧闭的浴室门。'>>

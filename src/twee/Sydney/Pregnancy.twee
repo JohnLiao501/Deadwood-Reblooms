@@ -80,7 +80,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms Sydney Pregnancy [nobr]
+:: Deadwood Reblooms Sydney Pregnancy
 <<deadwood-pregnancy-context 'Sydney'>>
 <<if !_pregnancy_context or (!_pregnancy_reveal and !_pregnancy_birth)>>
   <<deadwood-pregnancy-unavailable 'Sydney'>>
@@ -162,7 +162,7 @@
   <<deadwood-pregnancy-answer-links 'Deadwood Reblooms Sydney Pregnancy Care'>>
 <</if>>
 
-:: Deadwood Reblooms Sydney Pregnancy Care [nobr]
+:: Deadwood Reblooms Sydney Pregnancy Care
 <<deadwood-pregnancy-context 'Sydney'>>
 <<if !_pregnancy_context or !_pregnancy_known>>
   <<deadwood-pregnancy-unavailable 'Sydney'>>
@@ -243,7 +243,7 @@
   <<deadwood-pregnancy-care-links 'Deadwood Reblooms Sydney Pregnancy Care' _pregnancy_topics>>
 <</if>>
 
-:: Deadwood Reblooms Sydney Birth [nobr]
+:: Deadwood Reblooms Sydney Birth
 <<deadwood-pregnancy-context 'Sydney'>>
 <<if !_pregnancy_context or !_pregnancy_birth>>
   <<deadwood-pregnancy-unavailable 'Sydney'>>

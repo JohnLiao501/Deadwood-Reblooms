@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Property Bedroom [nobr]
+:: Deadwood Reblooms Property Bedroom
 <<set _property to maplebirch.get("Finance").realEstate.current>>
 <<if !_property || !maplebirch.get("Finance").realEstate.owns(_property.id) || maplebirch.get("Finance").realEstate.managementFor(_property.id).rented>>
   <<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>
@@ -124,7 +124,7 @@
   <</if>>
 <</if>>
 
-:: Deadwood Reblooms Property Desk [nobr]
+:: Deadwood Reblooms Property Desk
 <<set _property to maplebirch.get("Finance").realEstate.current>>
 <<set _study to maplebirch.get('Finance').realEstate.facilities.find(facility => facility.id === 'study')>>
 <<if !_property || !maplebirch.get('Finance').realEstate.floorOf('desk')>>
@@ -177,7 +177,7 @@
   <<deadwood-home-exit 'desk'>>
 <</if>>
 
-:: Deadwood Reblooms Property School Study [nobr]
+:: Deadwood Reblooms Property School Study
 <<set _property to maplebirch.get("Finance").realEstate.current>>
 <<if !_property or !maplebirch.get('Finance').realEstate.floorOf('desk') or !maplebirch.get('LifeSimulation')>>
   <span class='blue'><i><<lanSwitch 'The desk is unavailable.' '书桌暂时不能用。'>></i></span><br><br>
@@ -284,7 +284,7 @@
   <<deadwood-home-exit 'bathroom'>>
 <</if>>
 
-:: Deadwood Reblooms Property Bath [nobr]
+:: Deadwood Reblooms Property Bath
 <<set _property to maplebirch.get("Finance").realEstate.current>>
 <<if !_property || !maplebirch.get("Finance").realEstate.owns(_property.id) || maplebirch.get("Finance").realEstate.managementFor(_property.id).rented>>
   <<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>
@@ -345,7 +345,7 @@
   <<getouticon>><<lanLink ['Return to the bathroom', '返回浴室'] 'Deadwood Reblooms Property Bathroom'>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Property Bath Finish [nobr]
+:: Deadwood Reblooms Property Bath Finish
 <<set _property to maplebirch.get("Finance").realEstate.current>>
 <<if !_property || !maplebirch.get("Finance").realEstate.owns(_property.id) || maplebirch.get("Finance").realEstate.managementFor(_property.id).rented>>
   <<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>
@@ -387,7 +387,7 @@
   <</if>>
 <</if>>
 
-:: Deadwood Reblooms Property Kitchen [nobr]
+:: Deadwood Reblooms Property Kitchen
 <<set _property to maplebirch.get("Finance").realEstate.current>>
 <<if !_property || !maplebirch.get("Finance").realEstate.owns(_property.id) || maplebirch.get("Finance").realEstate.managementFor(_property.id).rented>>
   <<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>
@@ -439,7 +439,7 @@
   <<deadwood-home-exit 'kitchen'>>
 <</if>>
 
-:: Deadwood Reblooms Property Outdoor [nobr]
+:: Deadwood Reblooms Property Outdoor
 <<set _property to maplebirch.get("Finance").realEstate.current>>
 <<if !_property || !maplebirch.get("Finance").realEstate.owns(_property.id) || maplebirch.get("Finance").realEstate.managementFor(_property.id).rented>>
   <<lanLink ["Return to the agency", "返回房产中介"] 'Deadwood Reblooms Property Office'>><</lanLink>>

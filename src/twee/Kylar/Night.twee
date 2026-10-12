@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Kylar Night Wake [nobr]
+:: Deadwood Reblooms Kylar Night Wake
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>>
 <<if !$KylarExpansion.stay_invited or !isLoveInterest('Kylar')
   or !maplebirch.get('Kylar').atManor

@@ -176,6 +176,7 @@
   <<lanSwitch 'It is time to let Robin rest.' '该让罗宾休息了。'>>
 <</if>>
 <br><br><<getouticon>><<lanLink ['Say good night and leave', '道声晚安并离开'] 'Orphanage'>><<endevent>><</lanLink>>
+
 :: Deadwood Robin School Wake Widgets [widget]
 <<widget 'deadwood-robin-school-wake'>>
   <<if $location is 'home' and Time.schoolDay and Time.hour gte 6 and Time.hour lt 9

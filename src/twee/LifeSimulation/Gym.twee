@@ -121,7 +121,7 @@
 <</deadwood-dynamicblock>>
 <br><<getouticon>><<lanLink ['Return to the front desk', '返回前台'] 'Deadwood Reblooms Life Simulation Gym'>><</lanLink>>
 
-:: Deadwood Reblooms Life Simulation Gym Floor [nobr]
+:: Deadwood Reblooms Life Simulation Gym Floor
 <<set $outside to 0>><<set $location to 'deadwood_gym'>><<set $bus to 'cliff'>><<effects>><<endevent>>
 <<if !maplebirch.get("LifeSimulation").has or Time.hour lt 6 or Time.hour gte 22 or $exposed gt 0>>
   <span class='red'><<lanSwitch 'You need a valid pass to enter the training floor.' '进入训练区需要有效入场资格。'>></span><br><br>
@@ -225,7 +225,7 @@
 <</if>><br><br>
 <<changingroomicon>><<lanLink ['Return to the changing room', '返回更衣室'] 'Deadwood Reblooms Life Simulation Gym Changing Room'>><</lanLink>>
 
-:: Deadwood Reblooms Life Simulation Gym Training [nobr]
+:: Deadwood Reblooms Life Simulation Gym Training
 <<set _gymActivity to $LifeSimulation.gym.activity>>
 <<set _gymTrainingDay to Time.days>>
 <<set $outside to _gymActivity is 'deck-run' ? 1 : 0>><<set $location to 'deadwood_gym'>><<set $bus to 'cliff'>><<effects>>

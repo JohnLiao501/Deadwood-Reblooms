@@ -152,7 +152,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ['Return to the front courtyard', '返回前庭'] 'School Front Courtyard'>><</lanLink>>
 
-:: Deadwood Whitney Aftercare Answer [nobr]
+:: Deadwood Whitney Aftercare Answer
 <<set $outside to 1>><<set $location to 'school'>><<schooleffects>><<effects>>
 <<if !['whitney-aftercare-space', 'whitney-aftercare-walk'].includes($phase)
   or !$WhitneyExpansion.rescued or !['active', 'rescued'].includes(C.npc.Whitney.state)
@@ -230,7 +230,7 @@
 <br><br>
 <<getinicon>><<lanLink ["Continue","继续"] 'Docks'>><</lanLink>>
 
-:: Deadwood Whitney Pier Lean [nobr]
+:: Deadwood Whitney Pier Lean
 <<set $outside to 1>><<set $location to 'docks'>><<effects>>
 <<if $phase isnot 'whitney-pier-lean' or $whitneyromance isnot 1
   or !['active', 'rescued'].includes(C.npc.Whitney.state) or !isLoveInterest('Whitney')>>
@@ -249,7 +249,7 @@
 <br><br>
 <<getinicon>><<lanLink ["Continue","继续"] 'Docks'>><</lanLink>>
 
-:: Deadwood Whitney Flats [nobr]
+:: Deadwood Whitney Flats
 <<set $outside to 0>><<set $location to 'flats'>><<effects>>
 <<if $whitneyromance isnot 1 or !['active', 'rescued'].includes(C.npc.Whitney.state) or $whitney_home_stage lt 3 or $WhitneyExpansion.flats_day is Time.days
   or !(Time.dayState is 'dawn' or (Time.dayState is 'day' and Weather.precipitation is 'none' and !Time.schoolDay and ![3, 6, 7].includes(Time.weekDay)))>>

@@ -120,7 +120,7 @@
 <br><br>
 <<getouticon>><<lanLink ["Return to Kylar's room", '返回凯拉尔的房间'] 'Manor Kylar Room'>><</lanLink>>
 
-:: Deadwood Reblooms Kylar Yard [nobr]
+:: Deadwood Reblooms Kylar Yard
 <<set $outside to 1>><<location 'kylarmanor_outside'>><<effects>>
 <<if !maplebirch.get('Kylar').canGarden or $exposed gt 0 or pcAreArmsBound('both')
   or $KylarExpansion.yard_day is Time.days>>
@@ -181,7 +181,7 @@
   <<getinicon>><<lanLink ['Go back inside', '回到屋内'] 'Manor Hall'>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Kylar Yard Ask [nobr]
+:: Deadwood Reblooms Kylar Yard Ask
 <<set $outside to 1>><<location 'kylarmanor_outside'>><<effects>>
 <<if $phase isnot 'kylar-yard-ask' or C.npc.Kylar.state isnot 'active' or !isLoveInterest('Kylar')>>
   <span class='blue'><i><<lanSwitch 'There is nothing more to do here.' '这里已经没有别的事可做。'>></i></span>
@@ -211,7 +211,7 @@
 <</if>>
 <br><br><<getinicon>><<lanLink ['Go back inside', '返回屋内'] 'Manor Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Kylar Yard Help [nobr]
+:: Deadwood Reblooms Kylar Yard Help
 <<set $outside to 1>><<location 'kylarmanor_outside'>><<effects>>
 <<if $phase isnot 'kylar-yard-help' or C.npc.Kylar.state isnot 'active' or !isLoveInterest('Kylar') or pcAreArmsBound('both')>>
   <span class='blue'><i><<lanSwitch 'There is nothing more to do here.' '这里已经没有别的事可做。'>></i></span>

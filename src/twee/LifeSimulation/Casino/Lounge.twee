@@ -1,4 +1,4 @@
-:: Deadwood Reblooms Casino Lounge [nobr]
+:: Deadwood Reblooms Casino Lounge
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<if maplebirch.get('LifeSimulation').casino.available>>
   <<language>>
@@ -39,7 +39,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Return to the room', '返回赌馆'] 'Deadwood Reblooms Life Simulation Casino'>><</lanLink>><br>
 
-:: Deadwood Reblooms Casino Lounge Rest [nobr]
+:: Deadwood Reblooms Casino Lounge Rest
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<language>>
   <<option 'EN'>>
@@ -51,7 +51,7 @@
 <</language>><br><br>
 <<getouticon>><<lanLink ['Return to the lounge', '返回休息区'] 'Deadwood Reblooms Casino Lounge'>><</lanLink>><br>
 
-:: Deadwood Reblooms Casino Lounge Watch [nobr]
+:: Deadwood Reblooms Casino Lounge Watch
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<if maplebirch.get('LifeSimulation').casino.watch.state.joined>>
   <<if !maplebirch.get('LifeSimulation').casino.watch.state.log.length>>
@@ -95,7 +95,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Return to the lounge', '返回休息区'] 'Deadwood Reblooms Casino Lounge'>><</lanLink>><br>
 
-:: Deadwood Reblooms Casino Lounge Talk [nobr]
+:: Deadwood Reblooms Casino Lounge Talk
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<if maplebirch.get('LifeSimulation').casino.available>>
   <<language>>
@@ -120,7 +120,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Leave the server to work', '让对方继续工作'] 'Deadwood Reblooms Casino Lounge'>><</lanLink>><br>
 
-:: Deadwood Reblooms Casino Lounge Compliment [nobr]
+:: Deadwood Reblooms Casino Lounge Compliment
 <<run maplebirch.get('LifeSimulation').casino.enter()>><<effects>>
 <<language>>
   <<option 'EN'>>

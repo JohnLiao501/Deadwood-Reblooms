@@ -100,7 +100,7 @@
 <<stress -3>><<lstress>><<npcincr Sydney love 1>><<glove>><<clotheson>>
 <br><br><<getouticon>><<lanLink ["Return to the showers","返回淋浴区"] 'Temple Cloister Showers'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Bathroom [nobr]
+:: Deadwood Reblooms Sirris Estate Bathroom
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !$SydneyExpansion.estate.invited or (!_sydneyAtEstate and !_sirrisAtEstate)>>
@@ -149,7 +149,7 @@
 <<lanSwitch 'You wash, dry yourself with a clean towel, and put your clothes back on.' '你洗净身体，用干净的毛巾擦干，再穿好衣服。'>><<clotheson>>
 <br><br><<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Bath Meeting [nobr]
+:: Deadwood Reblooms Sirris Estate Sydney Bath Meeting
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !_sydneyAtEstate or $SydneyExpansion.estate.bathVisitDay isnot Time.days
@@ -185,7 +185,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sydney Bath Together [nobr]
+:: Deadwood Reblooms Sirris Estate Sydney Bath Together
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<npc Sydney>><<person1>><<run statusCheck('Sydney')>>
@@ -224,7 +224,7 @@
 <<npcincr Sydney love 1>><<glove>><<stress -3>><<lstress>><<clotheson>>
 <br><br><<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sirris Estate Sirris Bath Meeting [nobr]
+:: Deadwood Reblooms Sirris Estate Sirris Bath Meeting
 <<set $outside to 0>><<set $location to 'sirris_estate'>><<effects>>
 <<deadwood-reblooms-sirris-estate-presence>>
 <<if !_sirrisAtEstate or $SydneyExpansion.estate.bathVisitDay isnot Time.days
@@ -256,7 +256,7 @@
 <</if>>
 <br><br><<getouticon>><<lanLink ["Return to the hall","返回门厅"] 'Deadwood Reblooms Sirris Estate Hall'>><</lanLink>>
 
-:: Deadwood Reblooms Sydney Bath Intimacy [nobr]
+:: Deadwood Reblooms Sydney Bath Intimacy
 <<set $outside to 0>><<set $location to ($SydneyExpansion.bathReturn is 'estate') ? 'sirris_estate' : 'temple'>>
 <<if $sexstart is 1>>
   <<clearnpc>><<npc Sydney>>

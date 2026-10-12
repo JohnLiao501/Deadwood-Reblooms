@@ -166,6 +166,7 @@
   <<stress -6>><<trauma -6>>
 <</lanLink>><<ltrauma>><<lstress>>
 <br>
+
 :: Deadwood BirdTower Moor Home
 <<effects>>
 <<switch $speech_attitude>>
@@ -404,6 +405,7 @@
   <<HuntTogetherClean>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower Moor Bath
 <<effects>>
 <<language>>
@@ -456,7 +458,7 @@
 <br>
 <!--哈哈，还是吃了-->
 <<for _cc to 0; _cc lt maplebirch.get('BirdTower').party.length; _cc++>>
-  <<set $childRecords[$BirdTower.hunt.ids[_cc]].development.fed_daily++>>
+  <<set $childRecords[$BirdTower.hunt.ids[_cc]].development.fed_daily to Math.min(2, ($childRecords[$BirdTower.hunt.ids[_cc]].development.fed_daily ?? 0) + 1)>>
 <</for>>
 <<if currentSkillValue("skulduggery") gte 800 or (currentSkillValue("skulduggery") gte 600 and $transformationParts.traits.sharpEyes isnot "disabled")>>
   <<npc "Great Hawk">>
@@ -481,6 +483,7 @@
   <<endevent>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower Moor Return
 <<set $location to "tower">>
 <<effects>>

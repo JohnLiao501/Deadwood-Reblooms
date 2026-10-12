@@ -239,6 +239,7 @@
 <</if>>
 
 <!-- 混场回合循环。 -->
+
 :: Deadwood Reblooms Pool Party Group Sex
 <<set $outside to 0>><<set $location to 'pool'>><<schooleffects>><<effects>>
 <<if !$combat>>
@@ -249,6 +250,7 @@
 <</if>>
 
 <!-- 凯拉尔多人场：PC + 凯拉尔 + 另一位恋人。惠特尼被 householdRefusal 硬性排斥，不会出现在这里。 -->
+
 :: Deadwood Reblooms Pool Party Kylar Group
 <<set $outside to 0>><<set $location to 'pool'>><<schooleffects>><<effects>>
 <<set _pool to maplebirch.get('LifeSimulation').pool_party>>
@@ -283,6 +285,7 @@
 <</if>>
 
 <!-- 凯拉尔多人场的回合循环。 -->
+
 :: Deadwood Reblooms Pool Party Kylar Group Sex
 <<set $outside to 0>><<set $location to 'pool'>><<schooleffects>><<effects>>
 <<if !$combat>>

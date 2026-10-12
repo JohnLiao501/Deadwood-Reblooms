@@ -1,4 +1,4 @@
-:: Deadwood Remy Dates [nobr]
+:: Deadwood Remy Dates
 <<effects>><<set _remy to maplebirch.get('Orchard')?.remy>>
 <<if _remy?.canDate>>
   <<npc Remy>><<person1>>

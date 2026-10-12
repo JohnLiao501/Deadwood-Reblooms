@@ -5,7 +5,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Orchard Regular [nobr]
+:: Deadwood Orchard Regular
 <<set $location to 'market'>><<set $outside to 0>><<effects>><<endevent>>
 <<set $_orchard to maplebirch.get('Orchard')>>
 <<if $_orchard and $_orchard.canMeetRegular>>

@@ -159,6 +159,7 @@
   <<endevent>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower Hunt Plane Chase
 <<effects>><<childSelect $BirdTower.hunt.leader>>
 <<if maplebirch.get('BirdTower').leaderTrait is "clever">>

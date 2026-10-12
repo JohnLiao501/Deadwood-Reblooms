@@ -78,7 +78,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Robin Pregnancy [nobr]
+:: Deadwood Robin Pregnancy
 <<deadwood-pregnancy-context 'Robin'>>
 <<if !_pregnancy_context or (!_pregnancy_reveal and !_pregnancy_birth)>>
   <<deadwood-pregnancy-unavailable 'Robin'>>
@@ -165,7 +165,7 @@
   <<deadwood-pregnancy-answer-links 'Deadwood Robin Pregnancy Care'>>
 <</if>>
 
-:: Deadwood Robin Pregnancy Care [nobr]
+:: Deadwood Robin Pregnancy Care
 <<deadwood-pregnancy-context 'Robin'>>
 <<if !_pregnancy_context or !_pregnancy_known>>
   <<deadwood-pregnancy-unavailable 'Robin'>>
@@ -254,7 +254,7 @@
   <<deadwood-pregnancy-care-links 'Deadwood Robin Pregnancy Care' _pregnancy_topics>>
 <</if>>
 
-:: Deadwood Robin Birth [nobr]
+:: Deadwood Robin Birth
 <<deadwood-pregnancy-context 'Robin'>>
 <<if !_pregnancy_context or !_pregnancy_birth>>
   <<deadwood-pregnancy-unavailable 'Robin'>>

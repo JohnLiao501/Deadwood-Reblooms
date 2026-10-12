@@ -18,7 +18,7 @@
   <</if>>
 <</widget>>
 
-:: Deadwood Reblooms School Council [nobr]
+:: Deadwood Reblooms School Council
 <<set $outside to 0, $location to 'school'>><<schooleffects>><<effects>>
 <<lanSwitch 'You are in the student council room.' '你在学生会室里。'>><br>
 <<if !maplebirch.get('LifeSimulation').school.councilOpen>>
@@ -187,7 +187,7 @@
 <</if>>
 <<getouticon>><<lanLink ['Return to the hallways', '返回走廊'] 'Hallways'>><</lanLink>>
 
-:: Deadwood Reblooms School Council Work [nobr]
+:: Deadwood Reblooms School Council Work
 <<set $outside to 0, $location to 'school'>><<schooleffects>><<effects>>
 <<if $LifeSimulation.school.council.work_day is Time.days>>
   <<switch $LifeSimulation.school.council.work>>
@@ -272,7 +272,7 @@
 <</if>>
 <br><<getouticon>><<lanLink ['Return to the student council room', '返回学生会室'] 'Deadwood Reblooms School Council'>><</lanLink>>
 
-:: Deadwood Reblooms School Council Rest [nobr]
+:: Deadwood Reblooms School Council Rest
 <<set $outside to 0, $location to 'school'>><<schooleffects>><<effects>>
 <<language>>
   <<option 'EN'>>
@@ -282,7 +282,7 @@
 <</language>><<ltiredness>><<lstress>><br><br>
 <<getouticon>><<lanLink ['Return to the student council room', '返回学生会室'] 'Deadwood Reblooms School Council'>><</lanLink>>
 
-:: Deadwood Reblooms School Council Study [nobr]
+:: Deadwood Reblooms School Council Study
 <<set $outside to 0, $location to 'school'>><<schooleffects>><<effects>>
 <<switch $phase>>
   <<case 1>>

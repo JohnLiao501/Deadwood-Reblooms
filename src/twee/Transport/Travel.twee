@@ -1,4 +1,4 @@
-:: Deadwood Transport Menu [nobr]
+:: Deadwood Transport Menu
 <<deadwood-dynamicblock 'deadwood-transport-menu'>>
 <<set _transport to maplebirch.get('Transport')>>
 <<deadwood-transport-notice>>
@@ -134,7 +134,7 @@
 
 <</deadwood-dynamicblock>>
 
-:: Deadwood Transport Travel [nobr]
+:: Deadwood Transport Travel
 <<deadwood-dynamicblock 'deadwood-transport-travel'>>
 <<set _transport to maplebirch.get('Transport')>>
 <<if $Transport.trip and !$Transport.trip.settled>>
@@ -276,11 +276,11 @@
 <</if>>
 <</deadwood-dynamicblock>>
 
-:: Deadwood Transport Repair [nobr]
+:: Deadwood Transport Repair
 <<deadwood-transport-notice>><br><br>
 <<getouticon>><<lanLink ['Return to your vehicle', '返回载具旁'] 'Deadwood Transport Menu'>><</lanLink>><br>
 
-:: Deadwood Transport Pull Over [nobr]
+:: Deadwood Transport Pull Over
 <<set _transport to maplebirch.get('Transport')>>
 <<set _pull_name to $Transport.trip?.passengers?.[0]>>
 <<set _pull_start to $Transport.trip?.pullstart ? 1 : 0>>
@@ -313,7 +313,7 @@
   <</if>>
 <</if>>
 
-:: Deadwood Transport Pull Over Finish [nobr]
+:: Deadwood Transport Pull Over Finish
 <<effects>>
 <<set _pull_name to $Transport.trip?.passengers?.[0]>>
 <<if _pull_name>>
@@ -333,7 +333,7 @@
 <<endcombat>>
 <<getouticon>><<lanLink ['Continue', '继续'] _transport.arrival>><</lanLink>>
 
-:: Deadwood Transport Date [nobr]
+:: Deadwood Transport Date
 <<set _transport to maplebirch.get('Transport')>>
 <<if $Transport.trip?.dated>>
   <<language>>

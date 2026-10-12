@@ -1,4 +1,4 @@
-:: Deadwood Orchard Alex [nobr]
+:: Deadwood Orchard Alex
 <<set $outside to 1>><<farm_work_update>><<effects>>
 <<set $_orchard to maplebirch.get('Orchard')>>
 <<if $_orchard?.canTalkAlex>>

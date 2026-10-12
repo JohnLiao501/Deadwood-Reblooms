@@ -1,4 +1,4 @@
-:: Deadwood Transport Motors [nobr]
+:: Deadwood Transport Motors
 <<set _transport to maplebirch.get('Transport')>>
 <<set $Transport.shop to 'motors', $location to 'deadwood_transport_motors', $bus to 'harvest', $outside to 0>>
 <<= maplebirch.t('deadwood-reblooms:transport:place:motors')>><br><br>
@@ -38,7 +38,7 @@
 <</if>>
 <<deadwood-transport-return>>
 
-:: Deadwood Transport Dealer [nobr]
+:: Deadwood Transport Dealer
 <<set _transport to maplebirch.get('Transport')>>
 <<set $location to $Transport.shop is 'bicycle' ? 'deadwood_transport_bicycle' : 'deadwood_transport_motors', $bus to _transport.shopPoint, $outside to 0>>
 <<= maplebirch.t('deadwood-reblooms:transport:place:' + $Transport.shop)>><br><br>
@@ -123,7 +123,7 @@
   <</deadwood-dynamicblock>>
 <</if>>
 
-:: Deadwood Transport Buy [nobr]
+:: Deadwood Transport Buy
 <<set _transport to maplebirch.get('Transport'), _model to _transport.offer>>
 <<if !_model or !_transport.dealerOpen>>
   <<getouticon>><<lanLink ['Return to the showroom', '返回展厅'] 'Deadwood Transport Dealer'>><</lanLink>><br>
@@ -203,7 +203,7 @@
   <</lanLink>>
 <</if>>
 
-:: Deadwood Transport Service [nobr]
+:: Deadwood Transport Service
 <<set _transport to maplebirch.get('Transport')>>
 <<set $location to $Transport.shop is 'bicycle' ? 'deadwood_transport_bicycle' : 'deadwood_transport_service', $bus to _transport.shopPoint, $outside to 0>>
 <<= maplebirch.t('deadwood-reblooms:transport:place:' + ($Transport.shop is 'bicycle' ? 'bicycle' : 'garage'))>><br><br>
@@ -309,7 +309,7 @@
   <</deadwood-dynamicblock>>
 <</if>>
 
-:: Deadwood Transport Petrol [nobr]
+:: Deadwood Transport Petrol
 <<set _transport to maplebirch.get('Transport')>>
 <<set $location to 'deadwood_transport_petrol', $bus to _transport.shopPoint, $outside to 1>>
 <<= maplebirch.t('deadwood-reblooms:transport:place:petrol')>><br><br>
@@ -411,7 +411,7 @@
   <</deadwood-dynamicblock>>
 <</if>>
 
-:: Deadwood Transport Sell [nobr]
+:: Deadwood Transport Sell
 <<deadwood-dynamicblock 'deadwood-transport-sell'>>
 <<set _transport to maplebirch.get('Transport')>>
 <<if _transport.dealerOpen and _transport.vehicle and _transport.shopVehicles.includes(_transport.vehicle) and _transport.availableAtShop>>

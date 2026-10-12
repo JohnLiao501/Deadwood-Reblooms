@@ -48,6 +48,7 @@
   <<bird_pass 5>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower FirstHunt Intro 2
 <<language>>
   <<option 'EN'>>
@@ -134,6 +135,7 @@
   <<bird_pass 5>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower FirstHunt Intro 3
 <<rng 2>>
 <<set _beastGen to ($rng is 1 ? "猫" : "狐狸")>>
@@ -198,6 +200,7 @@
   <<bird_pass 5>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower FirstHunt Intro 4
 <<npc "Great Hawk">><<childSelect $BirdTower.scene.actors[0]>>
 <<language>>
@@ -273,6 +276,7 @@
   <<bird_pass 5>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower FirstHunt Intro 5
 <<language>>
   <<option 'EN'>>
@@ -392,6 +396,7 @@
   <<bird_pass 5>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower FirstHunt Intro 6
 <<language>>
   <<option 'EN'>>
@@ -557,6 +562,7 @@
   <<bird_pass 5>>
 <</lanLink>>
 <br>
+
 :: Deadwood BirdTower FirstHunt Intro 7
 <<language>>
   <<option 'EN'>>

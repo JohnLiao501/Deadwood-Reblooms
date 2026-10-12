@@ -255,7 +255,7 @@
   <</switch>>
 <</widget>>
 
-:: Deadwood Reblooms Life Simulation Blackjack [nobr]
+:: Deadwood Reblooms Life Simulation Blackjack
 <<set _blackjackGame to maplebirch.get('LifeSimulation')?.casino.blackjack>>
 <<if !_blackjackGame>>
   <<lanLink ['Return to the arcade', '返回游戏厅'] 'Arcade'>><</lanLink>><br>
@@ -319,7 +319,7 @@
   <</deadwood-dynamicblock>>
 <</if>>
 
-:: Deadwood Reblooms Life Simulation Blackjack Rules [nobr]
+:: Deadwood Reblooms Life Simulation Blackjack Rules
 <<language>>
   <<option 'EN'>>
     The card beside the deck reads:<br><br>

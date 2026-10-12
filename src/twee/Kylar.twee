@@ -81,7 +81,7 @@
   <<lanLink ['Close the wardrobe', '关上衣柜'] 'Manor Kylar Room'>><<cleanupOnWardrobeExit>><</lanLink>>
 <</widget>>
 
-:: Deadwood Reblooms Kylar Stay Invitation [nobr]
+:: Deadwood Reblooms Kylar Stay Invitation
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>>
 <<set _kylarAtManor to maplebirch.get('Kylar').atManor>>
 <<if $kylar_sleep_abduction isnot 1 or !isLoveInterest('Kylar') or !_kylarAtManor>>
@@ -117,7 +117,7 @@
     <<getouticon>><<link '返回凯拉尔的房间' 'Manor Kylar Room'>><</link>>
 <</language>>
 
-:: Deadwood Reblooms Kylar Wardrobe [exitCheckBypass nobr]
+:: Deadwood Reblooms Kylar Wardrobe [exitCheckBypass]
 <<set $outside to 0>><<location 'kylarmanor'>><<effects>>
 <<if !$KylarExpansion.stay_invited>>
   <<lanSwitch 'You leave Kylar’s things where they are.' '你没有动凯拉尔的东西。'>><br><br>

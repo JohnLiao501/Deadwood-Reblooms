@@ -283,7 +283,7 @@
 <</if>>
 <br><<getouticon>><<lanLink ['Return to the head teacher’s office', '返回校长办公室'] "Head's Office">><</lanLink>>
 
-:: Deadwood Reblooms Life Simulation School Board [nobr]
+:: Deadwood Reblooms Life Simulation School Board
 <<set $outside to 0>>
 <<set $location to 'school'>>
 <<schooleffects>>
@@ -444,7 +444,7 @@
 <br>
 <<getouticon>><<lanLink ['Return to the noticeboard', '返回公告栏'] 'Deadwood Reblooms Life Simulation School Board'>><</lanLink>>
 
-:: Deadwood Reblooms Life Simulation Prefect Appointment [nobr]
+:: Deadwood Reblooms Life Simulation Prefect Appointment
 <<set $outside to 0>>
 <<set $location to 'school'>>
 <<effects>>
@@ -479,7 +479,7 @@
 <br>
 <<getouticon>><<lanLink "返回校长办公室" "Head's Office">><</lanLink>>
 
-:: Deadwood Reblooms Life Simulation Prefect Appointment Result [nobr]
+:: Deadwood Reblooms Life Simulation Prefect Appointment Result
 <<set $outside to 0>>
 <<set $location to 'school'>>
 <<effects>>
@@ -537,7 +537,7 @@
 <br>
 <<getouticon>><<lanLink "返回校长办公室" "Head's Office">><</lanLink>>
 
-:: Deadwood Reblooms Life Simulation President Appointment Result [nobr]
+:: Deadwood Reblooms Life Simulation President Appointment Result
 <<set $outside to 0>>
 <<set $location to 'school'>>
 <<effects>>
@@ -625,7 +625,7 @@
   <span class='blue'><<lanSwitch 'The morning gate duty has ended.' '晨间校门值勤已经结束。'>></span>
 <</if>>
 
-:: Deadwood Reblooms Life Simulation Morning Duty Private Talk [nobr]
+:: Deadwood Reblooms Life Simulation Morning Duty Private Talk
 <<set $outside to 1>>
 <<set $location to 'school'>>
 <<schooleffects>>
@@ -714,7 +714,7 @@
   <<entranceicon>><<lanLink ['Return to the front courtyard', '返回前庭'] 'School Front Courtyard'>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Life Simulation Morning Duty Invitation [nobr]
+:: Deadwood Reblooms Life Simulation Morning Duty Invitation
 <<set $outside to 1>>
 <<set $location to 'school'>>
 <<schooleffects>>
@@ -859,7 +859,7 @@
   <<entranceicon>><<lanLink ['Return to the front courtyard', '返回前庭'] 'School Front Courtyard'>><</lanLink>>
 <</if>>
 
-:: Deadwood Reblooms Life Simulation Morning Duty Encounter Finish [nobr]
+:: Deadwood Reblooms Life Simulation Morning Duty Encounter Finish
 <<set $outside to 0>>
 <<set $location to 'school'>>
 <<schooleffects>>
@@ -911,7 +911,7 @@
 <</if>>
 <<entranceicon>><<lanLink ['Return to the hallways', '返回走廊'] 'Hallways'>><</lanLink>>
 
-:: Deadwood Reblooms Life Simulation Morning Duty Result [nobr]
+:: Deadwood Reblooms Life Simulation Morning Duty Result
 <<set $outside to 1>>
 <<set $location to 'school'>>
 <<schooleffects>>
@@ -1177,7 +1177,7 @@
 <br><br>
 <<getouticon>><<lanLink "返回校长办公室" "Head's Office">><</lanLink>>
 
-:: Deadwood Reblooms Life Simulation Dress Review [nobr]
+:: Deadwood Reblooms Life Simulation Dress Review
 <<set $outside to 0>>
 <<set $location to 'school'>>
 <<effects>>
