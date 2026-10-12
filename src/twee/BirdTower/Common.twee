@@ -1,23 +1,5 @@
 :: Deadwood BirdTower Widgets [widget]
-<!-- 通用 widget：调试入口、鹰崽称呼、图标与回塔结算。 -->
-<<widget 'BabyhawkTestFunc'>>
-  <<if $debug>>
-    <<setupOptions>>
-    <span class="gold"><<lanSwitch 'Bird Tower expansion' '高塔扩展'>></span>
-    <br>
-    <<lanSwitch 'Spawn hawks with each trait:' '按性格生成小鹰：'>>
-    <br>
-    <<lanLink ["Summon a flock of hawks", "召唤小鹰大军"] "Deadwood BirdTower Test Many Hawks">>
-      <<endevent>>
-    <</lanLink>>
-    <br><br>
-    <<lanSwitch 'Reassign the orphan hawk:' '重新指定孤儿小鹰：'>>
-    <br>
-    <<lanLink ["Pick up a hawk", "捡一下小鹰"] "Deadwood BirdTower Test OrphanHawk">>
-      <<endevent>>
-    <</lanLink>>
-  <</if>>
-<</widget>>
+<!-- 通用 widget：鹰崽称呼、图标与回塔结算。 -->
 
 <<widget "babyhawks">>
   <<if maplebirch.get('BirdTower').party.length gt 1 or $BirdTower.scene.ids.length gt 1>>
@@ -115,8 +97,8 @@
         <<icon "antiques/antique-gold-ring.png">>
       <<else>>
         <<set _colour = setup.colours.eyes_map[$childRecords[$orphanHawkChildId].features.eyeColour].variable>>
-        <<set $_baseIcon to "BirdTower/gold_ring.png">>
-        <<set $_gemIcon to "BirdTower/gold_ring_gem.png">>
+        <<set $_baseIcon to "bird-tower/gold-ring.png">>
+        <<set $_gemIcon to "bird-tower/gold-ring-gem.png">>
         <<icon $_baseIcon infront>>
         <span @class="'eye-' + _colour.replace(/ /g, '-')">
           <span class="colour-eye" style="color:#6E4E11;"><<icon $_gemIcon>></span>
@@ -225,8 +207,8 @@
             <</language>>
             <br>
             <<lanSwitch "After a flurry of chaos they grab the lurker again. After a chattering debate they seem to decide to eat it right there, carrying it to a nearby branch to feed." "一阵骚乱后，他们重新抓住了这只潜伏者，在一阵唧唧喳喳的讨论后，他们似乎决定就地开吃，把潜伏者带到了附近的树杈上开始进食。">>
-            <<set $childRecords[$BirdTower.hunt.ids[0]].development.fed_daily++>>
-            <<set $childRecords[$BirdTower.hunt.ids[1]].development.fed_daily++>>
+            <<set $childRecords[$BirdTower.hunt.ids[0]].development.fed_daily to Math.min(2, ($childRecords[$BirdTower.hunt.ids[0]].development.fed_daily ?? 0) + 1)>>
+            <<set $childRecords[$BirdTower.hunt.ids[1]].development.fed_daily to Math.min(2, ($childRecords[$BirdTower.hunt.ids[1]].development.fed_daily ?? 0) + 1)>>
           <<case "sympathy">>
             <<childSelect $BirdTower.hunt.ids[1]>>
             <<language>>

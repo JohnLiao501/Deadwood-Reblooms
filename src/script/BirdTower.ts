@@ -25,7 +25,7 @@ export default function BirdTowerScript(maplebirch: typeof window.maplebirch): v
         },
         {
           src: '<<set $childRecords[_childrenEating[$_cc]].development.activity to "lurkerEat">>',
-          applybefore: '<<set $childRecords[_childrenEating[$_cc]].development.fed_daily++>>',
+          applybefore: '<<set $childRecords[_childrenEating[$_cc]].development.fed_daily to Math.min(2, ($childRecords[_childrenEating[$_cc]].development.fed_daily ?? 0) + 1)>>',
           expected: 1
         },
         {
@@ -157,8 +157,6 @@ export default function BirdTowerScript(maplebirch: typeof window.maplebirch): v
       ]
     }
   });
-
-  maplebirch.tool.addTo('Options', 'BabyhawkTestFunc');
 
   // 玩法成就由框架初始化。
   maplebirch.tool.onInit(() => {

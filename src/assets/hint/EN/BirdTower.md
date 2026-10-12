@@ -25,6 +25,7 @@ On the children's page, each hawk shows an activity based on age, personality an
 Appetites grow with age. During the nestling stage one lurker feeds every chick; after fledging each hawk needs two meals a day, and once they can hunt alone they no longer need to be fed.
 
 - You can feed a lurker to a chosen chick or split it evenly among the nest.
+- When food is short, shared portions count proportionally towards that day's meals; you can keep feeding the remaining amount.
 - Feeding accumulates a running total. Extra meals during early growth can increase a chick's size; existing size and feeding history both nudge the personality roll.
 - If you never enter the tower that day, the Great Hawk feeds the chicks while uninjured and not pregnant. These meals still count toward the total.
 

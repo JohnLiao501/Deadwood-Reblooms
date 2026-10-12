@@ -155,10 +155,14 @@ class BirdTower extends Module {
     if (!children.length || !(stock > 0)) return [];
     const cost = typeof target === 'number' || !children.some(child => getChildDays(child.childId) >= 35) ? 1 : children.length;
     if (target !== 'share' && stock < cost) return [];
-    V.bird.materials.lurkers -= target === 'share' ? Math.min(stock, cost) : cost;
+    const spent = target === 'share' ? Math.min(stock, cost) : cost;
+    const portion = spent / cost;
+    V.bird.materials.lurkers -= spent;
     for (const child of children) {
       this.init(child.childId);
-      child.development.fed_daily = (child.development.fed_daily ?? 0) + 1;
+      const fed = Math.min(BIRD_TOWER_MEALS, (child.development.fed_daily ?? 0) + portion);
+      // 分食累加可能产生浮点误差，整餐份额保持整数。
+      child.development.fed_daily = Math.abs(fed - Math.round(fed)) < 1e-9 ? Math.round(fed) : fed;
       child.development.activity = 'lurkerEat';
       child.development.activityDay = Time.days;
       child.development.activityHour = Time.hour - 3;
@@ -203,16 +207,11 @@ class BirdTower extends Module {
       child.development.timer = undefined;
       child.development.activity = 'rest';
       let loot: string;
-      const eating = this.needsFood(child);
-      if (eating) {
-        loot = 'lurkers';
-        child.development.activity = 'lurkerEat';
-        child.development.fed_daily = (child.development.fed_daily ?? 0) + 1;
-        child.development.activityDay = Time.days;
-        child.development.activityHour = Time.hour;
-      } else if (child.development.hunt_loot !== undefined) {
+      if (child.development.hunt_loot !== undefined) {
         loot = child.development.hunt_loot;
         child.development.hunt_loot = undefined;
+      } else if (this.needsFood(child)) {
+        loot = 'lurkers';
       } else {
         const pool = ['nothing', 'junk', 'materials', 'valuables', 'lurkers'];
         loot = pool[random(0, pool.length - 1)];
@@ -223,6 +222,13 @@ class BirdTower extends Module {
       } else if (loot === 'valuables') {
         const pool = ['watch', 'ring', 'necklace', 'bracelet'];
         loot = pool[random(0, pool.length - 1)];
+      }
+      const eating = loot === 'lurkers' && this.needsFood(child);
+      if (eating) {
+        child.development.activity = 'lurkerEat';
+        child.development.fed_daily = Math.min(BIRD_TOWER_MEALS, (child.development.fed_daily ?? 0) + 1);
+        child.development.activityDay = Time.days;
+        child.development.activityHour = Time.hour;
       }
       if (['watch', 'ring', 'necklace', 'bracelet'].includes(loot)) V.bird.materials.valuables[loot] = (V.bird.materials.valuables[loot] ?? 0) + 1;
       else if (loot !== 'nothing' && !eating) V.bird.materials[loot] = (V.bird.materials[loot] ?? 0) + 1;
@@ -247,7 +253,9 @@ class BirdTower extends Module {
       this.init(id);
       const child = V.childRecords[id] as HawkChild;
       child.development.activity = 'lurkerEat';
-      child.development.fed_daily = (child.development.fed_daily ?? 0) + 1;
+      child.development.fed_daily = Math.min(BIRD_TOWER_MEALS, (child.development.fed_daily ?? 0) + 1);
+      child.development.activityDay = Time.days;
+      child.development.activityHour = Time.hour;
     }
     T.length = T.tempIDs.length;
     return T.length;
