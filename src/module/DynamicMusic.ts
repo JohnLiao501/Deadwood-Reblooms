@@ -135,7 +135,7 @@ class DynamicMusic {
   public constructor(private readonly core: typeof maplebirch) {}
 
   private get options() {
-    return V.options.maplebirch.DynamicMusic;
+    return V.options?.maplebirch?.DynamicMusic;
   }
 
   // 分轨倍率由框架管理；声明包尚未发布此接口，边界仅补充这项公开契约。
@@ -223,10 +223,11 @@ class DynamicMusic {
             if (this.ambient !== null) this.audio.ambience.stop(FADE_MS);
             this.ambient = null;
           } else if (this.ambient !== desired) {
-            const volume = this.options.ambienceVolume;
+            const volume = this.options?.ambienceVolume ?? DynamicMusic.options.ambienceVolume;
             if (await this.audio.ambience.play(AUDIO_PACK, desired, volume, FADE_MS)) {
               this.ambient = desired;
-              if (this.options.ambienceVolume !== volume) this.audio.ambience.setVolume(this.options.ambienceVolume);
+              const currentVolume = this.options?.ambienceVolume ?? DynamicMusic.options.ambienceVolume;
+              if (currentVolume !== volume) this.audio.ambience.setVolume(currentVolume);
             }
           }
         } catch (error) {
@@ -239,18 +240,21 @@ class DynamicMusic {
   }
 
   public refresh(): void {
-    const enabled = this.options.enabled === true && this.installed;
+    const options = this.options;
+    const enabled = options?.enabled === true && this.installed;
     if (enabled && !this.config) {
       if (!this.failed) this.loading ??= this.loadConfig();
       return;
     }
-    const state = this.state;
-    const music = enabled && this.options.musicEnabled !== false ? this.config?.music.find(track => track.when(state)) : null;
-    const ambience = enabled && this.options.ambienceEnabled !== false ? this.config?.ambience.find(track => track.when(state)) : null;
+    const state = enabled ? this.state : null;
+    const music = state && options?.musicEnabled !== false ? this.config?.music.find(track => track.when(state)) : null;
+    const ambience = state && options?.ambienceEnabled !== false ? this.config?.ambience.find(track => track.when(state)) : null;
     this.desired.music = music?.file.slice(6).replace(/\.[^.]+$/, '') ?? null;
     this.desired.ambience = ambience?.file ?? null;
-    this.audio.setModVolume(AUDIO_PACK, this.options.volume);
-    if (this.ambient !== null) this.audio.ambience.setVolume(this.options.ambienceVolume);
+    if (options) {
+      this.audio.setModVolume(AUDIO_PACK, options.volume);
+      if (this.ambient !== null) this.audio.ambience.setVolume(options.ambienceVolume);
+    }
     if (this.desired.music === null && this.syncing.has('music') && this.audio.ActivePlaylist?.name === AUDIO_PACK) this.audio.stop();
     if (this.desired.ambience === null && this.syncing.has('ambience')) this.audio.ambience.stop(FADE_MS);
     void this.sync('music');
@@ -258,13 +262,17 @@ class DynamicMusic {
   }
 
   public setVolume(value: number): void {
-    this.options.volume = Math.clamp(Number(value) || 0, 0, 1);
-    this.audio.setModVolume(AUDIO_PACK, this.options.volume);
+    const options = this.options;
+    if (!options) return;
+    options.volume = Math.clamp(Number(value) || 0, 0, 1);
+    this.audio.setModVolume(AUDIO_PACK, options.volume);
   }
 
   public setAmbienceVolume(value: number): void {
-    this.options.ambienceVolume = Math.clamp(Number(value) || 0, 0, 1);
-    if (this.ambient !== null) this.audio.ambience.setVolume(this.options.ambienceVolume);
+    const options = this.options;
+    if (!options) return;
+    options.ambienceVolume = Math.clamp(Number(value) || 0, 0, 1);
+    if (this.ambient !== null) this.audio.ambience.setVolume(options.ambienceVolume);
   }
 
   public preInit(): void {
