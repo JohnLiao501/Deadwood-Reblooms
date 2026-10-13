@@ -9,6 +9,7 @@
 
 <<widget 'deadwood-street-shop-link'>>
   <<if maplebirch.get('StreetLife').available and !($temple_spear_mission gte 1 and !$smuggler_pub_zephyr) and !(C.npc.Wren.love gte 40 and !$smuggler_pub_wren)>>
+    <<deadwood-street-cargo-link 'smuggler'>>
     <<icon 'street/weapon-case.png'>><<lanLink ["Look over the weapon seller's stock (0:01)", '看看武器卖家的货 (0:01)'] 'Deadwood Street Weapon Shop'>><<pass 1>><</lanLink>><br>
   <</if>>
 <</widget>>

@@ -259,6 +259,7 @@
   <<icon 'casino/slot-machine.png'>><<lanLink ['Slot machine', '老虎机'] 'Deadwood Reblooms Casino Slot Machine'>><</lanLink>><br>
   <<icon 'casino/dealer.png'>><<lanLink ['Talk to Marlow', '与马洛交谈'] 'Deadwood Reblooms Casino Dealer'>><</lanLink>><br><br>
   <<icon 'casino/lounge.png'>><<lanLink ['Go to the lounge', '前往休息区'] 'Deadwood Reblooms Casino Lounge'>><</lanLink>><br><br>
+  <<deadwood-street-cargo-link 'casino'>>
 <</if>>
 <<if !_casino.available and (_casino.chips gt 0 or _casino.holdem.state.joined)>>
   <<icon 'casino/cashier.png'>><<lanLink ['Visit the cashier', '前往筹码柜台'] 'Deadwood Reblooms Casino Cashier'>><</lanLink>><br><br>

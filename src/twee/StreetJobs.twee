@@ -1,0 +1,265 @@
+:: Deadwood Street Job Widgets [widget]
+
+<<widget 'deadwood-street-landry-link'>>
+  <<if maplebirch.get('StreetLife')?.jobs.available>>
+    <<socialiseicon 'ask'>><<lanLink ['Ask Landry about work', '向兰德里打听差事'] 'Deadwood Street Jobs'>><<endevent>><</lanLink>><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-street-cargo-link'>>
+  <<set _streetJobs to maplebirch.get('StreetLife')?.jobs>>
+  <<if _streetJobs?.available and _streetJobs.state.active and _streetJobs.state.active.stage isnot 'settlement'>>
+    <<set _streetContract to _streetJobs.contract>>
+    <<if _args[0] is _streetContract.source or _args[0] is _streetContract.target or (_args[0] is 'pub' and _streetJobs.state.active.stage is 'return')>>
+      <<icon _streetContract.icon>><<lanLink ['Attend to your delivery (0:01)', '处理委托货物 (0:01)'] 'Deadwood Street Cargo'>>
+        <<set $StreetLife.jobs.site to _args[0]>><<pass 1>>
+      <</lanLink>><br>
+    <</if>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-street-unload'>>
+  <<set _streetJobs to maplebirch.get('StreetLife')?.jobs>>
+  <<if _streetJobs?.available and _streetJobs.state.active and _streetJobs.state.active.vehicle isnot null and _streetJobs.cargoHere and maplebirch.get('Transport')?.canApproach>>
+    <<icon 'industry/dispatch.png'>><<lanLink ['Take the delivery out of your vehicle (0:05)', '从车上卸下委托货物 (0:05)'] $passage>>
+      <<if _streetJobs.act('unload')>><<pass 5>><<tiredness 2>><</if>>
+    <</lanLink>><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-street-job-status'>>
+  <<set _streetJobs to maplebirch.get('StreetLife').jobs, _streetJob to _streetJobs.state.active, _streetContract to _streetJobs.contract>>
+  <<if _streetJob>>
+    <div class='gold bold'><<= lanSwitch(_streetContract.name[0], _streetContract.name[1])>></div>
+    <ul class='journal'>
+      <li><<= lanSwitch(_streetContract.goods[0], _streetContract.goods[1])>> · <<lanSwitch 'Cargo space: ' '载货容量：'>><span class='teal'><<= _streetContract.cargo>></span></li>
+      <li><<set _streetFrom to _streetJobs.terms.sites[_streetContract.source].name, _streetTo to _streetJobs.terms.sites[_streetContract.target].name>><<= lanSwitch(_streetFrom[0], _streetFrom[1])>> → <<= lanSwitch(_streetTo[0], _streetTo[1])>></li>
+      <<if _streetJob.stage is 'settlement'>>
+        <li class='green'><<lanSwitch 'Delivered. Return to Landry for payment.' '货物已交付。回丰收街酒馆找兰德里领报酬。'>></li>
+        <li><<lanSwitch 'Payment due to you: ' '待领报酬：'>><<printmoney _streetJob.fee>></li>
+      <<else>>
+        <li><<lanSwitch 'Agreed fee: ' '约定报酬：'>><<printmoney _streetContract.fee>> · <<lanSwitch 'Deliver by ' '交货期限：'>>
+          <<set _streetDate to new DateTime(_streetJob.due)>><<= lanSwitch(getFormattedDate(_streetDate), _streetDate.month + '月' + _streetDate.day + '日')>> <<ampm _streetDate.hour _streetDate.minute>>
+        </li>
+        <<if _streetJobs.expired>>
+          <li class='red'>
+            <<if _streetJob.stage is 'pickup'>>
+              <<lanSwitch 'The delivery window has closed before you collected the goods. Tell Landry you cannot finish.' '你还没取货，交货期限及宽限时间就已经结束。请向兰德里取消委托。'>>
+            <<else>>
+              <<lanSwitch 'The delivery window has closed. Return the goods to Landry.' '交货期限及宽限时间都已结束，请把货物归还兰德里。'>>
+            <</if>>
+          </li>
+        <<elseif Time.date.timeStamp gt _streetJob.due>>
+          <li class='blue'><<lanSwitch 'The delivery is late. The fee will be reduced by a quarter; the buyer allows one further day.' '送货已迟到，报酬将减少四分之一；买家另给一天宽限。'>></li>
+        <</if>>
+        <<if _streetJob.stage is 'pickup'>>
+          <li><<lanSwitch 'Awaiting collection.' '尚未取货。'>></li>
+        <<elseif _streetJobs.lost>>
+          <li class='red'><<lanSwitch 'The vehicle carrying the goods is missing. Report the loss to Landry, or recover the vehicle first.' '载货车辆已失踪。可以先找回车辆，或向兰德里报告损失。'>></li>
+        <<elseif _streetJob.vehicle isnot null>>
+          <li><<lanSwitch 'The goods remain in your vehicle. Bring that vehicle to the destination, or unload at the street where it is parked.' '货物仍在载货车辆里。请把那辆车开到目的地，或在它停放的街道卸货。'>></li>
+          <<if maplebirch.get('Transport')>>
+            <<set _streetVehicle to _streetJobs.vehicle, _streetModel to maplebirch.get('Transport').catalog.models.find(item => item.id === _streetVehicle.model)>>
+            <li><<lanSwitch 'Cargo vehicle: ' '载货车辆：'>><span class='teal'><<= maplebirch.t(_streetModel.name)>></span> · <<= maplebirch.get('Transport').catalog.name(_streetVehicle.point)>></li>
+          <</if>>
+        <<else>>
+          <li><<lanSwitch 'You are carrying the goods.' '你正随身携带货物。'>><<if _streetJob.stage is 'return'>> <span class='blue'><<lanSwitch 'Return them to Landry.' '请归还兰德里。'>></span><</if>></li>
+        <</if>>
+      <</if>>
+    </ul>
+  <</if>>
+<</widget>>
+
+
+:: Deadwood Street Jobs
+<<set $location to 'pub'>><<set $outside to 0>><<effects>><<npc 'Landry'>><<person1>>
+<<set _streetJobs to maplebirch.get('StreetLife')?.jobs>>
+<<if !_streetJobs>><<lanSwitch 'No work is available.' '暂时没有差事。'>><br><<else>>
+  <<language>>
+    <<option 'EN'>>
+      Landry moves a glass away from the edge of the table. "Looking for work? A few people have asked me to find someone. Pick something you can finish. I'll find someone else for the rest."
+    <<option 'CN'>>
+      兰德里把桌沿的杯子往里挪了挪。“找活干？有几个人托我找人办事。挑你能做完的，剩下的我找别人。”
+  <</language>><br><br>
+  <<if _streetJobs.state.report and !_streetJobs.state.active>>
+    <<set _streetReport to _streetJobs.state.report>>
+    <<language>>
+      <<option 'EN'>>
+        <<if _streetReport.outcome is 'paid'>>
+          Landry taps the receipt from your last job. "That's settled. <<if _streetReport.late>>Next time, mind the time.<<else>>Good to know you finish what you start.<</if>>" You have collected <<printmoney _streetReport.fee>>.
+        <<elseif _streetReport.outcome is 'lost'>>
+          Landry listens without interrupting. "I'll have to tell them." <<He>> folds the note before putting it away. "Find out what happened to your vehicle before you take anything else."
+        <<else>>
+          Landry puts the job aside. "Better to tell me than leave someone waiting. There's no fee for this one."
+        <</if>>
+      <<option 'CN'>>
+        <<if _streetReport.outcome is 'paid'>>
+          兰德里点了点上一份委托的收条。“这笔结清了。<<if _streetReport.late>>下次看着点时间。<<else>>知道你会把接下的事做完，总是好事。<</if>>”你已经领到<<printmoney _streetReport.fee>>。
+        <<elseif _streetReport.outcome is 'lost'>>
+          兰德里没有打断你的话。“我得去跟他们交代。”<<He>>把纸条折起来，收好。“再接货之前，先弄清楚你的车是怎么回事。”
+        <<else>>
+          兰德里把这份差事搁到一边。“总比让人干等着好。这份就没报酬了。”
+        <</if>>
+    <</language>><br><br>
+  <</if>>
+  <<deadwood-street-job-status>>
+  <<if _streetJobs.available>>
+    <<if _streetJobs.state.active>>
+      <<deadwood-street-cargo-link 'pub'>>
+      <<if _streetJobs.state.active.stage is 'settlement'>>
+        <<highicon>><<lanLink ['Hand over the receipt and collect your fee (0:05)', '交回凭据并领取报酬 (0:05)'] 'Deadwood Street Jobs'>>
+          <<if _streetJobs.act('pay')>><<pass 5>><</if>>
+        <</lanLink>><br>
+      <<elseif _streetJobs.state.active.stage is 'pickup' or (_streetJobs.state.active.stage is 'return' and _streetJobs.cargoHere) or _streetJobs.lost>>
+        <<refuseicon>><<lanLink ['Tell Landry you cannot finish the job (0:05)', '告诉兰德里无法完成委托 (0:05)'] 'Deadwood Street Jobs'>>
+          <<if _streetJobs.act('cancel')>><<pass 5>><</if>>
+        <</lanLink>><br>
+      <</if>>
+    <<else>>
+      <<for _streetOffer range _streetJobs.offers>>
+        <<capture _streetOffer>>
+        <<icon _streetOffer.icon>><<lanLink _streetOffer.name 'Deadwood Street Job Offer'>>
+          <<set $StreetLife.jobs.offer to _streetOffer.id>>
+        <</lanLink>> · <<printmoney _streetOffer.fee>><br>
+        <</capture>>
+      <</for>>
+      <<if !_streetJobs.offers.length>>
+        <<lanSwitch 'Landry has no suitable work for you just now. Check again another day.' '兰德里眼下没有适合你的差事，改天可以再来问问。'>><br>
+      <</if>>
+    <</if>>
+  <</if>>
+<</if>><br>
+<<getouticon>><<lanLink ["Return to Landry's other business", '与兰德里聊别的'] 'Pub Landry'>><<endevent>><<set $phase to 1>><</lanLink>><br>
+
+:: Deadwood Street Job Offer
+<<set $location to 'pub'>><<set $outside to 0>><<effects>><<npc 'Landry'>><<person1>>
+<<set _streetJobs to maplebirch.get('StreetLife')?.jobs, _streetOffer to _streetJobs?.offers.find(item => item.id === $StreetLife.jobs.offer)>>
+<<if _streetOffer>>
+  <<language>>
+    <<option 'EN'>>
+      <<switch _streetOffer.id>>
+        <<case 'supplies'>>
+          "Someone needs a crate taken to the gambling room above the bar on Connudatus Street," Landry says. "Bottled drinks. Paid for already. Ask at the bar here for the delivery, then take it upstairs when they're open. Get a receipt and bring it back to me."<br><br>
+          "Count it with them. If the contents don't match the order, they may offer a smaller fee. You can bring it back if you don't agree."
+        <<case 'recovery'>>
+          "A contact put a grey equipment case down in the industrial alleyways. It's still there, as far as anyone knows." Landry traces a short line on the table. "Near the loading doors, on this side of the road. You'll have to look around. Bring the case to me."
+        <<case 'fence'>>
+          Landry rests a hand over a small pouch. "Watches. Stolen. I'd rather you knew that before saying yes." <<He>> watches your expression.<br><br>
+          "There's a buyer in the smuggler's pub. They know what they're buying. If the price changes, bring them back. If someone recognises the goods, decide whether the fee is worth the trouble. I'll pay you when the buyer confirms the handover."
+      <</switch>>
+    <<option 'CN'>>
+      <<switch _streetOffer.id>>
+        <<case 'supplies'>>
+          “有人要把一箱货送到康努达塔斯街酒吧楼上的赌馆。”兰德里说。“瓶装酒水，货钱已经付了。去这里的吧台取货，等赌馆开门后送上楼。让人签个收条，再拿回来给我。”<br><br>
+          “跟他们一起点清。要是东西跟订单对不上，他们可能少付些报酬。谈不拢，你可以带回来。”
+        <<case 'recovery'>>
+          “一个联系人把灰色器材箱落在工业区巷道了。目前没人说它被拿走。”兰德里在桌上划了一小段。“装货门附近，路的这一侧。你得过去找找，找到就带给我。”
+        <<case 'fence'>>
+          兰德里把手搭在一个小袋子上。“手表，偷来的。答应之前，你得先知道这点。”<<He>>观察着你的表情。<br><br>
+          “走私者酒馆有个买家，知道自己买的是什么。要是对方变卦压价，就带回来。要是有人认出了货，你自己想清楚，报酬值不值得惹这个麻烦。买家确认交接之后，我付你那一份。”
+      <</switch>>
+  <</language>><br><br>
+  <<lanSwitch 'Fee: ' '报酬：'>><<printmoney _streetOffer.fee>> · <<lanSwitch 'Deliver within 48 hours.' '须在 48 小时内交货。'>><br>
+  <span class='blue'><<lanSwitch 'Late deliveries lose a quarter of the fee. After a further 24 hours, return the goods. Collect payment from Landry.' '迟到交货扣四分之一报酬，再过 24 小时买家将不收货。最后回兰德里这里结算。'>></span><br><br>
+  <<if _streetJobs.available>>
+    <<icon _streetOffer.icon>><<lanLink ['Accept the job (0:05)', '接下这份差事 (0:05)'] 'Deadwood Street Jobs'>>
+      <<if _streetJobs.act('accept', _streetOffer.id)>><<pass 5>><</if>>
+    <</lanLink>><br>
+  <</if>>
+<<else>><<lanSwitch 'This job is no longer available.' '这份差事已经无法接受。'>><br><</if>>
+<<refuseicon>><<lanLink ['Leave it for now', '暂时不接'] 'Deadwood Street Jobs'>><</lanLink>><br>
+
+:: Deadwood Street Cargo
+<<set _streetJobs to maplebirch.get('StreetLife')?.jobs>>
+<<if !_streetJobs>><<lanLink ['Return to the pub', '返回酒馆'] 'Pub'>><</lanLink>><<exit>><</if>>
+<<set _streetSite to _streetJobs.terms.sites[$StreetLife.jobs.site]>>
+<<set $location to _streetSite.location, $outside to _streetSite.outside>><<effects>>
+<<set _streetJob to _streetJobs.state.active, _streetContract to _streetJobs.contract>>
+<<if _streetJob>>
+  <<deadwood-street-job-status>>
+  <<if _streetJobs.available and _streetJobs.cargoHere>>
+    <<if _streetJob.stage is 'pickup' and $StreetLife.jobs.site is _streetContract.source and !_streetJobs.expired>>
+      <<language>>
+        <<option 'EN'>>
+          <<if _streetContract.id is 'recovery'>>
+            <<if _streetJob.searches gt 0>>You have checked the open stretch of alley. There are scrape marks beside a loading door, leading behind a stack of empty pallets.<<else>>The loading doors are shut. Empty pallets stand along the wall. There is plenty of room for a case to have slipped out of sight.<</if>>
+          <<elseif _streetContract.id is 'supplies'>>
+            The bartender checks Landry's note, then points to a sealed crate beside the back door. "That one. The order's under the lid. Mind the bottles on the stairs."
+          <<else>>
+            Landry slides the pouch across the table. "Count them when you hand them over. Bring the pouch back if you can't agree." The watches knock softly against one another.
+          <</if>>
+        <<option 'CN'>>
+          <<if _streetContract.id is 'recovery'>>
+            <<if _streetJob.searches gt 0>>你已经找过巷道里开阔的地方。装货门旁有一道拖擦痕迹，一直延伸到堆起的空托盘后面。<<else>>装货门关着，空托盘沿墙堆放。手提箱可能滑到不少看不见的角落里。<</if>>
+          <<elseif _streetContract.id is 'supplies'>>
+            酒保核对兰德里的纸条，指向后门旁封好的一箱货。“就是那箱，订单在盖子底下。上楼的时候，小心瓶子。”
+          <<else>>
+            兰德里把小袋子推过桌面。“交货时点清。谈不拢，就把袋子带回来。”里面的手表轻轻碰在一起。
+          <</if>>
+      <</language>><br><br>
+      <<icon _streetContract.icon>><<lanLink [_streetContract.id === 'recovery' ? 'Search for the case (0:15)' : 'Collect the goods (0:05)', _streetContract.id === 'recovery' ? '寻找手提箱 (0:15)' : '取走货物 (0:05)'] 'Deadwood Street Cargo'>>
+        <<if _streetJobs.act('collect')>><<set _streetMinutes to _streetContract.id is 'recovery' ? 15 : 5>><<pass _streetMinutes>><<tiredness 2>><</if>>
+      <</lanLink>><br>
+    <<elseif _streetJob.stage is 'carrying' and $StreetLife.jobs.site is _streetContract.target and !_streetJobs.expired>>
+      <<language>>
+        <<option 'EN'>>
+          <<if _streetContract.id is 'supplies'>>
+            A server makes room on a side table and checks the order. <<if _streetJob.issue is 'shortage'>>"There's a bottle missing. I can sign for the rest, but the fee is a quarter less. Or you can take it back."<<else>>"This is the one. I'll count it with you, then sign."<</if>>
+          <<elseif _streetContract.id is 'recovery'>>
+            Landry checks the case's catches. "That's it. Let's make sure nothing's gone missing."
+          <<else>>
+            The buyer opens a space beside their drink. <<if _streetJob.issue is 'recognised'>>Someone at the next table points at a watch. "That one was taken from a car yesterday." The buyer looks at you. "You still want to finish this?"<<elseif _streetJob.issue is 'price'>>"I'll take them. But your fee's a quarter less. Tell Landry that's my offer." The buyer leaves the pouch in front of you.<<else>>"Landry sent you? Let's see them."<</if>>
+          <</if>>
+        <<option 'CN'>>
+          <<if _streetContract.id is 'supplies'>>
+            一名服务员在边桌上腾出位置，核对订单。<<if _streetJob.issue is 'shortage'>>“少了一瓶。剩下的可以签收，不过报酬得少四分之一。或者，你把它带回去。”<<else>>“就是这箱。跟你一起点完，我就签字。”<</if>>
+          <<elseif _streetContract.id is 'recovery'>>
+            兰德里检查手提箱的锁扣。“就是它。看看里面有没有少东西。”
+          <<else>>
+            买家在酒杯旁清出一块地方。<<if _streetJob.issue is 'recognised'>>邻桌有人指着一块手表。“这块表昨天刚从车里被偷走。”买家看着你。“还要继续交货吗？”<<elseif _streetJob.issue is 'price'>>“货我收。不过，你的报酬得少四分之一。就跟兰德里说，这是我的报价。”买家把小袋子留在你面前。<<else>>“兰德里让你来的？拿出来看看。”<</if>>
+          <</if>>
+      <</language>><br><br>
+      <<lanSwitch 'Fee if you complete this handover: ' '按当前条件交货的报酬：'>><<printmoney _streetJobs.fee>><br>
+      <<if _streetJob.issue is 'recognised'>>
+        <span class='red'><<lanSwitch 'Continuing will leave evidence linking you to the stolen goods.' '继续交易将留下你经手赃物的证据。'>></span><br>
+      <</if>>
+      <<if _streetContract.id isnot 'supplies' or (maplebirch.get('LifeSimulation')?.casino.open and $id gt 0)>>
+        <<icon 'industry/dispatch.png'>><<lanLink ['Complete the handover (0:10)', '完成交接 (0:10)'] 'Deadwood Street Cargo'>>
+          <<if _streetJobs.act('deliver')>><<pass 10>><<tiredness _streetContract.cargo>><</if>>
+        <</lanLink>><br>
+      <<else>><span class='blue'><<lanSwitch 'The gambling room must be open, and you need legal ID.' '赌馆营业期间才能交货，你还需要合法身份证。'>></span><br><</if>>
+      <<refuseicon>><<lanLink ['Take the goods back to Landry', '把货物带回兰德里那里'] 'Deadwood Street Cargo'>>
+        <<run _streetJobs.act('return')>>
+      <</lanLink>><br>
+    <</if>>
+    <<if ['carrying', 'return'].includes(_streetJob.stage)>>
+      <<if _streetJob.vehicle isnot null>>
+        <<icon 'industry/dispatch.png'>><<lanLink ['Unload and carry the goods (0:05)', '卸货并随身携带 (0:05)'] 'Deadwood Street Cargo'>>
+          <<if _streetJobs.act('unload')>><<pass 5>><<tiredness 2>><</if>>
+        <</lanLink>><br>
+      <<else>>
+        <<for _streetVehicle range _streetJobs.vehicles>>
+          <<capture _streetVehicle>>
+          <<set _streetModel to maplebirch.get('Transport').catalog.models.find(item => item.id === _streetVehicle.model)>>
+          <<icon 'industry/dispatch.png'>><<lanLink ['Load into ' + maplebirch.t(_streetModel.name) + ' (0:05)', '装入' + maplebirch.t(_streetModel.name) + ' (0:05)'] 'Deadwood Street Cargo'>>
+            <<if _streetJobs.act('load', _streetVehicle.id)>><<pass 5>><<tiredness 2>><</if>>
+          <</lanLink>><br>
+          <</capture>>
+        <</for>>
+      <</if>>
+      <<if _streetJobs.expired and _streetJob.stage is 'carrying'>>
+        <<refuseicon>><<lanLink ['Return this shipment', '退回这批货物'] 'Deadwood Street Cargo'>><<run _streetJobs.act('return')>><</lanLink>><br>
+      <</if>>
+    <</if>>
+  <<elseif _streetJob.vehicle isnot null and !_streetJobs.lost>>
+    <span class='blue'><<lanSwitch 'Bring the vehicle carrying this shipment here first. You have not brought the goods with you.' '请先把载货车辆开到这里。货物没有随你一起过来。'>></span><br>
+  <</if>>
+  <<if $StreetLife.jobs.site is 'pub' and _streetJobs.available>>
+    <<if _streetJob.stage is 'settlement'>>
+      <<highicon>><<lanLink ['Collect your fee (0:05)', '领取报酬 (0:05)'] 'Deadwood Street Jobs'>><<if _streetJobs.act('pay')>><<pass 5>><</if>><</lanLink>><br>
+    <<elseif _streetJob.stage is 'pickup' or (_streetJob.stage is 'return' and _streetJobs.cargoHere) or _streetJobs.lost>>
+      <<refuseicon>><<lanLink ['Close the job with Landry (0:05)', '向兰德里交代并结束委托 (0:05)'] 'Deadwood Street Jobs'>><<if _streetJobs.act('cancel')>><<pass 5>><</if>><</lanLink>><br>
+    <</if>>
+  <</if>>
+<<else>><<lanSwitch 'There are no goods left to handle.' '没有待处理的货物。'>><br><</if>><br>
+<<getouticon>><<lanLink ['Return', '返回'] _streetSite.passage>><<if $StreetLife.jobs.site is 'pub'>><<endevent>><<set $phase to 1>><</if>><</lanLink>><br>

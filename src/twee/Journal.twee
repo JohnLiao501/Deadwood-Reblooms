@@ -999,6 +999,30 @@
   <</if>>
 <</widget>>
 
+<!-- 街头委托：只读当前货物、期限和回执；交接与报酬在委托页面结算。 -->
+
+<<widget 'deadwood-street-job-journal'>>
+  <<if $StreetLife.jobs.active or $StreetLife.jobs.report>>
+    <<deadwood-card 'Street work' '街头委托'>>
+      <<deadwood-street-job-status>>
+      <<if !$StreetLife.jobs.active and $StreetLife.jobs.report>>
+        <<set _streetReport to $StreetLife.jobs.report>>
+        <ul class='journal'><li>
+          <<if _streetReport.outcome is 'paid'>>
+            <<lanSwitch 'Last fee collected: ' '上次领取报酬：'>><<printmoney _streetReport.fee>>
+            <<if _streetReport.late>><span class='blue'><<lanSwitch ' (late delivery)' '（迟到交货）'>></span><</if>>
+          <<elseif _streetReport.outcome is 'lost'>>
+            <span class='red'><<lanSwitch 'You reported a lost shipment. Your street reputation suffered.' '你报告了货物丢失，街头口碑受到影响。'>></span>
+          <<else>>
+            <<lanSwitch 'You returned or declined the last job. No fee was paid.' '上一份委托已退回或取消，没有领取报酬。'>>
+          <</if>>
+        </li></ul>
+      <</if>>
+    <</deadwood-card>>
+    <hr>
+  <</if>>
+<</widget>>
+
 <!-- 出租车工作 -->
 
 <<widget 'deadwood-taxi-journal'>>

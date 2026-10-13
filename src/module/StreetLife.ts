@@ -1,13 +1,21 @@
 import Module from './Module';
+import Jobs from './StreetLife/Jobs';
 
-/** 小镇街头的口碑与警方证据分开记录；兰德里交付是本轮接入的声誉来源。 */
+/** 街头口碑独立于警方证据；原版委托的贡献只读取，不重复增加原版计数。 */
 export default class StreetLife extends Module {
+  public readonly jobs = new Jobs(this);
+
   public constructor(core: typeof maplebirch) {
-    super(core, 'StreetLife', { reputation: 0 });
+    super(core, 'StreetLife', { reputation: 0, jobs: Jobs.defaults });
   }
 
   public get reputation(): number {
-    return Math.clamp(V.StreetLife.reputation + (Number(V.pub_task_stat) || 0) * 5, 0, 100);
+    return Math.clamp(V.StreetLife.reputation + Math.min(100, (Number(V.pub_task_stat) || 0) * 5), 0, 100);
+  }
+
+  public set reputation(value: number) {
+    // 存档字段保存相对原版贡献的增减，封顶后仍能正确结算损失。
+    V.StreetLife.reputation = Math.clamp(value, 0, 100) - Math.min(100, (Number(V.pub_task_stat) || 0) * 5);
   }
 
   public get available(): boolean {

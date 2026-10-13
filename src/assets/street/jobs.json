@@ -1,0 +1,82 @@
+{
+  "deadline_hours": 48,
+  "grace_hours": 24,
+  "cooldown_days": 3,
+  "late_ratio": 0.75,
+  "dispute_ratio": 0.75,
+  "witness_crime": 75,
+  "sites": {
+    "pub": {
+      "name": ["Harvest Street pub", "丰收街酒馆"],
+      "passage": "Pub Landry",
+      "point": "harvest",
+      "location": "pub",
+      "outside": 0
+    },
+    "alley": {
+      "name": ["Industrial alleyways", "工业区巷道"],
+      "passage": "Industrial Alleyways",
+      "point": "harvest",
+      "location": "alley",
+      "outside": 1
+    },
+    "casino": {
+      "name": ["Connudatus Street gambling room", "康努达塔斯街赌馆"],
+      "passage": "Deadwood Reblooms Life Simulation Casino",
+      "point": "connudatus",
+      "location": "deadwood_casino",
+      "outside": 0
+    },
+    "smuggler": {
+      "name": ["Smuggler's pub", "走私者酒馆"],
+      "passage": "Smuggler Pub",
+      "point": null,
+      "location": "underground",
+      "outside": 0
+    }
+  },
+  "jobs": [
+    {
+      "id": "supplies",
+      "name": ["A delivery upstairs", "送上楼的一箱货"],
+      "goods": ["A sealed crate of bottled drinks", "一箱封好的瓶装酒水"],
+      "source": "pub",
+      "target": "casino",
+      "cargo": 6,
+      "fee": 4500,
+      "reputation": 3,
+      "required_reputation": 0,
+      "icon": "pub.png",
+      "issues": ["shortage", "none", "none", "none"]
+    },
+    {
+      "id": "recovery",
+      "name": ["Left behind", "落下的手提箱"],
+      "goods": ["A grey equipment case", "一只灰色器材箱"],
+      "source": "alley",
+      "target": "pub",
+      "cargo": 2,
+      "fee": 8000,
+      "reputation": 4,
+      "required_reputation": 0,
+      "icon": "investigate.png",
+      "issues": ["none", "none", "none", "none"]
+    },
+    {
+      "id": "fence",
+      "name": ["A buyer below", "地下的买家"],
+      "goods": ["A pouch of stolen watches", "一袋赃表"],
+      "source": "pub",
+      "target": "smuggler",
+      "cargo": 1,
+      "fee": 11000,
+      "reputation": 5,
+      "required_reputation": 10,
+      "icon": "actions/crime.png",
+      "issues": ["price", "recognised", "none", "none"]
+    }
+  ],
+  "search_chance_base": 35,
+  "search_skill_divisor": 25,
+  "search_chance_max": 90
+}
