@@ -23,7 +23,7 @@ export default class Maintenance {
     }
   }
 
-  public pay(): boolean {
+  public pay(method: 'cash' | 'bank' = 'bank'): boolean {
     const vehicle = this.transport.vehicle;
     const bank = this.transport.core.get('Finance')?.state.bank;
     if (
@@ -32,12 +32,15 @@ export default class Maintenance {
       !this.transport.ready ||
       !vehicle ||
       !this.transport.nearby.includes(vehicle) ||
-      !bank?.opened ||
-      (vehicle.arrears ?? 0) <= 0 ||
-      bank.balance < vehicle.arrears!
+      (vehicle.arrears ?? 0) <= 0
     )
       return false;
-    bank.balance -= vehicle.arrears!;
+    const amount = vehicle.arrears!;
+    if (method === 'cash') {
+      if (V.money < amount) return false;
+      V.money -= amount;
+    } else if (method === 'bank' && bank?.opened && bank.balance >= amount) bank.balance -= amount;
+    else return false;
     vehicle.arrears = 0;
     return true;
   }

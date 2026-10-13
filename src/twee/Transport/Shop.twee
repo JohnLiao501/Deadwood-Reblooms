@@ -433,10 +433,17 @@
   <<lanSwitch 'Condition: ' '车况：'>><<deadwood-transport-condition _transport.vehicle>><br>
   <<lanSwitch 'Buyback offer: ' '回购报价：'>><<deadwood-transport-money `Math.floor(_transport.model.price * _transport.vehicle.condition / 200)`>><br><br>
   <<if (_transport.vehicle.arrears ?? 0) gt 0>>
-    <span class='red'><<lanSwitch 'Settle the unpaid upkeep before selling.' '出售前需结清保养欠费。'>></span><br>
+    <span class='red'><<lanSwitch 'Settle the unpaid upkeep before selling.' '出售前需结清保养欠费。'>></span> · <<deadwood-transport-money _transport.vehicle.arrears>><br>
+    <<if $money gte _transport.vehicle.arrears>>
+      <<shopicon 'register'>><<lanLink ['Pay cash', '用现金补缴']>>
+        <<if maplebirch.get('Transport').maintenance.pay('cash')>><<updatesidebarmoney>><<run Dynamic.render('deadwood-transport-sell')>><</if>>
+      <</lanLink>><br>
+    <<else>>
+      <span class='grey'><<lanSwitch 'You do not have enough cash to clear the upkeep.' '随身现金不足以结清保养欠费。'>></span><br>
+    <</if>>
     <<if maplebirch.get('Finance')?.state.bank.opened and maplebirch.get('Finance').state.bank.balance gte _transport.vehicle.arrears>>
       <<icon 'finance/bank-withdraw.png'>><<lanLink ['Pay from your bank account', '从银行账户补缴']>>
-        <<if maplebirch.get('Transport').maintenance.pay()>><<updatesidebarmoney>><<run Dynamic.render('deadwood-transport-sell')>><</if>>
+        <<if maplebirch.get('Transport').maintenance.pay('bank')>><<updatesidebarmoney>><<run Dynamic.render('deadwood-transport-sell')>><</if>>
       <</lanLink>><br>
     <</if>>
   <<else>>
