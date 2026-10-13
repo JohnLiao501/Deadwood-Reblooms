@@ -114,6 +114,13 @@
     <<elseif $RobinExpansion.fish_date_day is Time.days>>
       <<lanSwitch 'You put away the rod. Robin returns the bait tin and walks back with you. "We can try again another day," <<nnpc_he "Robin">> says before heading to the stall.' '你收起鱼竿。罗宾放好鱼饵盒，与你一同往回走。“改天可以再试试。”<<nnpc_he "Robin">>说完，朝摊位走去。'>><br><br>
     <</if>>
+    <<if $RobinExpansion.fish_date_day is Time.days and maplebirch.get('Robin').available and isLoveInterest('Robin') and C.npc.Robin.trauma lt 50 and getRobinLocation() is 'beach'>>
+      <!-- 收摊之前的那段路：沿潮线绕远，礁石把你们和摊位隔开。 -->
+      <<loveicon>>
+      <<lanLink ['Take the long way back along the tideline', '沿着潮线绕远回去'] 'Deadwood Robin Private Invite'>>
+        <<set $RobinExpansion.intimacy_site to 'fishing'>>
+      <</lanLink>><<promiscuous2>><br>
+    <</if>>
   <</if>>
 <</widget>>
 

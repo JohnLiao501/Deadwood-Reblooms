@@ -54,7 +54,7 @@ export default class Companions {
   public get canFoolAround(): boolean {
     const trip = this.transport.state.trip;
     return (
-      this.transport.core.passage.title === 'Deadwood Transport Travel' &&
+      ['Deadwood Transport Travel', 'Deadwood Transport Date'].includes(this.transport.core.passage.title) &&
       this.transport.ready &&
       !!trip?.settled &&
       !trip.interrupted &&
@@ -73,7 +73,7 @@ export default class Companions {
     const trip = this.transport.state.trip!;
     trip.fooled = true;
     if (trip.event) trip.event.resolved = true;
-    return this.transport.core.passage.title === 'Deadwood Transport Travel';
+    return true;
   }
 
   public date(): boolean {

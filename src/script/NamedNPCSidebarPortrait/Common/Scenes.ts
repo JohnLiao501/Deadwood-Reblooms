@@ -16,6 +16,13 @@ export default function scene(core: MaplebirchCore, name: string): string | unde
   const transport = core.get('Transport');
   const outside = name === 'Robin' && Time.season === 'winter' ? 'park' : casual[name];
 
+  if (name === 'Robin') {
+    const privateScene = title.startsWith('Deadwood Robin Private ');
+    if (title === 'Deadwood Robin Swim Date' || (privateScene && V.RobinExpansion?.intimacy_site === 'swim')) return 'school_swim';
+    if (title === 'Deadwood Robin Meteor Date' || (privateScene && V.RobinExpansion?.intimacy_site === 'meteor')) return outside;
+    if (title === 'Deadwood Robin Fishing Date' || (privateScene && V.RobinExpansion?.intimacy_site === 'fishing')) return 'beach';
+  }
+
   if (title.startsWith('Deadwood Transport ')) {
     const ride = transport?.state.commute;
     if (ride?.npc === name && school[name]) return name === 'Sydney' && ride.kind !== 'school' ? 'temple' : school[name];
@@ -31,7 +38,7 @@ export default function scene(core: MaplebirchCore, name: string): string | unde
     if (!banquet?.active || !banquet.state.arrived.some(guest => guest === name)) return;
     return banquet.state.formal && ['Robin', 'Whitney', 'Kylar', 'Avery', 'Harper'].includes(name) ? 'formal' : casual[name];
   }
-  if (title === 'Deadwood Reblooms Property Outing' && estate?.outings.plan?.name === name) return outside;
+  if ((title === 'Deadwood Reblooms Property Outing' || title.startsWith('Deadwood Reblooms Property Outing Closeness')) && estate?.outings.plan?.name === name) return outside;
   if (title === 'Deadwood Reblooms Property Return') {
     const note = estate?.outings.state.note;
     if (note?.name === name && !note.done) return note.kind === 'ride' && name !== 'Sydney' ? school[name] : outside;

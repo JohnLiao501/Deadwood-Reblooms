@@ -383,6 +383,13 @@
         <</switch>>
     <</language>><br><br>
   <</for>>
+  <<if maplebirch.get('Transport').companions.canFoolAround>>
+    <<loveicon>><<lanLink ['Find somewhere quiet before going home', '回家之前，先找个僻静的地方']>>
+      <<if maplebirch.get('Transport').companions.foolAround()>>
+        <<set $Transport.trip.pullstart to true>><<goto 'Deadwood Transport Pull Over'>>
+      <</if>>
+    <</lanLink>><<promiscuous2>><br><br>
+  <</if>>
   <<lanSwitch 'Back at the vehicle, your companions make their way home while you decide where to go next.' '回到车旁，同行的恋人准备回住处。你则想了想接下来要去哪里。'>><br><br>
 <</if>>
 <<getouticon>><<lanLink ['Continue', '继续'] _transport.arrival>><</lanLink>><br>

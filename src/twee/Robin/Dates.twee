@@ -71,6 +71,14 @@
     <br><br><<lanSwitch 'Robin makes a note to put the temporary staff’s paid hour on the shop rota. The business can keep running while you take a break.' '罗宾记下临时店员的这一小时，准备写进店铺的付薪班表。你们休息时，生意也仍有人照看。'>>
   <</if>>
   <<pass 60>><<stress -9>><<npcincr Robin trauma -2>><<npcincr Robin love 2>><<lstress>><<lrtrauma>><<glove>>
+  <<if $passage is 'Deadwood Robin Swim Date' and isLoveInterest('Robin') and C.npc.Robin.trauma lt 50 and getRobinLocation() is 'beach'>>
+    <br><br>
+    <!-- 游完泳后游过最后一个浮标，礁石挡住栈道的视线。复用摊位那套亲密链路。 -->
+    <<loveicon>>
+    <<lanLink ['Swim out past the last marker together', '一起游过最后一个浮标'] 'Deadwood Robin Private Invite'>>
+      <<set $RobinExpansion.intimacy_site to 'swim'>>
+    <</lanLink>><<promiscuous2>><br>
+  <</if>>
 <<else>>
   <<lanSwitch 'Robin cannot swim with you right now.' '罗宾现在没法和你一起游泳。'>>
 <</if>>

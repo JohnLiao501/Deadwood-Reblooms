@@ -245,6 +245,11 @@
 <<else>>
   <span class='red'><<lanSwitch 'You cannot cover this bill.' '你现在付不起这笔账单。'>></span> <<printmoney _outing_cost>><br>
 <</if>>
+<<if _outings.canIntimate>>
+  <<loveicon>>
+  <<lanLink ['Find somewhere out of sight before you drive back', '开车回去之前，先找个没人的地方'] 'Deadwood Reblooms Property Outing Closeness Invite'>>
+  <</lanLink>><<promiscuous2>><br>
+<</if>>
 <br><<getouticon>><<lanLink ['Return to the car and head home', '回到车旁，一起回家']>>
   <<if maplebirch.get('Finance').realEstate.outings.back()>><<goto 'Deadwood Transport Menu'>><</if>>
 <</lanLink>>
@@ -283,6 +288,14 @@
         悉尼又看了看时间。“<<if Time.hour gte 20>>差不多该回去参加晚祷了。<<else>>还能留一会儿，不过晚祷之前得回去。<</if>>”<<He>>坐下歇了片刻。“谢谢你留出时间陪我。”
     <</switch>>
 <</language>><br><br>
+<<if maplebirch.get("Finance").realEstate.canIntimate(_return.name, _return.property)>>
+  <!-- 沿用主卧的亲密入口，回家提醒仍由原有收尾选项结算。 -->
+  <<loveicon>><<lanLink `Time.hour >= 18 ? ['Let the evening go where it leads', '让这个晚上继续下去'] : ['Stay close a little longer', '再亲近一会儿']`>>
+    <<if maplebirch.get('Finance').realEstate.requestIntimacy(_return.name, 'bedroom')>>
+      <<set $sexstart to 1>><<goto 'Deadwood Reblooms Property Intimacy'>>
+    <</if>>
+  <</lanLink>><<promiscuous1>><<kissvirginitywarning>><<NPCvirginitywarning _return.name 'kiss'>><br><br>
+<</if>>
 <<if _return.name isnot 'Sydney' or Time.hour * 60 + Time.minute + 5 lt 21 * 60>>
   <<socialiseicon>><<lanLink ['Sit together for a few minutes (0:05)', '一起坐一会儿 (0:05)']>>
     <<set _return_source to $passage>>
@@ -296,3 +309,168 @@
   <span class='blue'><<lanSwitch 'Sydney needs to head back for evening prayers.' '悉尼得赶回去参加晚祷。'>></span><br><br>
 <</if>>
 <<getouticon>><<lanLink ['Carry on with your day', '继续安排自己的时间'] 'Deadwood Reblooms Property Home'>><<run maplebirch.get('Finance').realEstate.outings.finish()>><</lanLink>>
+
+:: Deadwood Reblooms Property Outing Closeness Invite
+<<set _outings to maplebirch.get('Finance').realEstate.outings>><<set _plan to _outings.plan>>
+<<if _outings.canIntimate>>
+  <<npc _plan.name>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      <<switch _plan.name>>
+        <<case 'Robin'>>
+          "Somewhere quieter?" Robin asks. <<He>> takes your hand. "I'd like that. We can take our time."
+        <<case 'Whitney'>>
+          <<if C.npc.Whitney.dom gte 10>>"Come on, then." Whitney catches your hand. "Don't stand there staring."<<else>>Whitney glances aside, then takes your hand. "Fine. Just us."<</if>>
+        <<case 'Kylar'>>
+          "Just us?" Kylar asks. <<if C.npc.Kylar.rage gte 40>><<He>> checks the path behind you before nodding.<<else>><<He>> smiles and nods.<</if>> "I'd like to stay with you a little longer."
+        <<case 'Sydney'>>
+          <<run statusCheck('Sydney')>>
+          <<if _sydneyStatus.includes('corrupt')>>"A little longer, then." Sydney takes your hand, smiling.<<else>>Sydney checks the time before taking your hand. "A little longer is all right. We still have to be back for prayers."<</if>>
+      <</switch>>
+    <<option 'CN'>>
+      <<switch _plan.name>>
+        <<case 'Robin'>>
+          “找个安静点的地方？”罗宾牵起你的手。“好啊。我们可以慢慢来。”
+        <<case 'Whitney'>>
+          <<if C.npc.Whitney.dom gte 10>>“那就走啊。”惠特尼拉住你的手。“别杵在这儿盯着我。”<<else>>惠特尼朝旁边看了一眼，才牵住你的手。“行啊。就我们两个。”<</if>>
+        <<case 'Kylar'>>
+          “就我们两个？”凯拉尔问。<<if C.npc.Kylar.rage gte 40>><<He>>回头看了一眼身后的小路，才点头。<<else>><<He>>笑着点了点头。<</if>>“我想再陪你一会儿。”
+        <<case 'Sydney'>>
+          <<run statusCheck('Sydney')>>
+          <<if _sydneyStatus.includes('corrupt')>>“那就再待一会儿。”悉尼笑着牵住你的手。<<else>>悉尼看了看时间，才牵住你的手。“再待一会儿可以。晚祷之前还是得回去。”<</if>>
+      <</switch>>
+  <</language>><br><br>
+  <<loveicon>><<lanLink ['Kiss your lover', '亲吻恋人']>>
+    <<if maplebirch.get('Finance').realEstate.outings.canIntimate>>
+      <<set $sexstart to 1>><<goto 'Deadwood Reblooms Property Outing Closeness'>>
+    <</if>>
+  <</lanLink>><<promiscuous1>><<kissvirginitywarning>><<NPCvirginitywarning _plan.name 'kiss'>><br>
+<<else>>
+  <span class='blue'><<lanSwitch 'It is time to return to the car.' '该返回车旁了。'>></span><br>
+<</if>>
+<br><<getouticon>><<lanLink ['Return to your outing', '返回外出活动'] 'Deadwood Reblooms Property Outing'>><</lanLink>>
+
+:: Deadwood Reblooms Property Outing Closeness
+<<set _estate to maplebirch.get('Finance').realEstate>>
+<<set _plan to _estate.outings.plan>>
+<<set _activity to _plan?.activity>>
+<<set _partner to _estate.residentsAt(_plan?.property).find(profile => profile.id === _plan?.name)>>
+<<set _placeBack to 'Deadwood Reblooms Property Outing'>>
+<<set $outside to _activity is 'walk' ? 1 : 0>><<set $location to {meal: 'cafe', shopping: 'shopping_centre', walk: 'town'}[_activity] || 'town'>>
+<<if !_plan or !_partner or ($sexstart is 1 and !_estate.outings.canIntimate) or ($sexstart isnot 1 and !$combat)>>
+  <<set $sexstart to 0>><<if $combat>><<endcombat>><</if>>
+  <<getouticon>><<lanLink ['Return to the car', '返回车旁'] _placeBack>><</lanLink>>
+<<else>>
+  <<if _plan.name is 'Sydney'>><<run statusCheck('Sydney')>><<set $corruptionEvent to 1>><</if>>
+  <<if $sexstart is 1>>
+    <<set $sexstart to 0>><<set _plan.intimate to true>>
+    <<if _plan.name is 'Sydney'>>
+      <<set $daily.sydney.sex to ($daily.sydney.sex || 0) + 1>><<set $sydney.sexTotal += 1>>
+    <</if>>
+    <<clearnpc>><<npc _plan.name>><<person1>>
+    <<if _plan.name isnot 'Sydney'>><<run statusCheck(_plan.name)>><</if>>
+    <<consensual>><<set $consensual to 1>><<neutral 1>>
+    <<maninit>><<set $enemytrust += 500>><<set $enemyarousalmax to 600>>
+    <<if _plan.name isnot 'Sydney'>><<npcexpose>><</if>>
+    <<if _plan.name is 'Sydney'>>
+      <!-- 贞操带尚在时保留遮挡，裸体初始化会把 NPC 的生殖器展示状态改为裸露。 -->
+      <<if _sydneyStatus.includes('corrupt') and !_sydneyChastity>>
+        <<npcexpose>>
+        <<set $enemyarousalmax += 100>>
+      <<else>>
+        <<npcClothesType $NPCList[0] 'undies'>>
+        <<if _sydneyStatus.includes('corrupt')>>
+          <<set $enemyarousalmax += 100>>
+        <</if>>
+        <<if _sydneyStatus.includes('pure')>>
+          <<set $enemyarousalmax -= 100>>
+        <</if>>
+      <</if>>
+      <<if _sydneyChastity and C.npc.Sydney.chastity.anus.includes('shield')>>
+        <<set $enemyarousalmax -= 100>>
+      <</if>>
+    <</if>>
+    <<npckiss>>
+    <<language>>
+      <<option 'EN'>>
+        <<switch _activity>>
+          <<case 'meal'>>
+            You stay at the table a little longer. <<print maplebirch.auto(_plan.name)>> reads your face, checks the aisle once, and slides in beside you on the bench. Under the table <<his>> hand closes over your thigh, and the two of you stay exactly where you are while the cafe fills up around you.
+          <<case 'shopping'>>
+            You take <<print maplebirch.auto(_plan.name)>> by the wrist and pull the curtain of a fitting room shut behind you both. A rail of unsold coats stands between you and the shop floor, and not much else. <<He>> starts to say something about the staff, then stops when <<he>> sees where you have put <<his>> hand.
+          <<case 'walk'>>
+            The arcade lights are behind you and the railings are ahead. <<print maplebirch.auto(_plan.name)>> lets you back <<him>> against the cold metal and does not put a hand out to stop you. "Someone could walk past," <<he>> says, and stays exactly where <<he>> is.
+        <</switch>>
+      <<option 'CN'>>
+        <<switch _activity>>
+          <<case 'meal'>>
+            你们在桌旁多留了一会儿。<<print maplebirch.auto(_plan.name)>>看了看你的脸色，扫了一眼过道，挪过来坐到你身边。桌子底下<<his>>的手按住你的大腿，你们谁也没动，卡座外面的人却越来越多。
+          <<case 'shopping'>>
+            你拉着<<print maplebirch.auto(_plan.name)>>的手腕，把试衣间的帘子在两个人身后拉上。你和卖场之间只隔着一杆没卖掉的外套，别的什么都没有。<<he>>刚要提店员的事，看见你把<<his>>手放在哪里，就闭了嘴。
+          <<case 'walk'>>
+            游戏厅的灯在你身后，前面是栏杆。<<print maplebirch.auto(_plan.name)>>由着你把<<him>>抵在冰凉的金属上，没有伸手拦。“会有人路过的。”<<he>>说，人却留在原处。
+        <</switch>>
+    <</language>><br><br>
+  <</if>>
+  <<set $enemyanger to 0>>
+  <<effects>><<effectsman>><<man>><<stateman>>
+  <br><br>
+  <<if _activity is 'shopping' and $enemyarousal gt 0 and $enemyarousal lt $enemyarousalmax and !_combatend and $consensual is 1>>
+    <<set _heat to $enemyarousal / $enemyarousalmax>>
+    <<if _heat lt 0.34>>
+      <span class='lewd'><<lanSwitch 'Nobody has come looking. The rail of coats takes one more knock and stays standing.' '没人过来找。那杆外套又晃了一下，还立在那儿。'>></span>
+    <<elseif _heat lt 0.67>>
+      <span class='lewd'><<lanSwitch 'A shop assistant calls out from somewhere past the curtain. <<print maplebirch.auto(_plan.name)>> answers for the pair of you without missing a beat.' '帘子外面有店员叫了一声。<<print maplebirch.auto(_plan.name)>>替你答了，语气一点没乱。'>></span>
+    <<else>>
+      <span class='lewd'><<lanSwitch 'The music changes. <<print maplebirch.auto(_plan.name)>> stops caring whether anyone can hear.' '背景音乐换了。<<print maplebirch.auto(_plan.name)>>已经不再在乎有没有人听得见。'>></span>
+    <</if>><br><br>
+  <</if>>
+  <<actionsman>>
+  <<if _combatend or _controlRegain is 1 or $consensual isnot 1>>
+    <span id='next'><<lanLink ['Next', '继续'] 'Deadwood Reblooms Property Outing Closeness Finish'>><</lanLink>></span><<nexttext>>
+  <<else>>
+    <span id='next'><<lanLink ['Next', '继续'] 'Deadwood Reblooms Property Outing Closeness'>><</lanLink>></span><<nexttext>>
+  <</if>>
+<</if>>
+
+:: Deadwood Reblooms Property Outing Closeness Finish
+<<set _estate to maplebirch.get('Finance').realEstate>>
+<<set _plan to _estate.outings.plan>>
+<<set _activity to _plan?.activity>>
+<<set $outside to _activity is 'walk' ? 1 : 0>><<set $location to {meal: 'cafe', shopping: 'shopping_centre', walk: 'town'}[_activity] || 'town'>>
+<<effects>>
+<<if _plan and $combat is 1>>
+  <<npc _plan.name>><<person1>>
+  <<if $consensual is 1>><<takeKissVirginity _plan.name 'loveInterest'>><</if>>
+  <<if $consensual is 1 and $enemyarousal gte $enemyarousalmax>>
+    <<ejaculation>><<npcincr _plan.name lust -20>><<npcincr _plan.name love 1>><<llust>><<glove>><br><br>
+    <<language>>
+      <<option 'EN'>>
+        <<switch _activity>>
+          <<case 'meal'>>
+            <<print maplebirch.auto(_plan.name)>> gets <<his>> breathing back under control before a waiter reaches the table, and looks down at the menu. <span class='lewd'>Under the table <<his>> hand stays exactly where it was.</span>
+          <<case 'shopping'>>
+            <<print maplebirch.auto(_plan.name)>> straightens <<his>> clothes first, then yours, then checks the curtain gap twice. <span class='lewd'>The rail of coats is a mess and both of you know why.</span>
+          <<case 'walk'>>
+            <<print maplebirch.auto(_plan.name)>> keeps <<his>> hand flat against the railing until <<he>> stops shaking, and does not step out of the dark where the arcade lights cannot reach. <span class='lewd'>Neither of you moves to leave.</span>
+        <</switch>>
+      <<option 'CN'>>
+        <<switch _activity>>
+          <<case 'meal'>>
+            侍者走到桌边之前，<<print maplebirch.auto(_plan.name)>>先把呼吸压平了，低头把菜单翻了一页。<span class='lewd'>桌子底下<<his>>的手一点没挪。</span>
+          <<case 'shopping'>>
+            <<print maplebirch.auto(_plan.name)>>先理好自己的衣服，又来理你的，再回头确认了两遍帘子的缝。<span class='lewd'>那杆外套歪得厉害，两个人都知道是为什么。</span>
+          <<case 'walk'>>
+            <<print maplebirch.auto(_plan.name)>>一只手按在栏杆上，直到不再发抖。<<he>>没有走出灯光照不到的那片暗处。<span class='lewd'>你们谁也没打算走。</span>
+        <</switch>>
+    <</language>>
+  <<elseif $enemyhealth lte 0 and $enemyarousal lt $enemyarousalmax>>
+    <<npcincr _plan.name love -1>><<llove>>
+    <<lanSwitch 'You stop and give <<print maplebirch.auto(_plan.name)>> room. <<He>> needs a moment before <<he>> is ready to be looked at again.' '你停下来，给<<print maplebirch.auto(_plan.name)>>留出余地。<<he>>缓了一会儿，才愿意重新对上视线。'>>
+  <<else>>
+    <<lanSwitch 'You stop, and the two of you stand apart for a moment.' '你停下来，两个人分开站了一会儿。'>>
+  <</if>>
+  <br><br>
+<</if>>
+<<clotheson>><<endcombat>>
+<<getouticon>><<lanLink ['Return to the car', '返回车旁'] 'Deadwood Reblooms Property Outing'>><</lanLink>>

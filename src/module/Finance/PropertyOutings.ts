@@ -15,6 +15,7 @@ export interface PropertyOutingState {
     stage: 'booked' | 'out' | 'visit' | 'return' | 'done' | 'cancelled' | 'missed';
     vehicle: number | null;
     enjoyed: boolean;
+    intimate?: boolean;
   } | null;
   visits: Record<string, { property: string; until: number; at: string }>;
   note: { name: string; property: string; day: number; kind: 'ride' | 'outing'; short: boolean; done: boolean } | null;
@@ -204,6 +205,11 @@ export default class PropertyOutings {
     return distance !== null && Time.hour * 60 + Time.minute + 20 + transport.journeyMinutes(transport.model, distance + 2) < 21 * 60;
   }
 
+  public get canIntimate(): boolean {
+    const plan = this.plan;
+    return this.canStay && !V.combat && !V.nextPassageCheck && !plan!.intimate && window.isLoveInterest(plan!.name) && (plan!.name !== 'Robin' || C.npc.Robin.trauma < 50);
+  }
+
   public back(enjoyed = false): boolean {
     const transport = this.core.get('Transport');
     if (
@@ -254,8 +260,10 @@ export default class PropertyOutings {
     const plan = this.plan;
     if (!this.valid(name, property)) return null;
     if (this.travelling && plan!.name === name) return false;
-    if (this.state.visits[name]?.property === property && this.state.visits[name].until > Time.date.timeStamp) return this.state.visits[name].at === 'deadwood_home';
-    if (plan?.name !== name || plan.property !== property || !this.waiting) return null;
+    const visit = this.state.visits[name];
+    const held = visit?.property === property && visit.until > Time.date.timeStamp;
+    if (held && visit.at !== 'deadwood_home') return false;
+    if (!held && (plan?.name !== name || plan.property !== property || !this.waiting)) return null;
     if (name === 'Robin') return window.getRobinLocation() === 'deadwood_home';
     if (name === 'Kylar') return window.getKylarLocation().area === 'deadwood_home';
     if (name === 'Sydney') {
@@ -273,7 +281,17 @@ export default class PropertyOutings {
     const ride = this.core.get('Transport')?.state.commute;
     if (ride?.boarded && !ride.arrived && ride.npc === name && ride.property === property) return 'deadwood_outing';
     if (this.travelling && this.plan!.name === name) return 'deadwood_outing';
-    if (this.state.visits[name]?.property === property && this.state.visits[name].until > Time.date.timeStamp) return this.state.visits[name].at;
+    const visit = this.state.visits[name];
+    if (visit?.property === property && visit.until > Time.date.timeStamp) {
+      // 接回家只覆盖空闲时段；店铺、家教、排练和神殿事务仍按原日程进行。
+      const free =
+        name === 'Robin'
+          ? ['orphanage', 'sleep'].includes(original)
+          : name === 'Kylar'
+            ? ['unknown', 'park', 'arcade', 'manor_bedroom'].includes(original)
+            : original === 'home' || (original === 'library' && Time.hour >= 16) || (original === 'temple' && V.sydney_templeWork === 'quarters');
+      return visit.at !== 'deadwood_home' || free ? visit.at : original;
+    }
     const plan = this.plan;
     if (plan?.name !== name || !this.waiting) return original;
     const free =

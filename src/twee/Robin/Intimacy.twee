@@ -3,14 +3,16 @@
 <<set _return to _site is 'shop' ? (Time.hour lt 21 ? 'Deadwood Robin Shop' : 'Cliff Street')
   : _site is 'lemonade' ? 'Beach'
   : _site is 'chocolate' ? 'Park'
+  : _site is 'swim' or _site is 'fishing' ? 'Beach'
   : $RobinExpansion.meteor_return>>
-<<set $outside to _site is 'meteor' ? 1 : 0>>
+<<set $outside to ['meteor', 'swim', 'fishing'].includes(_site) ? 1 : 0>>
 <<set $location to _site is 'shop' ? 'deadwood_robin_shop' : _site is 'chocolate' ? 'park' : 'beach'>>
 <<effects>><<npc Robin>><<person1>>
-<<if !['shop', 'lemonade', 'chocolate', 'meteor'].includes(_site)
+<<if !['shop', 'lemonade', 'chocolate', 'meteor', 'swim', 'fishing'].includes(_site)
   or !isLoveInterest('Robin') or C.npc.Robin.trauma gte 50
   or $robinmissing or $robin.timer.hurt gt 0
-  or $RobinExpansion.asylum.status is 'admitted'>>
+  or $RobinExpansion.asylum.status is 'admitted'
+  or (['swim', 'fishing'].includes(_site) and getRobinLocation() isnot 'beach')>>
   <<set $RobinExpansion.intimacy_site to null>>
   <<lanSwitch 'Robin cannot spend time with you now.' '罗宾现在没法陪你。'>>
 <<else>>
@@ -75,9 +77,23 @@
           又一颗流星划过夜空。罗宾把毯子拉到你们身上，随后停下来。
           “你想和我在这里多待一会儿吗？”<<he>>轻声问。
       <</language>>
+    <<case 'swim'>>
+      <<language>>
+        <<option 'EN'>>
+          Robin swims beside you towards the rocks. You stop where your feet can reach the sand. "Stay here a while?" <<he>> asks, taking your hand and waiting for your answer.
+        <<option 'CN'>>
+          你们并肩游到礁石旁，在脚能够碰到沙的地方停下。“在这儿多待一会儿？”罗宾牵起你的手，等你回答。
+      <</language>>
+    <<case 'fishing'>>
+      <<language>>
+        <<option 'EN'>>
+          The rod goes back in its sleeve. Robin takes the long way along the tideline instead of the path, where the rocks stand between you and the stall. <<He>> stops when you stop. "We still have time before I'm needed," <<he>> says, watching your face rather than the water.
+        <<option 'CN'>>
+          鱼竿收回套子里。罗宾没走小路，而是沿着潮线绕远，走到礁石把你们和摊位隔开的那一侧。你停下，<<he>>也停下。“离我该回去还有一会儿，”<<he>>说，看的是你的脸，不是海面。
+      <</language>>
   <</switch>>
   <br><br>
-  <<if _site isnot 'meteor' and !maplebirch.get('Robin').canTease>>
+  <<if !['meteor', 'swim', 'fishing'].includes(_site) and !maplebirch.get('Robin').canTease>>
     <span class='teal'><<lanSwitch 'Robin would rather return to work.' '罗宾想先回去工作。'>></span>
   <<elseif _site is 'lemonade' or _site is 'chocolate'>>
     <<loveicon 'hug'>><<lanLink ['Continue beneath the stall', '在摊位下继续'] 'Deadwood Robin Private Sex'>>
@@ -96,21 +112,21 @@
 :: Deadwood Robin Private Sex
 <!-- 原版罗宾的合意战斗初始化与结束流程。site 保存在当前 V 中，读档或跨回合后仍返回正确地点。 -->
 <<set _site to $RobinExpansion.intimacy_site>>
-<<if !['shop', 'lemonade', 'chocolate', 'meteor'].includes(_site)
+<<if !['shop', 'lemonade', 'chocolate', 'meteor', 'swim', 'fishing'].includes(_site)
   or ($sexstart is 1 and (!isLoveInterest('Robin') or C.npc.Robin.trauma gte 50
     or $robinmissing or $robin.timer.hurt gt 0 or $RobinExpansion.asylum.status is 'admitted'
-    or (_site isnot 'meteor' and !maplebirch.get('Robin').canTease)))>>
+    or (!['meteor', 'swim', 'fishing'].includes(_site) and !maplebirch.get('Robin').canTease)))>>
   <<set $sexstart to 0>>
   <<getouticon>><<lanLink ['Leave', '离开'] 'Orphanage'>><<endevent>><</lanLink>>
 <<else>>
-  <<set $outside to _site is 'meteor' ? 1 : 0>>
+  <<set $outside to ['meteor', 'swim', 'fishing'].includes(_site) ? 1 : 0>>
   <<set $location to _site is 'shop' ? 'deadwood_robin_shop' : _site is 'chocolate' ? 'park' : 'beach'>>
   <<if $sexstart is 1>>
     <<set $sexstart to 0>>
     <<clearnpc>><<npc Robin>><<person1>>
     <<run statusCheck('Robin')>>
     <<consensual>><<set $consensual to 1>><<neutral 1>>
-    <<if _site isnot 'lemonade' and _site isnot 'chocolate' and $exposed lt 2>>
+    <<if !['lemonade', 'chocolate', 'swim', 'fishing'].includes(_site) and $exposed lt 2>>
       <<strip>>
     <</if>>
     <<maninit>><<set $enemytrust += 500>>
@@ -139,6 +155,10 @@
           '脚步声从摊位前经过，罗宾继续搅着可可。'>>
       <<case 'meteor'>>
         <<lanSwitch 'You turn toward Robin beneath the blanket as another light crosses the sky. <span class="lewd"><<He>> is already warm against you, and <<he>> does not pull away when your hand finds <<his>> waist.</span>' '又一道光划过天空。你在毯子下面向罗宾转过身。<span class="lewd"><<He>>已经贴着你，暖得发烫，你的手摸上<<his>>腰时，<<he>>没有躲开。</span>'>>
+      <<case 'swim'>>
+        <<water>><<lanSwitch 'You stop together in the shallows, beside the rocks. Robin takes your hand and waits for you to come closer.' '你们在礁石旁的浅水里停下。罗宾牵住你的手，等你靠近。'>>
+      <<case 'fishing'>>
+        <<lanSwitch 'Out of sight of the stall, Robin stops pretending the walk is the point. <<He>> tucks the rod under one arm and gets <<his>> other hand on your waist, backing you into the rock until the stone is warm through your clothes and <<he>> is pressed the length of you.' '离开摊位的视线之后，罗宾不再装出只是散步的样子。<<he>>把鱼竿夹在腋下，另一只手按住你的腰，把你抵到礁石上，直到石头隔着衣服也焐热了，而<<he>>整个人贴着你。'>>
     <</switch>><br><br>
     <<if _site is 'lemonade' or _site is 'chocolate'>>
       <<promiscuity4>>
@@ -174,8 +194,9 @@
 <<set _return to _site is 'shop' ? 'Cliff Street'
   : _site is 'lemonade' ? 'Beach'
   : _site is 'chocolate' ? 'Park'
+  : _site is 'swim' or _site is 'fishing' ? 'Beach'
   : $RobinExpansion.meteor_return>>
-<<set $outside to _site is 'meteor' ? 1 : 0>>
+<<set $outside to ['meteor', 'swim', 'fishing'].includes(_site) ? 1 : 0>>
 <<set $location to _site is 'shop' ? 'deadwood_robin_shop' : _site is 'chocolate' ? 'park' : 'beach'>>
 <<effects>><<person1>>
 <<if $enemyarousal gte $enemyarousalmax>>
@@ -223,6 +244,20 @@
         <<option 'CN'>>
           流星渐渐稀疏。罗宾仍和你缩在毯子里，身体温热而安静，指尖沿着你的手背轻轻描过，直到最后一道亮光消失。
           <<He>>终于和你一起把毯子叠好，却还不时回头看向草地，像是夜色还能再借给你们一点时间。
+      <</language>>
+    <<case 'swim'>>
+      <<language>>
+        <<option 'EN'>>
+          You feel the sand under your feet before either of you says anything. Robin keeps hold of your wrist the whole way back through the shallows, and only lets go when the promenade comes into view. "There is a stall to get back to," <<he>> says, and does not sound like <<he>> wants to.
+        <<option 'CN'>>
+          你们谁都没先开口，脚底先碰到了沙。穿过浅水的整段路，罗宾一直攥着你的手腕，直到栈道进入视野才松开。“摊位还得回去看着。”<<he>>说，语气里听不出想回去的意思。
+      <</language>>
+    <<case 'fishing'>>
+      <<language>>
+        <<option 'EN'>>
+          Robin is the one who straightens your clothes, quickly, checking the path over your shoulder while <<he>> does it. The rod is still under <<his>> arm. <<He>> waits until you are both presentable before taking your hand again for the walk back.
+        <<option 'CN'>>
+          是罗宾先替你理好衣服的，动作很快，一边理一边越过你的肩看小路。鱼竿还夹在<<his>>腋下。<<He>>等两个人都收拾妥当，才重新牵起你的手往回走。
       <</language>>
   <</switch>>
 <</if>>

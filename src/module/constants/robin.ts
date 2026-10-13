@@ -128,7 +128,7 @@ export interface RobinExpansionState {
    * 亲密场景的返回目标。
    * 场景入口跨越遭遇战回合后仍要知道该回到哪处摊位或约会地点。
    */
-  intimacy_site: 'shop' | 'lemonade' | 'chocolate' | 'meteor' | null;
+  intimacy_site: 'shop' | 'lemonade' | 'chocolate' | 'meteor' | 'swim' | 'fishing' | null;
   /** 流星雨场景结束后返回的 Passage 名。 */
   meteor_return: string;
   /** 上次游泳事件的游戏日。 */
