@@ -33,6 +33,7 @@
   <<set _shareholders to _company.shareholders>>
   <<set _board_state to _shareholders.state>>
   <<set _shareholder_access to _shareholders.available and _company.share gte _shareholders.terms.meetingShare>>
+  <<deadwood-avery-controller-access>>
   <<if !_shareholder_access>>
     <<language>>
       <<option 'EN'>>

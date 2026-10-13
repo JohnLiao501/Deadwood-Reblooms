@@ -8,6 +8,16 @@ export default function CompanyAvery(maplebirch: typeof window.maplebirch): void
     if (game) return holdemView(maplebirch, game, true);
   });
   maplebirch.tool.inject({
+    widgetPassage: {
+      'Widgets Avery Mansion': [
+        {
+          // 共用原版庄园日程入口，许可与地牢知识由 Twee 写回原版变量。
+          src: '<<averySchedule>>',
+          applyafter: '<<deadwood-avery-controller-access>>',
+          expected: 1
+        }
+      ]
+    },
     locationPassage: {
       // 保留原版四个价格档，仅让存款参与价格感受，不把贷款、股票市值当现金。
       'Avery Valentines 13': [

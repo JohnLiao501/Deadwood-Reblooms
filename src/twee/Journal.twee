@@ -1046,6 +1046,7 @@
         <span><<lanSwitch 'Rewards collected' '累计实收'>></span><span><<printmoney _journal_bounty_state.earned>></span>
       </div>
       <<deadwood-street-bounty-status>>
+      <<deadwood-street-bounty-type-progress>>
       <<if _journal_bounty_state.active?.stage is 'escort' and _journal_bounty_state.active.vehicle isnot null>>
         <ul class='journal'>
           <<if _journal_bounties.lost>>

@@ -10,6 +10,7 @@ type Case = (typeof terms.cases)[number];
 type Attempt = 'talk' | 'run' | 'drive';
 interface Bounty {
   id: string;
+  fee?: number;
   key: string;
   stage: 'search' | 'identified' | 'pursuit' | 'fight' | 'escort' | 'settlement' | 'failed';
   site: Site;
@@ -39,6 +40,7 @@ interface BountiesState {
   day: number;
   board: string[];
   completed: number;
+  completedTypes: string[];
   earned: number;
   hunterDay: number;
   hunter: Hunter | null;
@@ -79,6 +81,7 @@ export default class Bounties {
     day: -1,
     board: [],
     completed: 0,
+    completedTypes: [],
     earned: 0,
     hunterDay: -1,
     hunter: null,
@@ -94,6 +97,19 @@ export default class Bounties {
 
   public get trust(): number {
     return C.npc.Grant?.love ?? 0;
+  }
+
+  public get bountyHunter(): boolean {
+    return this.state.cooperating && terms.cases.every(item => this.state.completedTypes?.includes(item.id));
+  }
+
+  public get remainingTypes(): Case[] {
+    return terms.cases.filter(item => !this.state.completedTypes?.includes(item.id));
+  }
+
+  public get payout(): number {
+    const fee = this.state.active?.fee ?? this.contract?.fee ?? 0;
+    return fee + (this.bountyHunter ? Math.floor((fee * 15) / 100) : 0);
   }
 
   public get wanted(): boolean {
@@ -356,6 +372,7 @@ export default class Bounties {
       if (!V.per_npc[key]) return false;
       state.active = {
         id: offer.id,
+        fee: offer.fee,
         key,
         stage: 'search',
         site: offer.site as Site,
@@ -375,13 +392,17 @@ export default class Bounties {
     if (!job || !contract) return false;
     if (action === 'pay') {
       if (title !== 'Deadwood Street Bounties' || job.stage !== 'settlement' || this.wanted || Time.hour < 8 || Time.hour >= 18) return false;
-      state.last = { id: job.id, outcome: 'paid', fee: contract.fee };
+      const fee = this.payout;
+      state.last = { id: job.id, outcome: 'paid', fee };
       state.active = null;
       state.completed++;
-      state.earned += contract.fee;
+      state.earned += fee;
       C.npc.Grant.love = Math.clamp(this.trust + 3, 0, 100);
       if (V.per_npc[job.key]) wiki(`<<endevent>><<clearNPC '${job.key}'>>`);
-      wiki(`<<money ${contract.fee} 'police'>>`);
+      wiki(`<<money ${fee} 'police'>>`);
+      // 先按付款前资格结算；完成最后一种委托的这单不提前获得奖金。
+      const completedTypes = (state.completedTypes ??= []);
+      if (!completedTypes.includes(job.id)) completedTypes.push(job.id);
       return true;
     }
     if (action === 'abandon' || action === 'release') {

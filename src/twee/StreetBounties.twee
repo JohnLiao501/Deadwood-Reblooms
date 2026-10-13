@@ -21,7 +21,10 @@
   <<if _bountyCase and _bountyContract>>
     <div class='gold bold'><<= lanSwitch(_bountyContract.name[0], _bountyContract.name[1])>></div>
     <ul class='journal'>
-      <li><<lanSwitch 'Reward after verification: ' '核验后的赏金：'>><<printmoney _bountyContract.fee>></li>
+      <li><<lanSwitch 'Reward after verification: ' '核验后的赏金：'>><<printmoney _bountyWork.payout>></li>
+      <<if _bountyWork.bountyHunter>>
+        <li class='blue'><<lanSwitch 'Includes a 15% bounty hunter bonus. Keep cooperating with Grant when collecting it.' '已含赏金猎人的15%奖金；领取时仍需与格兰特保持合作。'>></li>
+      <</if>>
       <<if _bountyCase.stage is 'settlement'>>
         <li class='green'><<lanSwitch 'The target has been handed over. Collect your reward at the station.' '目标已经移交，请到警局领取赏金。'>></li>
       <<else>>
@@ -61,6 +64,18 @@
       <</if>>
     </ul>
   <</if>>
+<</widget>>
+
+<<widget 'deadwood-street-bounty-type-progress'>>
+  <<set _bountyWork to maplebirch.get('StreetLife').bounties, _bountyRemainingTypes to _bountyWork.remainingTypes>>
+  <ul class='journal'>
+    <li><<lanSwitch 'Reward types collected: ' '已领款的悬赏类型：'>><span class='teal'><<= _bountyWork.terms.cases.length - _bountyRemainingTypes.length>> / <<= _bountyWork.terms.cases.length>></span></li>
+    <<if _bountyRemainingTypes.length>>
+      <li><<lanSwitch 'Still to complete and collect: ' '尚需完成并领款：'>><<= _bountyRemainingTypes.map(item => lanSwitch(item.name[0], item.name[1])).join(lanSwitch(', ', '、'))>></li>
+    <<else>>
+      <li class='green'><<lanSwitch 'Every type has been completed and paid. While you cooperate with Grant, future rewards include a 15% bounty hunter bonus.' '所有类型都已完成并领款。与格兰特保持合作时，后续赏金包含赏金猎人的15%奖金。'>></li>
+    <</if>>
+  </ul>
 <</widget>>
 
 :: Deadwood Street Bounties
@@ -116,6 +131,7 @@
         警员把你的询问表放在另一份档案上。“先处理你自己的记录。”这件事没解决之前，柜台不会向你发放赏金。
     <</language>><br><br>
   <</if>>
+  <<deadwood-street-bounty-type-progress>>
   <<if !_bountyWork.state.cooperating>>
     <<lanSwitch 'Speak to Grant before taking a notice from the board.' '先与格兰特谈好合作，再接取告示板上的差事。'>><br>
   <<elseif _bountyWork.available>>
@@ -157,13 +173,16 @@
         <</lanLink>><br>
       <</if>>
     <<elseif !_bountyWork.wanted and Time.hour gte 8 and Time.hour lt 18>>
+      <<if _bountyWork.bountyHunter>>
+        <span class='blue'><<lanSwitch 'Your bounty hunter qualification adds 15% to these base rewards while you continue cooperating with Grant.' '与格兰特保持合作时，赏金猎人资格会让下列基础赏金增加15%。'>></span><br><br>
+      <</if>>
       <<for _bountyOffer range _bountyWork.offers>>
         <<capture _bountyOffer>>
           <<deadwood-card _bountyOffer.name[0] _bountyOffer.name[1]>>
             <<icon _bountyOffer.icon>><<= lanSwitch(_bountyOffer.brief[0], _bountyOffer.brief[1])>><br><br>
             <<set _bountySiteName to _bountyWork.terms.sites[_bountyOffer.site].name>>
             <<lanSwitch 'Last sighting: ' '最近出现地点：'>><span class='teal'><<= lanSwitch(_bountySiteName[0], _bountySiteName[1])>></span><br>
-            <<lanSwitch 'Reward: ' '赏金：'>><<printmoney _bountyOffer.fee>><br>
+            <<lanSwitch 'Base reward: ' '基础赏金：'>><<printmoney _bountyOffer.fee>><br>
             <<lanSwitch 'Risk: ' '风险：'>><span class='purple'><<= lanSwitch(_bountyOffer.risk[0], _bountyOffer.risk[1])>></span><br><br>
             <span class='blue'><<lanSwitch 'The lead is valid for ' '接案后线索有效期为'>><<= _bountyWork.terms.deadline_hours>><<lanSwitch ' hours after acceptance.' '小时。'>></span><br>
             <<icon _bountyOffer.icon>><<lanLink ['Take this case (0:05)', '接下这份案件 (0:05)'] 'Deadwood Street Bounties'>>

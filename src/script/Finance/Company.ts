@@ -13,13 +13,22 @@ export default function Company(maplebirch: typeof window.maplebirch): void {
     { widget: [-1, 'deadwood-shareholder-lobby-link'], passage: 'Office Lobby' }
   );
   maplebirch.tool.addTo('Journal', 'deadwood-company-journal');
-  maplebirch.tool.patch.traits.add({
-    title: 'Special Traits',
-    name: () => maplebirch.t('deadwood-reblooms:finance:trait:partner:name'),
-    colour: 'gold',
-    has: () => !!V.Finance?.company && maplebirch.get('Finance')!.company.partner,
-    text: () => maplebirch.t('deadwood-reblooms:finance:trait:partner:text')
-  });
+  maplebirch.tool.patch.traits.add(
+    {
+      title: 'Special Traits',
+      name: () => maplebirch.t('deadwood-reblooms:finance:trait:partner:name'),
+      colour: 'gold',
+      has: () => !!V.Finance?.company && maplebirch.get('Finance')!.company.partner,
+      text: () => maplebirch.t('deadwood-reblooms:finance:trait:partner:text')
+    },
+    {
+      title: 'Special Traits',
+      name: () => maplebirch.t(`deadwood-reblooms:finance:trait:${maplebirch.get('Finance')!.company.shareholders.controller ? 'controller' : 'board'}:name`),
+      colour: () => (maplebirch.get('Finance')!.company.shareholders.controller ? 'green' : 'teal'),
+      has: () => !!V.Finance?.company && (maplebirch.get('Finance')!.company.shareholders.controller || maplebirch.get('Finance')!.company.shareholders.director),
+      text: () => maplebirch.t(`deadwood-reblooms:finance:trait:${maplebirch.get('Finance')!.company.shareholders.controller ? 'controller' : 'board'}:text`)
+    }
+  );
   maplebirch.tool.inject({
     widgetPassage: {
       Characteristics: [

@@ -1,5 +1,14 @@
 :: Deadwood Reblooms Company Avery Widgets [widget]
 
+<<widget 'deadwood-avery-controller-access'>>
+  <<if !$replayScene and !$statFreeze and $avery_mansion and maplebirch.get('Finance')?.company.shareholders.controller>>
+    <<set $avery_mansion.study_secret to Math.max($avery_mansion.study_secret ?? 0, 2)>>
+    <<if Time.hour gt 4 and (Time.hour isnot 23 or ['away', 'work'].includes($avery_mansion.schedule))>>
+      <<set $avery_mansion.study_unlocked to 1>>
+    <</if>>
+  <</if>>
+<</widget>>
+
 <<widget 'deadwood-avery-header'>>
   <<if _args[0] is 'result'>>
     <<deadwood-company-header>>

@@ -1,4 +1,5 @@
 import Module from './Module';
+import Achievements from './Achievements';
 import Jobs from './StreetLife/Jobs';
 import Bounties from './StreetLife/Bounties';
 import Bailey from './StreetLife/Bailey';
@@ -25,6 +26,11 @@ export default class StreetLife extends Module {
       smuggler_pub: SmugglerPub.defaults,
       ammo: { handgun: 0, shotgun: 0, rifle: 0 }
     });
+  }
+
+  public override preInit(): void {
+    super.preInit();
+    Achievements.add(this.core, 'StreetLife');
   }
 
   public get reputation(): number {

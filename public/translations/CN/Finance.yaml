@@ -120,6 +120,10 @@ deadwood-reblooms:industry:site:yard: 临街厂房
 deadwood-reblooms:industry:site:rail: 铁路旁厂房
 deadwood-reblooms:industry:site:rear: 后巷厂房
 
+'deadwood-reblooms:finance:feat:board:title': '席间有我'
+'deadwood-reblooms:finance:feat:board:description': '首次正式获任艾弗里公司的董事席位。'
+'deadwood-reblooms:finance:feat:controller:title': '控局'
+'deadwood-reblooms:finance:feat:controller:description': '持有艾弗里公司超过50%的已交割股份。'
 'deadwood-reblooms:finance:feat:factory_payment:title': '开工大吉'
 'deadwood-reblooms:finance:feat:factory_payment:description': '完成首笔工厂订单的生产与交货，并收到账款。预付款不计入。'
 'deadwood-reblooms:finance:feat:margin_call:title': '空中飞人'
@@ -130,6 +134,10 @@ deadwood-reblooms:industry:site:rear: 后巷厂房
 'deadwood-reblooms:finance:feat:unpaid_invoice:description': '工厂订单已经交货，客户却在结算时拒付货款。'
 'deadwood-reblooms:finance:trait:partner:name': '艾弗里的合伙人'
 'deadwood-reblooms:finance:trait:partner:text': '你与艾弗里签订了合作协议。<span class="green">合作订单可采用更高比例的预付款，并协商供货策略。</span>持股不足、办公室欠租或有待追偿债务时，合作权限暂停。'
+'deadwood-reblooms:finance:trait:board:name': '董事席位'
+'deadwood-reblooms:finance:trait:board:text': '你在董事会有了自己的席位。正常的商务往来维系着你与艾弗里的合作。<span class="green">艾弗里的怒气每天额外降低1，支配度每七天最多降低1，降至50即停止。</span>'
+'deadwood-reblooms:finance:trait:controller:name': '控股股东'
+'deadwood-reblooms:finance:trait:controller:text': '你握有公司的多数股份，在董事会的决定中占据主动。正常的商务往来维系着你与艾弗里的合作。<span class="green">艾弗里的怒气每天额外降低1，支配度每七天最多降低1，降至25即停止。</span>艾弗里的书房向你开放，你也知道通往地牢的入口。这些关系收益替代董事席位的效果，不叠加。'
 'deadwood-reblooms:finance:title:black_raven': '夜渡鸦'
 'deadwood-reblooms:finance:trait:ascended:name': '飞升'
 'deadwood-reblooms:finance:trait:ascended:text': '你已作为夜渡鸦飞升。<span class="green">麋鹿疤痕不再随时间增加创伤，压力和疲劳会随时间逐渐降低。</span><span class="red">意识仍会随时间流逝而增长，纯洁则逐渐消逝。</span>'

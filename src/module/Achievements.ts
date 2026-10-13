@@ -1,6 +1,6 @@
 // ./src/module/Achievements.ts
 
-type AchievementModule = 'Finance' | 'BirdTower' | 'LifeSimulation' | 'MoreTransformations' | 'Orchard' | 'Robin' | 'Sydney' | 'VanillaPlus' | 'Whitney';
+type AchievementModule = 'Finance' | 'BirdTower' | 'LifeSimulation' | 'MoreTransformations' | 'Orchard' | 'Robin' | 'StreetLife' | 'Sydney' | 'VanillaPlus' | 'Whitney';
 
 interface AchievementDefinition {
   module: AchievementModule;
@@ -249,6 +249,22 @@ class Achievements {
     },
     {
       module: 'Finance',
+      id: 'Deadwood Board Seat',
+      title: 'deadwood-reblooms:finance:feat:board:title',
+      description: 'deadwood-reblooms:finance:feat:board:description',
+      difficulty: 2,
+      filter: ['All', 'General']
+    },
+    {
+      module: 'Finance',
+      id: 'Deadwood Controlling Stake',
+      title: 'deadwood-reblooms:finance:feat:controller:title',
+      description: 'deadwood-reblooms:finance:feat:controller:description',
+      difficulty: 3,
+      filter: ['All', 'General']
+    },
+    {
+      module: 'Finance',
       id: 'Deadwood Black Raven',
       title: 'deadwood-reblooms:finance:title:black_raven',
       description: 'deadwood-reblooms:finance:feat:black_raven:description',
@@ -327,6 +343,22 @@ class Achievements {
       description: 'deadwood-reblooms:VanillaPlus:willpower:feat:description',
       difficulty: 3,
       filter: ['All', 'Stats']
+    },
+    {
+      module: 'StreetLife',
+      id: 'Deadwood Quiet Heist',
+      title: 'deadwood-reblooms:street:feat:quiet_heist:title',
+      description: 'deadwood-reblooms:street:feat:quiet_heist:description',
+      difficulty: 3,
+      filter: ['All', 'General']
+    },
+    {
+      module: 'StreetLife',
+      id: 'Deadwood First Bounty',
+      title: 'deadwood-reblooms:street:feat:bounty:title',
+      description: 'deadwood-reblooms:street:feat:bounty:description',
+      difficulty: 2,
+      filter: ['All', 'General']
     }
   ];
 
@@ -439,6 +471,17 @@ class Achievements {
         break;
       }
       case 'Finance': {
+        // 董事记录正式任命；控股读取当前已交割股份，未交割股份不算。
+        maplebirch.dynamic.regStateEvent('append', 'finance-board-seat-feat', {
+          output: 'earnFeat "Deadwood Board Seat"',
+          cond: () => V.feats?.currentSave['Deadwood Board Seat'] === undefined && V.Finance?.company?.shareholders?.board === true
+        });
+
+        maplebirch.dynamic.regStateEvent('append', 'finance-controlling-stake-feat', {
+          output: 'earnFeat "Deadwood Controlling Stake"',
+          cond: () => V.feats?.currentSave['Deadwood Controlling Stake'] === undefined && V.Finance?.company?.shareholders != null && maplebirch.get('Finance')!.company.shareholders.controller
+        });
+
         maplebirch.dynamic.regStateEvent('append', 'finance-black-raven-feat', {
           output: 'earnFeat "Deadwood Black Raven"',
           cond: () => V.feats?.currentSave['Deadwood Black Raven'] === undefined && V.Finance?.company?.ascension?.recognized === true
@@ -465,6 +508,31 @@ class Achievements {
             V.feats?.currentSave['Feels Like Home'] === undefined &&
             V.Finance?.real_estate != null &&
             maplebirch.get('Finance')!.realEstate.properties.some(property => maplebirch.get('Finance')!.realEstate.furnished(property.id))
+        });
+        break;
+      }
+      case 'StreetLife': {
+        // 安静进入银行还不算完成，须成功分账结案且从未报警或被认出。
+        maplebirch.dynamic.regStateEvent('append', 'street-life-quiet-heist-feat', {
+          output: 'earnFeat "Deadwood Quiet Heist"',
+          cond: () => {
+            const heist = V.StreetLife?.heist;
+            return (
+              V.feats?.currentSave['Deadwood Quiet Heist'] === undefined &&
+              heist?.stage === 'closed' &&
+              heist.settled &&
+              heist.outcome === 'success' &&
+              heist.entered &&
+              heist.approach === 'quiet' &&
+              !heist.raisedAlarm &&
+              !heist.identified
+            );
+          }
+        });
+
+        maplebirch.dynamic.regStateEvent('append', 'street-life-first-bounty-feat', {
+          output: 'earnFeat "Deadwood First Bounty"',
+          cond: () => V.feats?.currentSave['Deadwood First Bounty'] === undefined && (V.StreetLife?.bounties?.completed ?? 0) >= 1
         });
         break;
       }

@@ -12,6 +12,7 @@ export interface ShareholdersState {
   policy: Policy;
   next_meeting_day: number;
   last_dividend_day: number;
+  last_dom_day: number;
   minutes: { day: number; held: number; total: number; policy: Policy; passed: boolean } | null;
   placement_used: boolean;
   offer: { shares: number; price: number; total: number; expires: number } | null;
@@ -29,6 +30,7 @@ export default class Shareholders {
     policy: 'income',
     next_meeting_day: 0,
     last_dividend_day: -1,
+    last_dom_day: -1,
     minutes: null,
     placement_used: false,
     offer: null,

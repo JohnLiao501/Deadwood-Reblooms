@@ -95,7 +95,11 @@ With **settled AVY shares representing at least 5% of the current total**, enter
 
 **Identity and fame:** the first Attributes sentence reflects factory ownership, a trading business, shareholding, board membership or control while preserving the native gender and transformation description. Factory deliveries, orchard contracts, subscriptions and share transfers raise business fame. Cancelling factory orders lowers it. Shareholder meetings raise social fame. Routine activities such as deliveries use their own intervals; donations reward cumulative contributions and project outcomes, as shown at the donations desk.
 
-<span class="blue">Company votes affect accounts, financing and construction. Avery's love, rage, dominance, romantic requirements and ascension story retain their native rules.</span>
+**Board Seat → Controlling Shareholder**: control replaces the board seat trait; their benefits do not stack. A passed shareholder meeting or a reception conversation with Avery starts seven days of benefits from the following day: an additional **1 rage lost per day**, and at most **1 dominance lost every seven days**. Dominance stops decreasing at **50** for directors and **25** for controlling shareholders; values already below those floors are not raised. Upgrading or regaining eligibility does not reset the shared interval. Benefits pause if you lose both qualifications, owe office rent or collection debt, or Avery cannot conduct ordinary business.
+
+Control opens the mansion study to you and reveals how to open the dungeon entrance, without eavesdropping or searching. Your first mansion visit still requires the native invitation. Avery closes the study at 23:00 when at home; permission resumes from 05:00 the following morning. Knowing the entrance does not record a dungeon visit or its scenes.
+
+<span class="blue">Company votes affect accounts, financing and construction. Romance requirements and ascension retain their native rules; private interactions can still change Avery's love, rage and dominance.</span>
 
 ### Avery's attitude and private gathering
 

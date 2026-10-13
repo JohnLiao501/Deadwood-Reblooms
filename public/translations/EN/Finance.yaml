@@ -121,6 +121,10 @@ deadwood-reblooms:industry:site:yard: Street-side workshop
 deadwood-reblooms:industry:site:rail: Rail-side workshop
 deadwood-reblooms:industry:site:rear: Back-lane workshop
 
+'deadwood-reblooms:finance:feat:board:title': 'A Seat at the Table'
+'deadwood-reblooms:finance:feat:board:description': "Be formally appointed to the board of Avery's company for the first time."
+'deadwood-reblooms:finance:feat:controller:title': 'In Control'
+'deadwood-reblooms:finance:feat:controller:description': "Hold more than 50% of Avery's company in settled shares."
 'deadwood-reblooms:finance:feat:factory_payment:title': 'Open for Business'
 'deadwood-reblooms:finance:feat:factory_payment:description': 'Produce and deliver your first factory order, then receive payment. Advances do not count.'
 'deadwood-reblooms:finance:feat:margin_call:title': 'Flying Without a Net'
@@ -131,6 +135,10 @@ deadwood-reblooms:industry:site:rear: Back-lane workshop
 'deadwood-reblooms:finance:feat:unpaid_invoice:description': 'Deliver a factory order only for the customer to default on payment.'
 'deadwood-reblooms:finance:trait:partner:name': "Avery's Partner"
 'deadwood-reblooms:finance:trait:partner:text': 'You have signed a partnership agreement with Avery. <span class="green">Partnership orders offer larger advances and negotiated supply policies.</span> These privileges are suspended if your shareholding falls below the requirement, office rent is overdue or a debt is being collected.'
+'deadwood-reblooms:finance:trait:board:name': 'Board Seat'
+'deadwood-reblooms:finance:trait:board:text': 'You have a seat at the boardroom table. Regular business contact with Avery keeps your working relationship going. <span class="green">Avery loses an additional 1 rage per day and up to 1 dominance every seven days, down to 50.</span>'
+'deadwood-reblooms:finance:trait:controller:name': 'Controlling Shareholder'
+'deadwood-reblooms:finance:trait:controller:text': 'You hold a majority of the company and carry more weight at the boardroom table. Regular business contact with Avery keeps your working relationship going. <span class="green">Avery loses an additional 1 rage per day and up to 1 dominance every seven days, down to 25.</span> The study at the mansion is open to you, and you know where the dungeon entrance is. These relationship benefits replace those of a board seat and do not stack.'
 'deadwood-reblooms:finance:title:black_raven': 'Night Raven'
 'deadwood-reblooms:finance:trait:ascended:name': 'Ascended'
 'deadwood-reblooms:finance:trait:ascended:text': 'You have ascended as the Night Raven. <span class="green">Elk scars no longer cause trauma to increase over time. Stress and fatigue gradually ease as time passes.</span> <span class="red">Awareness still increases and purity decreases over time.</span>'
