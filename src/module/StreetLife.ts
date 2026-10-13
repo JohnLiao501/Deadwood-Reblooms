@@ -3,6 +3,7 @@ import Jobs from './StreetLife/Jobs';
 import Bounties from './StreetLife/Bounties';
 import Bailey from './StreetLife/Bailey';
 import Heist from './StreetLife/Heist';
+import SmugglerPub from './StreetLife/SmugglerPub';
 import ammunition from '../assets/street/ammunition.json';
 
 /** 街头口碑独立于警方证据；原版委托的贡献只读取，不重复增加原版计数。 */
@@ -11,6 +12,7 @@ export default class StreetLife extends Module {
   public readonly bounties = new Bounties(this);
   public readonly bailey = new Bailey(this);
   public readonly heist = new Heist(this);
+  public readonly smugglerPub = new SmugglerPub(this);
   public readonly ammunition = ammunition;
 
   public constructor(core: typeof maplebirch) {
@@ -20,6 +22,7 @@ export default class StreetLife extends Module {
       bounties: Bounties.defaults,
       bailey: Bailey.defaults,
       heist: Heist.defaults,
+      smuggler_pub: SmugglerPub.defaults,
       ammo: { handgun: 0, shotgun: 0, rifle: 0 }
     });
   }

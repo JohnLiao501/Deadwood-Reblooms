@@ -1,4 +1,5 @@
 import Detective from './StreetLife/Detective';
+import SmugglerPub from './StreetLife/SmugglerPub';
 
 export default function StreetLife(maplebirch: typeof window.maplebirch): void {
   const weaponTrait = () => {
@@ -14,6 +15,7 @@ export default function StreetLife(maplebirch: typeof window.maplebirch): void {
   // 服装目录独立于模块开关加载，类型说明常驻；玩法只在模块启用时接入。
   if (!maplebirch.get('StreetLife')) return;
   Detective(maplebirch);
+  SmugglerPub(maplebirch);
   maplebirch.tool.addTo('BeforeLinkZone', { widget: 'deadwood-street-detective-link', passage: 'Police Station' });
   maplebirch.tool.addTo('Journal', 'deadwood-street-bounty-journal');
   maplebirch.tool.addTo('Journal', 'deadwood-street-ammunition-journal');
