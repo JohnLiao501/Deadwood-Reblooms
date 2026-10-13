@@ -3,6 +3,7 @@
 import type { MaplebirchCore } from '@scml-dol-maplebirch/types';
 import type NPCSidebarPortrait from '../../module/NPCSidebarPortrait';
 import { Clothing } from './Clothing';
+import scene from './Common/Scenes';
 
 export default function (maplebirch: MaplebirchCore): void {
   maplebirch.npc.addSchedule('Avery', schedule =>
@@ -69,6 +70,8 @@ export default function (maplebirch: MaplebirchCore): void {
     const avery = C.npc?.Avery;
     const title = maplebirch.passage.title;
     if (avery?.init !== 1 || avery.state === 'dismissed') return '';
+    const arranged = scene(maplebirch, 'Avery');
+    if (arranged !== undefined) return arranged;
 
     // Spa：进场时解开毛巾并全裸，结束或拒绝后重新裹上毛巾
     if (title.startsWith('Avery Spa End') || title === 'Avery Spa Refuse' || title === 'Avery Spa Oral Finish' || title === 'Avery Spa Rape Finish') return 'towel';

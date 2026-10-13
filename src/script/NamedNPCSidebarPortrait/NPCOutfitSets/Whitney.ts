@@ -5,7 +5,18 @@ import { schoolUniformKeys } from '../Common/SchoolUniform';
 import inject from './Inject';
 import { addSet, sync } from './Clothes';
 
-const wardrobeKeys = [...schoolUniformKeys, 'school_swim_shorts', 'school_swimsuit', 'leather_jacket_jeans', 'sweater_sweatpants_sport', 'tshirt_shorts', 'hoodie_legwarmers', 'rags'] as const;
+const wardrobeKeys = [
+  ...schoolUniformKeys,
+  'school_swim_shorts',
+  'school_swimsuit',
+  'leather_jacket_jeans',
+  'sweater_sweatpants_sport',
+  'tshirt_shorts',
+  'hoodie_legwarmers',
+  'gothic_formal_suit',
+  'evening_gown',
+  'rags'
+] as const;
 
 export default function (maplebirch: MaplebirchCore): void {
   maplebirch.tool.onInit(() => {

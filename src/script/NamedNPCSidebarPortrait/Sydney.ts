@@ -6,6 +6,7 @@ import { Clothing } from './Clothing';
 import schoolSwim from './Common/SchoolSwim';
 import { preferColours } from './Common/Preference';
 import schoolUniforms, { schoolUniformKeys } from './Common/SchoolUniform';
+import scene from './Common/Scenes';
 
 export default function (maplebirch: MaplebirchCore, colours: { school: Map<string, string>; schoolOutfit: Map<string, string>; swim: Map<string, string>; cow?: string }) {
   'use strict';
@@ -250,6 +251,8 @@ export default function (maplebirch: MaplebirchCore, colours: { school: Map<stri
     const title = maplebirch.passage.title;
     // 回放场景强制位置
     if (V.sydney_location_override && V.replayScene) return V.sydney_location_override;
+    const arranged = scene(maplebirch, 'Sydney');
+    if (arranged !== undefined) return arranged;
 
     // 英语剧排练
     if (title.startsWith('English Play Rehearse') && (title.includes('Sydney') || title.includes('Both'))) return 'rehearsal';

@@ -7,6 +7,7 @@ import hoodie from './Common/Hoodie';
 import trainers from './Common/Trainers';
 import { preferColours } from './Common/Preference';
 import schoolUniforms from './Common/SchoolUniform';
+import scene from './Common/Scenes';
 
 export default function (
   maplebirch: MaplebirchCore,
@@ -114,8 +115,10 @@ export default function (
     wardrobe.wear('Kylar', 'abduction_formal', 'rose_wedding_dress', () => C.npc?.Kylar?.pronoun !== 'm');
     wardrobe.wear('Kylar', 'abduction_goth', 'gothic_formal_suit', () => C.npc?.Kylar?.pronoun === 'm');
     wardrobe.wear('Kylar', 'abduction_goth', 'gothic_rose_gown', () => C.npc?.Kylar?.pronoun !== 'm');
-    wardrobe.wear('Kylar', 'abduction_swim', 'beach_shorts', () => C.npc?.Kylar?.pronoun === 'm');
-    wardrobe.wear('Kylar', 'abduction_swim', 'bikini', () => C.npc?.Kylar?.pronoun !== 'm');
+    wardrobe.wear('Kylar', ['abduction_swim', 'swim'], 'beach_shorts', () => C.npc?.Kylar?.pronoun === 'm');
+    wardrobe.wear('Kylar', ['abduction_swim', 'swim'], 'bikini', () => C.npc?.Kylar?.pronoun !== 'm');
+    wardrobe.wear('Kylar', 'formal', 'gothic_formal_suit', () => C.npc?.Kylar?.pronoun === 'm');
+    wardrobe.wear('Kylar', 'formal', 'gothic_rose_gown', () => C.npc?.Kylar?.pronoun !== 'm');
     wardrobe.modify('Kylar', (clothes, context) => {
       if (context.key !== 'gothic_rose_gown') return;
       const items = (
@@ -239,6 +242,8 @@ export default function (
 
     // 非活动状态
     if (C.npc?.Kylar?.state !== 'active') return C.npc?.Kylar?.state === '' ? 'inactive' : '';
+    const arranged = scene(maplebirch, 'Kylar');
+    if (arranged !== undefined) return arranged;
 
     // 英语剧演出
     if (V.englishPlay === 'ongoing' && V.englishPlayDays === 0 && Time.hour >= 17 && Time.hour <= 20) return 'englishPlay';

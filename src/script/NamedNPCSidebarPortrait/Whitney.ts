@@ -8,6 +8,7 @@ import hoodie from './Common/Hoodie';
 import trainers from './Common/Trainers';
 import { preferColours } from './Common/Preference';
 import schoolUniforms, { schoolUniformKeys } from './Common/SchoolUniform';
+import scene from './Common/Scenes';
 
 export default function (maplebirch: MaplebirchCore, colours: { school: Map<string, string>; schoolOutfit: Map<string, string>; outfit: Map<string, string>; clothes: Map<string, string> }): void {
   maplebirch.npc.addSchedule('Whitney', schedule =>
@@ -106,6 +107,8 @@ export default function (maplebirch: MaplebirchCore, colours: { school: Map<stri
     // 剧情服装
     wardrobe.wear('Whitney', 'naked', 'naked');
     wardrobe.wear('Whitney', 'halloween', 'rags');
+    wardrobe.wear('Whitney', 'formal', 'gothic_formal_suit', () => C.npc?.Whitney?.pronoun === 'm');
+    wardrobe.wear('Whitney', 'formal', 'evening_gown', () => C.npc?.Whitney?.pronoun !== 'm');
 
     // 赤裸上身
     wardrobe.modify('Whitney', (clothes, context) => {
@@ -243,6 +246,8 @@ export default function (maplebirch: MaplebirchCore, colours: { school: Map<stri
     // 非活动状态
     if (whitney.state === 'pillory') return 'pillory';
     if (whitney.state === 'dungeon' || !['active', 'rescued'].includes(whitney.state)) return '';
+    const arranged = scene(maplebirch, 'Whitney');
+    if (arranged !== undefined) return arranged;
 
     // 深夜在家休息，上学日不能让校服日程覆盖凌晨的私人时间。
     if (Time.hour < 7) return 'topless';

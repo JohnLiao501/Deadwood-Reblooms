@@ -1,6 +1,7 @@
 // ./src/script/NamedNPCSidebarPortrait/Harper.ts
 
 import type { MaplebirchCore } from '@scml-dol-maplebirch/types';
+import scene from './Common/Scenes';
 
 export default function (maplebirch: MaplebirchCore): void {
   maplebirch.tool.onInit(() => {
@@ -23,7 +24,7 @@ export default function (maplebirch: MaplebirchCore): void {
     }
 
     const wardrobe = maplebirch.npc.Clothes.wardrobe;
-    const party = () => /^Skyscraper Party(?: |$)/.test(maplebirch.passage.title);
+    const party = () => /^Skyscraper Party(?: |$)/.test(maplebirch.passage.title) || scene(maplebirch, 'Harper') === 'formal';
     // 原版 hospital 衣物类型：医院、精神病院、农场检查均穿医生服。
     // Mansion Party Harper 明写刚下班仍穿工作服，在场沿用原版 V.npc。
     wardrobe.wear('Harper', '*', 'doctor', () => !party());

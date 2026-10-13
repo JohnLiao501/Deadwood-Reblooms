@@ -8,6 +8,7 @@ import hoodie from './Common/Hoodie';
 import trainers from './Common/Trainers';
 import { preferColours } from './Common/Preference';
 import schoolUniforms from './Common/SchoolUniform';
+import scene from './Common/Scenes';
 
 export default function (
   maplebirch: MaplebirchCore,
@@ -114,6 +115,8 @@ export default function (
 
     // 浴室服装
     wardrobe.wear('Robin', 'bath', 'towel_wrap');
+    wardrobe.wear('Robin', 'school_swim', 'school_swim_shorts', () => C.npc?.Robin?.pronoun === 'm');
+    wardrobe.wear('Robin', 'school_swim', 'school_swimsuit', () => C.npc?.Robin?.pronoun !== 'm');
 
     // 剧情服装
     wardrobe.wear('Robin', ['naked', 'docks', 'dinner', 'underground'], 'naked');
@@ -244,6 +247,8 @@ export default function (
 
     // 睡觉：睡衣
     wardrobe.wear('Robin', 'sleep', 'pyjama');
+    wardrobe.wear('Robin', 'formal', 'tuxedo_formal', () => C.npc?.Robin?.pronoun === 'm');
+    wardrobe.wear('Robin', 'formal', 'gothic_rose_gown', () => C.npc?.Robin?.pronoun !== 'm');
 
     // 归途之书的神殿值班与留宿，未启用神殿路线时不改变原版衣装。
     const temple = () => Boolean(maplebirch.get('RobinTemple'));
@@ -299,6 +304,8 @@ export default function (
 
     // 强制位置覆盖（剧情回放等）
     if (V.robinlocationoverride && V.robinlocationoverride.during.includes(Time.hour)) return V.robinlocationoverride.location;
+    const arranged = scene(maplebirch, 'Robin');
+    if (arranged !== undefined) return arranged;
 
     // 仅接管神殿内的当前剧情，邀请和回家页面沿用原版地点。
     if (maplebirch.get('RobinTemple') && V.location === 'temple' && title.startsWith('RobinTemple ')) return 'temple';
