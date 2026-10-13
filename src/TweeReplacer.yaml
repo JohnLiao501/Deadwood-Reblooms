@@ -13,9 +13,9 @@
     <<if ["Robin","Whitney","Alex","Eden"].includes($npc[0])>><<deadwood-reblooms-li-discovery>><<elseif
 
 - passage: Traits
-  # 保留原版与 DoLX 的称号判断，只在返回名称后补生理标记。
+  # 保留原版的称号判断，只在返回名称后补生理标记。
   findRegex: >-
-    name: \(\) => (V\.player\.gender is "n" \? "[^"]+" : "[^"]+"|V\.hallucinations gte 2 \|\| !V\.settings\.bestialityEnabled \? "[^"]+" : V\.player\.gender is "n" \? "[^"]+" : "[^"]+"|\{\s*(?:if \(V\.hallucinations gte 2 \|\| !V\.settings\.bestialityEnabled\) return "Harpy";\s*)?if \(playerFeelsManlike\(\)\) return "(?:Wolf|Cat|Bird)boy";\s*if \(playerFeelsGirllike\(\)\) return "(?:Wolf|Cat|Bird)girl";\s*return "(?:Wolf|Cat|Bird)kin";\s*\}),
+    name: \(\) => (V\.player\.gender is "n" \? "[^"]+" : "[^"]+"|V\.hallucinations gte 2 \|\| !V\.settings\.bestialityEnabled \? "[^"]+" : V\.player\.gender is "n" \? "[^"]+" : "[^"]+"),
   replace: >-
     name: () => (() => $1)() + (V.player.sex is "h" ? "<<lanSwitch ' (⚥)' '(⚥)'>>" : ""),
   all: true

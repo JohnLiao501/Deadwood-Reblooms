@@ -272,16 +272,17 @@ class Horse extends Transformation {
           }
         ],
         'Widgets Effects Man': [
-          // 只替换动作描写，保留 DoLP 的闪避、反击与成功后的数值结算。
+          // 只替换踢击动作描写，保留原版的命中判断与数值结算。
           {
             srcmatchgroup: /<<actionskick \$feettarget>>/g,
             to: '<<deadwood-reblooms-action-kick $feettarget>>',
             expected: 2
           },
-          // 两版成功踢击的基础伤害不同，蹄足倍率沿用各自原值。DoLP 分支数不固定。
+          // 原版两个成功踢击分支使用强度 5；蹄足启用时沿用三倍倍率。
           {
-            srcmatchgroup: /<<defiance (5|10) \$feettarget>>/g,
-            to: '<<defiance `$1 * (typeof $transformationParts?.traits?.hooves is "string" and isPartEnabled($transformationParts.traits.hooves) ? 3 : 1)` $feettarget>>'
+            srcmatchgroup: /<<defiance 5 \$feettarget>>/g,
+            to: '<<defiance `5 * (typeof $transformationParts?.traits?.hooves is "string" and isPartEnabled($transformationParts.traits.hooves) ? 3 : 1)` $feettarget>>',
+            expected: 2
           }
         ]
       }

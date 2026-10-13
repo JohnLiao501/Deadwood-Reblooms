@@ -215,7 +215,15 @@ export default function DoLX(core: MaplebirchCore): void {
     }
 
     // 主脚本已处理通用 Math.clamp 公式，此处只接入 DoLX 的 AMC 公式与缓存后的诱惑评分。
-    const passageRules: Record<string, Rule[]> = {};
+    const passageRules: Record<string, Rule[]> = {
+      // DoLX 的兽化称号使用块函数；保留性别感受和 Harpy 判断，只补生理标记。
+      Traits: [
+        [
+          /name: \(\) => (\{\s*(?:if \(V\.hallucinations gte 2 \|\| !V\.settings\.bestialityEnabled\) return "Harpy";\s*)?if \(playerFeelsManlike\(\)\) return "(?:Wolf|Cat|Bird)boy";\s*if \(playerFeelsGirllike\(\)\) return "(?:Wolf|Cat|Bird)girl";\s*return "(?:Wolf|Cat|Bird)kin";\s*\}),/g,
+          'name: () => (() => $1)() + (V.player.sex is "h" ? "<<lanSwitch \' (⚥)\' \'(⚥)\'>>" : ""),'
+        ]
+      ]
+    };
     if (core.get('VanillaPlus')) {
       Object.assign(passageRules, {
         Cheats: [
