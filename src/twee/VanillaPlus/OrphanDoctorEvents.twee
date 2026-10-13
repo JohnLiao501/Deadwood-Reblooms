@@ -1,0 +1,70 @@
+:: Widgets Vanilla Plus Orphan Events [widget]
+<<widget "deadwood-orphan-skip">>
+	<<lanSwitch 'You pass by a group of orphans whispering about sexual things. They do not sound like they know what they are talking about.' '你路过一群正在小声说下流话的孤儿。听起来他们根本不懂自己在说什么。'>>
+	<br><br>
+	<<lanLink ['Next', '继续'] 'Orphanage'>><<endevent>><</lanLink>>
+	<br>
+<</widget>>
+
+<<widget "deadwood-orphan-event">>
+	<<switch _args[0]>>
+		<<case "doctor">>
+			<<deadwood-orphan-doctor>>
+		<<case "judge">>
+			<<deadwood-orphan-judge>>
+		<<case "masturbation">>
+			<<deadwood-orphan-masturbation>>
+		<<case "erection">>
+			<<deadwood-orphan-erection>>
+		<<default>>
+			<<deadwood-orphan-skip>>
+	<</switch>>
+<</widget>>
+
+<<widget "deadwood-orphan-doctor">>
+	<<generateNPC 1 "t">>
+	<<person1>>
+	<<generateNPC 2 "t">>
+	<<person2>>
+	<<lanSwitch 'A <<person1>><<person>> and <<person2>><<person>> approach you. "Hey, we know a cool game. Want to play?" the <<person1>><<person>> says with a smirk.' '一个 <<person1>><<person>> 和一个 <<person2>><<person>> 凑过来。"嘿，我们知道一个好玩的游戏。想玩吗？"那个 <<person1>><<person>> 笑得不怀好意。'>>
+	<br><br>
+	<<lanLink ['Agree (0:30)', '答应 (0:30)'] 'Home Doctor'>><<pass 30>><</lanLink>>
+	<br>
+	<<lanLink ['Refuse', '拒绝'] 'Home Orphan Refuse'>><</lanLink>>
+	<br>
+<</widget>>
+
+<<widget "deadwood-orphan-judge">>
+	<<generateNPC 1 "t">>
+	<<person1>>
+	<<generateNPC 2 "t" $NPCList[0].pronoun>>
+	<<person2>>
+	<<lanSwitch 'A <<person1>><<person>> and <<person2>><<person>> approach you. "Hey, we need your help with something." the <<person1>><<person>> says. "Do you mind helping us? It will not take long."' '一个 <<person1>><<person>> 和一个 <<person2>><<person>> 凑过来。"嘿，我们有件事想请你帮忙。"那个 <<person1>><<person>> 说。"能帮一下吗？不会耽误太久。"'>>
+	<br><br>
+	<<lanLink ['Agree (0:10)', '答应 (0:10)'] 'Home Orphan Judge'>><<pass 10>><</lanLink>>
+	<br>
+	<<lanLink ['Refuse', '拒绝'] 'Home Orphan Refuse'>><</lanLink>>
+	<br>
+<</widget>>
+
+<<widget "deadwood-orphan-masturbation">>
+	<<generateNPC 1 "t">>
+	<<person1>>
+	<<lanSwitch 'A <<person1>><<person>> approaches you. "My friends keep using a word I do not know, can you tell me what it means?"' '一个 <<person1>><<person>> 走过来。"我朋友老说一个词，我不懂那是什么意思，你能告诉我吗？"'>>
+	<br><br>
+	<<lanLink ['Agree (0:10)', '答应 (0:10)'] 'Home Masturbation Lesson'>><<pass 10>><</lanLink>>
+	<br>
+	<<lanLink ['Refuse', '拒绝'] 'Home Orphan Refuse'>><</lanLink>>
+	<br>
+<</widget>>
+
+<<widget "deadwood-orphan-erection">>
+	<<generateNPC 1 "t">>
+	<<person1>>
+	<<lanSwitch 'A <<person1>><<person>> approaches you. "I have a question about something, can you help me with it somewhere private?"' '一个 <<person1>><<person>> 走过来。"我有个问题想问你，能找个没人的地方说吗？"'>>
+	<br><br>
+	<<lanLink ['Agree (0:10)', '答应 (0:10)'] 'Home Erection Lesson'>><<pass 10>><</lanLink>>
+	<br>
+	<<lanLink ['Refuse', '拒绝'] 'Home Orphan Refuse'>><</lanLink>>
+	<br>
+<</widget>>
