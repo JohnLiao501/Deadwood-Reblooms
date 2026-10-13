@@ -11,11 +11,9 @@ import scene from './Common/Scenes';
 export default function (maplebirch: MaplebirchCore, colours: { school: Map<string, string>; schoolOutfit: Map<string, string>; swim: Map<string, string>; cow?: string }) {
   'use strict';
 
-  maplebirch.npc.addSchedule('Sydney', schedule =>
-    schedule.when(() => C.npc?.Sydney?.init === 1, location, {
-      id: 'sydney-location'
-    })
-  );
+  maplebirch.npc.Schedule.get('Sydney')
+    .remove('sydney-location')
+    .when(() => C.npc?.Sydney?.init === 1, location, { id: 'sydney-location' });
 
   maplebirch.tool.onInit(() => {
     maplebirch.on(':npcInject', data, 'Sydney data');
@@ -43,6 +41,8 @@ export default function (maplebirch: MaplebirchCore, colours: { school: Map<stri
       put(clothes: Record<string, any>, key: string): void;
       strip(clothes: Record<string, any>, slot: string | readonly string[]): void;
     };
+
+    wardrobe.wear('Sydney', 'naked', 'naked');
 
     // 基层内衣：腐化低于 10 时，男性使用男性内衣，其他性别使用女性内衣
     wardrobe.layer(
@@ -191,6 +191,7 @@ export default function (maplebirch: MaplebirchCore, colours: { school: Map<stri
       const title = maplebirch.passage.title;
       const all = ['over_head', 'over_upper', 'over_lower', 'upper', 'lower', 'under_upper', 'under_lower', 'head', 'face', 'neck', 'hands', 'legs', 'feet', 'handheld'];
       const naked =
+        ['RobinTemple Promise Altar', 'RobinTemple Promise End'].includes(title) ||
         title.startsWith('Deadwood Reblooms Sydney Temple Bath') ||
         title.startsWith('Deadwood Reblooms Sirris Estate Sydney Bath') ||
         title.startsWith('Deadwood Reblooms Sydney Bath') ||

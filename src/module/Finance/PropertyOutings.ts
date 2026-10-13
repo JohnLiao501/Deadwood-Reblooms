@@ -31,7 +31,7 @@ export interface PropertyOutingState {
     wet?: boolean;
   } | null;
   visits: Record<string, { property: string; until: number; at: string }>;
-  note: { name: string; property: string; day: number; kind: 'ride' | 'outing'; short: boolean; done: boolean } | null;
+  note: { name: string; property: string; day: number; kind: 'ride' | 'outing' | 'temple'; short: boolean; done: boolean } | null;
   offer_day: number;
   memories: Record<string, OutingMemory>;
 }
@@ -407,9 +407,9 @@ export default class PropertyOutings {
     return true;
   }
 
-  public receive(name: string, property: string, kind: 'ride' | 'outing'): void {
+  public receive(name: string, property: string, kind: 'ride' | 'outing' | 'temple'): void {
     if (!this.valid(name, property)) return;
-    const end = name === 'Sydney' ? 21 : kind === 'ride' && name === 'Robin' && Time.hour < 16 ? 16 : 24;
+    const end = name === 'Sydney' ? 21 : kind === 'temple' && Time.hour >= 20 ? 31 : kind === 'ride' && name === 'Robin' && Time.hour < 16 ? 16 : 24;
     this.state.visits[name] = { property, until: Time.date.timeStamp + Math.max(0, end * 60 - Time.hour * 60 - Time.minute) * 60, at: 'deadwood_home' };
     this.state.note = { name, property, day: Math.floor(Time.days), kind, short: kind === 'outing' && !this.plan?.enjoyed, done: false };
   }

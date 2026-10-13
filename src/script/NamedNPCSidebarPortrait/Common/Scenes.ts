@@ -44,6 +44,7 @@ export default function scene(core: MaplebirchCore, name: string): string | unde
   if (title === 'Deadwood Reblooms Property Outing Recall' && estate?.outings.memory?.name === name) return Time.hour < (name === 'Sydney' ? 6 : 7) ? sleep[name] : casual[name];
   if (title === 'Deadwood Reblooms Property Return') {
     const note = estate?.outings.state.note;
+    if (note?.name === name && !note.done && note.kind === 'temple') return 'temple';
     if (note?.name === name && !note.done) return note.kind === 'ride' && name !== 'Sydney' ? school[name] : outside;
   }
 

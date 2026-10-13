@@ -14,11 +14,9 @@ export default function (
   maplebirch: MaplebirchCore,
   colours: { school: Map<string, string>; schoolOutfit: Map<string, string>; outfit: Map<string, string>; clothes: Map<string, string>; christmas: Map<string, string> }
 ): void {
-  maplebirch.npc.addSchedule('Robin', schedule =>
-    schedule.when(() => C.npc?.Robin?.init === 1, location, {
-      id: 'robin-location'
-    })
-  );
+  maplebirch.npc.Schedule.get('Robin')
+    .remove('robin-location')
+    .when(() => C.npc?.Robin?.init === 1, location, { id: 'robin-location' });
 
   maplebirch.tool.onInit(() => {
     maplebirch.on(':npcInject', data, 'Robin data');

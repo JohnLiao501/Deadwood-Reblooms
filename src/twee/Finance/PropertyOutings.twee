@@ -274,7 +274,7 @@
 <<run _estate.enter()>><<effects>><<npc _return.name>><<person1>>
 <<language>>
   <<option 'EN'>>
-    You put the car keys down inside the door. <<if _return.kind is 'ride'>>The journey is over. <<He>> sets <<his>> bag down near the door.<<elseif _return.short>>You came back sooner than planned. For a moment, you stand together in the quiet hall.<<else>>The noise of the town falls away when the door closes behind you.<</if>>
+    <<if _return.kind is 'temple'>>You close the door behind you. Robin puts <<his>> things near the door. "I’ll put these away in a minute," <<he>> says.<<else>>You put the car keys down inside the door. <<if _return.kind is 'ride'>>The journey is over. <<He>> sets <<his>> bag down near the door.<<elseif _return.short>>You came back sooner than planned. For a moment, you stand together in the quiet hall.<<else>>The noise of the town falls away when the door closes behind you.<</if>><</if>>
     <br><br>
     <<switch _return.name>>
       <<case 'Robin'>>
@@ -287,7 +287,7 @@
         Sydney checks the time again. "<<if Time.hour gte 20>>I'll need to head back for evening prayers soon.<<else>>I can stay a little longer, but I'll need to be back for evening prayers.<</if>>" <<He>> sits down for a moment. "Thank you for making time."
     <</switch>>
   <<option 'CN'>>
-    你进门放下车钥匙。<<if _return.kind is 'ride'>>这趟路已经走完，<<he>>把包放在门边。<<elseif _return.short>>你们比原计划回来得早，在安静的门厅里一起站了片刻。<<else>>家门在身后合上，小镇的喧闹也随之远了。<</if>>
+    <<if _return.kind is 'temple'>>你合上家门。罗宾把随身的东西放在门边。“一会儿再收起来吧。”<<he>>说。<<else>>你进门放下车钥匙。<<if _return.kind is 'ride'>>这趟路已经走完，<<he>>把包放在门边。<<elseif _return.short>>你们比原计划回来得早，在安静的门厅里一起站了片刻。<<else>>家门在身后合上，小镇的喧闹也随之远了。<</if>><</if>>
     <br><br>
     <<switch _return.name>>
       <<case 'Robin'>>
