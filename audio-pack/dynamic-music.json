@@ -1,16 +1,458 @@
 {
-  "version": 1,
+  "version": 2,
+  "scenes": [
+    {
+      "scene": "dungeon",
+      "when": {
+        "bus": "avery_dungeon"
+      }
+    },
+    {
+      "scene": "dungeon",
+      "when": {
+        "passage": ["Mansion Dungeon*", "Mansion Return Dungeon"]
+      }
+    },
+    {
+      "scene": "shop",
+      "when": {
+        "passage": "Deadwood Street Weapon Shop"
+      }
+    },
+    {
+      "scene": "pub",
+      "when": {
+        "passage": ["Smuggler Pub*", "Deadwood Smuggler Pub*"]
+      }
+    },
+    {
+      "scene": "uncanny",
+      "when": {
+        "location": ["asylum", "lake_ruin", "night_monster_lair", "churchyard", "graveyard"]
+      }
+    },
+    {
+      "scene": "school",
+      "when": {
+        "location": ["school", "school_rear_courtyard", "pool"]
+      }
+    },
+    {
+      "scene": "casino",
+      "when": {
+        "location": "deadwood_casino"
+      }
+    },
+    {
+      "scene": "pub",
+      "when": {
+        "location": "pub"
+      }
+    },
+    {
+      "scene": "finance",
+      "when": {
+        "location": ["financial_centre", "office", "avery_skyscraper"]
+      }
+    },
+    {
+      "scene": "factory",
+      "when": {
+        "location": ["factory", "deadwood_factory"]
+      }
+    },
+    {
+      "scene": "shop",
+      "when": {
+        "location": ["shopping_centre", "adult_shop", "forest_shop", "dilapidated_shop", "deadwood_robin_shop", "deadwood_transport*"]
+      }
+    },
+    {
+      "scene": "temple",
+      "when": {
+        "location": ["temple", "old_temple"]
+      }
+    },
+    {
+      "scene": "hospital",
+      "when": {
+        "location": "hospital"
+      }
+    },
+    {
+      "scene": "beach",
+      "when": {
+        "location": ["beach", "sea", "docks", "mer_pier", "island", "coastpath", "prison_beach"]
+      }
+    },
+    {
+      "scene": "underground",
+      "when": {
+        "location": ["underground", "sewers", "drain", "wolf_cave"]
+      }
+    },
+    {
+      "scene": "prison",
+      "when": {
+        "location": "prison"
+      }
+    },
+    {
+      "scene": "farm",
+      "when": {
+        "location": ["alex_farm", "alex_cottage", "farm", "farm_manors", "estate", "riding_school"]
+      }
+    },
+    {
+      "scene": "forest",
+      "when": {
+        "location": ["forest", "meadow", "moor", "bog", "lake", "forest_shop_garden", "park"]
+      }
+    },
+    {
+      "scene": "home",
+      "when": {
+        "location": ["home", "orphanage", "deadwood_home", "flats", "avery_mansion", "cabin", "hotel", "chalets"]
+      }
+    },
+    {
+      "scene": "town",
+      "when": {
+        "location": ["town", "alley", "industrial", "promenade", "market", "townhall", "police_station"]
+      }
+    }
+  ],
   "music": [
-    { "track": "encounter", "file": "audio/encounter.ogg", "priority": 900, "when": { "combat": 1 } },
-    { "track": "solar-eclipse", "file": "audio/solar-eclipse.ogg", "priority": 800, "when": { "solarEclipse": true } },
-    { "track": "blood-moon", "file": "audio/blood-moon.ogg", "priority": 700, "when": { "bloodMoon": true } },
-    { "track": "meteor-shower", "file": "audio/meteor-shower.ogg", "priority": 600, "when": { "meteorShower": true } },
-    { "track": "night", "file": "audio/night.ogg", "priority": 100, "when": { "dayState": "night" } },
-    { "track": "day", "file": "audio/day.ogg", "priority": 0, "when": {} }
+    {
+      "track": "danger",
+      "file": "audio/music/pursuit.ogg",
+      "title": "Urgent",
+      "artist": "SRG774",
+      "priority": 1000,
+      "when": {
+        "combat": 1,
+        "consensual": false
+      }
+    },
+    {
+      "track": "consensual",
+      "file": "audio/music/temple.ogg",
+      "title": "First Light Particles",
+      "artist": "Yoiyami",
+      "priority": 990,
+      "when": {
+        "combat": 1,
+        "consensual": true
+      }
+    },
+    {
+      "track": "pursuit",
+      "file": "audio/music/pursuit.ogg",
+      "title": "Urgent",
+      "artist": "SRG774",
+      "priority": 950,
+      "when": {
+        "action": "pursuit"
+      }
+    },
+    {
+      "track": "heist",
+      "file": "audio/music/industry.ogg",
+      "title": "Searching",
+      "artist": "yd",
+      "priority": 940,
+      "when": {
+        "action": "heist"
+      }
+    },
+    {
+      "track": "solar-eclipse",
+      "file": "audio/music/solar-eclipse.ogg",
+      "title": "Unsolved Investigation",
+      "artist": "isaiah658",
+      "priority": 900,
+      "when": {
+        "solarEclipse": true,
+        "outside": true
+      }
+    },
+    {
+      "track": "blood-moon",
+      "file": "audio/music/blood-moon.ogg",
+      "title": "Grief and Anger",
+      "artist": "TinyWorlds",
+      "priority": 890,
+      "when": {
+        "bloodMoon": true,
+        "outside": true
+      }
+    },
+    {
+      "track": "meteor-shower",
+      "file": "audio/music/meteor-shower.ogg",
+      "title": "Next to You",
+      "artist": "Joth",
+      "priority": 880,
+      "when": {
+        "meteorShower": true,
+        "outside": true
+      }
+    },
+    {
+      "track": "uncanny",
+      "file": "audio/music/uncanny.ogg",
+      "title": "Kokopelli's Graveyard",
+      "artist": "Cleyton Kauffman",
+      "priority": 700,
+      "when": {
+        "scene": "uncanny"
+      }
+    },
+    {
+      "track": "underground",
+      "file": "audio/music/solar-eclipse.ogg",
+      "title": "Unsolved Investigation",
+      "artist": "isaiah658",
+      "priority": 690,
+      "when": {
+        "scene": ["underground", "dungeon", "prison"]
+      }
+    },
+    {
+      "track": "casino",
+      "file": "audio/music/jazz.ogg",
+      "title": "Jazz Improvisation (Looped)",
+      "artist": "Alex McCulloch",
+      "priority": 600,
+      "when": {
+        "scene": ["casino", "pub"]
+      }
+    },
+    {
+      "track": "temple",
+      "file": "audio/music/temple.ogg",
+      "title": "First Light Particles",
+      "artist": "Yoiyami",
+      "priority": 600,
+      "when": {
+        "scene": "temple"
+      }
+    },
+    {
+      "track": "hospital",
+      "file": "audio/music/hospital.ogg",
+      "title": "Sector",
+      "artist": "SRG774",
+      "priority": 600,
+      "when": {
+        "scene": "hospital"
+      }
+    },
+    {
+      "track": "industry",
+      "file": "audio/music/industry.ogg",
+      "title": "Searching",
+      "artist": "yd",
+      "priority": 600,
+      "when": {
+        "scene": "factory"
+      }
+    },
+    {
+      "track": "finance",
+      "file": "audio/music/shop.ogg",
+      "title": "Buy Something!",
+      "artist": "Cleyton Kauffman",
+      "priority": 600,
+      "when": {
+        "scene": "finance"
+      }
+    },
+    {
+      "track": "shop",
+      "file": "audio/music/shop.ogg",
+      "title": "Buy Something!",
+      "artist": "Cleyton Kauffman",
+      "priority": 600,
+      "when": {
+        "scene": "shop"
+      }
+    },
+    {
+      "track": "school",
+      "file": "audio/music/school.ogg",
+      "title": "Childhood Friends",
+      "artist": "Juhani Junkala",
+      "priority": 600,
+      "when": {
+        "scene": "school"
+      }
+    },
+    {
+      "track": "home",
+      "file": "audio/music/home.ogg",
+      "title": "A Place I Call Home",
+      "artist": "Juhani Junkala",
+      "priority": 600,
+      "when": {
+        "scene": "home"
+      }
+    },
+    {
+      "track": "beach",
+      "file": "audio/music/beach.ogg",
+      "title": "Sand Castles",
+      "artist": "Juhani Junkala",
+      "priority": 600,
+      "when": {
+        "scene": "beach"
+      }
+    },
+    {
+      "track": "forest",
+      "file": "audio/music/forest.ogg",
+      "title": "Peaceful Days",
+      "artist": "Juhani Junkala",
+      "priority": 600,
+      "when": {
+        "scene": ["forest", "farm"]
+      }
+    },
+    {
+      "track": "police",
+      "file": "audio/music/solar-eclipse.ogg",
+      "title": "Unsolved Investigation",
+      "artist": "isaiah658",
+      "priority": 580,
+      "when": {
+        "location": "police_station"
+      }
+    },
+    {
+      "track": "town-night",
+      "file": "audio/music/town-night.ogg",
+      "title": "Where Time Stands Still",
+      "artist": "Juhani Junkala",
+      "priority": 100,
+      "when": {
+        "dayState": "night"
+      }
+    },
+    {
+      "track": "town-day",
+      "file": "audio/music/town-day.ogg",
+      "title": "Home Town",
+      "artist": "Juhani Junkala",
+      "priority": 0,
+      "when": {}
+    }
   ],
   "ambience": [
-    { "track": "ambience-thunderstorm", "file": "audio/ambience-thunderstorm.ogg", "priority": 600, "when": { "weather": ["storm", "thunderstorm"] } },
-    { "track": "ambience-rain", "file": "audio/ambience-rain.ogg", "priority": 500, "when": { "precipitation": "rain" } },
-    { "track": "ambience-wind", "file": "audio/ambience-wind.ogg", "priority": 400, "when": { "precipitation": "snow" } }
+    {
+      "track": "thunderstorm",
+      "file": "audio/ambience/thunderstorm.ogg",
+      "priority": 900,
+      "when": {
+        "outside": true,
+        "lightning": true,
+        "precipitation": "rain"
+      }
+    },
+    {
+      "track": "rain",
+      "file": "audio/ambience/rain.ogg",
+      "priority": 800,
+      "when": {
+        "outside": true,
+        "precipitation": "rain"
+      }
+    },
+    {
+      "track": "wind",
+      "file": "audio/ambience/wind.ogg",
+      "priority": 750,
+      "when": {
+        "outside": true,
+        "precipitation": "snow"
+      }
+    },
+    {
+      "track": "sea",
+      "file": "audio/ambience/sea.ogg",
+      "priority": 600,
+      "when": {
+        "outside": true,
+        "scene": "beach"
+      }
+    },
+    {
+      "track": "machinery",
+      "file": "audio/ambience/machinery.ogg",
+      "priority": 500,
+      "when": {
+        "outside": false,
+        "scene": "factory"
+      }
+    },
+    {
+      "track": "underground",
+      "file": "audio/ambience/underground.ogg",
+      "priority": 500,
+      "when": {
+        "outside": false,
+        "scene": ["underground", "dungeon", "uncanny"]
+      }
+    },
+    {
+      "track": "fireplace",
+      "file": "audio/ambience/fireplace.ogg",
+      "priority": 450,
+      "when": {
+        "outside": false,
+        "location": "cabin",
+        "dayState": "night"
+      }
+    },
+    {
+      "track": "night",
+      "file": "audio/ambience/night.ogg",
+      "priority": 200,
+      "when": {
+        "outside": true,
+        "scene": ["forest", "farm"],
+        "precipitation": "none",
+        "dayState": "night",
+        "season": ["spring", "summer", "autumn"]
+      }
+    },
+    {
+      "track": "day",
+      "file": "audio/ambience/day.ogg",
+      "priority": 100,
+      "when": {
+        "outside": true,
+        "scene": ["forest", "farm"],
+        "precipitation": "none",
+        "dayState": ["dawn", "day", "dusk"]
+      }
+    },
+    {
+      "track": "crowd",
+      "file": "audio/ambience/crowd.ogg",
+      "priority": 400,
+      "when": {
+        "outside": false,
+        "scene": ["casino", "pub"]
+      }
+    },
+    {
+      "track": "traffic",
+      "file": "audio/ambience/traffic.ogg",
+      "priority": 300,
+      "when": {
+        "outside": true,
+        "location": ["town", "alley", "industrial", "promenade", "market", "townhall"]
+      }
+    }
   ]
 }

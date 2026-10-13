@@ -8,7 +8,7 @@
 - 元夕：提供马转化贴图。
 - 查查查茶子：雷米恋爱模组原作者。其作品为果园模块的雷米关系与囚禁差分提供参考。
 
-动态音乐使用 Kresiek The Furry、Augmentality（Brandon Morris）、AdoTheLimey、primbal、Breviceps、Joth、TinyWorlds、isaiah658、SketchMan3 和 rubberduck 的 CC0 音频。逐曲名称、作者与来源见[音频素材记录](https://github.com/MaplebirchLeaf/Deadwood-Reblooms/blob/main/audio-pack/audio/CREDITS.md)。
+动态音乐使用多位创作者公开以 CC0 发布的器乐与环境录音。逐曲名称、作者、原始来源与处理记录见[音频素材记录](https://github.com/MaplebirchLeaf/Deadwood-Reblooms/blob/main/audio-pack/audio/CREDITS.md)。
 
 也感谢所有提供建议、测试反馈与帮助的朋友。
 

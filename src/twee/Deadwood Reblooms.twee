@@ -127,51 +127,93 @@
   <<done>><<run maplebirch.get("DeadwoodReblooms").bindHint()>><</done>>
 <</widget>>
 
-<!-- 音频播放器 -->
+<!-- 内建包只展示音乐；导入库保留文件管理，环境音交给动态调度器。 -->
 <<widget 'DeadwoodRebloomsPlayback'>>
-  <<set $_playlist to maplebirch.audio.playlist(_args[0])>>
+  <<set _playbackLibrary to _args[0] is 'deadwood-reblooms-audio' ? 'deadwood-reblooms-audio' : 'deadwood-reblooms'>>
+  <<set _playbackTracks to maplebirch.audio.playlist(_playbackLibrary).tracks.filter(track => _playbackLibrary !== 'deadwood-reblooms-audio' || track.audioName.startsWith('music/'))>>
   <div class='deadwood-reblooms-playback-left'>
-    <<for _track range $_playlist.tracks>>
-      <<capture _track>>
+    <div class='deadwood-reblooms-playback-track'>
+      <<if maplebirch.get('DynamicMusic').installed>>
+        <<lanLink ['Audio Pack', '音频包'] 'title'>><<deadwood-dynamic-music-library 'deadwood-reblooms-audio'>><</lanLink>>
+      <</if>>
+      <<lanLink ['Imported Audio', '导入音频'] 'title'>><<deadwood-dynamic-music-library 'deadwood-reblooms'>><</lanLink>>
+    </div>
+    <<for _track range _playbackTracks>>
+      <<capture _track _playbackLibrary>>
         <div class='deadwood-reblooms-playback-track'>
           <<link _track.title>>
-            <<run maplebirch.audio.playFromMod(_args[0], _track.audioName).then((modName) => maplebirch.SugarCube.Wikifier.wikifyEval(`<<replace '#deadwood-reblooms-playback'>><<DeadwoodRebloomsPlayback ${JSON.stringify(modName)}>><</replace>>`) )>>
+            <<run maplebirch.audio.playFromMod(_playbackLibrary, _track.audioName).then(library => {
+              if (typeof library !== 'string') return;
+              if (library === 'deadwood-reblooms-audio') maplebirch.audio.PlayMode = 'loop_one';
+              maplebirch.SugarCube.Wikifier.wikifyEval(`<<deadwood-dynamic-music-library ${JSON.stringify(library)}>>`);
+            })>>
           <</link>>
           <span class='deadwood-reblooms-playback-format'><<= _track.format>></span>
         </div>
       <</capture>>
     <</for>>
-    <div class='deadwood-reblooms-playback-import-head'>
-      <span class='deadwood-reblooms-playback-import-label'><<lanSwitch 'Import Audio' '导入音频'>></span>
-      <span class='deadwood-reblooms-playback-clear'>
-        <<lanLink 'clear cache' 'title'>>
-          <<run maplebirch.audio.clearAudio(_args[0]).then((modName) => maplebirch.SugarCube.Wikifier.wikifyEval(`<<replace '#deadwood-reblooms-playback'>><<DeadwoodRebloomsPlayback ${JSON.stringify(modName)}>><</replace>>`) )>>
-        <</lanLink>>
-      </span>
-    </div>
-    <div class='deadwood-reblooms-playback-import-file'>
-      <input
-        type='file'
-        accept='audio/*'
-        onchange='
-          maplebirch.audio.addFile(this.files[0], "deadwood-reblooms").then((modName) =>
-            maplebirch.SugarCube.Wikifier.wikifyEval(`<<replace "#deadwood-reblooms-playback">><<DeadwoodRebloomsPlayback "${modName}">><</replace>>`)
-          )
-        '
-      >
-    </div>
+    <<if _playbackTracks.length is 0>>
+      <<lanSwitch 'No tracks in this library.' '此音频库中没有曲目。'>>
+    <</if>>
+    <<if _playbackLibrary is 'deadwood-reblooms'>>
+      <div class='deadwood-reblooms-playback-import-head'>
+        <span class='deadwood-reblooms-playback-import-label'><<lanSwitch 'Import Audio' '导入音频'>></span>
+        <span class='deadwood-reblooms-playback-clear'>
+          <<lanLink ['Clear Imported Audio', '清空导入音频'] 'title'>>
+            <<run maplebirch.audio.clearAudio('deadwood-reblooms').then(library => {
+              if (typeof library === 'string') maplebirch.SugarCube.Wikifier.wikifyEval(`<<deadwood-dynamic-music-library ${JSON.stringify(library)}>>`);
+            })>>
+          <</lanLink>>
+        </span>
+      </div>
+      <div class='deadwood-reblooms-playback-import-file'>
+        <input
+          type='file'
+          accept='audio/*'
+          onchange='
+            if (this.files.length) maplebirch.audio.addFile(this.files[0], "deadwood-reblooms").then(library => {
+              if (typeof library === "string") maplebirch.SugarCube.Wikifier.wikifyEval(`<<deadwood-dynamic-music-library ${JSON.stringify(library)}>>`);
+            });
+          '
+        >
+      </div>
+    <</if>>
   </div>
-  <div id='deadwood-reblooms-playback-controls' class='deadwood-reblooms-playback-right'><<DeadwoodRebloomsPlaybackControls _args[0]>></div>
+  <div id='deadwood-reblooms-playback-controls' class='deadwood-reblooms-playback-right'><<DeadwoodRebloomsPlaybackControls _playbackLibrary>></div>
 <</widget>>
 
-<!-- 音频控制栏：显示当前曲目并提供播放模式、切歌与音量控制。 -->
+<!-- 音频包的切歌只在音乐之间移动，防止环境音进入主播放器。 -->
+<<widget 'deadwood-dynamic-music-skip'>>
+  <<run ((library, direction) => {
+    const current = maplebirch.audio.CurrentTrack;
+    if (!current) return;
+    let result;
+    if (current.modName === 'deadwood-reblooms-audio') {
+      const tracks = maplebirch.audio.playlist(current.modName).tracks.filter(track => track.audioName.startsWith('music/'));
+      if (!tracks.length) return;
+      const index = tracks.findIndex(track => track.audioName === current.audioName);
+      const target = tracks[(Math.max(0, index) + direction + tracks.length) % tracks.length];
+      result = maplebirch.audio.playFromMod(current.modName, target.audioName).then(success => {
+        if (typeof success === 'string') maplebirch.audio.PlayMode = 'loop_one';
+        return success;
+      });
+    } else result = direction < 0 ? maplebirch.audio.previous() : maplebirch.audio.next();
+    result.then(success => {
+      if (success !== false) maplebirch.SugarCube.Wikifier.wikifyEval(`<<deadwood-dynamic-music-library ${JSON.stringify(library)}>>`);
+    });
+  })(_args[0], _args[1])>>
+<</widget>>
+
+<!-- 控制的是当前主曲目；音乐和环境音的分层开关、音量在模组设置中。 -->
 <<widget 'DeadwoodRebloomsPlaybackControls'>>
+  <<set _audioMasterVolume to maplebirch.audio.Volume>>
   <<if maplebirch.audio.CurrentTrack>>
-    <<set _snap to maplebirch.audio.snapshot>>
+    <<set _snap to maplebirch.audio.snapshot, _builtinMusic to _snap.track.modName is 'deadwood-reblooms-audio'>>
+    <<set _controlTracks to maplebirch.audio.playlist(_snap.track.modName).tracks.filter(track => !_builtinMusic || track.audioName.startsWith('music/'))>>
     <div class='deadwood-reblooms-playback-now'>
       <span><<lanSwitch 'Now Playing: ' '当前播放：'>></span>
       <strong><span class='gold'><<= _snap.track?.title ?? ''>></span></strong>
-      <span><<= _snap.index + 1>> / <<= _snap.length>></span>
+      <span><<= _controlTracks.findIndex(track => track.audioName === _snap.track.audioName) + 1>> / <<= _controlTracks.length>></span>
       <span class='deadwood-reblooms-playback-mode'>
         <<switch _snap.mode>>
           <<case 'sequential'>>
@@ -193,53 +235,46 @@
       </span>
     </div>
     <div class='deadwood-reblooms-playback-button-row'>
-      <!-- 异步切歌先把 widget 参数带进闭包，回调不再读取已恢复的 _args。 -->
-      <<lanLink ['Previous Track', '上一首'] 'title'>>
-        <<run ((modName) => maplebirch.audio.previous().then(() => maplebirch.SugarCube.Wikifier.wikifyEval(`<<replace "#deadwood-reblooms-playback">><<DeadwoodRebloomsPlayback ${JSON.stringify(modName)}>><</replace>>`)))(_args[0])>>
-      <</lanLink>>
+      <<lanLink ['Previous Track', '上一首'] 'title'>><<deadwood-dynamic-music-skip _args[0] -1>><</lanLink>>
       <<if _snap.state is 'playing'>>
         <<lanLink ['Pause', '暂停'] 'title'>>
           <<run maplebirch.audio.pause()>>
-          <<replace '#deadwood-reblooms-playback-controls'>>
-            <<DeadwoodRebloomsPlaybackControls _args[0]>>
-          <</replace>>
+          <<replace '#deadwood-reblooms-playback-controls'>><<DeadwoodRebloomsPlaybackControls _args[0]>><</replace>>
         <</lanLink>>
       <<else>>
         <<lanLink ['Resume', '恢复'] 'title'>>
           <<run maplebirch.audio.resume()>>
-          <<replace '#deadwood-reblooms-playback-controls'>>
-            <<DeadwoodRebloomsPlaybackControls _args[0]>>
-          <</replace>>
+          <<replace '#deadwood-reblooms-playback-controls'>><<DeadwoodRebloomsPlaybackControls _args[0]>><</replace>>
         <</lanLink>>
       <</if>>
       <<lanLink ['Stop', '停止'] 'title'>>
         <<run maplebirch.audio.stop()>>
-        <<replace '#deadwood-reblooms-playback-controls'>>
-          <<DeadwoodRebloomsPlaybackControls _args[0]>>
-        <</replace>>
+        <<replace '#deadwood-reblooms-playback-controls'>><<DeadwoodRebloomsPlaybackControls _args[0]>><</replace>>
       <</lanLink>>
-      <<lanLink ['Next Track', '下一首'] 'title'>>
-        <<run ((modName) => maplebirch.audio.next().then(() => maplebirch.SugarCube.Wikifier.wikifyEval(`<<replace "#deadwood-reblooms-playback">><<DeadwoodRebloomsPlayback ${JSON.stringify(modName)}>><</replace>>`)))(_args[0])>>
-      <</lanLink>>
-      <<lanLink ['Repeat Mode', '循环模式'] 'title'>>
-        <<run maplebirch.audio.cyclePlayMode()>>
-        <<replace '#deadwood-reblooms-playback-controls'>>
-          <<DeadwoodRebloomsPlaybackControls _args[0]>>
-        <</replace>>
-      <</lanLink>>
-    </div>
-    <div class='deadwood-reblooms-playback-volume'>
-      <<numberslider '_snap.volume' _snap.volume 0 1 0.01 { value: v => lanSwitch('Volume: ', '音量：') + Math.round(v * 100) + '%', onInputChange: value => { maplebirch.audio.Volume = value; } }>>
+      <<lanLink ['Next Track', '下一首'] 'title'>><<deadwood-dynamic-music-skip _args[0] 1>><</lanLink>>
+      <<if !_builtinMusic>>
+        <<lanLink ['Repeat Mode', '循环模式'] 'title'>>
+          <<run maplebirch.audio.cyclePlayMode()>>
+          <<replace '#deadwood-reblooms-playback-controls'>><<DeadwoodRebloomsPlaybackControls _args[0]>><</replace>>
+        <</lanLink>>
+      <</if>>
     </div>
     <<run maplebirch.audio.bindProgress('deadwood-reblooms-playback-progress', 'deadwood-reblooms-playback-time')>>
   <<else>>
     <div class='deadwood-reblooms-playback-empty'>
       <div class='deadwood-reblooms-playback-empty-title'><<lanSwitch 'No audio selected' '未选择音频'>></div>
       <div class='deadwood-reblooms-playback-empty-text'>
-        <<lanSwitch 'Choose a track from the left list, or import an audio file first.' '请从左侧列表选择音频，或先导入音频文件。'>>
+        <<if _args[0] is 'deadwood-reblooms-audio'>>
+          <<lanSwitch 'Choose a music track from the left list.' '请从左侧列表选择音乐。'>>
+        <<else>>
+          <<lanSwitch 'Choose a track from the left list, or import an audio file first.' '请从左侧列表选择音频，或先导入音频文件。'>>
+        <</if>>
       </div>
     </div>
   <</if>>
+  <div class='deadwood-reblooms-playback-volume'>
+    <<numberslider '_audioMasterVolume' _audioMasterVolume 0 1 0.01 { value: v => lanSwitch('Master Volume: ', '总音量：') + Math.round(v * 100) + '%', onInputChange: value => { maplebirch.audio.Volume = value; } }>>
+  </div>
 <</widget>>
 
 <!-- 定制涂鸦 -->

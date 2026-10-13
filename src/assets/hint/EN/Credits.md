@@ -8,7 +8,7 @@ Thanks to the following creators for their work and help:
 - 元夕: provided the horse transformation sprites.
 - 查查查茶子: original author of Remy Love Mod. The work informs Remy’s relationships and captivity dialogue in the Orchard module.
 
-Dynamic music uses CC0 audio by Kresiek The Furry, Augmentality (Brandon Morris), AdoTheLimey, primbal, Breviceps, Joth, TinyWorlds, isaiah658, SketchMan3, and rubberduck. See the [audio source record](https://github.com/MaplebirchLeaf/Deadwood-Reblooms/blob/main/audio-pack/audio/CREDITS.md) for each track and source.
+Dynamic music uses instrumental pieces and field recordings released as CC0 by their creators. See the [audio source record](https://github.com/MaplebirchLeaf/Deadwood-Reblooms/blob/main/audio-pack/audio/CREDITS.md) for every piece, creator, original source and edit.
 
 Thanks also to everyone who shared ideas, testing feedback, and other help.
 

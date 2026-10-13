@@ -1,21 +1,39 @@
 :: Deadwood Reblooms Dynamic Music Widgets [widget]
 
-<!-- 动态音乐设置：分别控制音乐和环境声音量。 -->
+<!-- 总开关和分层开关均在修改后刷新调度器；音量仍独立保存。 -->
 <<widget 'Deadwood-Reblooms-DynamicMusic-Options'>>
   <details open>
     <summary class='settingsHeader options'><span class='gold'><<lanSwitch 'Dynamic Music' '动态音乐'>></span></summary>
     <div class='settingsGrid'>
       <div class='settingsToggleItemWide'>
-        <label class='deadwood-dynamic-music-enabled'>
+        <label class='deadwood-dynamic-music-toggle'>
           <<checkbox '$options.maplebirch.DynamicMusic.enabled' false true autocheck>>
           <<lanSwitch 'Enable Dynamic Music' '启用动态音乐'>>
         </label>
-        <div class='description'><span class='blue'><i><<lanSwitch 'Requires the optional Deadwood Reblooms Audio Pack.' '需要安装可选的《枯木逢春》音频包。'>></i></span></div>
+        <div class='description'><i>
+          <<if maplebirch.get('DynamicMusic').installed>>
+            <span class='green'><<lanSwitch 'Audio pack loaded.' '音频包已加载。'>></span>
+          <<else>>
+            <span class='blue'><<lanSwitch 'Load the optional Deadwood Reblooms Audio Pack to hear dynamic audio.' '加载可选的《枯木逢春》音频包后，才能播放动态音频。'>></span>
+          <</if>>
+        </i></div>
+      </div>
+      <div class='settingsToggleItem'>
+        <label class='deadwood-dynamic-music-toggle'>
+          <<checkbox '$options.maplebirch.DynamicMusic.musicEnabled' false true autocheck>>
+          <<lanSwitch 'Music' '音乐'>>
+        </label>
         <div class='numberslider-inline maplebirch-relationcount-slider'>
           <label>
             <<numberslider '$options.maplebirch.DynamicMusic.volume' $options.maplebirch.DynamicMusic.volume 0 1 0.01 { value: v => lanSwitch('Music: ', '音乐：') + Math.round(v * 100) + '%', onInputChange: value => { maplebirch.get("DynamicMusic").setVolume(value); } }>>
           </label>
         </div>
+      </div>
+      <div class='settingsToggleItem'>
+        <label class='deadwood-dynamic-music-toggle'>
+          <<checkbox '$options.maplebirch.DynamicMusic.ambienceEnabled' false true autocheck>>
+          <<lanSwitch 'Ambience' '环境音'>>
+        </label>
         <div class='numberslider-inline maplebirch-relationcount-slider'>
           <label>
             <<numberslider '$options.maplebirch.DynamicMusic.ambienceVolume' $options.maplebirch.DynamicMusic.ambienceVolume 0 1 0.01 { value: v => lanSwitch('Ambience: ', '环境声：') + Math.round(v * 100) + '%', onInputChange: value => { maplebirch.get("DynamicMusic").setAmbienceVolume(value); } }>>
@@ -24,4 +42,30 @@
       </div>
     </div>
   </details><hr>
+<</widget>>
+
+<!-- 内建曲库和本地导入库共用播放器；异步加载完成后才绘制列表。 -->
+<<widget 'deadwood-dynamic-music-player'>>
+  <<set _musicLibrary to maplebirch.get('DynamicMusic').installed ? 'deadwood-reblooms-audio' : 'deadwood-reblooms'>>
+  <details class='deadwood-reblooms-playback'>
+    <summary class='deadwood-reblooms-playback-summary'><span class='red'><<lanSwitch 'Music Player' '音乐播放器'>></span></summary>
+    <div id='deadwood-reblooms-playback' class='deadwood-reblooms-playback-content'>
+      <<lanSwitch 'Loading audio library…' '正在加载音频库……'>>
+    </div>
+  </details>
+  <<capture _musicLibrary>>
+    <<done>><<deadwood-dynamic-music-library _musicLibrary>><</done>>
+  <</capture>>
+<</widget>>
+
+<<widget 'deadwood-dynamic-music-library'>>
+  <<run ((library) => {
+    const target = document.getElementById('deadwood-reblooms-playback');
+    if (!target || !['deadwood-reblooms-audio', 'deadwood-reblooms'].includes(library)) return;
+    target.dataset.library = library;
+    maplebirch.audio.getPlaylist(library).then(() => {
+      if (document.getElementById('deadwood-reblooms-playback') !== target || target.dataset.library !== library) return;
+      maplebirch.SugarCube.Wikifier.wikifyEval(`<<replace '#deadwood-reblooms-playback'>><<DeadwoodRebloomsPlayback ${JSON.stringify(library)}>><</replace>>`);
+    }).catch(error => maplebirch.audio.log('Audio library could not be loaded', 'WARN', error));
+  })(_args[0])>>
 <</widget>>
