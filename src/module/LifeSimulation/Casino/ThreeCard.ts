@@ -51,6 +51,7 @@ class ThreeCard {
     private readonly core: typeof maplebirch,
     public readonly options: ThreeCardOptions = DEFAULT_CASINO_OPTIONS.threeCard
   ) {}
+
   public get antes(): readonly number[] {
     return this.options.antes;
   }

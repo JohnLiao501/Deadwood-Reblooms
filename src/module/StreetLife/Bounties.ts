@@ -91,38 +91,49 @@ export default class Bounties {
   public get state(): BountiesState {
     return V.StreetLife.bounties;
   }
+
   public get trust(): number {
     return C.npc.Grant?.love ?? 0;
   }
+
   public get wanted(): boolean {
     return window.crimeSumCurrent() >= terms.wanted_evidence;
   }
+
   public get available(): boolean {
     return this.street.available && !V.nextPassageCheck;
   }
+
   public get busy(): boolean {
     return this.fightingCargo || (!!this.state.hunter && ['approach', 'confrontation', 'fight', 'caught'].includes(this.state.hunter.stage));
   }
+
   public get fightingHeist(): boolean {
     return !!this.street.heist.state.fight;
   }
+
   public get fightingCargo(): boolean {
     return !!this.street.bailey.state.fight;
   }
+
   public get fightingHunter(): boolean {
     return this.state.hunter?.stage === 'fight';
   }
+
   public get fight(): Bounty | Hunter | CargoFight | HeistFight | null {
     if (this.fightingHeist) return this.street.heist.state.fight;
     if (this.fightingCargo) return this.street.bailey.state.fight;
     return this.fightingHunter ? this.state.hunter : this.state.active?.stage === 'fight' ? this.state.active : null;
   }
+
   public get combatStats() {
     return this.fightingHeist ? this.street.heist.terms.combat : this.fightingCargo ? this.street.bailey.terms.combat : this.fightingHunter ? terms.hunter.combat : this.contract?.combat;
   }
+
   public get inCombat(): boolean {
     return !!this.fight?.combatStarted && V.combat === 1 && V.enemytype === 'man' && V.NPCList[0]?.per === this.fight.key;
   }
+
   public get combatComplete(): boolean {
     return (
       this.inCombat &&
@@ -131,15 +142,19 @@ export default class Bounties {
       (V.enemyhealth <= 0 || V.enemyarousal >= V.enemyarousalmax || (V.alarm === 1 && V.rescue >= 1) || V.finish === 1 || (V.pain >= 100 && V.willpowerpain === 0))
     );
   }
+
   public get contract(): Case | undefined {
     return terms.cases.find(item => item.id === this.state.active?.id);
   }
+
   public get target() {
     return this.state.active ? V.per_npc[this.state.active.key] : null;
   }
+
   public get wounded(): boolean {
     return !!this.target?.deadwoodGunshot;
   }
+
   public get offers(): Case[] {
     if (!this.state.cooperating || this.wanted || this.state.active || this.street.heist.inAction) return [];
     const order = this.state.board.length ? this.state.board : terms.cases.map(item => item.id);
@@ -155,6 +170,7 @@ export default class Bounties {
       )
       .slice(0, 4);
   }
+
   public get point(): string | null {
     const title = this.street.core.passage.title;
     if (['Deadwood Street Bounties', 'Deadwood Street Detective', 'Police Station'].includes(title)) return 'barb';
@@ -163,15 +179,19 @@ export default class Bounties {
     const site = Object.values(terms.sites).find(site => site.passage === title);
     return site ? site.point : (Catalog.point(title) ?? this.street.core.get('Transport')?.point ?? null);
   }
+
   public get expired(): boolean {
     return !!this.state.active && !['escort', 'settlement'].includes(this.state.active.stage) && Time.date.timeStamp > this.state.active.due;
   }
+
   public get vehicle(): Vehicle | undefined {
     return V.Transport?.vehicles.find(item => item.id === this.state.active?.vehicle);
   }
+
   public get lost(): boolean {
     return this.state.active?.vehicle != null && (!this.vehicle || !!this.vehicle.stolen);
   }
+
   public get here(): boolean {
     const job = this.state.active;
     if (!job) return false;
@@ -179,6 +199,7 @@ export default class Bounties {
     const title = this.street.core.passage.title;
     return title === terms.sites[job.site].passage || (title === 'Deadwood Street Bounty' && this.state.site === job.site);
   }
+
   public get vehicles(): Vehicle[] {
     const transport = this.street.core.get('Transport');
     if (!transport || transport.taxi.active || transport.state.commute || this.street.core.get('Finance')?.realEstate.outings.travelling || transport.state.passengers.length) return [];
@@ -187,12 +208,14 @@ export default class Bounties {
       return item.point === this.point && !item.stolen && item.garage === null && item.condition > 0 && model?.kind === 'motor_vehicle' && model.seats >= 1;
     });
   }
+
   /** 装载允许停在原地；追车还需满足交通模块的上路条件，并预留短途燃油。 */
   public get drivers(): Vehicle[] {
     const transport = this.street.core.get('Transport');
     if (!transport?.ready || !transport.state.school.motor_vehicle.licensed || V.drunk > 0 || V.drugged > 0 || V.stress >= V.stressmax || V.worn.feet.type.includes('shackle')) return [];
     return this.vehicles.filter(item => (item.arrears ?? 0) <= 0 && item.fuel >= Catalog.models.find(model => model.id === item.model)!.fuel_use * 5);
   }
+
   public get chances(): Record<Attempt, number> {
     // 猎人的判定独立于 PC 正在承办的案件，技能、装备及身体状态仍共用。
     const item = this.state.hunter ? terms.hunter : this.contract;
@@ -206,10 +229,12 @@ export default class Bounties {
       )
     };
   }
+
   public get hunterChances() {
     const chance = this.chances;
     return { talk: chance.talk > 0 && window.crimeSumCurrent() < terms.wanted_evidence ? 100 : Math.min(60, chance.talk), run: chance.run };
   }
+
   public get walkMinutes(): number {
     return ((this.point ? Catalog.distance(this.point, 'barb') : null) ?? 30) + 5;
   }
