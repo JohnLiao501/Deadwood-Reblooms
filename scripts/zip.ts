@@ -432,7 +432,7 @@ function hasContent(value: unknown): boolean {
 }
 
 function ClothesFiles(files: Map<string, Buffer>): Array<{ key: string; filePath: string }> {
-  const slots = new Set(['head', 'face', 'neck', 'upper', 'lower', 'under_upper', 'under_lower', 'over_upper', 'over_lower', 'legs', 'feet', 'hands', 'genitals']);
+  const slots = new Set(['head', 'face', 'neck', 'upper', 'lower', 'under_upper', 'under_lower', 'over_upper', 'over_lower', 'legs', 'feet', 'hands', 'genitals', 'handheld']);
   const clothes: Array<{ key: string; filePath: string }> = [];
   for (const [filePath, buffer] of files) {
     if (!/^clothes\/[^/]+\.json$/.test(filePath)) continue;

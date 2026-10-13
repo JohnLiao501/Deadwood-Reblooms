@@ -1,0 +1,85 @@
+:: Deadwood Street Life Widgets [widget]
+
+<<widget 'deadwood-street-reputation'>>
+  <<set $_streetRep to maplebirch.get('StreetLife').reputation>>
+  <<set $_streetDescription to $_streetRep gte 80 ? ['On the streets, your name is associated with getting difficult jobs done.', '在镇上的街头，你已经有了能办成棘手差事的名声。'] : $_streetRep gte 50 ? ['Your name is familiar in conversations around town.', '镇上街头的闲谈里，越来越多人认得你的名字。'] : $_streetRep gte 20 ? ['Word on the street is that you deliver what you promise.', '你说到做到的名声，正在镇上的街头传开。'] : $_streetRep gt 0 ? ['A few people around town remember you getting a job done.', '镇上有几个人记得，你替人办成过事。'] : ['Your name means little on the town’s streets.', '镇上的街头还没多少人听过你的名字。']>>
+  <<set $_streetBox to {name: lanSwitch('Street', '街头'), icon: 'img/misc/icon/street-life.png', description: lanSwitch(...$_streetDescription)}>>
+  <<relation-box-simple $_streetBox>>
+<</widget>>
+
+<<widget 'deadwood-street-shop-link'>>
+  <<if maplebirch.get('StreetLife').available and !($temple_spear_mission gte 1 and !$smuggler_pub_zephyr) and !(C.npc.Wren.love gte 40 and !$smuggler_pub_wren)>>
+    <<icon 'street/weapon-case.png'>><<lanLink ["Look over the weapon seller's stock (0:01)", '看看武器卖家的货 (0:01)'] 'Deadwood Street Weapon Shop'>><<pass 1>><</lanLink>><br>
+  <</if>>
+<</widget>>
+
+:: Deadwood Street Weapon Shop
+<div id='clothingShop-div' class='main-shop-div'>
+  <<deadwoodStreetShop-main>>
+</div>
+
+:: Deadwood Street Shop Widgets [widget]
+<!-- 原版 updateclothingshop 按 $shopName + Shop-main 回到此处。 -->
+<<widget 'deadwoodStreetShop-main'>>
+  <<set $location to 'underground'>><<set $outside to 0>><<effects>>
+  <<if $tryOn.autoReset isnot false>>
+    <<tryOnReset>>
+    <!-- 原版试穿快照不含模组副手槽；结账遍历所有服装槽前补齐空记录。 -->
+    <<if $worn.handheld_left>>
+      <<set $tryOn.ownedStored.handheld_left to clone($worn.handheld_left)>>
+      <<set $tryOn.tryingOn.handheld_left to null>>
+    <</if>>
+  <</if>>
+  <<if !maplebirch.get('StreetLife').available>>
+    <<clothingReset>><<set $tryOn.autoReset to true>>
+    <<lanSwitch 'The seller closes the case before you can browse.' '你还没来得及看货，卖家就合上了箱子。'>><br>
+    <<getouticon>><<lanLink ['Return to the pub', '返回酒馆'] 'Smuggler Pub'>><</lanLink>><<exit>>
+  <</if>>
+  <<set $shopName to 'deadwoodStreet'>><<set _shopCloseOverride to false>>
+  <<unset $clothes_choice>><<unset $shopListStartCount>><<set $shopPage to 0>>
+  <<language>>
+    <<option 'EN'>>
+      Behind one of the wooden partitions, a seller lifts a cloth from an open case. The noise of the bar covers the click of its catches. "Prices are on the tags. Keep them covered until you're out of here." The seller leaves enough room for you to look, but keeps the case within reach.
+    <<option 'CN'>>
+      木板隔间后，卖家掀开敞口箱子上的布。箱扣的轻响淹没在酒馆的喧闹里。“价钱写在签上。出了这里再亮出来。”卖家给你留出看货的位置，箱子始终放在伸手可及的地方。
+  <</language>><br><br>
+  <<icon 'street/weapon-case.png'>><<lanLink ['Browse handheld equipment', '查看手持物品']>>
+    <<replace '#clothingShop-div'>><<HandheldShop>><</replace>>
+  <</lanLink>><br>
+  <<if $tryOn.value gt 0>>
+    <<lanSwitch 'Equipment you are trying: ' '正在试拿的物品：'>><<printmoney $tryOn.value>><br>
+    <<refuseicon>><<lanLink ['Return the equipment', '归还试拿物品']>>
+      <<clothingReset>><<updatesidebarimg>><<updatesidebardescription>><<updateclothingshop>>
+    <</lanLink>><br>
+    <<if maplebirch.get('Finance')?.canPay($tryOn.value, 'clothes') ?? $tryOn.value lte $money>>
+      <<highicon>><<lanLink ['Buy and keep holding', '购买并继续手持']>>
+        <<buyTryOnClothes 'wear'>><<updatesidebarmoney>><<updateclothingshop>>
+      <</lanLink>><br>
+      <<sendItemsToDropdown>>
+      <<wardrobeicon>><<lanLink ['Buy and store in wardrobe', '购买并送入衣柜']>>
+        <<buyTryOnClothes 'wardrobe'>><<updatesidebarmoney>><<updatesidebarimg>><<updatesidebardescription>><<updateclothingshop>>
+      <</lanLink>><br>
+    <</if>>
+  <</if>><br>
+  <<getouticon>><<lanLink ['Return to the pub (0:01)', '返回酒馆 (0:01)'] 'Smuggler Pub'>>
+    <<clothingReset>><<set $tryOn.autoReset to true>><<shopClothingFilterReset>><<pass 1>>
+  <</lanLink>><br>
+<</widget>>
+
+:: Deadwood Street Weapon Widgets [widget]
+<<widget 'deadwood-street-weapon'>>
+  <<if !maplebirch.get('StreetLife').canUse(_args[0])>><<exit>><</if>>
+  <<set _streetHand to _args[0]>><<set _streetTarget to Number(maplebirch.SugarCube.State.variables[_streetHand + 'target'])>>
+  <<set _streetWeapon to setup.clothes.handheld[$worn[_streetHand is 'left' ? 'handheld_left' : 'handheld'].index]>>
+  <<switch _streetWeapon.variable>>
+    <<case 'street_baton'>>
+      <<lanSwitch 'You swing your short baton.' '你挥动短棍。'>><<defiance 2 _streetTarget>>
+    <<case 'street_knife'>>
+      <<lanSwitch 'You strike with your small knife.' '你用小刀发动攻击。'>><<defiance 3 _streetTarget>>
+    <<case 'street_stunner'>>
+      <<lanSwitch 'You press the stun device against your attacker.' '你把电击器抵向袭击者。'>>
+      <<set _thedamage to Math.min(6, $enemyno gte 2 ? $NPCList[_streetTarget].health : $enemyhealth)>>
+      <<if $enemyno gte 2>><<npcdamage _streetTarget>><</if>>
+      <<set $enemyhealth -= _thedamage>><<set $enemyanger += 5>>
+  <</switch>><br>
+<</widget>>

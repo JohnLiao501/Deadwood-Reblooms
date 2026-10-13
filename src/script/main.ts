@@ -16,6 +16,7 @@ import Whitney from './Whitney';
 import Kylar from './Kylar';
 import BirdTower from './BirdTower';
 import Transport from './Transport';
+import StreetLife from './StreetLife';
 
 (function (maplebirch): void {
   'use strict';
@@ -37,4 +38,5 @@ import Transport from './Transport';
   if (maplebirch.get('LifeSimulation')) LifeSimulation(maplebirch);
   if (maplebirch.get('Orchard')) Orchard(maplebirch);
   if (maplebirch.get('Transport')) Transport(maplebirch);
+  StreetLife(maplebirch);
 })(maplebirch);
