@@ -36,5 +36,5 @@ export default function MoreTransformations(maplebirch: typeof window.maplebirch
       ]
     }
   });
-  maplebirch.tool.addTo('BeforeLinkZone', { widget: 'deadwood-raven-link', passage: 'Forest' });
+  maplebirch.tool.addTo('BeforeLinkZone', { widget: 'deadwood-raven-link', passage: ['Forest', 'Churchyard'] });
 }

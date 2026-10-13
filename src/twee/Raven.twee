@@ -2,7 +2,7 @@
 
 <<widget 'deadwood-raven-events'>>
   <<if maplebirch.get('MoreTransformations') and maplebirch.get('MoreTransformations').Raven.available and !maplebirch.get('MoreTransformations').Raven.met>>
-    <<addinlineevent 'deadwood_raven_flock' 0.33>>
+    <<addinlineevent 'deadwood_raven_flock' 1>>
       <<set _raven to maplebirch.get('MoreTransformations').Raven>>
       <<language>>
         <<option 'EN'>>
@@ -32,21 +32,58 @@
 <</widget>>
 
 <<widget 'deadwood-raven-link'>>
-  <<if maplebirch.get('MoreTransformations') and $eventskip gte 1 and maplebirch.get('MoreTransformations').Raven.available and maplebirch.get('MoreTransformations').Raven.met>>
-    <<print maplebirch.get('MoreTransformations').Raven.icon>><<lanLink ['Look for the raven flock (0:05)', '寻找渡鸦群 (0:05)']>>
-      <<set _raven_origin to $passage>>
-      <<if maplebirch.get('MoreTransformations').Raven.act('visit') and $passage is _raven_origin>>
-        <<goto 'Deadwood Reblooms Raven'>>
-      <</if>>
-    <</lanLink>><br>
+  <<set _raven to maplebirch.get('MoreTransformations')?.Raven>>
+  <<if _raven and _raven.available and ($passage is 'Churchyard' or $eventskip gte 1)>>
+    <<if _raven.met>>
+      <<print _raven.icon>><<lanLink ['Look for the raven flock (0:05)', '寻找渡鸦群 (0:05)']>>
+        <<set _raven_origin to $passage>>
+        <<if maplebirch.get('MoreTransformations').Raven.act('visit') and $passage is _raven_origin>>
+          <<goto 'Deadwood Reblooms Raven'>>
+        <</if>>
+      <</lanLink>><br>
+    <<elseif _raven.canSearch>>
+      <<print _raven.icon>><<lanLink ['Listen for the ravens (0:15)', '循着鸣叫寻找渡鸦 (0:15)']>>
+        <<set _raven_origin to $passage>>
+        <<if maplebirch.get('MoreTransformations').Raven.act('search') and $passage is _raven_origin>>
+          <<goto 'Deadwood Reblooms Raven'>>
+        <</if>>
+      <</lanLink>><<transform-hint 'raven' 'grey'>><br>
+    <</if>>
   <</if>>
 <</widget>>
 
 :: Deadwood Reblooms Raven
-<<set $outside to 1>><<set $location to 'forest'>><<effects>>
+<<set _ravenReturn to $MoreTransformations.raven.origin is 'Churchyard' ? 'Churchyard' : 'Forest'>>
+<<if _ravenReturn is 'Churchyard'>>
+  <<location 'churchyard'>>
+<<else>>
+  <<location 'forest'>>
+<</if>>
+<<set $outside to 1>><<effects>>
 <<set _raven to maplebirch.get('MoreTransformations')?.Raven>>
 <<if _raven and _raven.met>>
   <<switch $MoreTransformations.raven.action>>
+    <<case 'search'>>
+      <<language>>
+        <<option 'EN'>>
+          You stop to listen, following the low calls.
+          <<if _ravenReturn is 'Churchyard'>>
+            A raven watches from a worn stone arch. It drops to a headstone as you approach. Two more perch above it, their claws scraping the stone.
+          <<else>>
+            A raven hops between the roots beside the path. Two more settle on a low branch, watching as you approach.
+          <</if>>
+          <br><br>
+          One croaks, and you answer almost without thinking. The sound comes easily. You can still feel it in your throat when the birds fall quiet.
+        <<option 'CN'>>
+          你停下来仔细聆听，循着低哑的鸣叫走去。
+          <<if _ravenReturn is 'Churchyard'>>
+            一只渡鸦从磨损的石拱上看着你。走近时，它落到一块墓碑上，另两只栖在上方，爪子擦过石面。
+          <<else>>
+            一只渡鸦在小径旁的树根间跳跃。另两只落在低处的枝条上，看着你走近。
+          <</if>>
+          <br><br>
+          其中一只叫了一声，你几乎不假思索地回应了它。声音自然地脱口而出。鸟群安静下来后，那股震颤仍留在你的喉咙里。
+      <</language>>
     <<case 'follow'>>
       <<language>>
         <<option 'EN'>>
@@ -61,10 +98,18 @@
     <<case 'feed'>>
       <<language>>
         <<option 'EN'>>
-          You leave the fruit on a root and step back. A raven takes a piece, then another joins it. Their beaks click against the bark.<br><br>
+          <<if _ravenReturn is 'Churchyard'>>
+            You leave the fruit on a low wall and step back. A raven takes a piece, then another joins it. Their beaks click against the stone.
+          <<else>>
+            You leave the fruit on a root and step back. A raven takes a piece, then another joins it. Their beaks click against the bark.
+          <</if>><br><br>
           One looks up and croaks. An answering sound catches in your throat. You swallow, but the urge to answer stays with you.
         <<option 'CN'>>
-          你把水果放在树根上，往后退了退。一只渡鸦啄走一块，另一只也凑了过来，鸟喙碰在树皮上，发出轻响。<br><br>
+          <<if _ravenReturn is 'Churchyard'>>
+            你把水果放在矮墙上，往后退了退。一只渡鸦啄走一块，另一只也凑了过来，鸟喙碰在石面上，发出轻响。
+          <<else>>
+            你把水果放在树根上，往后退了退。一只渡鸦啄走一块，另一只也凑了过来，鸟喙碰在树皮上，发出轻响。
+          <</if>><br><br>
           其中一只抬头叫了一声。回应它的声音卡在你的喉咙里。你咽了咽口水，那股想要回应的冲动仍未消散。
       <</language>>
     <<case 'call'>>
@@ -72,7 +117,7 @@
         <<option 'EN'>>
           You listen to the ravens, then try their calls for yourself.
           <<if $maplebirch.transformation.raven.level gte 6>>
-            Your voice carries through the trees. Several birds turn towards you, answering in quick succession.
+            Your voice carries. Several birds turn towards you, answering in quick succession.
           <<elseif $maplebirch.transformation.raven.level gte 2>>
             You hear the small differences between their voices. One answers when you get its call right.
           <<else>>
@@ -82,7 +127,7 @@
         <<option 'CN'>>
           你听着渡鸦的叫声，试着模仿。
           <<if $maplebirch.transformation.raven.level gte 6>>
-            你的声音穿过林间，几只鸟转向你，接连回应。
+            你的声音传开，几只鸟转向你，接连回应。
           <<elseif $maplebirch.transformation.raven.level gte 2>>
             你能听出它们声音里细微的差别。模仿对了时，其中一只回应了你。
           <<else>>
@@ -93,21 +138,29 @@
     <<case 'preen'>>
       <<language>>
         <<option 'EN'>>
-          You sit beneath the branches, smoothing your dark feathers into place. A loose feather comes away between your fingers. Above you, a raven works its beak through its own plumage.<br><br>
+          You sit in the shade, smoothing your dark feathers into place. A loose feather comes away between your fingers. Above you, a raven works its beak through its own plumage.<br><br>
           The remaining feathers settle neatly against your skin. You feel a little more at ease.
         <<option 'CN'>>
-          你坐在枝条下，把黑色羽毛一根根理顺。一片松动的羽毛落在指间。头顶上，一只渡鸦正用鸟喙梳理自己的覆羽。<br><br>
+          你坐在阴凉处，把黑色羽毛一根根理顺。一片松动的羽毛落在指间。头顶上，一只渡鸦正用鸟喙梳理自己的覆羽。<br><br>
           其余羽毛顺服地贴着皮肤，你也放松了些。
       <</language>><<lstress>>
     <<default>>
       <<language>>
         <<option 'EN'>>
-          You find the ravens among the trees. One hops along a branch as you approach, keeping you in view.
+          <<if _ravenReturn is 'Churchyard'>>
+            You find the ravens on the old stonework. One hops along a wall as you approach, keeping you in view.
+          <<else>>
+            You find the ravens among the trees. One hops along a branch as you approach, keeping you in view.
+          <</if>>
           <<if $maplebirch.transformation.raven.level gte 4>>
             It settles beside you, close enough for its feathers to brush against yours.
           <</if>>
         <<option 'CN'>>
-          你在林间找到了渡鸦。走近时，一只鸟沿着枝条跳了几步，始终看着你。
+          <<if _ravenReturn is 'Churchyard'>>
+            你在旧石墙上找到了渡鸦。走近时，一只鸟沿着墙头跳了几步，始终看着你。
+          <<else>>
+            你在林间找到了渡鸦。走近时，一只鸟沿着枝条跳了几步，始终看着你。
+          <</if>>
           <<if $maplebirch.transformation.raven.level gte 4>>
             它在你身边停下，近得羽毛几乎碰到了你的覆羽。
           <</if>>
@@ -141,10 +194,17 @@
   <<else>>
     <<language>>
       <<option 'EN'>>
-        The birds have flown out of sight. You should return to the path.
+        The birds have flown out of sight. You should head back.
       <<option 'CN'>>
-        鸟群已经飞出了视野。你该回到小径上了。
+        鸟群已经飞出了视野。你该回去了。
     <</language>><br><br>
   <</if>>
+<<elseif _raven and $MoreTransformations.raven.action is 'search'>>
+  <<language>>
+    <<option 'EN'>>
+      You stop to listen. Wind stirs the leaves, but no raven answers. After a while, you turn back to the path. You can try again tomorrow.
+    <<option 'CN'>>
+      你停下来仔细聆听。风吹动树叶，却没有渡鸦回应。过了一会儿，你转身回到小径。明天可以再来找找。
+  <</language>><br><br>
 <</if>>
-<<getouticon>><<lanLink ['Return to the path', '返回小径'] 'Forest'>><<set $eventskip to 1>><</lanLink>>
+<<getouticon>><<lanLink [_ravenReturn is 'Churchyard' ? 'Return to the churchyard' : 'Return to the path', _ravenReturn is 'Churchyard' ? '返回老教堂墓地' : '返回小径'] _ravenReturn>><<set $eventskip to 1>><</lanLink>>

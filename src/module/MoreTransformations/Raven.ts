@@ -149,9 +149,27 @@ class Raven extends Transformation {
     return this.flock.met;
   }
 
-  /** 与原版森林安全事件共用地点，追猎期间不提供停留互动。 */
+  /** 森林与老教堂墓地的日间鸟群；不打断追猎、昏厥或已排定的场景。 */
   public get available(): boolean {
-    return V.location === 'forest' && V.combat !== 1 && !V.possessed && V.foresthunt < 1 && Time.dayState !== 'night' && !Weather.bloodMoon;
+    return (
+      ['forest', 'churchyard'].includes(V.location) &&
+      V.combat !== 1 &&
+      !V.possessed &&
+      V.foresthunt < 1 &&
+      V.stress < V.stressmax &&
+      !V.nextPassage &&
+      !V.nextPassageCheck &&
+      Time.dayState !== 'night' &&
+      !Weather.bloodMoon
+    );
+  }
+
+  public get canSearch(): boolean {
+    return this.available && !this.met && this.flock.searched !== Math.floor(Time.days);
+  }
+
+  public get searchChance(): number {
+    return V.location === 'churchyard' ? 100 : 75;
   }
 
   public get food(): string | undefined {
@@ -159,29 +177,35 @@ class Raven extends Transformation {
   }
 
   public get canFeed(): boolean {
-    return this.available && this.flock.fed !== Time.days && this.food !== undefined && !window.pcAreArmsBound('both');
+    return this.available && this.flock.fed !== Math.floor(Time.days) && this.food !== undefined && !window.pcAreArmsBound('both');
   }
 
   public get canCall(): boolean {
-    return this.available && this.met && this.flock.called !== Time.days && !V.daily.no_sing && !V.worn.face.type.includes('gag');
+    return this.available && this.met && this.flock.called !== Math.floor(Time.days) && !V.daily.no_sing && !V.worn.face.type.includes('gag');
   }
 
   public get canPreen(): boolean {
     const feathers = V.transformationParts?.raven?.plumage;
-    return this.available && this.met && this.flock.preened !== Time.days && typeof feathers === 'string' && isPartEnabled(feathers) && !window.pcAreArmsBound('both');
+    return this.available && this.met && this.flock.preened !== Math.floor(Time.days) && typeof feathers === 'string' && isPartEnabled(feathers) && !window.pcAreArmsBound('both');
   }
 
   /** 奖励只在玩家选择动作时结算，正文重绘与读档不会重复增加点数。 */
-  public act(action: 'visit' | 'follow' | 'feed' | 'call' | 'preen'): boolean {
+  public act(action: 'search' | 'visit' | 'follow' | 'feed' | 'call' | 'preen'): boolean {
     if (!this.available) return false;
     let gain = 0;
     let minutes = 5;
     switch (action) {
+      case 'search':
+        if (!this.canSearch) return false;
+        this.flock.searched = Math.floor(Time.days);
+        gain = random(1, 100) <= this.searchChance ? 5 : 0;
+        minutes = 15;
+        break;
       case 'visit':
         if (!this.met) return false;
         break;
       case 'follow':
-        if (this.met) return false;
+        if (this.met || V.location !== 'forest') return false;
         gain = 5;
         minutes = 15;
         V.forest = Math.min(100, V.forest + 10);
@@ -191,23 +215,26 @@ class Raven extends Transformation {
         const food = this.food!;
         V.foodstuff[food].amount--;
         gain = this.met ? 2 : 5;
-        this.flock.fed = Time.days;
+        this.flock.fed = Math.floor(Time.days);
         break;
       }
       case 'call':
         if (!this.canCall) return false;
         gain = 1;
         minutes = 10;
-        this.flock.called = Time.days;
+        this.flock.called = Math.floor(Time.days);
         break;
       case 'preen':
         if (!this.canPreen) return false;
         gain = 1;
         minutes = 10;
-        this.flock.preened = Time.days;
+        this.flock.preened = Math.floor(Time.days);
         break;
+      default:
+        return false;
     }
-    this.flock.met = true;
+    this.flock.met ||= action !== 'search' || gain > 0;
+    this.flock.origin = V.location === 'churchyard' ? 'Churchyard' : 'Forest';
     this.flock.action = action;
     // 使用原版宏，使转化压制、时间事件和森林追猎计时继续正常结算。
     maplebirch.SugarCube.Wikifier.wikifyEval(`<<transform 'raven' ${gain}>><<pass ${minutes}>>${action === 'preen' ? '<<stress -3>>' : action === 'call' ? '<<tiredness 1>>' : ''}`);

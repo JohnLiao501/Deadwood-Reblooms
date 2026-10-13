@@ -51,7 +51,7 @@ class MoreTransformations {
     Achievements.add(this.core, 'MoreTransformations');
 
     this.core.on(':variable', () => {
-      V.MoreTransformations ??= { raven: { met: false, fed: -1, called: -1, preened: -1, action: '', disparaged: 0 } };
+      V.MoreTransformations ??= { raven: { met: false, searched: -1, fed: -1, called: -1, preened: -1, origin: 'Forest', action: '', disparaged: 0 } };
     });
     this.Whale.apply(this.core);
     this.Horse.apply(this.core);
