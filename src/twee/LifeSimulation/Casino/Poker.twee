@@ -20,7 +20,7 @@
 <</widget>>
 
 <<widget 'deadwood-poker-log'>>
-  <<set $_pokerLogGame to _args[0] is 'private' ? maplebirch.get('Finance').company.avery.cards : _args[0] is 'watch' ? maplebirch.get('LifeSimulation').casino.watch : _args[0] is 'holdem' ? maplebirch.get('LifeSimulation').casino.holdem : maplebirch.get('LifeSimulation').casino.threeCard>>
+  <<set $_pokerLogGame to _args[0] is 'pub' ? maplebirch.get('StreetLife').smugglerPub.cards.holdem : _args[0] is 'private' ? maplebirch.get('Finance').company.avery.cards : _args[0] is 'watch' ? maplebirch.get('LifeSimulation').casino.watch : _args[0] is 'holdem' ? maplebirch.get('LifeSimulation').casino.holdem : maplebirch.get('LifeSimulation').casino.threeCard>>
   <div class='poker-log' role='log'>
     <<for $_pokerEntry range $_pokerLogGame.state.log.slice(-6)>>
       <p><<deadwood-poker-name `$_pokerLogGame.state.seats[$_pokerEntry.seat].name`>>
@@ -46,19 +46,23 @@
 <<widget 'deadwood-poker-holdem-view'>>
   <<set $_holdemHandNames to [['High card', '高牌'], ['One pair', '一对'], ['Two pair', '两对'], ['Three of a kind', '三条'], ['Straight', '顺子'], ['Flush', '同花'], ['Full house', '葫芦'], ['Four of a kind', '四条'], ['Straight flush', '同花顺']]>>
   <<set $_holdemPrivate to _args[0] is 'private'>>
-  <<set $_holdem to $_holdemPrivate ? maplebirch.get('Finance').company.avery.cards : _args[0] is 'watch' ? maplebirch.get('LifeSimulation').casino.watch : maplebirch.get('LifeSimulation').casino.holdem>><<set $_holdemState to $_holdem.state>>
+  <<set $_holdemPub to _args[0] is 'pub'>>
+  <<set $_holdem to $_holdemPub ? maplebirch.get('StreetLife').smugglerPub.cards.holdem : $_holdemPrivate ? maplebirch.get('Finance').company.avery.cards : _args[0] is 'watch' ? maplebirch.get('LifeSimulation').casino.watch : maplebirch.get('LifeSimulation').casino.holdem>><<set $_holdemState to $_holdem.state>>
   <<set $_holdemWatching to $_holdem.watching>>
   <p><<lanSwitch 'Seats: ' '本桌人数：'>><<= $_holdem.tableSize>><<if $_holdemPrivate>> · <<lanSwitch 'Hands: ' '已打局数：'>><<= $_holdem.session.hands>>/1<</if>></p>
   <div class='poker-table'>
     <<if !$_holdemState.joined>>
       <<if $_holdemPrivate>>
         <p><<lanSwitch 'Choose your buy-in. The remaining money is returned when you leave; committed bets remain in the pot. No credit at this table.' '选择买入金额。离席时退回余款，已下注的钱留在底池。这张桌不赊账。'>></p>
-      <<else>><p><<language>>
+      <<else>>
+        <<if $_holdemPub>>
+          <p><<lanSwitch 'Count out cash from your wallet. Money left on the table is returned when you leave; committed bets stay in the pot. No credit or table fee.' '从钱包取出现金上桌。离桌时收回余款，已经下注的钱留在底池。不赊账，也不抽水。'>></p>
+        <<else>><p><<language>>
         <<option 'EN'>>
           Choose how many of your casino chips to bring to the table. Chips left when you leave return to your casino balance.
         <<option 'CN'>>
           选择带上牌桌的筹码数额。离桌时，剩余筹码会退回给你。
-      <</language>></p>
+        <</language>></p><</if>>
         <div class='poker-controls'>
           <<for $_holdemSize range $_holdem.options.seats>>
             <button type='button' data-action='seats' @data-amount="$_holdemSize" @aria-pressed="String($_holdemSize === $_holdem.tableSize)"><<= $_holdemSize>><<lanSwitch ' seats' ' 人桌'>></button>
@@ -90,7 +94,7 @@
           <</if>>
           </strong>
           <p class='poker-seat-detail'>
-            <<lanSwitch 'Chips' '筹码'>> <<printmoney $_holdemSeat.stack>> · <<lanSwitch 'This round' '本轮投入'>> <<printmoney $_holdemSeat.street_bet>>
+            <<lanSwitch `$_holdemPub ? 'Cash' : 'Chips'` `$_holdemPub ? '现金' : '筹码'`>> <<printmoney $_holdemSeat.stack>> · <<lanSwitch 'This round' '本轮投入'>> <<printmoney $_holdemSeat.street_bet>>
             <<if $_holdemSeat.folded>><<lanSwitch ' · Folded' ' · 已弃牌'>>
             <<elseif $_holdemSeat.stack is 0 and $_holdem.active>><<lanSwitch ' · All-in' ' · 已全下'>><</if>>
           </p>
@@ -103,7 +107,7 @@
     <</if>>
   </div>
   <<if $_holdemState.joined>>
-    <<deadwood-poker-log `$_holdemPrivate ? 'private' : $_holdemWatching ? 'watch' : 'holdem'`>>
+    <<deadwood-poker-log `$_holdemPub ? 'pub' : $_holdemPrivate ? 'private' : $_holdemWatching ? 'watch' : 'holdem'`>>
   <</if>>
   <div class='poker-controls'>
     <<if $_holdemWatching>>
@@ -114,7 +118,7 @@
       <</if>>
     <<elseif !$_holdemState.joined>>
       <<for $_holdemBuyIn range $_holdem.buyIns>>
-        <button type='button' data-action='join' @data-amount="$_holdemBuyIn" @data-disabled="!$_holdem.available || $_holdem.funds < $_holdemBuyIn"><<lanSwitch 'Bring to the table: ' '带上牌桌：'>><<printmoney $_holdemBuyIn>><<if !$_holdemPrivate>><<lanSwitch ' chips' ' 筹码'>><</if>></button>
+        <button type='button' data-action='join' @data-amount="$_holdemBuyIn" @data-disabled="!$_holdem.available || $_holdem.funds < $_holdemBuyIn"><<lanSwitch 'Bring to the table: ' '带上牌桌：'>><<printmoney $_holdemBuyIn>><<if !$_holdemPrivate and !$_holdemPub>><<lanSwitch ' chips' ' 筹码'>><</if>></button>
       <</for>>
     <<else>>
       <<if $_holdem.active>>
@@ -129,13 +133,16 @@
         <button type='button' data-action='raise' @data-disabled="!$_holdem.canRaise || $_holdem.maximumRaise < $_holdem.minimumRaise"><<lanSwitch 'Raise (0:01)' '加注 (0:01)'>></button>
         <button type='button' data-action='allin' @data-disabled="!$_holdem.canAct || ($_holdem.maximumRaise > $_holdemState.current_bet && !$_holdem.canRaise)"><<lanSwitch 'All-in ' '全下 '>><<printmoney $_holdem.player.stack>> (0:01)</button>
       <<elseif !$_holdemPrivate or $_holdem.canDeal>><button type='button' data-action='deal' @data-disabled="!$_holdem.canDeal"><<lanSwitch 'Deal a hand (0:02)' '发牌 (0:02)'>></button><</if>>
-      <<if !$_holdemPrivate>><button type='button' data-action='cashout'><<lanSwitch `$_holdem.active ? 'Fold and return chips' : 'Return chips'` `$_holdem.active ? '弃牌并收回剩余筹码' : '收回筹码'`>></button><</if>>
+      <<if !$_holdemPrivate>><button type='button' data-action='cashout'>
+        <<if $_holdemPub>><<lanSwitch `$_holdem.active ? 'Fold and collect remaining cash' : 'Collect remaining cash'` `$_holdem.active ? '弃牌并收回余款' : '收回余款'`>>
+        <<else>><<lanSwitch `$_holdem.active ? 'Fold and return chips' : 'Return chips'` `$_holdem.active ? '弃牌并收回剩余筹码' : '收回筹码'`>><</if>>
+      </button><</if>>
     <</if>>
   </div>
   <<if $_holdemState.phase is 'done'>>
     <<for $_holdemPotIndex, $_holdemPot range $_holdemState.pots>>
       <p @class="$_holdemWatching or $_holdemPot.winners.includes(0) ? 'gold' : 'blue'">
-        <<lanSwitch `$_holdemPot.returned ? 'Uncalled chips returned' : $_holdemPotIndex === 0 ? 'Main pot' : 'Side pot'` `$_holdemPot.returned ? '未被跟注的筹码退回' : $_holdemPotIndex === 0 ? '主池' : '边池'`>> <<printmoney `$_holdemPot.amount - $_holdemPot.fee`>> →
+        <<lanSwitch `$_holdemPot.returned ? ($_holdemPub ? 'Uncalled cash returned' : 'Uncalled chips returned') : $_holdemPotIndex === 0 ? 'Main pot' : 'Side pot'` `$_holdemPot.returned ? ($_holdemPub ? '未被跟注的钱退回' : '未被跟注的筹码退回') : $_holdemPotIndex === 0 ? '主池' : '边池'`>> <<printmoney `$_holdemPot.amount - $_holdemPot.fee`>> →
         <<for $_holdemWinnerIndex, $_holdemWinner range $_holdemPot.winners>>
         <<if $_holdemWinnerIndex gt 0>>
           /
@@ -143,7 +150,7 @@
         <<deadwood-poker-name `$_holdemState.seats[$_holdemWinner].name`>><</for>>
       </p>
     <</for>>
-    <<if !$_holdemPrivate>><p class='poker-fee'><<lanSwitch 'Table fee' '本局抽水'>> <<printmoney $_holdemState.fee>></p><</if>>
+    <<if !$_holdemPrivate and !$_holdemPub>><p class='poker-fee'><<lanSwitch 'Table fee' '本局抽水'>> <<printmoney $_holdemState.fee>></p><</if>>
   <</if>>
 <</widget>>
 

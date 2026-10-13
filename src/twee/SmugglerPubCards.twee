@@ -1,0 +1,51 @@
+:: Deadwood Smuggler Pub Card Widgets [widget]
+<<widget 'deadwood-pub-card-leave'>>
+  <<getouticon>><<lanLink ['Leave the table', '离开牌桌'] 'Deadwood Smuggler Pub'>>
+    <<run maplebirch.get('StreetLife').smugglerPub.cards.close()>>
+  <</lanLink>><br>
+<</widget>>
+
+<<widget 'deadwood-pub-card-entry'>>
+  <<set _pubCardReady to false>>
+  <<set _pubCards to maplebirch.get('StreetLife')?.smugglerPub.cards>>
+  <<if !_pubCards or _pubCards.state.mode isnot _args[0] or $location isnot 'underground' or $smuggler_pub_known isnot 1>>
+    <<lanSwitch 'Join a table from inside the smugglers’ pub.' '请先到走私者酒馆内选择牌桌。'>><br>
+    <<getouticon>><<back `lanSwitch('Return', '返回')`>><<exit>>
+  <</if>>
+  <<set $outside to 0>><<unset $bus>><<effects>>
+  <<if !_pubCards.atTable(_args[0])>>
+    <<lanSwitch 'You cannot continue at this table just now. Collect your remaining money and leave.' '你眼下无法继续牌局，可以收回余款后离桌。'>><br>
+    <<deadwood-pub-card-leave>><<exit>>
+  <</if>>
+  <<set _pubCardReady to true>>
+<</widget>>
+
+:: Deadwood Smuggler Pub Blackjack
+<<deadwood-pub-card-entry 'blackjack'>>
+<<if !_pubCardReady>><<exit>><</if>>
+<<language>>
+  <<option 'EN'>>
+    You take the empty chair opposite the dealer. A folded towel keeps the cash clear of a damp ring left by a glass. "A pound, five or ten," the regular says, squaring the deck. "Count it out first. We settle every hand."
+  <<option 'CN'>>
+    你在庄家对面的空椅上坐下。折好的毛巾把现金与杯子留下的湿印隔开。熟客理齐牌堆。“一镑、五镑或十镑。先数清，每局现结。”
+<</language>><br><br>
+<<lanSwitch 'Cash in your wallet: ' '钱包现金：'>><<printmoney $money>><br><br>
+<<deadwood-pub-blackjack-table>><br>
+<strong><<lanSwitch 'Table rules' '牌桌规则'>></strong><br>
+<<lanSwitch 'Aces count as 1 or 11; face cards count as 10. The dealer stands on all 17s. A win returns twice the stake, a natural blackjack returns two and a half times it, and a push returns the stake. Returns include your original bet. Leaving an unfinished hand forfeits its stake.' 'A 算 1 或 11，花牌算 10。庄家所有 17 点都停牌。普通获胜返还赌注的两倍，起手二十一点返还两倍半，平局退回本金。返还均含本金；中途离桌视为弃局，失去本局赌注。'>><br><br>
+<<deadwood-pub-card-leave>>
+
+:: Deadwood Smuggler Pub Holdem
+<<deadwood-pub-card-entry 'holdem'>>
+<<if !_pubCardReady>><<exit>><</if>>
+<<language>>
+  <<option 'EN'>>
+    The customers make room for you at the second table. Someone turns a saucer upside down to mark the dealer. "Five, ten or twenty pounds to sit down. No borrowing." Notes stay folded beside each hand; loose change goes into the middle as the blinds are counted out.
+  <<option 'CN'>>
+    第二桌的客人给你让出位置。有人倒扣一只碟子，标记庄位。“拿五镑、十镑或二十镑坐下。不借钱。”钞票折好，放在各人的牌旁，数清的盲注零钱则推到桌子中间。
+<</language>><br><br>
+<<lanSwitch 'Cash in your wallet: ' '钱包现金：'>><<printmoney $money>><br><br>
+<<deadwood-pub-holdem-table>><br>
+<strong><<lanSwitch 'Table rules' '牌桌规则'>></strong><br>
+<<lanSwitch 'Choose a three- or four-person table. Each player receives two private cards and shares five community cards. Small and big blinds are 1% and 2% of the initial cash brought to the table. Short all-ins create side pots; unmatched money is returned. There is no table fee or mid-hand top-up. Leaving folds your hand and returns only your uncommitted cash. If fewer than two funded players remain, leave and join a new table.' '选择三人桌或四人桌。每人两张底牌，共用五张公共牌。小盲和大盲分别为初次带上桌金额的 1% 和 2%。小额全下另分边池，无人跟注的多余款项退回。不抽水，中途不能追加本钱。离桌视为弃牌，只收回未下注的余款；若有钱继续的玩家不足两人，可以离桌重新入座。'>><br><br>
+<<deadwood-pub-card-leave>>

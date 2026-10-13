@@ -16,7 +16,8 @@ export default class BlackjackView {
 
   public constructor(
     private readonly core: typeof maplebirch,
-    private readonly game: Blackjack
+    private readonly game: Blackjack,
+    private readonly cashTable?: { context: string; action: (action: string, value: string) => boolean }
   ) {
     this.root.id = 'deadwood-blackjack';
     const table = document.createElement('div');
@@ -28,9 +29,10 @@ export default class BlackjackView {
     table.append(this.hand('dealer', opponent, state.dealer, state.phase === 'player' && !(state.venue === 'casino' && state.trick.peeked === 1), animation));
     if (state.partner) table.append(this.hand('partner', lanSwitch(state.partner, names[state.partner] ?? state.partner), state.partner_cards, state.phase === 'player', animation));
     table.append(this.hand('player', lanSwitch('Your hand', '你的牌'), state.player, false, animation));
-    this.root.append(table, this.core.SugarCube.Wikifier.wikifyEval('<<deadwood-blackjack-status>>'));
+    const context = cashTable ? ` '${cashTable.context}'` : '';
+    this.root.append(table, this.core.SugarCube.Wikifier.wikifyEval(`<<deadwood-blackjack-status${context}>>`));
     this.controls.className = 'blackjack-controls';
-    this.controls.append(this.core.SugarCube.Wikifier.wikifyEval('<<deadwood-blackjack-controls>>'));
+    this.controls.append(this.core.SugarCube.Wikifier.wikifyEval(`<<deadwood-blackjack-controls${context}>>`));
     this.root.append(this.controls);
     for (const button of this.controls.querySelectorAll<HTMLButtonElement>('button[data-action]')) {
       button.disabled = button.dataset.disabled === 'true';
@@ -38,6 +40,10 @@ export default class BlackjackView {
         if (button.disabled || this.controls.inert) return;
         this.controls.inert = true;
         const action = button.dataset.action!;
+        if (this.cashTable) {
+          if (!this.cashTable.action(action, button.dataset.value ?? '')) this.controls.inert = false;
+          return;
+        }
         const macro = ['start', 'hit', 'stand'].includes(action) ? 'deadwood-blackjack-action' : 'deadwood-blackjack-choice';
         this.core.SugarCube.Wikifier.wikifyEval(`<<${macro} '${action}' ${JSON.stringify(button.dataset.value ?? '')}>>`);
         if (this.core.passage.title === blackjackPassage) {

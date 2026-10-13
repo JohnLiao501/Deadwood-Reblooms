@@ -1,4 +1,28 @@
+import BlackjackView from '../LifeSimulation/Casino/BlackjackView';
+import { holdemView } from '../LifeSimulation/Casino/PokerView';
+import { pubCardPassages } from '../../module/StreetLife/SmugglerCards';
+
 export default function SmugglerPub(maplebirch: typeof window.maplebirch): void {
+  for (const game of ['blackjack', 'holdem'] as const) {
+    maplebirch.tool.macro.defineS(`deadwood-pub-${game}-table`, () => {
+      const cards = maplebirch.get('StreetLife')!.smugglerPub.cards;
+      const revision = cards.state.revision;
+      const action = (name: string, amount: number): boolean => {
+        const accepted = cards.action(game, name, amount, revision);
+        if (accepted && maplebirch.passage.title === pubCardPassages[game]) {
+          maplebirch.SugarCube.Engine.play(cards.state.mode ? pubCardPassages[game] : 'Deadwood Smuggler Pub');
+        }
+        return accepted;
+      };
+      return game === 'blackjack'
+        ? new BlackjackView(maplebirch, cards.blackjack, { context: 'pub', action: (name, value) => action(name, Number(value)) }).root
+        : holdemView(maplebirch, cards.holdem, false, { widget: "<<deadwood-poker-holdem-view 'pub'>>", action });
+    });
+  }
+  maplebirch.on(':passagestart', passage => {
+    const cards = maplebirch.get('StreetLife')?.smugglerPub.cards;
+    if (cards?.state.mode && passage.title !== pubCardPassages[cards.state.mode]) cards.close();
+  });
   maplebirch.tool.patch.location.configure(
     'deadwood_smuggler_pub',
     {

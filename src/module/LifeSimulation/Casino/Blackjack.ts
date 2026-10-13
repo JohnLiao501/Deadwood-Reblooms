@@ -13,7 +13,7 @@ export interface PlayingCard {
 
 export interface BlackjackState {
   trick: CardTrickState;
-  venue: 'arcade' | 'casino' | 'home';
+  venue: 'arcade' | 'casino' | 'home' | 'pub';
   property: string | null;
   companion: string | null;
   partner: string | null;

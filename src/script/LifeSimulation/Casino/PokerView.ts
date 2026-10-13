@@ -10,6 +10,10 @@ import { privateCardsPassage } from '../../../module/Finance/PrivateCards';
 const holdemPassage = 'Deadwood Reblooms Life Simulation Holdem';
 const threeCardPassage = 'Deadwood Reblooms Life Simulation Three Card';
 const watchPassage = 'Deadwood Reblooms Casino Lounge Watch';
+interface CashTableView {
+  widget: string;
+  action: (action: string, amount: number) => boolean;
+}
 
 /** Twee 负责桌面、文案与选项，这里只加载牌面、处理加注输入及动画。 */
 class TableView {
@@ -20,10 +24,11 @@ class TableView {
   public constructor(
     private readonly core: typeof maplebirch,
     private readonly mode: 'holdem' | 'three' | 'watch' | 'private',
-    private readonly game: Holdem | ThreeCard
+    private readonly game: Holdem | ThreeCard,
+    private readonly cashTable?: CashTableView
   ) {
     this.root.id = mode === 'private' ? 'deadwood-private-cards' : mode === 'watch' ? 'deadwood-poker-watch' : mode === 'holdem' ? 'deadwood-holdem' : 'deadwood-three-card';
-    const widget = ['watch', 'private'].includes(mode) ? `<<deadwood-poker-holdem-view '${mode}'>>` : `<<deadwood-poker-${mode}-view>>`;
+    const widget = cashTable?.widget ?? (['watch', 'private'].includes(mode) ? `<<deadwood-poker-holdem-view '${mode}'>>` : `<<deadwood-poker-${mode}-view>>`);
     this.root.append(core.SugarCube.Wikifier.wikifyEval(widget));
     for (const spot of this.root.querySelectorAll<HTMLElement>('[data-cards]')) {
       const cards = spot.dataset.cards === 'board' ? (game as Holdem).state.board : (game.state.seats[Number(spot.dataset.cards)]?.cards ?? []);
@@ -48,6 +53,10 @@ class TableView {
   private act(action: string, amount: number): void {
     if (this.root.inert) return;
     this.root.inert = true;
+    if (this.cashTable) {
+      if (!this.cashTable.action(action, amount)) this.root.inert = false;
+      return;
+    }
     if (this.mode === 'private') {
       this.core.SugarCube.Wikifier.wikifyEval(`<<deadwood-private-cards-action '${action}' ${amount}>>`);
       if (this.core.passage.title === privateCardsPassage) this.core.SugarCube.Engine.play(privateCardsPassage);
@@ -99,8 +108,8 @@ class TableView {
   }
 }
 
-export function holdemView(core: typeof maplebirch, game: Holdem, privateTable = false): HTMLElement {
-  return new TableView(core, privateTable ? 'private' : game.watching ? 'watch' : 'holdem', game).ready(game.active);
+export function holdemView(core: typeof maplebirch, game: Holdem, privateTable = false, cashTable?: CashTableView): HTMLElement {
+  return new TableView(core, privateTable ? 'private' : game.watching ? 'watch' : 'holdem', game, cashTable).ready(game.active);
 }
 
 export function threeCardView(core: typeof maplebirch, game: ThreeCard): HTMLElement {

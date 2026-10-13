@@ -1,5 +1,58 @@
 :: Deadwood Smuggler Pub Widgets [widget]
 
+/* 菜单与点击共用判定；只有本页的小事才使用这份时长和价格。 */
+<<widget 'deadwood-smuggler-pub-check'>>
+  <<set _pub to maplebirch.get('StreetLife')?.smugglerPub>>
+  <<set _pubTerms to {
+    tea: {minutes:5, cost:200},
+    rest: {minutes:15, cost:0},
+    board: {minutes:5, cost:0},
+    listen: {minutes:10, cost:0},
+    work: {minutes:15, cost:0}
+  }>>
+  <<set _pubTerm to Object.hasOwn(_pubTerms, _args[0]) ? _pubTerms[_args[0]] : null>>
+  <<set _pubCan to _pub?.available and !!_pubTerm and (_pubTerm.cost is 0 or $money gte _pubTerm.cost)>>
+  <<if _pubCan>>
+    <<switch _args[0]>>
+      <<case 'tea'>>
+        <<set _pubCan to !$worn.face.type.includes('gag') and (_pub.state.teaDay isnot Math.floor(Time.days) or _pub.state.teaCount lt 3) and !pcAreArmsBound('both')>>
+      <<case 'rest'>>
+        <<set _pubCan to Time.date.timeStamp gte _pub.state.restAt + 3600>>
+      <<case 'listen'>>
+        <<set _pubCan to _pub.state.listenDay isnot Math.floor(Time.days)>>
+      <<case 'work'>>
+        <<set _pubCan to _pub.state.workDay isnot Math.floor(Time.days) and !pcAreArmsBound('both') and $tiredness lt 1800>>
+    <</switch>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-smuggler-pub-action'>>
+  <<deadwood-smuggler-pub-check _args[0]>>
+  <<if !_pubCan or maplebirch.passage.title isnot 'Deadwood Smuggler Pub' or _args[1] isnot Time.date.timeStamp>><<exit>><</if>>
+  <<set _pubAt to Time.date.timeStamp, _pubDay to Math.floor(Time.days)>>
+  /* 先登记限额与茶钱；推进时间中途离场，也不会重复接活或白拿茶。 */
+  <<switch _args[0]>>
+    <<case 'work'>><<set _pub.state.workDay to _pubDay>>
+    <<case 'listen'>><<set _pub.state.listenDay to _pubDay>>
+    <<case 'rest'>><<set _pub.state.restAt to _pubAt>>
+    <<case 'tea'>>
+      <<if _pub.state.teaDay isnot _pubDay>><<set _pub.state.teaCount to 0>><</if>>
+      <<set _pub.state.teaDay to _pubDay, _pub.state.teaCount += 1>>
+      <<money `-_pubTerm.cost`>>
+  <</switch>>
+  <<set _pubLast to {action:_args[0], at:_pubAt, outcome:'interrupted'}>>
+  <<set _pub.state.last to _pubLast>>
+  <<pass _pubTerm.minutes>>
+  /* 重新确认页面、可停留状态和本次记录的引用；强制转场后不结算恢复、工资或技能。 */
+  <<if !_pub?.available or maplebirch.passage.title isnot 'Deadwood Smuggler Pub' or _pub.state.last isnot _pubLast>><<exit>><</if>>
+  <<set _pubLast.outcome to 'done'>>
+  <<switch _pubLast.action>>
+    <<case 'tea'>><<stress -8>><<tiredness -10>>
+    <<case 'rest'>><<stress -12>><<tiredness -30>>
+    <<case 'work'>><<money 400>><<housekeeping 1>><<tiredness 2>>
+  <</switch>>
+<</widget>>
+
 <<widget 'deadwood-smuggler-pub-environment'>>
   <<language>>
     <<option 'EN'>>
@@ -66,7 +119,8 @@
 :: Deadwood Smuggler Pub
 <<set _pub to maplebirch.get('StreetLife')?.smugglerPub>>
 <<if $location isnot 'underground' or $smuggler_pub_known isnot 1>>
-  <<deadwood-street-heist-meeting-required>><<exit>>
+  <<lanSwitch 'Reach the smugglers’ pub by the usual route before spending time there.' '请先沿原版路线到走私者酒馆，再在那里停留。'>><br>
+  <<getouticon>><<back `lanSwitch('Return', '返回')`>><<exit>>
 <</if>>
 <<set $outside to 0>><<unset $bus>><<effects>>
 <<if !_pub?.available>>
@@ -141,11 +195,11 @@
   {id:'listen', name:['Listen to the room', '听听周围的闲谈'], icon:'socialise.png'},
   {id:'work', name:['Help clear the tables', '帮忙收拾桌子'], icon:'sponge.png'}
 ]>>
-  <<set _pubTerm to _pub.actions[_pubOffer.id]>>
   <<capture _pub _pubOffer _pubOfferedAt>>
+    <<deadwood-smuggler-pub-check _pubOffer.id>>
     <<icon _pubOffer.icon>>
-    <<if _pub.can(_pubOffer.id)>>
-      <<lanLink _pubOffer.name 'Deadwood Smuggler Pub'>><<run _pub.act(_pubOffer.id, _pubOfferedAt)>><</lanLink>>
+    <<if _pubCan>>
+      <<lanLink _pubOffer.name 'Deadwood Smuggler Pub'>><<deadwood-smuggler-pub-action _pubOffer.id _pubOfferedAt>><</lanLink>>
     <<else>>
       <span class='grey'><<= lanSwitch(_pubOffer.name[0], _pubOffer.name[1])>></span>
     <</if>>
@@ -179,5 +233,21 @@
       <</lanLink>><br>
     <</capture>>
   <</for>>
+<</if>><br>
+<<language>>
+  <<option 'EN'>>
+    At two small tables beyond the partition, a regular deals blackjack and a few customers play hold'em. Coins and notes sit beside the cards; they count each bet aloud before moving it into the middle.
+  <<option 'CN'>>
+    隔墙后的两张小桌边，一位熟客坐庄玩二十一点，几名客人围着另一桌打德州扑克。硬币和钞票就放在纸牌旁；每次下注，他们都先报清金额，再把钱推到桌子中间。
+<</language>><br><br>
+<<if _pub.gamblingAvailable>>
+  <<icon 'casino/blackjack.png'>><<lanLink ['Join the cash blackjack table', '加入现金二十一点牌桌'] 'Deadwood Smuggler Pub Blackjack'>>
+    <<run _pub.cards.enter('blackjack')>>
+  <</lanLink>><br>
+  <<icon 'casino/watch-hand.png'>><<lanLink ["Join the cash hold'em table", '加入现金德州扑克牌桌'] 'Deadwood Smuggler Pub Holdem'>>
+    <<run _pub.cards.enter('holdem')>>
+  <</lanLink>><br>
+<<else>>
+  <span class='grey'><<lanSwitch 'You cannot join the card tables while your arms are bound or you are too stressed to play.' '手臂受束缚或压力过高时，你无法加入牌桌。'>></span><br>
 <</if>><br>
 <<getouticon>><<lanLink ['Return to the pub', '返回酒馆'] 'Smuggler Pub'>><<endevent>><</lanLink>><br>
