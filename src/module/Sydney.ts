@@ -48,7 +48,7 @@ class Sydney extends Module {
     T.sydneyAvailable = active && T.sydney_location === 'temple';
     T.festivalNight = festivalNight;
     T.sirrisMorning = sirrisMorning;
-    T.dormAccess = active && ['monk', 'priest'].includes(V.temple_rank) && V.sydney?.rank === 'monk' && V.sydneyromance === 1;
+    T.dormAccess = active && ['monk', 'priest'].includes(V.temple_rank) && ['monk', 'priest'].includes(V.sydney?.rank) && V.sydneyromance === 1;
     T.christmasRest = christmasRest;
     // quarters 是宿舍杂务，不能据此认定悉尼就在床铺旁。
     T.sydneyWorking = T.sydneyAvailable && V.sydney_templeWork === 'quarters';

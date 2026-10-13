@@ -85,7 +85,7 @@
 <</if>>
 <!-- 在宿舍场景再次检查权限，避免节日链接绕过入口条件。 -->
 <<if !_dormAccess>>
-  <<if !['monk', 'priest'].includes($temple_rank) or $sydney?.rank isnot 'monk'>>
+  <<if !['monk', 'priest'].includes($temple_rank) or !['monk', 'priest'].includes($sydney?.rank)>>
     <<lanSwitch "You and Sydney must both pass the temple's trial before you can use the bunks." '你和悉尼都通过神殿的考核后，才能使用这里的床铺。'>>
   <<elseif $sydneyromance isnot 1>>
     <<lanSwitch "Sydney has not invited you to stay beside the bunk yet." '悉尼还没有邀请你留在床铺旁。'>>

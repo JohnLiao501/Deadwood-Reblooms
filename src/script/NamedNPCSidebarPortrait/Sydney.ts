@@ -102,8 +102,8 @@ export default function (maplebirch: MaplebirchCore, colours: { school: Map<stri
     });
 
     // 神殿基础服装：男性穿修士服，其他性别穿修女服，女性见习教徒穿见习修女服
-    wardrobe.wear('Sydney', 'temple', 'nun_habit', () => C.npc?.Sydney?.pronoun !== 'm' && V.sydney?.rank === 'monk');
-    wardrobe.wear('Sydney', 'temple', 'monk_habit', () => C.npc?.Sydney?.pronoun === 'm' && V.sydney?.rank === 'monk');
+    wardrobe.wear('Sydney', 'temple', 'nun_habit', () => C.npc?.Sydney?.pronoun !== 'm' && ['monk', 'priest'].includes(V.sydney?.rank));
+    wardrobe.wear('Sydney', 'temple', 'monk_habit', () => C.npc?.Sydney?.pronoun === 'm' && ['monk', 'priest'].includes(V.sydney?.rank));
     wardrobe.wear('Sydney', 'temple', 'novice_nun_habit', () => C.npc?.Sydney?.pronoun !== 'm' && ['initiate', '见习教徒'].includes(V.sydney?.rank));
     wardrobe.wear('Sydney', 'temple', 'initiate_robes', () => C.npc?.Sydney?.pronoun === 'm' && ['initiate', '见习教徒'].includes(V.sydney?.rank));
 
@@ -122,7 +122,7 @@ export default function (maplebirch: MaplebirchCore, colours: { school: Map<stri
       'Sydney',
       'temple',
       'sexy_nun_habit',
-      () => C.npc?.Sydney?.pronoun !== 'm' && V.sydney?.rank === 'monk' && window.isLoveInterest('Sydney') && C.npc?.Sydney?.corruption >= 40 && C.npc?.Sydney?.lust >= 20
+      () => C.npc?.Sydney?.pronoun !== 'm' && ['monk', 'priest'].includes(V.sydney?.rank) && window.isLoveInterest('Sydney') && C.npc?.Sydney?.corruption >= 40 && C.npc?.Sydney?.lust >= 20
     );
 
     // 英语剧服装：根据 Sydney 的角色显示 Sterling 或 Cass 戏服
