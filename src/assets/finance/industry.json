@@ -46,18 +46,21 @@
     {
       "id": 0,
       "name": "deadwood-reblooms:industry:site:yard",
+      "icon": "industry/workshop.png",
       "multiplier": 1,
       "workers": 8
     },
     {
       "id": 1,
       "name": "deadwood-reblooms:industry:site:rail",
+      "icon": "industry/rail-workshop.png",
       "multiplier": 1.5,
       "workers": 12
     },
     {
       "id": 2,
       "name": "deadwood-reblooms:industry:site:rear",
+      "icon": "industry/rear-workshop.png",
       "multiplier": 2,
       "workers": 16
     }

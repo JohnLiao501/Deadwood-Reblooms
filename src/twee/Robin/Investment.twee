@@ -12,7 +12,7 @@
       <<option 'CN'>>
         罗宾在当天的收据下面画了一条线。“你是说，买下店里的一部分？不是再借我钱？”<<He>>从账本上抬起头，看着你。“我愿意。不过，我还是想自己经营这家店。而且，我不能保证每周都让你赚到钱。”<br><br>罗宾翻开新的一页。“还是写清楚吧。就算生意出了问题，我们也知道哪些归谁。”
     <</language>><br><br>
-    <<lanLink ['Agree to draw up a partnership contract', '同意拟一份合伙合同']>>
+    <<icon 'company/agreement.png'>><<lanLink ['Agree to draw up a partnership contract', '同意拟一份合伙合同']>>
       <<run maplebirch.get('Robin').shop.investment.agree()>>
       <<run Dynamic.render('deadwood-shop-partnership')>>
     <</lanLink>><br><br>
@@ -84,9 +84,9 @@
   <<if _contract.share lt _investment.terms.maximumShare>>
     <<set _shareTarget to _contract.share + _investment.terms.shareStep>>
     <label><<lanSwitch "Total holding after purchase: " "购买后总持有份额：">><<listbox '_shareTarget' autoselect>><<optionsfrom [10,20,30,40].filter(share => share > _contract.share)>><</listbox>>%</label><br>
-    <<lanLink ['Check the price', '核对价格']>><<replace '#deadwood-investment-quote'>><<printmoney `maplebirch.get('Robin').shop.investment.quote(Number(_shareTarget)) ?? 0`>><</replace>><</lanLink>>
+    <<icon 'finance/quote.png'>><<lanLink ['Check the price', '核对价格']>><<replace '#deadwood-investment-quote'>><<printmoney `maplebirch.get('Robin').shop.investment.quote(Number(_shareTarget)) ?? 0`>><</replace>><</lanLink>>
     <span id='deadwood-investment-quote' aria-live='polite'><<printmoney `_investment.quote(_shareTarget) ?? 0`>></span><br>
-    <<lanLink ['Buy the additional share with your debit card', '用借记卡购买新增份额']>>
+    <<icon 'company/share-subscription.png'>><<lanLink ['Buy the additional share with your debit card', '用借记卡购买新增份额']>>
       <<if maplebirch.get('Robin').shop.investment.invest(Number(_shareTarget))>>
         <<run maplebirch.get('Finance').refreshMoneyUI()>>
         <<replace '#deadwood-shop-investment-panel'>>
@@ -97,7 +97,7 @@
     <span id='deadwood-investment-result' aria-live='polite'></span><br>
   <</if>>
   <<if _contract.share gt 0>>
-    <<lanLink ['Request a buyback of your whole holding', '申请回购全部份额']>>
+    <<icon 'finance/share-buyback.png'>><<lanLink ['Request a buyback of your whole holding', '申请回购全部份额']>>
       <<run maplebirch.get('Robin').shop.investment.exit(true)>>
       <<replace '#deadwood-shop-investment-panel'>>
         <<deadwood-shop-investment>>

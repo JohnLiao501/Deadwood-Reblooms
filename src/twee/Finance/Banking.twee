@@ -288,7 +288,7 @@
             柜员把开户表推到你面前，随后要求查看带照片的身份证件。你递上布莱尔替你办好的卡片。卡片从扫描器下划过，绿灯亮起。柜员端详片刻，开始把上面的资料抄到表格里。
         <</language>>
         <br><br>
-        <<lanLink ["Open a bank account", "开立银行账户"]>>
+        <<icon 'finance/bank-counter.png'>><<lanLink ["Open a bank account", "开立银行账户"]>>
           <<set _financeResult to maplebirch.get("Finance").openBankAccount()>>
           <<replace '#deadwood-reblooms-finance-bank-debit-panel'>><<deadwood-reblooms-finance-bank-debit-panel>><</replace>>
           <<replace '#deadwood-reblooms-finance-result'>><<deadwood-reblooms-finance-result _financeResult>><</replace>>
@@ -309,7 +309,7 @@
         <<lanSwitch 'No' '无'>>
       <</if>><br>
       <<if !$Finance.bank.debit_card>>
-        <<lanLink ["Apply for a debit card", "申请借记卡"]>>
+        <<icon 'finance/bank-debit-card.png'>><<lanLink ["Apply for a debit card", "申请借记卡"]>>
           <<set _financeResult to maplebirch.get("Finance").issueDebitCard()>>
           <<replace '#deadwood-reblooms-finance-bank-debit-panel'>><<deadwood-reblooms-finance-bank-debit-panel>><</replace>>
           <<replace '#deadwood-reblooms-finance-result'>><<deadwood-reblooms-finance-result _financeResult>><</replace>>
@@ -375,7 +375,7 @@
         <<lanSwitch 'No' '无'>>
       <</if>><br>
       <<if !$Finance.bank.credit_card>>
-        <<lanLink ["Apply for a credit card", "申请信用卡"]>>
+        <<icon 'finance/bank-credit-card.png'>><<lanLink ["Apply for a credit card", "申请信用卡"]>>
           <<set _financeResult to maplebirch.get("Finance").issueCreditCard()>>
           <<replace '#deadwood-reblooms-finance-bank-credit-panel'>><<deadwood-reblooms-finance-bank-credit-panel>><</replace>>
           <<replace '#deadwood-reblooms-finance-result'>><<deadwood-reblooms-finance-result _financeResult>><</replace>>
@@ -556,7 +556,7 @@
       <span class='blue'><i><<lanSwitch 'You need a bank account before opening a securities account.' '开立证券账户前需要先拥有银行账户。'>></i></span>
     <<elseif !$Finance.brokerage.opened>>
       <<lanSwitch 'You do not have a securities account.' '你还没有证券账户。'>><br>
-      <<lanLink ["Open a securities account", "开立证券账户"]>>
+      <<icon 'finance/securities-account.png'>><<lanLink ["Open a securities account", "开立证券账户"]>>
         <<set _financeResult to maplebirch.get("Finance").openBrokerageAccount()>>
         <<replace '#deadwood-reblooms-finance-exchange-account-panel'>><<deadwood-reblooms-finance-exchange-account-panel>><</replace>>
         <<replace '#deadwood-reblooms-finance-result'>><<deadwood-reblooms-finance-result _financeResult>><</replace>>

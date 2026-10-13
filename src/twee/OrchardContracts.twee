@@ -62,7 +62,7 @@
       <<option 'CN'>>
         签单时按集市售价的八五折锁定单价，一周内不变。押金为货款的两成。你标记保留的水果不会用于交货。
     <</language>><br>
-    <<lanLink ['Check the quote', '核对报价']>>
+    <<icon 'finance/quote.png'>><<lanLink ['Check the quote', '核对报价']>>
       <<set $_quote to maplebirch.get('Orchard').contractQuote(_contractFruit, Number(_contractAmount))>>
       <<replace '#orchard-contract-quote'>>
         <<if $_quote>>
@@ -70,7 +70,7 @@
         <</if>>
       <</replace>>
     <</lanLink>><div id='orchard-contract-quote'></div>
-    <<lanLink ['Reserve the delivery', '签下这批长单'] 'Deadwood Orchard Farm Contract Result'>>
+    <<icon 'orchard/standing-order.png'>><<lanLink ['Reserve the delivery', '签下这批长单'] 'Deadwood Orchard Farm Contract Result'>>
       <<set $Orchard.contract_result to maplebirch.get('Orchard').acceptContract(_contractFruit, Number(_contractAmount))>>
     <</lanLink>><br>
   <</if>>
