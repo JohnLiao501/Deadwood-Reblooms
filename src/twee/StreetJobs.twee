@@ -1,12 +1,14 @@
 :: Deadwood Street Job Widgets [widget]
 
 <<widget 'deadwood-street-landry-link'>>
+  <<deadwood-street-bounty-link 'pub'>>
   <<if maplebirch.get('StreetLife')?.jobs.available>>
     <<socialiseicon 'ask'>><<lanLink ['Ask Landry about work', '向兰德里打听差事'] 'Deadwood Street Jobs'>><<endevent>><</lanLink>><br>
   <</if>>
 <</widget>>
 
 <<widget 'deadwood-street-cargo-link'>>
+  <<deadwood-street-bounty-link _args[0]>>
   <<set _streetJobs to maplebirch.get('StreetLife')?.jobs>>
   <<if _streetJobs?.available and _streetJobs.receiving and _streetJobs.state.active and _streetJobs.state.active.stage isnot 'settlement'>>
     <<set _streetContract to _streetJobs.contract>>
@@ -88,6 +90,10 @@
 <<set $location to 'pub'>><<set $outside to 0>><<effects>><<npc 'Landry'>><<person1>>
 <<set _streetJobs to maplebirch.get('StreetLife')?.jobs>>
 <<if !_streetJobs>><<lanSwitch 'No work is available.' '暂时没有差事。'>><br><<else>>
+  <<if _streetJobs.available and _streetJobs.state.day isnot Math.floor(Time.days)>>
+    <<set _streetJobs.state.day to Math.floor(Time.days)>>
+    <<set _streetJobs.state.board to _streetJobs.terms.jobs.map(item => item.id).shuffle()>>
+  <</if>>
   <<language>>
     <<option 'EN'>>
       Landry moves a glass away from the edge of the table. "Looking for work? A few people have asked me to find someone. Pick something you can finish. I'll find someone else for the rest."
@@ -120,7 +126,7 @@
     <<if _streetJobs.state.active>>
       <<deadwood-street-cargo-link 'pub'>>
       <<if _streetJobs.state.active.stage is 'settlement'>>
-        <<highicon>><<lanLink ['Hand over the receipt and collect your fee (0:05)', '交回凭据并领取报酬 (0:05)'] 'Deadwood Street Jobs'>>
+        <<icon 'street/job-payment.png'>><<lanLink ['Hand over the receipt and collect your fee (0:05)', '交回凭据并领取报酬 (0:05)'] 'Deadwood Street Jobs'>>
           <<if _streetJobs.act('pay')>><<pass 5>><</if>>
         <</lanLink>><br>
       <<elseif _streetJobs.state.active.stage is 'pickup' or (_streetJobs.state.active.stage is 'return' and _streetJobs.contract.return_to is 'pub' and _streetJobs.cargoHere) or _streetJobs.lost>>
@@ -202,12 +208,12 @@
         <<if _streetJob.issue is 'queue'>>
           <span class='blue'><<lanSwitch 'The receiver cannot take the goods yet. Wait here, or return the shipment.' '收货人暂时无法接货。可以在这里等待，或退回货物。'>></span><br>
         <<else>>
-          <<icon 'industry/dispatch.png'>><<lanLink ['Complete the handover (0:10)', '完成交接 (0:10)'] 'Deadwood Street Cargo'>>
+          <<icon 'street/cargo-handover.png'>><<lanLink ['Complete the handover (0:10)', '完成交接 (0:10)'] 'Deadwood Street Cargo'>>
             <<if _streetJobs.act('deliver')>><<pass 10>><<tiredness _streetContract.cargo>><</if>>
           <</lanLink>><br>
         <</if>>
       <</if>>
-      <<refuseicon>><<lanLink ['Return the goods to the sender', '把货物退给发货人'] 'Deadwood Street Cargo'>>
+      <<icon 'street/cargo-return.png'>><<lanLink ['Return the goods to the sender', '把货物退给发货人'] 'Deadwood Street Cargo'>>
         <<run _streetJobs.act('return')>>
       <</lanLink>><br>
     <</if>>
@@ -227,7 +233,7 @@
         <</for>>
       <</if>>
       <<if _streetJobs.expired and _streetJob.stage is 'carrying'>>
-        <<refuseicon>><<lanLink ['Return this shipment', '退回这批货物'] 'Deadwood Street Cargo'>><<run _streetJobs.act('return')>><</lanLink>><br>
+        <<icon 'street/cargo-return.png'>><<lanLink ['Return this shipment', '退回这批货物'] 'Deadwood Street Cargo'>><<run _streetJobs.act('return')>><</lanLink>><br>
       <</if>>
     <</if>>
   <<elseif _streetJob.vehicle isnot null and !_streetJobs.lost>>
@@ -235,9 +241,9 @@
   <</if>>
   <<if _streetJobs.available>>
     <<if $StreetLife.jobs.site is 'pub' and _streetJob.stage is 'settlement'>>
-      <<highicon>><<lanLink ['Collect your fee (0:05)', '领取报酬 (0:05)'] 'Deadwood Street Jobs'>><<if _streetJobs.act('pay')>><<pass 5>><</if>><</lanLink>><br>
+      <<icon 'street/job-payment.png'>><<lanLink ['Collect your fee (0:05)', '领取报酬 (0:05)'] 'Deadwood Street Jobs'>><<if _streetJobs.act('pay')>><<pass 5>><</if>><</lanLink>><br>
     <<elseif $StreetLife.jobs.site is _streetContract.return_to and _streetJob.stage is 'return' and _streetJobs.cargoHere and _streetJobs.receiving>>
-      <<refuseicon>><<lanLink ['Hand the goods back (0:05)', '归还这批货物 (0:05)'] 'Deadwood Street Cargo'>><<if _streetJobs.act('cancel')>><<pass 5>><</if>><</lanLink>><br>
+      <<icon 'street/cargo-return.png'>><<lanLink ['Hand the goods back (0:05)', '归还这批货物 (0:05)'] 'Deadwood Street Cargo'>><<if _streetJobs.act('cancel')>><<pass 5>><</if>><</lanLink>><br>
     <<elseif $StreetLife.jobs.site is 'pub' and (_streetJob.stage is 'pickup' or _streetJobs.lost)>>
       <<refuseicon>><<lanLink ['Close the job with Landry (0:05)', '向兰德里交代并结束委托 (0:05)'] 'Deadwood Street Jobs'>><<if _streetJobs.act('cancel')>><<pass 5>><</if>><</lanLink>><br>
     <</if>>

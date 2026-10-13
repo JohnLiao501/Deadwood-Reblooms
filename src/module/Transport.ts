@@ -476,6 +476,8 @@ class Transport extends Module {
     const commute = this.state.commute;
     if (commute && (!this.commute.active || !commute.boarded || destination !== commute.to)) return false;
     const outings = this.core.get('Finance')?.realEstate.outings;
+    const escort = this.core.get('StreetLife')?.bounties.state.active;
+    if (escort?.stage === 'escort' && escort.vehicle === this.vehicle?.id && (taxi || commute || outings?.travelling || this.state.passengers.length)) return false;
     if (outings?.travelling && (destination !== outings.target || outings.plan?.stage === 'visit' || this.vehicle?.id !== outings.plan?.vehicle)) return false;
     const passengers = this.state.passengers.filter(name => this.companions.available.includes(name)).slice(0, this.model!.seats);
     if (commute && !passengers.includes(commute.npc)) return false;

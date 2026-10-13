@@ -1028,6 +1028,86 @@
   <</if>>
 <</widget>>
 
+<!-- 追缉：只读案件、回执与押送车辆；目标生成、追逐和领款由现场选择处理。 -->
+
+<<widget 'deadwood-street-bounty-journal'>>
+  <<set _journal_bounties to maplebirch.get('StreetLife')?.bounties>>
+  <<if !_journal_bounties>><<exit>><</if>>
+  <<set _journal_bounty_state to _journal_bounties.state>>
+  <<if _journal_bounty_state.cooperating or _journal_bounty_state.active or _journal_bounty_state.last or _journal_bounty_state.hunter>>
+    <<deadwood-card 'Cases and bounties' '案件与悬赏'>>
+      <div class='dr-finance-summary'>
+        <span><<lanSwitch 'Cases completed' '完成案件'>></span><span class='teal'><<= _journal_bounty_state.completed>></span>
+        <span><<lanSwitch 'Rewards collected' '累计实收'>></span><span><<printmoney _journal_bounty_state.earned>></span>
+      </div>
+      <<deadwood-street-bounty-status>>
+      <<if _journal_bounty_state.active?.stage is 'escort' and _journal_bounty_state.active.vehicle isnot null>>
+        <ul class='journal'>
+          <<if _journal_bounties.lost>>
+            <li class='red'><<lanSwitch 'The escort vehicle is missing. Report the loss at the station, or recover that vehicle first.' '押送车辆已失踪。请到警局报告，或先找回那辆车。'>></li>
+          <<else>>
+            <<set _journal_bounty_vehicle to _journal_bounties.vehicle, _journal_bounty_transport to maplebirch.get('Transport')>>
+            <<if _journal_bounty_transport>>
+              <<set _journal_bounty_model to _journal_bounty_transport.catalog.models.find(item => item.id === _journal_bounty_vehicle.model)>>
+              <li><<lanSwitch 'Escort vehicle: ' '押送车辆：'>><span class='teal'><<= maplebirch.t(_journal_bounty_model.name)>></span> · <<= _journal_bounty_transport.catalog.name(_journal_bounty_vehicle.point)>></li>
+            <</if>>
+          <</if>>
+        </ul>
+      <</if>>
+      <<if !_journal_bounty_state.active and _journal_bounty_state.last>>
+        <ul class='journal'><li>
+          <<switch _journal_bounty_state.last.outcome>>
+            <<case 'paid'>>
+              <<lanSwitch 'Last reward collected: ' '上次领取赏金：'>><<printmoney _journal_bounty_state.last.fee>>
+            <<case 'released'>>
+              <<lanSwitch 'You released the target. The case closed without a reward.' '你放走了目标，这份委托已结束，没有赏金。'>>
+            <<case 'interrupted'>>
+              <<lanSwitch 'Your arrest interrupted the last assignment. No reward was paid.' '你被拘捕，上一份追查委托随之中断，没有领取赏金。'>>
+            <<default>>
+              <<lanSwitch 'Your last assignment closed without a reward.' '上一份追查委托已结束，没有领取赏金。'>>
+          <</switch>>
+        </li></ul>
+      <</if>>
+      <<if _journal_bounty_state.hunter>>
+        <ul class='journal'><li @class='_journal_bounty_state.hunter.stage === "escaped" ? "green" : "red"'>
+          <<switch _journal_bounty_state.hunter.stage>>
+            <<case 'approach'>><<lanSwitch 'A bounty hunter has stopped you in the street.' '赏金猎人在街上拦住了你。'>>
+            <<case 'confrontation'>><<lanSwitch 'The hunter is confronting you over the notice.' '猎人正在依照告示拦截你。'>>
+            <<case 'fight'>><<lanSwitch 'You are fighting the hunter.' '你正在与猎人战斗。'>>
+            <<case 'caught'>><<lanSwitch 'The hunter has caught you and is arranging a police handover.' '你已被猎人抓住，对方正在安排移交警方。'>>
+            <<case 'escaped'>><<lanSwitch 'You have escaped this hunter.' '你已摆脱这名猎人。'>>
+          <</switch>>
+        </li></ul>
+      <</if>>
+      <<if _journal_bounties.wanted>>
+        <ul class='journal'><li class='red'><<lanSwitch 'The police have enough evidence to arrest you. New assignments and reward payments are suspended.' '警方已有足够罪证拘捕你，新委托与赏金发放暂时停止。'>></li></ul>
+      <<elseif _journal_bounty_state.active?.stage is 'settlement'>>
+        <span class='blue'><<lanSwitch 'Reward collection: police station, 08:00–18:00.' '赏金领取：警察局，08:00–18:00。'>></span><br>
+      <</if>>
+    <</deadwood-card>>
+    <hr>
+  <</if>>
+<</widget>>
+
+<!-- 弹药库存只读；购买与开火在现场结算。 -->
+
+<<widget 'deadwood-street-ammunition-journal'>>
+  <<set _journal_street to maplebirch.get('StreetLife')>>
+  <<if _journal_street and (Object.values($StreetLife.ammo).some(count => count > 0) or ['handheld', 'handheld_left'].some(slot => setup.clothes.handheld[$worn[slot]?.index]?.streetWeapon))>>
+    <<deadwood-card 'Ammunition' '弹药'>>
+      <div class='dr-finance-summary'>
+        <<for _journal_ammo_id, _journal_ammo range _journal_street.ammunition>>
+          <span><<icon _journal_ammo.icon>><<= lanSwitch(_journal_ammo.name[0], _journal_ammo.name[1])>></span><span class='teal'><<= $StreetLife.ammo[_journal_ammo_id]>><<lanSwitch ' rounds' ' 发'>></span>
+        <</for>>
+      </div>
+      <ul class='journal'>
+        <li><<lanSwitch 'The weapon seller at the smugglers’ pub stocks ammunition.' '走私者酒馆的武器卖家也出售弹药。'>></li>
+        <li><<lanSwitch 'Practice with Eden improves your aim; pain makes it harder to keep steady.' '与伊甸练枪有助于瞄准；疼痛会让你更难保持稳定。'>></li>
+      </ul>
+    <</deadwood-card>><hr>
+  <</if>>
+<</widget>>
+
 <!-- 出租车工作 -->
 
 <<widget 'deadwood-taxi-journal'>>

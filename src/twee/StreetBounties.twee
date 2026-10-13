@@ -1,0 +1,512 @@
+:: Deadwood Street Bounty Widgets [widget]
+
+<!-- 原版地点只提供入口；认人、交接和领款各在自有页面核验一次。 -->
+<<widget 'deadwood-street-bounty-link'>>
+  <<set _bountyWork to maplebirch.get('StreetLife')?.bounties, _bountySite to _args[0]>>
+  <<if _bountyWork?.available and _bountyWork.state.active and _bountyWork.terms.sites[_bountySite] and !(_bountySite is 'docks' and Time.dayState is 'night')>>
+    <<set _bountyCase to _bountyWork.state.active>>
+    <<if (_bountyCase.site is _bountySite and ['search', 'identified', 'pursuit', 'fight'].includes(_bountyCase.stage)) or (_bountyCase.stage is 'escort' and _bountyWork.here)>>
+      <<capture _bountySite>>
+        <<icon `_bountyWork.contract?.icon ?? 'street/case-board.png'`>><<lanLink ['Follow up your case (0:01)', '处理手上的案件 (0:01)'] 'Deadwood Street Bounty'>>
+          <<set $StreetLife.bounties.site to _bountySite>><<endevent>><<pass 1>>
+        <</lanLink>><br>
+      <</capture>>
+    <</if>>
+  <</if>>
+<</widget>>
+
+<!-- 日志只读取当前阶段；不得在此生成目标、重抽判定或结算赏金。 -->
+<<widget 'deadwood-street-bounty-status'>>
+  <<set _bountyWork to maplebirch.get('StreetLife').bounties, _bountyCase to _bountyWork.state.active, _bountyContract to _bountyWork.contract>>
+  <<if _bountyCase and _bountyContract>>
+    <div class='gold bold'><<= lanSwitch(_bountyContract.name[0], _bountyContract.name[1])>></div>
+    <ul class='journal'>
+      <li><<lanSwitch 'Reward after verification: ' '核验后的赏金：'>><<printmoney _bountyContract.fee>></li>
+      <<if _bountyCase.stage is 'settlement'>>
+        <li class='green'><<lanSwitch 'The target has been handed over. Collect your reward at the station.' '目标已经移交，请到警局领取赏金。'>></li>
+      <<else>>
+        <<set _bountyDate to new DateTime(_bountyCase.due), _bountySiteName to _bountyWork.terms.sites[_bountyCase.site].name>>
+        <li><<lanSwitch 'Last reported near ' '最近出现于：'>><<= lanSwitch(_bountySiteName[0], _bountySiteName[1])>></li>
+        <<if _bountyCase.stage isnot 'escort'>>
+          <li><<lanSwitch 'Follow this lead by ' '线索有效至：'>><<= lanSwitch(getFormattedDate(_bountyDate), _bountyDate.month + '月' + _bountyDate.day + '日')>> <<ampm _bountyDate.hour _bountyDate.minute>></li>
+        <</if>>
+        <<switch _bountyCase.stage>>
+          <<case 'search'>>
+            <li><<lanSwitch 'Follow the description and establish the target’s identity.' '依照特征寻找线索，先确认目标的身份。'>></li>
+          <<case 'identified'>>
+            <li><<lanSwitch 'You have matched the person to the case photograph.' '你已经核对照片与特征，确认了目标。'>></li>
+          <<case 'pursuit'>>
+            <li class='red'><<lanSwitch 'The target is trying to get away. Continue the pursuit or withdraw.' '目标正在逃跑，可以继续追赶或放弃追缉。'>></li>
+          <<case 'fight'>>
+            <li class='red'><<lanSwitch 'The target is resisting. The confrontation has become a fight.' '目标正在反抗，追缉已经转为战斗。'>></li>
+          <<case 'escort'>>
+            <<if _bountyWork.wounded>>
+              <li class='red'><<lanSwitch 'The target has a gunshot wound. Arrange medical assistance before handing them over.' '目标受了枪伤。先安排医护接收，再办理移交。'>></li>
+            <<else>>
+              <li><<lanSwitch 'Bring the target to the police station on Barb Street.' '把目标带到巴布街的警察局。'>></li>
+            <</if>>
+            <<if _bountyWork.lost>>
+              <li class='red'><<lanSwitch 'The escort vehicle is missing. Report the loss at the station.' '押送车辆失踪了，请回警局报告。'>></li>
+            <<elseif _bountyWork.wounded and _bountyCase.vehicle isnot null>>
+              <li class='blue'><<lanSwitch 'The injured target is still in the assigned vehicle. Return to it before arranging medical assistance.' '伤者仍在押送车辆中。回到那辆车旁，再安排医护接收。'>></li>
+            <<elseif _bountyCase.vehicle isnot null>>
+              <li class='blue'><<lanSwitch 'The target remains in the assigned vehicle. Bring that vehicle to Barb Street before handing them over.' '目标仍在押送车辆中。先把那辆车开到巴布街，再办理移交。'>></li>
+            <</if>>
+          <<case 'failed'>>
+            <li class='blue'><<lanSwitch 'The target got away. Report the failed pursuit before taking another case.' '目标已经逃脱。接新案前，先回报这次追缉失败。'>></li>
+        <</switch>>
+        <<if _bountyWork.expired and _bountyCase.stage isnot 'failed'>>
+          <li class='blue'><<lanSwitch 'The lead has gone cold. Return to the station and close the assignment.' '线索已经失效，回警局结束这份委托。'>></li>
+        <</if>>
+      <</if>>
+    </ul>
+  <</if>>
+<</widget>>
+
+:: Deadwood Street Bounties
+<<set $location to 'police_station'>><<set $outside to 0>><<effects>>
+<<set _bountyWork to maplebirch.get('StreetLife')?.bounties>>
+<<if _bountyWork>>
+  <!-- 每日首次可查看时保存顺序；同日重进、领款和重绘不重新抽取。 -->
+  <<if _bountyWork.available and _bountyWork.state.day isnot Math.floor(Time.days)>>
+    <<set _bountyWork.state.day to Math.floor(Time.days)>>
+    <<set _bountyWork.state.board to _bountyWork.terms.cases.map(item => item.id).shuffle()>>
+  <</if>>
+  <<if maplebirch.npc.Schedule.get('Grant').location is 'police_station'>><<endevent>><<npc 'Grant'>><<person1>><</if>>
+  <<language>>
+    <<option 'EN'>>
+      Photographs and typed notices cover the board beside reception. Several have dates crossed out and rewritten. The glass at the counter rattles as an officer shuts a drawer. Each notice gives a description, the last reported sighting, and what must be checked before a reward is paid.
+    <<option 'CN'>>
+      前台旁的告示板贴满照片和打印的通知，有几份的日期被划掉，又重新填过。警员关上抽屉，柜台上的玻璃跟着轻响。每份告示都写着人物特征、最近出现的地点，以及领赏前需要核验的事项。
+  <</language>><br><br>
+  <<if _bountyWork.state.last and !_bountyWork.state.active>>
+    <<set _bountyReport to _bountyWork.state.last>>
+    <<language>>
+      <<option 'EN'>>
+        <<if _bountyReport.outcome is 'paid'>>
+          The receipt for your last case is filed beneath your name. You have collected <<printmoney _bountyReport.fee>>. The officer turns to the remaining notices.
+        <<elseif _bountyReport.outcome is 'released'>>
+          "You let them go?" The officer writes your account down. "Then the notice stays up. You'll have to explain that decision to Grant."
+        <<elseif _bountyReport.outcome is 'interrupted'>>
+          Your unfinished assignment has been returned to the board. The file gives the interruption a short, matter-of-fact entry.
+        <<else>>
+          Your last assignment has been closed without a reward. The officer takes the information you found before putting the notice back with the other open cases.
+        <</if>>
+      <<option 'CN'>>
+        <<if _bountyReport.outcome is 'paid'>>
+          上一份案件的收据归在你的名字下，你已经领到了<<printmoney _bountyReport.fee>>。警员转向余下的告示。
+        <<elseif _bountyReport.outcome is 'released'>>
+          “你把人放了？”警员记下你的说法。“那告示还得贴着。这个决定，你得跟格兰特解释。”
+        <<elseif _bountyReport.outcome is 'interrupted'>>
+          你没办完的委托已经重新放回告示板，档案里对这次中断只记了一段简短的说明。
+        <<else>>
+          上一份委托已经结束，没有赏金。警员记下你找到的消息，把告示放回其它待办案件之间。
+        <</if>>
+    <</language>><br><br>
+  <</if>>
+  <<deadwood-street-bounty-status>>
+  <<if _bountyWork.state.active?.stage is 'settlement' and _bountyWork.wounded>>
+    <<deadwood-street-bounty-medical-handover>>
+  <</if>>
+  <<if _bountyWork.wanted>>
+    <<language>>
+      <<option 'EN'>>
+        The officer places your enquiry form on top of another file. "Your own record needs attention first." There is no reward to collect while that remains unresolved.
+      <<option 'CN'>>
+        警员把你的询问表放在另一份档案上。“先处理你自己的记录。”这件事没解决之前，柜台不会向你发放赏金。
+    <</language>><br><br>
+  <</if>>
+  <<if !_bountyWork.state.cooperating>>
+    <<lanSwitch 'Speak to Grant before taking a notice from the board.' '先与格兰特谈好合作，再接取告示板上的差事。'>><br>
+  <<elseif _bountyWork.available>>
+    <<if _bountyWork.state.active>>
+      <<set _bountyCase to _bountyWork.state.active>>
+      <<if _bountyCase.stage is 'settlement'>>
+        <<if !_bountyWork.wanted and Time.hour gte 8 and Time.hour lt 18>>
+          <<icon 'street/job-payment.png'>><<lanLink ['Collect the verified reward (0:05)', '领取核验后的赏金 (0:05)'] 'Deadwood Street Bounties'>>
+            <<if _bountyWork.act('pay')>><<pass 5>><</if>>
+          <</lanLink>><br>
+        <<elseif !_bountyWork.wanted>>
+          <span class='blue'><<lanSwitch 'The payment desk opens at 8 am and closes at 6 pm.' '领款窗口每天8点开放，18点关闭。'>></span><br>
+        <</if>>
+      <<elseif _bountyCase.stage is 'escort'>>
+        <<if _bountyWork.lost or !_bountyWork.target>>
+          <<refuseicon>><<lanLink ['Report the missing target (0:05)', '报告目标失踪 (0:05)'] 'Deadwood Street Bounties'>>
+            <<if _bountyWork.act('abandon')>><<pass 5>><</if>>
+          <</lanLink>><br>
+        <<elseif _bountyWork.point is 'barb' and _bountyWork.here>>
+          <<if _bountyCase.vehicle isnot null>>
+            <<getouticon>><<lanLink ['Help the target out of the vehicle (0:05)', '帮助目标下车 (0:05)'] 'Deadwood Street Bounties'>>
+              <<if _bountyWork.act('unload')>><<pass 5>><</if>>
+            <</lanLink>><br>
+          <<elseif _bountyWork.wounded>>
+            <<icon 'street/identity-handover.png'>><<lanLink ['Arrange medical assistance and police collection (0:30)', '安排医护与警员接收 (0:30)']>>
+              <<if _bountyWork.act('medical-handover')>><<endevent>><<goto 'Deadwood Street Bounties'>><</if>>
+            <</lanLink>><br>
+          <<else>>
+            <<icon 'street/identity-handover.png'>><<lanLink ['Hand the target over for identification (0:10)', '移交目标并核验身份 (0:10)'] 'Deadwood Street Bounties'>>
+              <<if _bountyWork.act('handover')>><<pass 10>><</if>>
+            <</lanLink>><br>
+          <</if>>
+        <<else>>
+          <span class='blue'><<lanSwitch 'The target is not here. Bring the assigned vehicle back, or meet them where you left it.' '目标不在这里。请把押送车辆开回来，或回车辆停放的地方接人。'>></span><br>
+        <</if>>
+      <<else>>
+        <<refuseicon>><<lanLink ['Report that you cannot finish this case (0:05)', '回报这次无法完成案件 (0:05)'] 'Deadwood Street Bounties'>>
+          <<if _bountyWork.act('abandon')>><<pass 5>><</if>>
+        <</lanLink>><br>
+      <</if>>
+    <<elseif !_bountyWork.wanted and Time.hour gte 8 and Time.hour lt 18>>
+      <<for _bountyOffer range _bountyWork.offers>>
+        <<capture _bountyOffer>>
+          <<deadwood-card _bountyOffer.name[0] _bountyOffer.name[1]>>
+            <<icon _bountyOffer.icon>><<= lanSwitch(_bountyOffer.brief[0], _bountyOffer.brief[1])>><br><br>
+            <<set _bountySiteName to _bountyWork.terms.sites[_bountyOffer.site].name>>
+            <<lanSwitch 'Last sighting: ' '最近出现地点：'>><span class='teal'><<= lanSwitch(_bountySiteName[0], _bountySiteName[1])>></span><br>
+            <<lanSwitch 'Reward: ' '赏金：'>><<printmoney _bountyOffer.fee>><br>
+            <<lanSwitch 'Risk: ' '风险：'>><span class='purple'><<= lanSwitch(_bountyOffer.risk[0], _bountyOffer.risk[1])>></span><br><br>
+            <span class='blue'><<lanSwitch 'The lead is valid for ' '接案后线索有效期为'>><<= _bountyWork.terms.deadline_hours>><<lanSwitch ' hours after acceptance.' '小时。'>></span><br>
+            <<icon _bountyOffer.icon>><<lanLink ['Take this case (0:05)', '接下这份案件 (0:05)'] 'Deadwood Street Bounties'>>
+              <<if _bountyWork.act('accept', _bountyOffer.id)>><<pass 5>><</if>>
+            <</lanLink>><br>
+          <</deadwood-card>>
+        <</capture>>
+      <</for>>
+      <<if !_bountyWork.offers.length>>
+        <<lanSwitch 'There are no new assignments for you just now. Check the board another day.' '眼下没有新的委托可接，改天可以再来看告示板。'>><br>
+      <</if>>
+    <<elseif !_bountyWork.wanted>>
+      <span class='blue'><<lanSwitch 'New assignments are issued between 8 am and 6 pm. The notices remain on the board overnight.' '新委托在8点至18点之间受理，夜间告示仍留在板上。'>></span><br>
+    <</if>>
+  <</if>><br>
+  <<if maplebirch.npc.Schedule.get('Grant').location is 'police_station'>>
+    <<socialiseicon 'ask'>><<lanLink ['Speak to Grant', '与格兰特交谈'] 'Deadwood Street Detective'>><<endevent>><</lanLink>><br>
+  <</if>>
+<</if>>
+<<getouticon>><<lanLink ['Return to reception', '返回前台'] 'Police Station'>><<endevent>><</lanLink>><br>
+
+:: Deadwood Street Bounty
+<<set _bountyWork to maplebirch.get('StreetLife')?.bounties, _bountyCase to _bountyWork?.state.active, _bountyContract to _bountyWork?.contract>>
+<<if !_bountyCase or !_bountyContract>>
+  <<lanSwitch 'There is no active lead to follow.' '现在没有正在追查的线索。'>><br><br>
+  <<getouticon>><<lanLink ['Return to the station', '返回警局'] 'Deadwood Street Bounties'>><<endevent>><</lanLink>><br>
+  <<exit>>
+<</if>>
+<<set _bountyPlace to _bountyWork.terms.sites[_bountyWork.state.site]>>
+<<set $location to _bountyPlace.location>><<set $outside to _bountyPlace.outside>>
+<<if _bountyPlace.point and (_bountyCase.stage is 'pursuit' or ['run', 'drive'].includes(_bountyCase.outcome))>><<set $location to 'town', $outside to 1>><</if>>
+<<effects>>
+<<deadwood-street-bounty-status>>
+<<if _bountyCase.stage is 'search'>>
+  <<deadwood-street-bounty-search>>
+  <<if _bountyWork.available and !_bountyWork.expired>>
+    <<icon 'investigate.png'>><<lanLink ['Check the description and ask around (0:15)', '核对特征并打听线索 (0:15)'] 'Deadwood Street Bounty'>>
+      <<if _bountyWork.act('investigate')>><<pass 15>><</if>>
+    <</lanLink>><br>
+  <</if>>
+<<elseif ['identified', 'pursuit', 'escort'].includes(_bountyCase.stage)>>
+  <<if _bountyWork.here and _bountyWork.target>>
+    <<if $NPCList[0]?.per isnot _bountyCase.key>><<endevent>><<loadNPC 0 _bountyCase.key>><</if>>
+    <<person1>>
+    <<switch _bountyCase.stage>>
+      <<case 'identified'>>
+        <<deadwood-street-bounty-identification>>
+        <<if _bountyWork.available and !_bountyWork.expired>>
+          <<if _bountyWork.chances.talk gt 0>>
+            <<socialiseicon 'ask'>><<lanLink ['Ask the target to come quietly (0:10)', '劝目标主动配合 (0:10)'] 'Deadwood Street Bounty'>>
+              <<if _bountyWork.act('talk')>><<pass 10>><</if>>
+            <</lanLink>><<difficulty _bountyWork.chances.talk>><br>
+          <</if>>
+          <<if !pcAreArmsBound('both')>>
+            <<skinicon 'manacles'>><<lanLink ['Try to restrain the target', '尝试制服目标']>>
+              <<if _bountyWork.act('fight')>><<goto 'Deadwood Street Fight'>><</if>>
+            <</lanLink>><br>
+          <</if>>
+        <</if>>
+      <<case 'pursuit'>>
+        <<language>>
+          <<option 'EN'>>
+            <<if !_bountyPlace.point>>
+              <<print $NPCList[0].name>> slips behind a wooden partition. A stool scrapes across the floor, and someone shouts from the next alcove. You catch sight of the same jacket in the passage between the rooms.
+            <<else>>
+              <<print $NPCList[0].name>> breaks away as you move closer. A shoulder brushes a passing pedestrian, and someone shouts after them. You catch sight of the same jacket again beyond the next corner.
+            <</if>>
+          <<option 'CN'>>
+            <<if !_bountyPlace.point>>
+              <<print $NPCList[0].name>>闪到木板隔间后。凳子刮过地板，邻近的隔间传来叫骂，你在连接房间的通道里又看见了那件外套。
+            <<else>>
+              你靠近时，<<print $NPCList[0].name>>猛地挣开，擦过一个路人的肩膀。身后有人大声叫骂，你在下一个转角后，又看见了那件外套。
+            <</if>>
+        <</language>><br><br>
+        <<if _bountyWork.available and !_bountyWork.expired>>
+          <<if _bountyWork.chances.run gt 0>>
+            <<runicon>><<lanLink ['Pursue on foot (0:10)', '步行追赶 (0:10)'] 'Deadwood Street Bounty'>>
+              <<if _bountyWork.act('run')>><<pass 10>><<athletics 2>><<tiredness 6>><</if>>
+            <</lanLink>><<difficulty _bountyWork.chances.run>><br>
+          <</if>>
+          <<for _bountyVehicle range _bountyWork.drivers>>
+            <<capture _bountyVehicle>>
+              <<set _bountyModel to maplebirch.get('Transport').catalog.models.find(item => item.id === _bountyVehicle.model)>>
+              <<icon `'transport/' + _bountyModel.id + '.png'`>><<lanLink [lanSwitch('Follow in ', '驾车追赶：') + maplebirch.t(_bountyModel.name) + ' (0:05)', lanSwitch('Follow in ', '驾车追赶：') + maplebirch.t(_bountyModel.name) + ' (0:05)'] 'Deadwood Street Bounty'>>
+                <<if _bountyWork.act('drive', _bountyVehicle.id)>><<pass 5>><</if>>
+              <</lanLink>><<difficulty _bountyWork.chances.drive>><br>
+            <</capture>>
+          <</for>>
+        <</if>>
+      <<case 'escort'>>
+        <<deadwood-street-bounty-escort>>
+    <</switch>>
+  <<else>>
+    <span class='blue'><<lanSwitch 'The target is in the assigned vehicle. Return to that vehicle before continuing.' '目标在押送车辆里，回那辆车旁再继续处理。'>></span><br><br>
+  <</if>>
+<<elseif _bountyCase.stage is 'fight'>>
+  <<language>>
+    <<option 'EN'>>
+      You have caught up, but the target refuses to come quietly. They turn to face you, hands raised. You brace yourself.
+    <<option 'CN'>>
+      你已经追上了人，目标却不肯配合。对方转身面对你，抬起双手。你站稳了脚步。
+  <</language>><br><br>
+  <<lanLink ['Confront the target', '迎战目标'] 'Deadwood Street Fight'>><</lanLink>><br>
+<<elseif _bountyCase.stage is 'settlement' and _bountyWork.wounded>>
+  <<deadwood-street-bounty-medical-handover>>
+<<elseif _bountyCase.stage is 'failed'>>
+  <<language>>
+    <<option 'EN'>>
+      You can report where you found the target and what happened, but there is no one under your control to bring back. The assignment remains unfinished.
+    <<option 'CN'>>
+      你能回报目标出现的地点和事情的经过，却没有控制住任何人，无法带回警局。这份委托还没有完成。
+  <</language>><br><br>
+<</if>>
+<<if _bountyWork.available and ['search', 'identified', 'pursuit', 'fight', 'failed'].includes(_bountyCase.stage)>>
+  <<refuseicon>><<lanLink ['Withdraw from this assignment (0:05)', '放弃这份追查委托 (0:05)'] _bountyPlace.passage>>
+    <<if _bountyWork.act('abandon')>><<endevent>><<pass 5>><</if>>
+  <</lanLink>><br>
+<</if>><br>
+<<getouticon>><<lanLink ['Return to the area', '返回附近'] _bountyPlace.passage>><<endevent>><</lanLink>><br>
+
+:: Deadwood Street Bounty Narrative [widget]
+
+<<widget 'deadwood-street-bounty-search'>>
+  <<= lanSwitch(_bountyContract.search[0], _bountyContract.search[1])>>
+  <<if _bountyCase.searches gt 0>>
+    <<language>>
+      <<option 'EN'>>
+        The accounts begin to agree. You check the time and the remaining details against the notice.
+      <<option 'CN'>>
+        几个人的说法渐渐吻合，你把时间和其余细节与告示再次核对。
+    <</language>>
+  <</if>><br><br>
+<</widget>>
+
+<<widget 'deadwood-street-bounty-identification'>>
+  <<language>>
+    <<option 'EN'>>
+      The face matches the photograph. You check the remaining details before stepping into view. "<<print $NPCList[0].name>>? The station wants to speak to you."
+    <<option 'CN'>>
+      这张脸与照片吻合。你又核对了其余特征，才走到对方面前。“<<print $NPCList[0].name>>？警局需要你过去一趟。”
+  <</language>><br><br>
+  <<= lanSwitch(_bountyContract.identify[0], _bountyContract.identify[1])>><br><br>
+<</widget>>
+
+<<widget 'deadwood-street-bounty-escort'>>
+  <<language>>
+    <<option 'EN'>>
+      <<if _bountyWork.wounded>>
+        <<print $NPCList[0].name>> has stopped fighting. Blood darkens the clothes around the gunshot wound. You stay nearby, keeping the weapon away from them. They look towards the street, then down at the blood again.
+      <<elseif _bountyCase.outcome is 'talk'>>
+        "Fine. I'll explain it there." <<print $NPCList[0].name>> comes with you, watching the road rather than meeting your eyes.
+      <<elseif _bountyCase.outcome is 'drive'>>
+        After the fight, you guide <<print $NPCList[0].name>> into the passenger seat of the car you used to intercept them. You keep the keys in your hand.
+      <<elseif _bountyCase.outcome is 'run'>>
+        The chase and struggle leave both of you breathing hard. You keep hold of <<print $NPCList[0].name>>. "We're going to the station."
+      <<else>>
+        After the struggle, <<print $NPCList[0].name>> stops trying to break away. You keep watch while catching your breath. "We're going to the station."
+      <</if>>
+    <<option 'CN'>>
+      <<if _bountyWork.wounded>>
+        <<print $NPCList[0].name>>已经停止反抗，枪伤周围的衣服被血浸得发暗。你留在旁边，确保武器不在对方伸手可及的地方。对方望了眼街道，又低头看向衣服上的血迹。
+      <<elseif _bountyCase.outcome is 'talk'>>
+        “行。到那边再说清楚。”<<print $NPCList[0].name>>跟着你，望向道路，没有与你对视。
+      <<elseif _bountyCase.outcome is 'drive'>>
+        战斗结束后，你让<<print $NPCList[0].name>>坐进刚才用来拦截对方的汽车，车钥匙仍握在自己手里。
+      <<elseif _bountyCase.outcome is 'run'>>
+        追逐与挣扎让两人都喘得厉害。你没有松开<<print $NPCList[0].name>>。“去警局。”
+      <<else>>
+        一番挣扎之后，<<print $NPCList[0].name>>不再试着逃开。你喘了口气，仍留意着对方的动作。“去警局。”
+      <</if>>
+  <</language>><br><br>
+  <<if _bountyWork.available>>
+    <<if _bountyCase.vehicle isnot null>>
+      <<getouticon>><<lanLink ['Help the target out of the vehicle (0:05)', '帮助目标下车 (0:05)'] 'Deadwood Street Bounty'>>
+        <<if _bountyWork.act('unload')>><<pass 5>><</if>>
+      <</lanLink>><br>
+    <<elseif _bountyWork.wounded>>
+      <<if _bountyWork.point>>
+        <<icon 'street/identity-handover.png'>><<lanLink ['Arrange medical assistance and police collection (0:30)', '安排医护与警员接收 (0:30)']>>
+          <<if _bountyWork.act('medical-handover')>><<endevent>><<goto 'Deadwood Street Bounty'>><</if>>
+        <</lanLink>><br>
+      <<else>>
+        <span class='blue'><<lanSwitch 'There is no road access here. Return by the original route to the surface and arrange medical assistance.' '这里不通道路。先沿原路回到地面，再安排医护接收。'>></span><br>
+      <</if>>
+    <<else>>
+      <<for _bountyVehicle range _bountyWork.vehicles>>
+        <<capture _bountyVehicle>>
+          <<set _bountyModel to maplebirch.get('Transport').catalog.models.find(item => item.id === _bountyVehicle.model)>>
+          <<icon `'transport/' + _bountyModel.id + '.png'`>><<lanLink [lanSwitch('Seat the target in ', '让目标乘坐：') + maplebirch.t(_bountyModel.name) + ' (0:05)', lanSwitch('Seat the target in ', '让目标乘坐：') + maplebirch.t(_bountyModel.name) + ' (0:05)'] 'Deadwood Street Bounty'>>
+            <<if _bountyWork.act('load', _bountyVehicle.id)>><<pass 5>><</if>>
+          <</lanLink>><br>
+        <</capture>>
+      <</for>>
+      <<if _bountyWork.point is 'barb'>>
+        <<icon 'street/identity-handover.png'>><<lanLink ['Hand the target over for identification (0:10)', '移交目标并核验身份 (0:10)'] 'Deadwood Street Bounties'>>
+          <<if _bountyWork.act('handover')>><<endevent>><<pass 10>><</if>>
+        <</lanLink>><br>
+      <<elseif _bountyWork.point>>
+        <<set _bountyWalkText to '(' + Math.floor(_bountyWork.walkMinutes / 60) + ':' + String(_bountyWork.walkMinutes % 60).padStart(2, '0') + ')'>>
+        <<runicon>><<lanLink ['Walk the target to the station ' + _bountyWalkText, '步行押送至警局 ' + _bountyWalkText]>>
+          <<if _bountyWork.act('walk')>><<endevent>><<goto 'Deadwood Street Bounties'>><</if>>
+        <</lanLink>><br>
+      <<else>>
+        <span class='blue'><<lanSwitch 'Return to the surface before escorting the target along the town streets.' '先沿原路回到地面，再沿镇上的街道押送目标。'>></span><br>
+      <</if>>
+    <</if>>
+    <<refuseicon>><<lanLink ['Let the target go and give up the reward (0:05)', '放走目标并放弃赏金 (0:05)'] _bountyPlace.passage>>
+      <<if _bountyWork.act('release')>><<endevent>><<pass 5>><</if>>
+    <</lanLink>><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-street-bounty-medical-handover'>>
+  <<language>>
+    <<option 'EN'>>
+      The medics take charge of the injured person while an officer checks the photograph and records where you found them. You are asked how the wound occurred. The officer takes your account down without promising what will happen next. The target is taken away for treatment under police supervision; the reward still has to be verified at the station.
+    <<option 'CN'>>
+      医护人员接过伤者，旁边的警员核对照片，记下你找到对方的地点。对方询问枪伤是怎么造成的，把你的说法写进记录，却没有对后续处理作出保证。目标被带去接受治疗，由警方看管；赏金仍需回警局核验领取。
+  <</language>><br><br>
+<</widget>>
+
+:: Deadwood Street Hunter Widgets [widget]
+
+<!-- append 先确认原版已呈现普通街道菜单；此处移除出行选项，进入自有页面由点击完成。 -->
+<<widget 'deadwood-street-hunter-entry'>>
+  <<set _hunterWork to maplebirch.get('StreetLife')?.bounties, _hunterCase to _hunterWork?.state.hunter>>
+  <<if _hunterCase?.stage is 'approach' and _hunterCase.source is $passage>>
+    <<replace '#passage-content'>>
+      <<language>>
+        <<option 'EN'>>
+          Someone steps into your path, a folded notice held beside a phone. Their gaze moves between the picture and your face. "There you are. The station has a reward out for you." They move when you do, keeping the pavement blocked.
+        <<option 'CN'>>
+          有人挡住你的去路，手机旁拿着一张折起的告示。目光在照片与你的脸之间来回移动。“找到了。警局可给你开了赏钱。”你挪动脚步，对方也跟着动，始终挡在前方。
+      <</language>><br><br>
+      <<icon 'investigate.png'>><<lanLink ['Face the hunter', '面对赏金猎人']>><<if _hunterWork.act('face')>><<goto 'Deadwood Street Hunter'>><</if>><</lanLink>><br>
+    <</replace>>
+  <</if>>
+<</widget>>
+
+:: Deadwood Street Hunter
+<<set _hunterWork to maplebirch.get('StreetLife')?.bounties, _hunterCase to _hunterWork?.state.hunter>>
+<<if !_hunterCase>>
+  <<lanSwitch 'The pavement ahead is clear.' '前方的道路已经畅通。'>><br><br>
+  <<getouticon>><<lanLink ['Return to the street', '返回街道'] 'Barb Street'>><<endevent>><</lanLink>><br>
+  <<exit>>
+<</if>>
+<<set $location to 'town'>><<set $outside to 1>><<effects>>
+<<if ['confrontation', 'fight', 'escaped', 'caught'].includes(_hunterCase.stage)>>
+  <<if $NPCList[0]?.per isnot _hunterCase.key>><<endevent>><<loadNPC 0 _hunterCase.key>><</if>>
+  <<person1>>
+<</if>>
+<<switch _hunterCase.stage>>
+  <<case 'confrontation'>>
+    <<language>>
+      <<option 'EN'>>
+        The hunter keeps one hand free. "We can walk back together. Or I can make this difficult." A few passers-by slow down, then continue past you. The notice carries the station's details and a reward of <<printmoney _hunterCase.amount>>.
+        <<if _hunterWork.state.cooperating>>The name on your own case file buys you no space on the pavement.<</if>>
+      <<option 'CN'>>
+        猎人空着一只手。“一起走回去，省点事。要不然，就没那么轻松了。”几个路人放慢脚步，又从你身边继续走过。告示上写着警局的信息，赏金为<<printmoney _hunterCase.amount>>。
+        <<if _hunterWork.state.cooperating>>你替警局办事的那份档案，此刻并不能让对方让开道路。<</if>>
+    <</language>><br><br>
+    <<if _hunterWork.available>>
+      <<if _hunterWork.hunterChances.talk gt 0>>
+        <<socialiseicon 'ask'>><<lanLink ['Talk your way past (0:05)', '设法说服对方放行 (0:05)'] 'Deadwood Street Hunter'>>
+          <<if _hunterWork.act('hunter-talk')>><<pass 5>><</if>>
+        <</lanLink>><<difficulty _hunterWork.hunterChances.talk>><br>
+      <</if>>
+      <<if _hunterWork.hunterChances.run gt 0>>
+        <<runicon>><<lanLink ['Run for it (0:10)', '逃跑 (0:10)'] 'Deadwood Street Hunter'>>
+          <<if _hunterWork.act('hunter-run')>><<pass 10>><<athletics 2>><<tiredness 6>><</if>>
+        <</lanLink>><<difficulty _hunterWork.hunterChances.run>><br>
+      <</if>>
+      <<if !pcAreArmsBound('both')>>
+        <<skinicon 'manacles'>><<lanLink ['Fight the hunter', '反抗猎人']>>
+          <<if _hunterWork.act('hunter-resist')>><<goto 'Deadwood Street Fight'>><</if>>
+        <</lanLink>><br>
+      <</if>>
+      <<skinicon 'manacles'>><<lanLink ['Go to the station quietly', '主动配合前往警局'] 'Deadwood Street Hunter Handover'>><<run _hunterWork.act('hunter-surrender')>><</lanLink>><br>
+    <</if>>
+  <<case 'fight'>>
+    <<language>>
+      <<option 'EN'>>
+        The hunter blocks your attempt to get away. A hand reaches for your wrist. You plant your feet as the gap closes.
+      <<option 'CN'>>
+        猎人挡住了你脱身的路线，一只手伸向你的手腕。对方逼近，你稳住了脚步。
+    <</language>><br><br>
+    <<lanLink ['Defend yourself', '保护自己'] 'Deadwood Street Fight'>><</lanLink>><br>
+  <<case 'escaped'>>
+    <<language>>
+      <<option 'EN'>>
+        <<if _hunterCase.outcome is 'talk'>>
+          The hunter studies the notice again. The moment of hesitation gives you room to pass. You keep walking until the voice behind you is lost in the traffic.
+        <<elseif _hunterCase.outcome is 'fight'>>
+          You knock the reaching hand aside and slip past. A shout follows you, but the hunter has to force a way through the people you have already passed.
+        <<else>>
+          You turn a corner without slowing down. When you look back from the next crossing, the hunter is no longer in sight.
+        <</if>>
+      <<option 'CN'>>
+        <<if _hunterCase.outcome is 'talk'>>
+          猎人又看了一遍告示。片刻迟疑给了你擦身而过的空隙，你继续向前，直到身后的声音淹没在车流里。
+        <<elseif _hunterCase.outcome is 'fight'>>
+          你拨开伸来的手，从旁边脱身。身后传来一声叫喊，可猎人还得挤过那些你已经走过的人。
+        <<else>>
+          你没有减速，迅速转过一个街角。到下一个路口回头看时，身后已经看不见猎人的踪影。
+        <</if>>
+    <</language>><br><br>
+    <span class='blue'><<lanSwitch 'You escaped this hunter. The evidence at the station remains.' '你甩掉了这名猎人，警局的罪证仍然存在。'>></span><br><br>
+    <<getouticon>><<lanLink ['Return to the street', '返回街道'] _hunterCase.source>><<run _hunterWork.act('leave')>><<endevent>><</lanLink>><br>
+  <<case 'caught'>>
+    <<language>>
+      <<option 'EN'>>
+        The hunter gets a firm grip before you can get clear. "Enough. Keep your hands where I can see them." Their phone is already open to a call. You hear the station's name above the noise of the road.
+      <<option 'CN'>>
+        你还没能脱身，猎人就牢牢抓住了你。“够了。双手放在我看得见的地方。”手机已经拨通，你在街道的喧闹中听见了警局的名字。
+    <</language>><br><br>
+    <<skinicon 'manacles'>><<lanLink ['Be taken to the station', '被带往警局'] 'Deadwood Street Hunter Handover'>><</lanLink>><br>
+<</switch>>
+
+:: Deadwood Street Hunter Handover
+<<set $location to 'police_station'>><<set $outside to 0>><<effects>>
+<<set _hunterWork to maplebirch.get('StreetLife')?.bounties, _hunterCase to _hunterWork?.state.hunter>>
+<<if _hunterCase?.stage is 'caught'>>
+  <<language>>
+    <<option 'EN'>>
+      At reception, the hunter presents the notice. An officer checks it against a file, then calls someone from the corridor behind the desk. "We'll take it from here." The hunter stays at the counter while you are led downstairs. A cell door rattles shut behind you.
+    <<option 'CN'>>
+      猎人在前台出示告示。警员对照档案核验之后，向柜台后的走廊叫来同事。“接下来交给我们。”猎人留在柜台前，你被带下楼，身后的牢门哗啦一声关上。
+  <</language>><br><br>
+  <!-- 强制移交接原版判刑，不经过带有自首减刑的 Police Turn。 -->
+  <<lanLink ['Wait (1:00)', '等待 (1:00)']>>
+    <<if _hunterWork.act('arrest')>><<set $leftarm to 'bound'>><<set $rightarm to 'bound'>><<unbind>><<endevent>><<pass 60>><<goto 'Police Cell'>><</if>>
+  <</lanLink>><br>
+<<else>>
+  <<lanSwitch 'Reception has no detainee waiting for this handover.' '前台没有等待这次移交的被捕者。'>><br><br>
+  <<getouticon>><<lanLink ['Return to reception', '返回前台'] 'Police Station'>><<endevent>><</lanLink>><br>
+<</if>>
+
+:: Deadwood Street Bounty Travel Widgets [widget]
+
+<!-- 同一车辆记录对应同一名在押目标；其它车辆及恋人同行不显示此提醒。 -->
+<<widget 'deadwood-street-bounty-transit'>>
+  <<set _transit_bounties to maplebirch.get('StreetLife')?.bounties, _transit_bounty to _transit_bounties?.state.active>>
+  <<if _transit_bounty?.stage is 'escort' and _transit_bounty.vehicle is _args[0] and !_transit_bounties.lost and _transit_bounties.vehicle.garage is null>>
+    <span class='blue'> · <<lanSwitch 'Target aboard · Barb Street police station' '目标在车内 · 巴布街警察局'>></span>
+  <</if>>
+<</widget>>

@@ -1,0 +1,503 @@
+{
+  "cooldown_days": 3,
+  "deadline_hours": 72,
+  "wanted_evidence": 1000,
+  "hunter_evidence": 5000,
+  "hunter_chance": 25,
+  "hunter_max_chance": 50,
+  "hunter": {
+    "talk": 15,
+    "run": 20,
+    "drive": 25,
+    "combat": {
+      "health": 200,
+      "anger": 200,
+      "trust": -100,
+      "strength": 20000
+    }
+  },
+  "sites": {
+    "alley": {
+      "name": ["Industrial alleyways", "工业区巷道"],
+      "passage": "Industrial Alleyways",
+      "point": "harvest",
+      "location": "alley",
+      "outside": 1
+    },
+    "pub": {
+      "name": ["Harvest Street pub", "丰收街酒馆"],
+      "passage": "Pub Landry",
+      "point": "harvest",
+      "location": "pub",
+      "outside": 0
+    },
+    "docks": {
+      "name": ["Docks", "码头"],
+      "passage": "Docks",
+      "point": "mer",
+      "location": "docks",
+      "outside": 1
+    },
+    "casino": {
+      "name": ["Connudatus Street gambling room", "康努达塔斯街赌馆"],
+      "passage": "Deadwood Reblooms Life Simulation Casino",
+      "point": "connudatus",
+      "location": "deadwood_casino",
+      "outside": 0
+    },
+    "smuggler": {
+      "name": ["Smuggler's pub", "走私者酒馆"],
+      "passage": "Smuggler Pub",
+      "point": null,
+      "location": "underground",
+      "outside": 0
+    },
+    "cafe": {
+      "name": ["Ocean Breeze Cafe", "海风咖啡馆"],
+      "passage": "Ocean Breeze",
+      "point": "cliff",
+      "location": "cafe",
+      "outside": 0
+    },
+    "hospital": {
+      "name": ["Hospital foyer", "医院大厅"],
+      "passage": "Hospital Foyer",
+      "point": "nightingale",
+      "location": "hospital",
+      "outside": 0
+    },
+    "townhall": {
+      "name": ["Town Hall reception", "市政厅前台"],
+      "passage": "Town Hall Wait",
+      "point": "cliff",
+      "location": "townhall",
+      "outside": 0
+    },
+    "tailor": {
+      "name": ["Tailor shop", "裁缝店"],
+      "passage": "Tailor Shop",
+      "point": "high",
+      "location": "shopping_centre",
+      "outside": 0
+    },
+    "finance": {
+      "name": ["Financial centre reception", "金融中心接待处"],
+      "passage": "Deadwood Reblooms Financial Centre",
+      "point": "high",
+      "location": "financial_centre",
+      "outside": 0
+    },
+    "library": {
+      "name": ["School library", "学校图书馆"],
+      "passage": "School Library",
+      "point": "oxford",
+      "location": "school",
+      "outside": 0
+    },
+    "police": {
+      "name": ["Police station", "警察局"],
+      "passage": "Police Station",
+      "point": "barb",
+      "location": "police_station",
+      "outside": 0
+    }
+  },
+  "cases": [
+    {
+      "id": "theft",
+      "name": ["The missing lockbox", "失窃的钱箱"],
+      "brief": [
+        "A warrant identifies a suspect in a shop burglary. The last sighting was near the industrial loading doors. Check the photograph and description before approaching anyone.",
+        "商店失窃案的拘捕令列明了一名嫌疑人，最后一次目击在工业区装货门附近。接近任何人之前，先核对照片与描述。"
+      ],
+      "site": "alley",
+      "requires": "",
+      "fee": 18000,
+      "icon": "street/lockbox-case.png",
+      "search": [
+        "The loading doors rattle above the alley. A driver pauses beside a trolley when you show the photograph. \"Seen plenty of coats like that. Let me look at the face.\" You wait while they compare it with someone at the far loading bay.",
+        "巷道上方的卸货门哗啦作响。你拿出照片，一位推货车的司机停下脚步。“这样的外套，见得多了。让我看看脸。”你等着对方仔细辨认，再朝远处卸货口旁的人望去。"
+      ],
+      "identify": [
+        "The face and the details on the notice match. \"Who told you I was here?\" The target shifts a bag behind one leg. \"I needed the money. That's all.\" Their eyes keep returning to the gap beside the loading door.",
+        "面孔与告示上的特征都对得上。“谁告诉你我在这里？”目标把包挪到一条腿后。“我需要钱。就这样。”对方的目光始终往卸货门旁的空隙飘。"
+      ],
+      "risk": [
+        "The loading bays offer cover and several ways out. This target looks more ready to flee than to stand their ground.",
+        "卸货口附近遮挡多，也有几条出路。目标比起正面冲突，更像是准备找机会逃跑。"
+      ],
+      "combat": {
+        "health": 175,
+        "anger": 150,
+        "trust": -100,
+        "strength": 18000
+      },
+      "talk": 35,
+      "run": 35,
+      "drive": 45
+    },
+    {
+      "id": "assault",
+      "name": ["Trouble on the waterfront", "海滨的袭击案"],
+      "brief": [
+        "Witnesses identified a suspect after an assault near the docks. A warrant is on file. Ask about the sighting without accusing the first person you meet.",
+        "码头附近的袭击案有目击者指认，拘捕令已经签发。调查目击地点，别把碰见的第一个人当成目标。"
+      ],
+      "site": "docks",
+      "requires": "",
+      "fee": 26000,
+      "icon": "street/witness-statement.png",
+      "search": [
+        "Ropes creak along the quay. You keep clear of the workers carrying equipment and show the photograph beside a shed. \"That's the one,\" a worker says, rubbing an old bruise on their wrist. \"But check for yourself. I don't want another row here.\"",
+        "码头边的缆绳吱呀作响。你避开搬运设备的工人，在货棚旁拿出照片。“就是那个人。”工人揉着手腕上的旧淤青，“不过，你自己认准了。我可不想这里再打一场。”"
+      ],
+      "identify": [
+        "The target lets go of the railing when you mention the warrant. \"It was an argument. They started it.\" They turn to face you fully, feet planted on the quay. \"You weren't there.\"",
+        "你提到拘捕令时，目标松开了栏杆。“就是吵了一架。是那帮人先动的手。”对方转身正对着你，双脚稳稳踩在码头地面上。“你又没在场。”"
+      ],
+      "risk": [
+        "An assault is already on the file. The target is sturdy and willing to fight; the edge of the quay leaves little room for mistakes.",
+        "档案里已有袭击记录。目标身强体壮，也不惧动手，码头边缘更容不得失足。"
+      ],
+      "combat": {
+        "health": 250,
+        "anger": 200,
+        "trust": -120,
+        "strength": 22000
+      },
+      "talk": 20,
+      "run": 30,
+      "drive": 40
+    },
+    {
+      "id": "escape",
+      "name": ["A missed court appearance", "未到庭的人"],
+      "brief": [
+        "A defendant failed to appear in court. A recent sighting places them at the Harvest Street pub. The warrant permits apprehension; it does not authorise you to punish them.",
+        "一名被告没有按时出庭，近期有人在丰收街酒馆见过此人。拘捕令允许将其带回，不允许你自行惩罚。"
+      ],
+      "site": "pub",
+      "requires": "",
+      "fee": 22000,
+      "icon": "street/court-summons.png",
+      "search": [
+        "Glasses knock against the bar while you wait for a break in the conversation. A customer recognises the photograph and nods towards the quieter end of the room. \"Been nursing that drink for an hour. Don't know anything about a court date.\"",
+        "杯子磕在吧台上，你等着谈话出现一个空隙。一位客人认出照片，朝房间较安静的那头点了点下巴。“端着那杯酒坐了一个小时了。开庭的事，我可不知道。”"
+      ],
+      "identify": [
+        "The target puts their glass down when you show the notice. \"I was going to sort it out.\" A coat is pulled from the chair. \"Another day or two. That's all I needed.\" They glance towards the door instead of picking the drink up again.",
+        "你出示告示，目标放下了杯子。“我本来就打算去解决。”对方从椅背拿起外套。“再过一两天。给我这一两天就行。”目光转向门口，没有再端起那杯酒。"
+      ],
+      "risk": [
+        "The warrant is for failing to appear in court. The target is anxious about going back; a conversation may settle this without a struggle.",
+        "拘捕令针对未按期出庭。目标害怕回去，但好好谈谈，也许能免去一番挣扎。"
+      ],
+      "combat": {
+        "health": 125,
+        "anger": 120,
+        "trust": -80,
+        "strength": 16000
+      },
+      "talk": 45,
+      "run": 25,
+      "drive": 35
+    },
+    {
+      "id": "chips",
+      "name": ["Chips that do not add up", "对不上的筹码"],
+      "brief": [
+        "The police have a warrant for a fraud suspect linked to counterfeit gambling chips. Staff recorded a recent visit to the Connudatus Street gambling room. Match the photograph before approaching a customer; losing money at a table is not a crime.",
+        "警方已对涉嫌使用假筹码诈骗的人签发拘捕令，赌馆员工记录了此人近期在康努达塔斯街的行踪。接近客人之前先核对照片，牌桌上输钱可不是犯罪。"
+      ],
+      "site": "casino",
+      "requires": "casino",
+      "fee": 23000,
+      "icon": "street/lockbox-case.png",
+      "search": [
+        "Chips click across the tables. You show the photograph away from a hand in progress, and a member of staff lowers their voice. \"The one who kept asking about changing chips? Still here a little while ago.\" They point towards a customer keeping watch on the cashier.",
+        "桌上的筹码碰得轻响。你避开正在进行的牌局，把照片递给一位员工。对方压低声音：“一直问怎么兑筹码的那个人？刚才还在。”员工指向一名正留意柜台的客人。"
+      ],
+      "identify": [
+        "The customer covers a small pile of chips with one hand when you mention the warrant. \"I bought them. How was I supposed to know?\" They smile, but the smile fades as you read the name from the notice.",
+        "你提到拘捕令，客人用一只手盖住面前那小堆筹码。“我是买来的。我怎么知道？”对方还想笑一笑，可你念出告示上的姓名后，那点笑意便消失了。"
+      ],
+      "risk": [
+        "The target relies on excuses and the busy room. Drawing a crowd could give them a chance to slip away.",
+        "目标擅长找借口，也指望赌馆里的忙乱掩护。引来围观，反倒可能给对方脱身的机会。"
+      ],
+      "combat": {
+        "health": 150,
+        "anger": 140,
+        "trust": -80,
+        "strength": 16000
+      },
+      "talk": 40,
+      "run": 40,
+      "drive": 45
+    },
+    {
+      "id": "pharmacy",
+      "name": ["A missing pharmacy consignment", "失踪的药房补货"],
+      "brief": [
+        "A hospital consignment was stolen, and the named suspect has an outstanding burglary warrant. A delivery receipt places them in the hospital foyer. Check the recorded identity; a patient's medication is not evidence of this theft.",
+        "一批医院补货遭窃，档案中列名的嫌疑人已有入室盗窃拘捕令。一张送货回执表明此人近期到过医院大厅。先核对记录中的身份，病人携带的药物不能当作这桩盗窃的证据。"
+      ],
+      "site": "hospital",
+      "requires": "",
+      "fee": 28000,
+      "icon": "street/pharmacy-carton.png",
+      "search": [
+        "Wheels squeak along the corridor beyond reception. A worker handling delivery forms studies the photograph. \"Came asking if another carton had arrived. Didn't like being told to wait.\" You compare the receipt's details with an adult carrying an empty delivery bag.",
+        "前台后的走廊传来推车轮子的吱呀声。整理送货表格的职员仔细看了看照片。“来问另一箱货到没到。让人等一等，还挺不高兴。”你核对回执上的特征，再望向一名拎着空送货袋的成年人。"
+      ],
+      "identify": [
+        "The target folds the empty bag under one arm. \"I was only the driver. Nobody tells the driver anything.\" The warrant remains between you. They look at the corridor, then at the doors behind you.",
+        "目标把空袋子折起来夹在臂下。“我只是司机。什么事都没人跟司机说。”拘捕令仍摊在你们之间。对方先看了看走廊，又望向你身后的大门。"
+      ],
+      "risk": [
+        "The foyer is crowded with patients and staff. The target may try to pass as a courier, then run when the explanation fails.",
+        "大厅里有病人与职员来往。目标可能装成普通送货员，辩解不成便会设法逃走。"
+      ],
+      "combat": {
+        "health": 175,
+        "anger": 150,
+        "trust": -100,
+        "strength": 18000
+      },
+      "talk": 35,
+      "run": 40,
+      "drive": 45
+    },
+    {
+      "id": "fraud",
+      "name": ["A signature that was never given", "未曾签下的名字"],
+      "brief": [
+        "A fraud warrant names a suspect who used forged business documents. They were last seen asking about an appointment at the financial centre. The file concerns the forgery, not an unpaid loan; staff must confirm the photograph and description.",
+        "诈骗拘捕令列明了一名涉嫌使用伪造经营文件的人，最后一次目击是此人在金融中心询问预约。案件针对伪造文件，并非追讨欠款；先请职员核对照片与特征。"
+      ],
+      "site": "finance",
+      "requires": "finance",
+      "fee": 32000,
+      "icon": "street/document-envelope.png",
+      "search": [
+        "A printer feeds another page into the tray behind reception. The receptionist looks at the photograph, then at a visitor waiting with a folder across their knees. \"Claimed there'd been a mistake with the appointment. They've asked twice already.\"",
+        "前台后的打印机又吐出一页纸。接待员看了看照片，再望向一名把文件夹横放在膝上的访客。“说预约出了差错。已经问过两回了。”"
+      ],
+      "identify": [
+        "The visitor closes the folder before you finish mentioning the warrant. \"Those papers were authorised. This is a business disagreement.\" You read the allegation from the file. Their polished reply stops halfway through the next sentence.",
+        "你还没说完拘捕令的事，访客就合上了文件夹。“那些文件都有授权。这是经营上的分歧。”你念出档案中的指控，对方那套熟练的答话在下一句话说到一半时停住了。"
+      ],
+      "risk": [
+        "The target is practiced at talking, but does not look eager for a fight. Keep the allegation separate from their business excuses.",
+        "目标很会说话，却不像愿意动手。别让对方把档案中的指控混进经营上的借口里。"
+      ],
+      "combat": {
+        "health": 150,
+        "anger": 120,
+        "trust": -80,
+        "strength": 16000
+      },
+      "talk": 45,
+      "run": 35,
+      "drive": 40
+    },
+    {
+      "id": "false_clerk",
+      "name": ["The bogus clerk", "冒牌办事员"],
+      "brief": [
+        "The police have issued a fraud warrant after residents reported paying an impostor for council services. The suspect was seen waiting at Town Hall reception. Verify the identity in the file; helping someone with forms is not itself an offence.",
+        "有居民支付所谓市政服务费用后报案，警方已对冒充办事员的嫌疑人签发诈骗拘捕令。此人近期被目击在市政厅前台等候。先核对档案中的身份，帮人填表本身并不是犯罪。"
+      ],
+      "site": "townhall",
+      "requires": "",
+      "fee": 18000,
+      "icon": "street/document-envelope.png",
+      "search": [
+        "People shift along the queue, clutching envelopes and crumpled forms. A clerk takes a careful look at the photograph. \"Keeps hanging around the waiting area. Doesn't work here.\" The person they indicate has a tidy stack of leaflets and no place behind the counter.",
+        "队伍慢慢向前挪，人们攥着信封与折皱的表格。办事员仔细辨认照片。“总在等候区转悠。不是这里的员工。”被指出的那个人手边叠着整齐的传单，柜台后却没有其席位。"
+      ],
+      "identify": [
+        "The target smooths the leaflets into a pile. \"I help people. That's what they paid for.\" You show the name and photograph on the warrant. \"I was going to give it back,\" they add, much more quietly.",
+        "目标把传单重新抚平，叠成一摞。“我帮人办事。人家付的是这个钱。”你给对方看拘捕令上的姓名与照片。“我本来打算退回去的。”后半句话的声音小了许多。"
+      ],
+      "risk": [
+        "The target appears nervous rather than strong. The waiting room has witnesses, but the queue also hides a quick exit.",
+        "目标显得紧张，不像身强力壮。等候区不缺目击者，不过排队的人也能挡住逃往门口的脚步。"
+      ],
+      "combat": {
+        "health": 125,
+        "anger": 130,
+        "trust": -80,
+        "strength": 16000
+      },
+      "talk": 50,
+      "run": 40,
+      "drive": 45
+    },
+    {
+      "id": "intimidation",
+      "name": ["A customer nobody wants back", "不受欢迎的回头客"],
+      "brief": [
+        "An assault and intimidation complaint has led to a warrant for a named suspect. They have returned to the Ocean Breeze Cafe. Confirm the photograph with a witness before intervening; the cafe's ordinary arguments are not your assignment.",
+        "一起袭击与恐吓投诉已有明确嫌疑人，拘捕令已经签发。此人又出现在海风咖啡馆。介入之前，请目击者核对照片；咖啡馆里的普通口角不属于你的委托。"
+      ],
+      "site": "cafe",
+      "requires": "",
+      "fee": 26000,
+      "icon": "street/witness-statement.png",
+      "search": [
+        "Cups clatter near the counter. You keep the photograph low while a customer glances at it. \"Again?\" They stop stirring their drink. \"The table by the door. I've been trying not to look over there.\" You compare the notice with the person watching the staff.",
+        "柜台附近响着杯碟碰撞声。你把照片放低，一位客人瞥了一眼。“又来了？”搅动饮料的手停住了。“门旁那张桌。我一直尽量不往那边看。”你拿告示核对那名留意着员工的人。"
+      ],
+      "identify": [
+        "The target pushes their chair back as you mention the station. \"Someone's been telling stories.\" The chair legs scrape the floor. \"Tell them to come and say it to my face.\" They rise before you have finished speaking.",
+        "你提到警局，目标便把椅子向后推。“有人在胡说八道。”椅腿刮过地板。“让人过来，当着我的面说。”你还没说完，对方已经站起身。"
+      ],
+      "risk": [
+        "The target is openly hostile, and the tables leave little room to move. Staff and customers need space to get clear.",
+        "目标毫不掩饰敌意，桌椅之间也不好闪避。员工与客人需要空隙避开冲突。"
+      ],
+      "combat": {
+        "health": 200,
+        "anger": 180,
+        "trust": -100,
+        "strength": 20000
+      },
+      "talk": 25,
+      "run": 35,
+      "drive": 40
+    },
+    {
+      "id": "fence",
+      "name": ["The buyer of stolen tools", "赃物的买家"],
+      "brief": [
+        "A handling-stolen-goods warrant identifies a suspect linked to stolen construction tools. A witness places them at the smuggler's pub. The warrant names one person; it is not permission to accuse everyone in the room.",
+        "收买赃物的拘捕令列明了一名与失窃施工工具有关的嫌疑人，有目击者称此人在走私者酒馆出现过。拘捕令只列了一个人，并不是让你指控屋里所有人的许可。"
+      ],
+      "site": "smuggler",
+      "requires": "underground",
+      "fee": 34000,
+      "icon": "street/tools-case.png",
+      "search": [
+        "The air is warm and stale beneath the low ceiling. You show the photograph to someone away from the bar. They give it a long look before answering. \"Back there. If you're after trouble, don't bring the whole room into it.\" A heavy case rests beneath the indicated seat.",
+        "低矮屋顶下的空气温热而沉闷。你避开吧台，把照片给一位客人看。对方看了好一会儿才答话。“后面。要找麻烦，别把整屋人都扯进去。”被指出的座位下放着一只沉重的箱子。"
+      ],
+      "identify": [
+        "The target plants a boot beside the case when you mention the warrant. \"You're a long way from the station.\" Conversation nearby goes quiet for a moment. \"I bought a few tools. That's all anyone needs to know.\"",
+        "你提到拘捕令，目标把靴子踏在箱子旁。“这里离警局可远着呢。”附近的谈话短暂安静下来。“买了几件工具。知道这些就够了。”"
+      ],
+      "risk": [
+        "The target is strong and dislikes police attention. You are below ground, away from your vehicle and the ordinary street exits.",
+        "目标体格强壮，也不愿招来警方注意。这里在地下，离你的车辆与地面的街道出口都有一段距离。"
+      ],
+      "combat": {
+        "health": 225,
+        "anger": 180,
+        "trust": -100,
+        "strength": 22000
+      },
+      "talk": 20,
+      "run": 30,
+      "drive": 35
+    },
+    {
+      "id": "uniforms",
+      "name": ["The wrong garment bag", "拿错的衣物袋"],
+      "brief": [
+        "A burglary warrant names a suspect in the theft of a workplace's uniforms and wages. A garment receipt places them at the tailor shop. Match the named suspect; wearing the same uniform does not make another worker responsible.",
+        "一家工作场所的制服与工资遭窃，拘捕令已列明入室盗窃嫌疑人。一张衣物收据把线索引向裁缝店。先认准列名的人，穿着同款制服的其他工人不应受牵连。"
+      ],
+      "site": "tailor",
+      "requires": "",
+      "fee": 16000,
+      "icon": "street/garment-bag.png",
+      "search": [
+        "The sewing machine slows as you show the photograph. An assistant checks a garment receipt, then points towards the waiting area. \"Wanted the name patches removed. Said the workplace had closed.\" An adult holding a garment bag watches the conversation from beside the door.",
+        "你拿出照片，缝纫机的声音慢了下来。店员核对衣物收据，朝等候区指了指。“要拆掉名牌。说原来的单位关门了。”一名拎着衣物袋的成年人站在门旁，留意着你们的谈话。"
+      ],
+      "identify": [
+        "The target grips the garment bag with both hands. \"They owed me.\" You show the warrant, and they swallow before speaking again. \"I was going to take the uniforms back.\" Their account says nothing about the missing wages.",
+        "目标双手攥住衣物袋。“本来就欠我的。”你出示拘捕令，对方咽了口唾沫，才继续开口。“制服，我本来打算还回去的。”这套说法里，没有提到失踪的工资。"
+      ],
+      "risk": [
+        "The target is frightened of the charge and keeps looking at the door. The confined shop makes a struggle risky for the people around you.",
+        "目标害怕这项指控，始终往门口张望。店里空间有限，动手容易波及旁人。"
+      ],
+      "combat": {
+        "health": 150,
+        "anger": 140,
+        "trust": -80,
+        "strength": 18000
+      },
+      "talk": 45,
+      "run": 40,
+      "drive": 45
+    },
+    {
+      "id": "equipment",
+      "name": ["Equipment that never came back", "没能归还的器材"],
+      "brief": [
+        "An adult contractor is wanted under a burglary warrant for removing school equipment. A recent delivery places the named suspect near the school library. Check the photograph and employment record; pupils and ordinary overdue-book borrowers are not targets.",
+        "一名成年承包人员涉嫌窃取学校器材，已有入室盗窃拘捕令。近期的送货记录表明列名的人在学校图书馆附近出现过。核对照片与工作记录，学生和普通逾期借书者都不是追缉目标。"
+      ],
+      "site": "library",
+      "requires": "",
+      "fee": 21000,
+      "icon": "street/equipment-case.png",
+      "search": [
+        "Pages turn quietly between the shelves. You wait until a staff member has finished helping a reader, then show the photograph. \"Not one of the students. Came with the equipment deliveries.\" An adult with a contractor's bag waits near a stack of empty boxes.",
+        "书架之间响着轻轻的翻页声。你等一位职员帮读者找完书，才拿出照片。“不是学生。跟着器材送货来过。”一名拎着工装包的成年人站在几只空箱子旁等候。"
+      ],
+      "identify": [
+        "The target glances at the shelves when you mention the warrant. \"Keep your voice down.\" They draw the bag closer. \"The job ended. I thought nobody wanted that stuff anymore.\" Their eyes settle on the way out of the library.",
+        "你提到拘捕令，目标先往书架间看了一眼。“小声点。”对方把包拉近。“活都结束了。我以为那些东西已经没人要了。”目光最后停在图书馆的出口上。"
+      ],
+      "risk": [
+        "The target wants to avoid a scene and may listen before trying to escape. The quiet room contains readers who have nothing to do with the case.",
+        "目标不想当众闹开，也许愿意先听你说完再设法脱身。安静的房间里，还有与案件无关的读者。"
+      ],
+      "combat": {
+        "health": 175,
+        "anger": 140,
+        "trust": -80,
+        "strength": 18000
+      },
+      "talk": 45,
+      "run": 40,
+      "drive": 45
+    },
+    {
+      "id": "cargo_raid",
+      "name": ["The loading-bay robber", "卸货口的劫货者"],
+      "brief": [
+        "A robbery warrant names a suspect who assaulted a driver and stole a consignment. Witnesses reported the same person near the industrial loading bays. Check the photograph against the witness description; carrying cargo is not evidence by itself.",
+        "一名袭击司机并劫走货物的嫌疑人已有抢劫拘捕令，目击者称同一个人又出现在工业区卸货口。将照片与目击特征核对，携带货物本身不能作为证据。"
+      ],
+      "site": "alley",
+      "requires": "",
+      "fee": 40000,
+      "icon": "street/equipment-case.png",
+      "search": [
+        "An engine idles at the mouth of the alley. A driver studies the photograph from behind the cab door. \"That's who pulled me out.\" They point past a stack of pallets, then draw back into the cab. You compare the person beyond the pallets with the details on the notice.",
+        "巷口一辆货车怠速作响。司机隔着驾驶室的门辨认照片。“就是把我拽下车的那个人。”对方指了指一摞托盘后面，随即退回车内。你将托盘另一侧那人的特征，与告示逐项比对。"
+      ],
+      "identify": [
+        "The target straightens beside the pallets as you mention the warrant. \"Wrong person.\" They stare at you rather than at the photograph. \"Walk away while you still can.\" Their hands come free of their pockets.",
+        "你提到拘捕令，目标在托盘旁站直了身子。“认错人了。”对方盯着你，根本没去看照片。“趁还能走，赶紧走。”双手从口袋里抽了出来。"
+      ],
+      "risk": [
+        "This suspect has already used violence against a driver and appears ready to do so again. The stacked cargo limits your movement.",
+        "这名嫌疑人已经对司机使用过暴力，看起来也不介意再来一次。堆起的货物还会限制你的活动空间。"
+      ],
+      "combat": {
+        "health": 250,
+        "anger": 200,
+        "trust": -120,
+        "strength": 22000
+      },
+      "talk": 15,
+      "run": 35,
+      "drive": 45
+    }
+  ]
+}

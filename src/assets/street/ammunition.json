@@ -1,0 +1,20 @@
+{
+  "handgun": {
+    "name": ["Handgun ammunition", "手枪弹药"],
+    "count": 12,
+    "cost": 6000,
+    "icon": "street/handgun-ammo.png"
+  },
+  "shotgun": {
+    "name": ["Shotgun shells", "霰弹枪弹药"],
+    "count": 6,
+    "cost": 4800,
+    "icon": "street/shotgun-shells.png"
+  },
+  "rifle": {
+    "name": ["Rifle ammunition", "步枪弹药"],
+    "count": 10,
+    "cost": 8000,
+    "icon": "street/rifle-ammo.png"
+  }
+}

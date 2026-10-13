@@ -34,6 +34,7 @@ declare global {
   const Links: { enabled: boolean };
 
   interface Window {
+    crimeSumCurrent(): number;
     settingValueNameFromValue?: (name: string, value: unknown) => unknown;
     sexShopOnBuyClick(index: number, inSexShop?: boolean, colour?: string, costsMoney?: boolean): void;
     deck(): PlayingCard[];

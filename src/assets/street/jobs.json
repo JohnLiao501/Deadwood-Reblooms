@@ -96,7 +96,7 @@
       "fee": 4500,
       "reputation": 3,
       "required_reputation": 0,
-      "icon": "pub.png",
+      "icon": "street/bottle-crate.png",
       "issues": ["shortage", "queue", "none", "none"],
       "illegal": false,
       "requires": "casino"
@@ -114,7 +114,7 @@
       "fee": 8000,
       "reputation": 4,
       "required_reputation": 0,
-      "icon": "investigate.png",
+      "icon": "street/equipment-case.png",
       "issues": ["queue", "none", "none", "none"],
       "illegal": false,
       "requires": ""
@@ -132,7 +132,7 @@
       "fee": 11000,
       "reputation": 5,
       "required_reputation": 10,
-      "icon": "actions/crime.png",
+      "icon": "street/watch-pouch.png",
       "issues": ["price", "recognised", "queue", "none"],
       "illegal": true,
       "requires": "underground"
@@ -150,7 +150,7 @@
       "fee": 6500,
       "reputation": 4,
       "required_reputation": 10,
-      "icon": "hospital.png",
+      "icon": "street/pharmacy-carton.png",
       "issues": ["label", "queue", "none", "none"],
       "illegal": false,
       "requires": ""
@@ -168,7 +168,7 @@
       "fee": 3000,
       "reputation": 2,
       "required_reputation": 0,
-      "icon": "library.png",
+      "icon": "street/library-crate.png",
       "issues": ["queue", "none", "none", "none"],
       "illegal": false,
       "requires": ""
@@ -186,7 +186,7 @@
       "fee": 5000,
       "reputation": 3,
       "required_reputation": 0,
-      "icon": "food/coffee.png",
+      "icon": "street/coffee-delivery.png",
       "issues": ["label", "queue", "none", "none"],
       "illegal": false,
       "requires": ""
@@ -204,7 +204,7 @@
       "fee": 6000,
       "reputation": 3,
       "required_reputation": 0,
-      "icon": "docks.png",
+      "icon": "street/tools-case.png",
       "issues": ["label", "queue", "none", "none"],
       "illegal": false,
       "requires": ""
@@ -222,7 +222,7 @@
       "fee": 12500,
       "reputation": 6,
       "required_reputation": 15,
-      "icon": "actions/crime.png",
+      "icon": "street/tools-case.png",
       "issues": ["price", "recognised", "queue", "none"],
       "illegal": true,
       "requires": "underground"
@@ -240,7 +240,7 @@
       "fee": 4000,
       "reputation": 2,
       "required_reputation": 0,
-      "icon": "office.png",
+      "icon": "street/document-envelope.png",
       "issues": ["queue", "none", "none", "none"],
       "illegal": false,
       "requires": ""
@@ -258,7 +258,7 @@
       "fee": 3500,
       "reputation": 2,
       "required_reputation": 0,
-      "icon": "clothing-shop.png",
+      "icon": "street/garment-bag.png",
       "issues": ["label", "none", "none", "none"],
       "illegal": false,
       "requires": ""
@@ -276,7 +276,7 @@
       "fee": 5500,
       "reputation": 3,
       "required_reputation": 10,
-      "icon": "finance/bank-counter.png",
+      "icon": "street/document-envelope.png",
       "issues": ["queue", "none", "none", "none"],
       "illegal": false,
       "requires": "finance"
@@ -294,7 +294,7 @@
       "fee": 15000,
       "reputation": 6,
       "required_reputation": 20,
-      "icon": "actions/crime.png",
+      "icon": "street/concealed-parcel.png",
       "issues": ["price", "recognised", "queue", "none"],
       "illegal": true,
       "requires": "underground"

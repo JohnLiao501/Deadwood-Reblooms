@@ -55,7 +55,7 @@ export default class Jobs {
   }
 
   public get available(): boolean {
-    return this.street.available && !window.pcAreArmsBound('both') && !V.nextPassageCheck;
+    return this.street.available && !this.street.bounties.busy && !window.pcAreArmsBound('both') && !V.nextPassageCheck;
   }
 
   public get offers(): Contract[] {
@@ -70,7 +70,7 @@ export default class Jobs {
           (item.requires !== 'finance' || !!this.street.core.get('Finance')) &&
           (item.requires !== 'underground' || V.smuggler_pub_known === 1)
       );
-    // 当前条件过滤之后取三项合法、一项非法；当天随机顺序由 gate 保存。
+    // 当前条件过滤之后取三项合法、一项非法；当天随机顺序由委托页面保存。
     return [...candidates.filter(item => !item.illegal).slice(0, 3), ...candidates.filter(item => item.illegal).slice(0, 1)];
   }
 
@@ -185,7 +185,7 @@ export default class Jobs {
       if (
         contract.id === 'recovery' &&
         ++job.searches === 1 &&
-        random(1, 100) > Math.clamp(terms.search_chance_base + V.skulduggery / terms.search_skill_divisor, terms.search_chance_base, terms.search_chance_max)
+        random(1, 100) > Math.clamp(terms.search_chance_base + window.currentSkillValue('skulduggery') / terms.search_skill_divisor, terms.search_chance_base, terms.search_chance_max)
       )
         return true;
       job.stage = 'carrying';

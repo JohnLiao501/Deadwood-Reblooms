@@ -1,0 +1,117 @@
+:: Deadwood Street Fight
+<<set _bountyCombat to maplebirch.get('StreetLife')?.bounties, _bountyFight to _bountyCombat?.fight>>
+<<if !_bountyFight or !$per_npc[_bountyFight.key]>>
+  <<lanSwitch 'There is no current confrontation to continue.' '当前没有待继续的冲突。'>><br><br>
+  <<getouticon>><<lanLink ['Return to the case board', '返回案件告示板'] 'Deadwood Street Bounties'>><</lanLink>><br>
+  <<exit>>
+<</if>>
+
+<<if _bountyCombat.fightingHunter>>
+  <<set $location to 'town', $outside to 1>>
+<<else>>
+  <<set _bountyFightPlace to _bountyCombat.terms.sites[_bountyCombat.state.site]>>
+  <<set $location to _bountyFightPlace.location, $outside to _bountyFightPlace.outside>>
+  <<if _bountyFightPlace.point and ['run', 'drive'].includes(_bountyFight.outcome)>><<set $location to 'town', $outside to 1>><</if>>
+<</if>>
+
+<!-- 身份来自本案保存的成人 NPC；只在首次进入初始化，重绘与读档不重置生命。 -->
+<<if !_bountyFight.combatStarted and _bountyCombat.available and !$nextPassage>>
+  <<set _bountyFightStats to _bountyCombat.fightingHunter ? _bountyCombat.terms.hunter.combat : _bountyCombat.contract.combat>>
+  <<endevent>><<loadNPC 0 _bountyFight.key>>
+  <<set $NPCList[0].health to _bountyFightStats.health, $NPCList[0].healthmax to _bountyFightStats.health>>
+  <<neutral 1>><<set $consensual to 0>><<maninit>>
+  <<set $enemytrust to _bountyFightStats.trust, $enemyanger to _bountyFightStats.anger, $enemystrength to _bountyFightStats.strength>>
+  <<npcidlegenitals>><<set _bountyFight.combatStarted to true>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      <<if _bountyCombat.fightingHunter>>
+        <<print $NPCList[0].name>> reaches for your wrist. You knock the hand aside and brace yourself on the pavement.
+      <<else>>
+        <<print $NPCList[0].name>> raises an arm as you reach closer. You plant your feet and move to stop them getting past.
+      <</if>>
+    <<option 'CN'>>
+      <<if _bountyCombat.fightingHunter>>
+        <<print $NPCList[0].name>>伸手抓向你的手腕。你拨开那只手，在人行道上站稳脚步。
+      <<else>>
+        你靠近时，<<print $NPCList[0].name>>抬起一条手臂。你站稳脚步，试着拦住对方的去路。
+      <</if>>
+  <</language>><br><br>
+<</if>>
+
+<<if _bountyCombat.inCombat>>
+  <<effects>>
+  <<if $passage isnot 'Deadwood Street Fight'>><<exit>><</if>>
+  <<effectsman>><<alarmstate>><<man>><<stateman>>
+  <br><br><<actionsman>>
+  <!-- 原版强制转场优先，保留普通 Next 链接交给原版 link override 处理。 -->
+  <<if $passage isnot 'Deadwood Street Fight'>><<exit>><</if>>
+  <<if $nextPassage or $nextPassageCheck>>
+    <span id='next'><<lanLink ['Next', '继续'] 'Deadwood Street Fight'>><</lanLink>></span><<nexttext>>
+  <<elseif _combatend or _bountyCombat.combatComplete>>
+    <span id='next'><<lanLink ['Next', '继续'] 'Deadwood Street Fight Finish'>><</lanLink>></span><<nexttext>>
+  <<else>>
+    <span id='next'><<lanLink ['Next', '继续'] 'Deadwood Street Fight'>><</lanLink>></span><<nexttext>>
+  <</if>>
+<<elseif $nextPassage or $nextPassageCheck>>
+  <span id='next'><<lanLink ['Next', '继续'] 'Deadwood Street Fight'>><</lanLink>></span><<nexttext>>
+<<else>>
+  <<lanSwitch 'The confrontation cannot continue here. Return to the station to review the assignment.' '这场冲突无法在这里继续，请回警局核对委托。'>><br><br>
+  <<getouticon>><<lanLink ['Return to the case board', '返回案件告示板'] 'Deadwood Street Bounties'>><</lanLink>><br>
+<</if>>
+
+:: Deadwood Street Fight Finish
+<<set _bountyCombat to maplebirch.get('StreetLife')?.bounties, _bountyFight to _bountyCombat?.fight>>
+<<if $nextPassage or $nextPassageCheck>>
+  <span id='next'><<lanLink ['Next', '继续'] 'Deadwood Street Fight'>><</lanLink>></span><<nexttext>>
+  <<exit>>
+<</if>>
+<<if !_bountyFight or !_bountyCombat.inCombat or !_bountyCombat.combatComplete>>
+  <<if _bountyCombat?.inCombat>>
+    <span id='next'><<lanLink ['Next', '继续'] 'Deadwood Street Fight'>><</lanLink>></span><<nexttext>>
+  <<else>>
+    <<lanSwitch 'There is no unfinished confrontation here.' '这里没有待结束的冲突。'>><br><br>
+    <<getouticon>><<lanLink ['Return to the case board', '返回案件告示板'] 'Deadwood Street Bounties'>><</lanLink>><br>
+  <</if>>
+  <<exit>>
+<</if>>
+
+<<set _bountyWasHunter to _bountyCombat.fightingHunter>>
+<!-- finish 先保存演员与结果，再调用原版 endcombat；此页不重复清理或发放奖励。 -->
+<<if _bountyCombat.act('finish')>>
+  <<if $passage isnot 'Deadwood Street Fight Finish'>><<exit>><</if>>
+  <<language>>
+    <<option 'EN'>>
+      <<if _bountyWasHunter>>
+        <<if _bountyFight.stage is 'escaped'>>
+          You break clear of the hunter and put a few steps between you. The road is open ahead.
+        <<else>>
+          The hunter catches your arm before you can get clear. You hear a call to the station as their grip tightens.
+        <</if>>
+      <<elseif _bountyFight.stage is 'escort'>>
+        The target stops struggling. You catch your breath, keeping watch as you prepare to take them to the station.
+      <<else>>
+        You pull back to catch your breath. The target is no longer within reach; there is no one to hand over.
+      <</if>>
+    <<option 'CN'>>
+      <<if _bountyWasHunter>>
+        <<if _bountyFight.stage is 'escaped'>>
+          你摆脱猎人，拉开了几步距离。前方的道路已经畅通。
+        <<else>>
+          你还没能脱身，猎人就抓住了你的手臂。握住你的力道收紧，耳边传来拨往警局的电话声。
+        <</if>>
+      <<elseif _bountyFight.stage is 'escort'>>
+        目标停止挣扎。你缓了口气，仍留意着对方的动作，准备将人带往警局。
+      <<else>>
+        你退开喘了口气。目标已经脱离了你的控制，这次没有人能带回警局。
+      <</if>>
+  <</language>><br><br>
+  <<if _bountyWasHunter and _bountyFight.stage is 'caught'>>
+    <<skinicon 'manacles'>><<lanLink ['Be taken to the station', '被带往警局'] 'Deadwood Street Hunter Handover'>><</lanLink>><br>
+  <<elseif _bountyWasHunter>>
+    <<getouticon>><<lanLink ['Continue', '继续'] 'Deadwood Street Hunter'>><</lanLink>><br>
+  <<else>>
+    <<getouticon>><<lanLink ['Continue', '继续'] 'Deadwood Street Bounty'>><</lanLink>><br>
+  <</if>>
+<<else>>
+  <span id='next'><<lanLink ['Next', '继续'] 'Deadwood Street Fight'>><</lanLink>></span><<nexttext>>
+<</if>>

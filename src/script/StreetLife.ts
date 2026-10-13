@@ -1,3 +1,5 @@
+import Detective from './StreetLife/Detective';
+
 export default function StreetLife(maplebirch: typeof window.maplebirch): void {
   const weaponTrait = () => {
     // 原版 clothingtrait 按 type 读取这张表及同名图标；物品标识不能只有 type 而没有说明。
@@ -11,19 +13,52 @@ export default function StreetLife(maplebirch: typeof window.maplebirch): void {
   maplebirch.on(':language', weaponTrait);
   // 服装目录独立于模块开关加载，类型说明常驻；玩法只在模块启用时接入。
   if (!maplebirch.get('StreetLife')) return;
-  maplebirch.dynamic.regStateEvent('gate', 'deadwood-street-job-board', {
-    extra: { passage: ['Deadwood Street Jobs'] },
-    cond: () => maplebirch.get('StreetLife')!.jobs.available && V.StreetLife.jobs.day !== Math.floor(Time.days),
+  Detective(maplebirch);
+  maplebirch.tool.addTo('BeforeLinkZone', { widget: 'deadwood-street-detective-link', passage: 'Police Station' });
+  maplebirch.tool.addTo('Journal', 'deadwood-street-bounty-journal');
+  maplebirch.tool.addTo('Journal', 'deadwood-street-ammunition-journal');
+  maplebirch.dynamic.regStateEvent('gate', 'deadwood-street-fight-interrupted', {
+    cond: () => {
+      if (!V.StreetLife?.bounties) return false;
+      const work = maplebirch.get('StreetLife')!.bounties;
+      return (!!work.fight?.combatStarted && !V.combat) || (maplebirch.passage.title === 'Police Cell' && !!work.state.active);
+    },
     action: () => {
-      // 每日首次进入委托页洗牌一次；全部候选保留，临时未解锁不会占住当天名额。
-      const state = V.StreetLife.jobs;
-      state.day = Math.floor(Time.days);
-      state.board = maplebirch.get('StreetLife')!.jobs.terms.jobs.map(item => item.id);
-      for (let i = state.board.length - 1; i > 0; i--) {
-        const j = random(0, i);
-        [state.board[i], state.board[j]] = [state.board[j], state.board[i]];
+      const work = maplebirch.get('StreetLife')!.bounties;
+      if (maplebirch.passage.title === 'Police Cell' && work.state.active) {
+        const job = work.state.active;
+        if (V.NPCList[0]?.per === job.key) maplebirch.SugarCube.Wikifier.wikifyEval('<<endevent>>');
+        if (V.per_npc[job.key]) maplebirch.SugarCube.Wikifier.wikifyEval(`<<clearNPC '${job.key}'>>`);
+        work.state.last = { id: job.id, outcome: 'interrupted', fee: 0 };
+        work.state.active = null;
+      }
+      const fight = work.fight!;
+      if (!fight) return;
+      fight.combatStarted = false;
+      if (work.fightingHunter) {
+        if (V.NPCList[0]?.per === fight.key) maplebirch.SugarCube.Wikifier.wikifyEval('<<endevent>>');
+        if (V.per_npc[fight.key]) maplebirch.SugarCube.Wikifier.wikifyEval(`<<clearNPC '${fight.key}'>>`);
+        work.state.hunter = null;
+      } else {
+        work.state.active!.stage = 'failed';
+        work.state.active!.vehicle = null;
       }
     }
+  });
+  maplebirch.dynamic.regStateEvent('append', 'deadwood-street-bounty-hunter', {
+    extra: { match: / Street$/ },
+    // 原文及普通街道菜单已完成，才能拦路；强制事件没有当页 Bus 链接。
+    cond: () => {
+      const bounty = maplebirch.get('StreetLife')!.bounties;
+      return (
+        bounty.available &&
+        Array.isArray(V.link_table) &&
+        V.link_table.some(entry => entry.includes('|Bus]]')) &&
+        (bounty.state.hunter ? bounty.state.hunter.stage === 'approach' && bounty.state.hunter.source === maplebirch.passage.title : bounty.state.hunterDay !== Math.floor(Time.days))
+      );
+    },
+    action: () => maplebirch.get('StreetLife')!.bounties.checkHunter(),
+    output: 'deadwood-street-hunter-entry'
   });
   maplebirch.tool.addTo('Reputation', 'deadwood-street-reputation');
   maplebirch.tool.addTo('Journal', 'deadwood-street-job-journal');
@@ -122,10 +157,17 @@ export default function StreetLife(maplebirch: typeof window.maplebirch): void {
       display: () => {
         const item = V.worn[hand === 'left' ? 'handheld_left' : 'handheld'];
         const data = setup.clothes.handheld[item.index];
-        return lanSwitch(`Use ${data.name}`, `使用${data.cn_name_cap}`);
+        return data.streetWeapon ? lanSwitch(`Fire ${data.name}`, `使用${data.cn_name_cap}开火`) : lanSwitch(`Use ${data.name}`, `使用${data.cn_name_cap}`);
       },
       value: () => `streetWeapon${hand}`,
       color: 'def',
+      difficulty: () => {
+        const firearm = setup.clothes.handheld[V.worn[hand === 'left' ? 'handheld_left' : 'handheld'].index].streetWeapon;
+        if (!firearm) return '';
+        const rounds = V.StreetLife.ammo[firearm.ammo];
+        const shots = Math.min(firearm.shots, rounds);
+        return lanSwitch(`${rounds} rounds remaining · Fires ${shots} round${shots === 1 ? '' : 's'}`, `剩余 ${rounds} 发 · 本次耗弹 ${shots} 发`);
+      },
       effect: `<<deadwood-street-weapon '${hand}'>>`
     });
   }

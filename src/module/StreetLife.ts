@@ -1,12 +1,16 @@
 import Module from './Module';
 import Jobs from './StreetLife/Jobs';
+import Bounties from './StreetLife/Bounties';
+import ammunition from '../assets/street/ammunition.json';
 
 /** 街头口碑独立于警方证据；原版委托的贡献只读取，不重复增加原版计数。 */
 export default class StreetLife extends Module {
   public readonly jobs = new Jobs(this);
+  public readonly bounties = new Bounties(this);
+  public readonly ammunition = ammunition;
 
   public constructor(core: typeof maplebirch) {
-    super(core, 'StreetLife', { reputation: 0, jobs: Jobs.defaults });
+    super(core, 'StreetLife', { reputation: 0, jobs: Jobs.defaults, bounties: Bounties.defaults, ammo: { handgun: 0, shotgun: 0, rifle: 0 } });
   }
 
   public get reputation(): number {
@@ -24,6 +28,8 @@ export default class StreetLife extends Module {
 
   public canUse(hand: 'left' | 'right'): boolean {
     const item = V.worn?.[hand === 'left' ? 'handheld_left' : 'handheld'];
+    const weapon = setup.clothes.handheld[item?.index];
+    const firearm = weapon?.streetWeapon;
     const target = V.NPCList?.[Number(V[`${hand}target`])];
     return (
       !!this.core.get('StreetLife') &&
@@ -44,7 +50,8 @@ export default class StreetLife extends Module {
       V.walltype !== 'front' &&
       target?.active === 'active' &&
       target.stance !== 'defeated' &&
-      ['street_baton', 'street_knife', 'street_stunner'].includes(item?.variable ?? setup.clothes.handheld[item?.index]?.variable)
+      (V.enemyno < 2 || target.health > 0) &&
+      (firearm ? V.StreetLife.ammo[firearm.ammo] > 0 : weapon?.streetMelee > 0 || ['street_knife', 'street_stunner'].includes(weapon?.variable))
     );
   }
 }

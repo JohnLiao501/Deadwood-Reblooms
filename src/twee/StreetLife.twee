@@ -3,7 +3,7 @@
 <<widget 'deadwood-street-reputation'>>
   <<set $_streetRep to maplebirch.get('StreetLife').reputation>>
   <<set $_streetDescription to $_streetRep gte 80 ? ['On the streets, your name is associated with getting difficult jobs done.', '在镇上的街头，你已经有了能办成棘手差事的名声。'] : $_streetRep gte 50 ? ['Your name is familiar in conversations around town.', '镇上街头的闲谈里，越来越多人认得你的名字。'] : $_streetRep gte 20 ? ['Word on the street is that you deliver what you promise.', '你说到做到的名声，正在镇上的街头传开。'] : $_streetRep gt 0 ? ['A few people around town remember you getting a job done.', '镇上有几个人记得，你替人办成过事。'] : ['Your name means little on the town’s streets.', '镇上的街头还没多少人听过你的名字。']>>
-  <<set $_streetBox to {name: lanSwitch('Street', '街头'), icon: 'img/misc/icon/street-life.png', description: lanSwitch(...$_streetDescription)}>>
+  <<set $_streetBox to {name: lanSwitch('Street', '街头'), icon: 'img/misc/icon/street-life.png', description: lanSwitch($_streetDescription[0], $_streetDescription[1])}>>
   <<relation-box-simple $_streetBox>>
 <</widget>>
 
@@ -62,9 +62,29 @@
       <</lanLink>><br>
     <</if>>
   <</if>><br>
+  <<deadwood-street-ammunition>><br>
   <<getouticon>><<lanLink ['Return to the pub (0:01)', '返回酒馆 (0:01)'] 'Smuggler Pub'>>
     <<clothingReset>><<set $tryOn.autoReset to true>><<shopClothingFilterReset>><<pass 1>>
   <</lanLink>><br>
+<</widget>>
+
+<!-- 弹药留在武器店主柜台；原版目录自行布局返回按钮与分类页。money 宏沿用侧栏支付方式。 -->
+<<widget 'deadwood-street-ammunition'>>
+  <span class='gold bold'><<lanSwitch 'Ammunition' '弹药'>></span><br>
+  <<for _streetAmmoId, _streetAmmo range maplebirch.get('StreetLife').ammunition>>
+    <<capture _streetAmmoId _streetAmmo>>
+      <<icon _streetAmmo.icon>><<= lanSwitch(_streetAmmo.name[0], _streetAmmo.name[1])>> · <<lanSwitch 'In reserve: ' '备用：'>><span class='teal'><<= $StreetLife.ammo[_streetAmmoId]>></span><br>
+      <<if maplebirch.get('Finance')?.canPay(_streetAmmo.cost, 'clothes') ?? _streetAmmo.cost lte $money>>
+        <<lanLink ['Buy ' + _streetAmmo.count + ' rounds', '购买 ' + _streetAmmo.count + ' 发']>>
+          <<if maplebirch.get('StreetLife').available and (maplebirch.get('Finance')?.canPay(_streetAmmo.cost, 'clothes') ?? _streetAmmo.cost lte $money)>>
+            <<money `-_streetAmmo.cost` 'clothes'>><<set $StreetLife.ammo[_streetAmmoId] += _streetAmmo.count>><<updatesidebarmoney>><<updateclothingshop>>
+          <</if>>
+        <</lanLink>>
+      <<else>>
+        <span class='grey'><<lanSwitch 'Buy ' '购买 '>><<= _streetAmmo.count>><<lanSwitch ' rounds' ' 发'>></span>
+      <</if>> · <<printmoney _streetAmmo.cost>><br>
+    <</capture>>
+  <</for>>
 <</widget>>
 
 :: Deadwood Street Weapon Widgets [widget]
@@ -73,14 +93,35 @@
   <<set _streetHand to _args[0]>><<set _streetTarget to Number(maplebirch.SugarCube.State.variables[_streetHand + 'target'])>>
   <<set _streetWeapon to setup.clothes.handheld[$worn[_streetHand is 'left' ? 'handheld_left' : 'handheld'].index]>>
   <<switch _streetWeapon.variable>>
-    <<case 'street_baton'>>
-      <<lanSwitch 'You swing your short baton.' '你挥动短棍。'>><<defiance 2 _streetTarget>>
     <<case 'street_knife'>>
-      <<lanSwitch 'You strike with your small knife.' '你用小刀发动攻击。'>><<defiance 3 _streetTarget>>
+      <<lanSwitch 'You strike with your small knife.' '你用小刀发动攻击。'>><<defiance 3 _streetTarget>><<attackstat>>
+    <<case 'street_crowbar'>>
+      <<lanSwitch 'You swing your crowbar at your attacker.' '你抡起撬棍，砸向袭击者。'>><<defiance _streetWeapon.streetMelee _streetTarget>><<attackstat>>
+    <<case 'street_machete'>>
+      <<lanSwitch 'You slash at your attacker with your machete.' '你挥动砍刀，劈向袭击者。'>><<defiance _streetWeapon.streetMelee _streetTarget>><<attackstat>>
     <<case 'street_stunner'>>
       <<lanSwitch 'You press the stun device against your attacker.' '你把电击器抵向袭击者。'>>
       <<set _thedamage to Math.min(6, $enemyno gte 2 ? $NPCList[_streetTarget].health : $enemyhealth)>>
       <<if $enemyno gte 2>><<npcdamage _streetTarget>><</if>>
-      <<set $enemyhealth -= _thedamage>><<set $enemyanger += 5>>
+      <<set $enemyhealth -= _thedamage>><<set $enemyanger += 5>><<attackstat>>
+    <<case 'street_handgun' 'street_shotgun' 'street_smg' 'street_rifle'>>
+      <<set _streetFirearm to _streetWeapon.streetWeapon>>
+      <!-- 每发固定值 + 目标最大生命百分比；shots 为计划弹数，余弹不足按实数结算。 -->
+      <<set _streetShots to Math.min(_streetFirearm.shots, $StreetLife.ammo[_streetFirearm.ammo])>>
+      <<set $StreetLife.ammo[_streetFirearm.ammo] -= _streetShots>>
+      <<language>>
+        <<option 'EN'>>
+          You fire your <<= _streetWeapon.name>>. <<if _streetShots gt 1>>Shots crack in quick succession, cutting through the struggle.<<else>>The shot cracks through the struggle.<</if>> Your attacker staggers, clutching the wound.
+        <<option 'CN'>>
+          你用<<= _streetWeapon.cn_name_cap>>开火。<<if _streetShots gt 1>>枪声接连响起，打断了拉扯。<<else>>枪声骤然响起，打断了拉扯。<</if>>袭击者踉跄了一下，捂住伤处。
+      <</language>>
+      <<set _streetHealthMax to $enemyno gte 2 ? $NPCList[_streetTarget].healthmax : $enemyhealthmax>>
+      <!-- 原版练枪统计以 1000 为熟练门槛；有效伤害系数为 90%–100%，疼痛至多再减 10 个百分点。 -->
+      <<set _streetAim to 0.9 + Math.clamp($stat_shoot / 1000, 0, 1) * 0.1 - Math.clamp($pain / 100, 0, 1) * 0.1>>
+      <<set _thedamage to Math.min((_streetFirearm.damage + _streetHealthMax * _streetFirearm.damage_percent / 100) * _streetShots * _streetAim, $enemyno gte 2 ? $NPCList[_streetTarget].health : $enemyhealth)>>
+      <<if $enemyno gte 2>><<npcdamage _streetTarget>><</if>>
+      <<set $enemyhealth -= _thedamage, $enemyanger += 30>><<attackstat>>
+      <<set $NPCList[_streetTarget].deadwoodGunshot to true>>
+      <<crimeUp _streetFirearm.crime 'assault'>>
   <</switch>><br>
 <</widget>>

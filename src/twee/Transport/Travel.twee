@@ -6,7 +6,7 @@
   <<lanSwitch 'Your vehicles are parked elsewhere.' '你的载具停在别处。'>><br><br>
   <<deadwood-transport-return>>
 <<else>>
-  <<icon `'transport/' + _transport.model.id + '.png'`>><b><<print maplebirch.t(_transport.model.name)>></b> — <<print _transport.catalog.name(_transport.point)>><br><br>
+  <<icon `'transport/' + _transport.model.id + '.png'`>><b><<print maplebirch.t(_transport.model.name)>></b> — <<print _transport.catalog.name(_transport.point)>><<deadwood-street-bounty-transit _transport.vehicle.id>><br><br>
   <<deadwood-taxi-menu>>
   <<if !_transport.taxi.active>>
     <<if (_transport.vehicle.arrears ?? 0) gt 0>>
@@ -240,7 +240,7 @@
         <</if>>
         <<deadwood-transport-road-scene>>
         到了<<print _transport.catalog.name($Transport.trip.to)>>，你停下车，把它留在路边。
-    <</language>><br><br>
+    <</language>><<deadwood-street-bounty-transit _transport.vehicle.id>><br><br>
     <<deadwood-street-cargo-travel>>
     <<if $Transport.trip.taxi>>
       <<deadwood-taxi-arrival>>

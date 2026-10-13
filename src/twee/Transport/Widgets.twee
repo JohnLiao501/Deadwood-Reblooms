@@ -56,7 +56,7 @@
           <<if maplebirch.get('Transport').open(_available_vehicle.id)>>
             <<if $passage is _vehicle_source>><<goto 'Deadwood Transport Menu'>><</if>>
           <</if>>
-        <</lanLink>><br>
+        <</lanLink>><<deadwood-street-bounty-transit _available_vehicle.id>><br>
       <</capture>>
     <</for>>
   <</if>>
