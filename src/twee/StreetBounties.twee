@@ -23,7 +23,7 @@
     <ul class='journal'>
       <li><<lanSwitch 'Reward after verification: ' '核验后的赏金：'>><<printmoney _bountyWork.payout>></li>
       <<if _bountyWork.bountyHunter>>
-        <li class='blue'><<lanSwitch 'Includes a 15% bounty hunter bonus. Keep cooperating with Grant when collecting it.' '已含赏金猎人的15%奖金；领取时仍需与格兰特保持合作。'>></li>
+        <li class='blue'><<lanSwitch 'Includes a 15% bounty hunter bonus. Keep cooperating with Grant when collecting it.' '已含赏金猎人的15%奖金。领取时仍需与格兰特保持合作。'>></li>
       <</if>>
       <<if _bountyCase.stage is 'settlement'>>
         <li class='green'><<lanSwitch 'The target has been handed over. Collect your reward at the station.' '目标已经移交，请到警局领取赏金。'>></li>
@@ -69,7 +69,7 @@
 <<widget 'deadwood-street-bounty-type-progress'>>
   <<set _bountyWork to maplebirch.get('StreetLife').bounties, _bountyRemainingTypes to _bountyWork.remainingTypes>>
   <ul class='journal'>
-    <li><<lanSwitch 'Reward types collected: ' '已领款的悬赏类型：'>><span class='teal'><<= _bountyWork.terms.cases.length - _bountyRemainingTypes.length>> / <<= _bountyWork.terms.cases.length>></span></li>
+    <li><<icon 'street/bounty-record.png'>><<lanSwitch 'Reward types collected: ' '已领款的悬赏类型：'>><span class='teal'><<= _bountyWork.terms.cases.length - _bountyRemainingTypes.length>> / <<= _bountyWork.terms.cases.length>></span></li>
     <<if _bountyRemainingTypes.length>>
       <li><<lanSwitch 'Still to complete and collect: ' '尚需完成并领款：'>><<= _bountyRemainingTypes.map(item => lanSwitch(item.name[0], item.name[1])).join(lanSwitch(', ', '、'))>></li>
     <<else>>
@@ -400,7 +400,7 @@
     <<option 'EN'>>
       The medics take charge of the injured person while an officer checks the photograph and records where you found them. You are asked how the wound occurred. The officer takes your account down without promising what will happen next. The target is taken away for treatment under police supervision; the reward still has to be verified at the station.
     <<option 'CN'>>
-      医护人员接过伤者，旁边的警员核对照片，记下你找到对方的地点。对方询问枪伤是怎么造成的，把你的说法写进记录，却没有对后续处理作出保证。目标被带去接受治疗，由警方看管；赏金仍需回警局核验领取。
+      医护人员接过伤者，旁边的警员核对照片，记下你找到对方的地点。对方询问枪伤是怎么造成的，把你的说法写进记录，却没有对后续处理作出保证。目标被带去接受治疗，由警方看管。赏金仍需回警局核验领取。
   <</language>><br><br>
 <</widget>>
 

@@ -360,7 +360,7 @@
   <<option 'EN'>>
     Remy proposes a name as though it ought to settle the question. You try it aloud, then suggest another. <<if $english gte 400>>You point out how the shortened form will sound; <<he>> repeats it, testing the difference.<<else>><<He>> asks you to repeat yours, slowly.<</if>> Nothing is entered on the register. There is still time to choose.
   <<option 'CN'>>
-    雷米提出一个名字，仿佛这样就能定下来。你试着念了一遍，又提了另一个。<<if $english gte 400>>你说起简称叫起来会是什么样；<<he>>跟着念了一遍，比较两者的区别。<<else>><<He>>让你把那个名字再慢慢念一遍。<</if>> 登记簿上还没有写下什么，仍有时间再选。
+    雷米提出一个名字，仿佛这样就能定下来。你试着念了一遍，又提了另一个。<<if $english gte 400>>你说起简称叫起来会是什么样。<<he>>跟着念了一遍，比较两者的区别。<<else>><<He>>让你把那个名字再慢慢念一遍。<</if>> 登记簿上还没有写下什么，仍有时间再选。
 <</language>>
 <</if>>
 <<case 'children'>>
@@ -417,7 +417,7 @@
                   <<option 'EN'>>
                     You tell Remy the pregnancy has ended. <<He>> reaches for the old appointment slip, then stops. "What do you want to do with this?" You ask <<him>> to leave it aside while you speak. <<if _remyPregnancy.captive>>A worker looks over from the next pen. You lower your voice; Remy stays outside the gate.<<elseif $Orchard.remy.romance and C.npc.Remy.love gte 50>><<He>> leaves the register closed and waits for you to continue.<<else>><<He>> looks uncomfortable with a conversation that has no timetable to settle.<</if>>
                   <<option 'CN'>>
-                    你告诉雷米，那次怀孕已经结束。<<He>>伸手去拿旧预约单，又停住。“这个，你想怎么处理？”你请<<him>>先放到一旁，听你说。<<if _remyPregnancy.captive>>隔壁栏位的工人望过来。你压低声音；雷米仍在门外。<<elseif $Orchard.remy.romance and C.npc.Remy.love gte 50>><<He>>没有打开登记簿，等着你继续说。<<else>>这场谈话没有什么待排的时间表，<<he>>显得有些不自在。<</if>>
+                    你告诉雷米，那次怀孕已经结束。<<He>>伸手去拿旧预约单，又停住。“这个，你想怎么处理？”你请<<him>>先放到一旁，听你说。<<if _remyPregnancy.captive>>隔壁栏位的工人望过来。你压低声音。雷米仍在门外。<<elseif $Orchard.remy.romance and C.npc.Remy.love gte 50>><<He>>没有打开登记簿，等着你继续说。<<else>>这场谈话没有什么待排的时间表，<<he>>显得有些不自在。<</if>>
                 <</language>>
                 <<pass 10>>
               <</replace>>

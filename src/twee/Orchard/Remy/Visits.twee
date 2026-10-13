@@ -9,7 +9,7 @@
       <<option 'EN'>>
         Remy leads you into the office. Two mugs sit beside the kettle; <<he>> asks how you take your tea before making either. <<He>> moves the lesson register from the spare chair, but keeps it within reach. Outside, a horse stamps against its stall door.
       <<option 'CN'>>
-        雷米带你走进办公室。水壶旁摆着两个杯子；<<he>>先问你喝茶时加些什么，才开始准备。<<He>>把课程登记簿从空椅子上挪开，却仍放在伸手可及的位置。外面有匹马踢了踢厩门。
+        雷米带你走进办公室。水壶旁摆着两个杯子。<<he>>先问你喝茶时加些什么，才开始准备。<<He>>把课程登记簿从空椅子上挪开，却仍放在伸手可及的位置。外面有匹马踢了踢厩门。
     <</language>><br><br>
   <<else>>
     <<language>>

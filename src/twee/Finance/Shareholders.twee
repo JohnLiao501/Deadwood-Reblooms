@@ -174,7 +174,7 @@
   <</language>><br><br>
   <<for _policy range ['reserve', 'expansion', 'income']>>
     <<capture _policy>>
-      <<icon `_policy === 'expansion' ? 'company/tower-budget.png' : _policy === 'reserve' ? 'industry/funds.png' : 'finance/bank-deposit.png'`>><<lanLink [`Propose ${_policy === 'reserve' ? 'reserves' : _policy === 'expansion' ? 'expansion funding' : 'full dividends'} (0:30)`, `提出${_policy === 'reserve' ? '储备' : _policy === 'expansion' ? '扩张筹资' : '全额分红'}方案 (0:30)`] 'Deadwood Reblooms Shareholder Minutes'>>
+      <<icon `_policy === 'expansion' ? 'company/tower-budget.png' : _policy === 'reserve' ? 'industry/funds.png' : 'company/dividend.png'`>><<lanLink [`Propose ${_policy === 'reserve' ? 'reserves' : _policy === 'expansion' ? 'expansion funding' : 'full dividends'} (0:30)`, `提出${_policy === 'reserve' ? '储备' : _policy === 'expansion' ? '扩张筹资' : '全额分红'}方案 (0:30)`] 'Deadwood Reblooms Shareholder Minutes'>>
         <<set $Finance.company.result to maplebirch.get('Finance').company.shareholders.meeting(_policy) ? 'corporate-ok' : 'corporate-failed'>>
         <<if $Finance.company.result is 'corporate-ok'>><<pass 30>><</if>><<endevent>>
       <</lanLink>><br>

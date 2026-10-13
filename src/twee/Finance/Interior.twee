@@ -170,7 +170,7 @@
       <<option 'EN'>>
         A sound grasp of maths helps you check the exercises; a companion can read them back to you. You can prepare one set of notes each day.
       <<option 'CN'>>
-        扎实的数学基础有助于核对习题；同伴也可以帮你逐题读一遍。每天可以整理一份学习资料。
+        扎实的数学基础有助于核对习题。同伴也可以帮你逐题读一遍。每天可以整理一份学习资料。
     <</language>><br>
   <</if>>
   <br>
@@ -455,7 +455,7 @@
           <<option 'EN'>>
             Robin follows you outside. <<if C.npc.Robin.trauma gte 20>><<He>> stays close to the door, <span class='teal'>holding your hand while you look out</span>.<<else>>"<span class='teal'>It's different when it's our place, isn't it?</span>" <<He>> lingers beside you, with no orphanage lights to signal that it's time to go back.<</if>>
           <<option 'CN'>>
-            罗宾跟着你出来。<<if C.npc.Robin.trauma gte 20>><<He>>留在门边，<span class='teal'>握着你的手，陪你望向外面</span>。<<else>>“<span class='teal'>是我们自己的地方，感觉就不一样了，对吧？</span>”<<He>>在你身边多站了一会儿；不用看着孤儿院的灯，猜该什么时候回去了。<</if>>
+            罗宾跟着你出来。<<if C.npc.Robin.trauma gte 20>><<He>>留在门边，<span class='teal'>握着你的手，陪你望向外面</span>。<<else>>“<span class='teal'>是我们自己的地方，感觉就不一样了，对吧？</span>”<<He>>在你身边多站了一会儿。不用看着孤儿院的灯，猜该什么时候回去了。<</if>>
         <</language>>
       <<case 'Whitney'>>
         <<language>>

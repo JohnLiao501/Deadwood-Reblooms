@@ -54,7 +54,7 @@
             <</if>>
           </li>
         <<elseif Time.date.timeStamp gt _streetJob.due>>
-          <li class='blue'><<lanSwitch 'The delivery is late. The fee will be reduced by a quarter; the buyer allows one further day.' '送货已迟到，报酬将减少四分之一；买家另给一天宽限。'>></li>
+          <li class='blue'><<lanSwitch 'The delivery is late. The fee will be reduced by a quarter; the buyer allows one further day.' '送货已迟到，报酬将减少四分之一。买家另给一天宽限。'>></li>
         <</if>>
         <<if _streetJob.stage is 'pickup'>>
           <li><<lanSwitch 'Awaiting collection.' '尚未取货。'>></li>
@@ -139,7 +139,7 @@
         <</lanLink>><br>
       <</if>>
     <<else>>
-      <span class='blue'><<lanSwitch 'The available work changes each day. New contacts and completed jobs can make room for another offer.' '差事每天轮换；结识新联系人或完成委托后，也可能有其它差事可接。'>></span><br><br>
+      <span class='blue'><<lanSwitch 'The available work changes each day. New contacts and completed jobs can make room for another offer.' '差事每天轮换。结识新联系人或完成委托后，也可能有其它差事可接。'>></span><br><br>
       <<for _streetOffer range _streetJobs.offers>>
         <<capture _streetOffer>>
         <<icon _streetOffer.icon>><<lanLink _streetOffer.name 'Deadwood Street Job Offer'>>
@@ -160,7 +160,7 @@
 <<set _streetJobs to maplebirch.get('StreetLife')?.jobs, _streetOffer to _streetJobs?.offers.find(item => item.id === $StreetLife.jobs.offer)>>
 <<if _streetOffer>>
   <<set _streetContract to _streetOffer>><<deadwood-street-job-pitch>>
-  <<if _streetOffer.illegal>><span class='red'><<lanSwitch 'These are stolen or illicit goods. You can refuse the job or return the shipment; completing a witnessed handover leaves theft evidence.' '货物涉及盗窃或违禁交易。可以拒绝接单或退货；被认出仍继续交货，会留下经手赃物的证据。'>></span><br><br><</if>>
+  <<if _streetOffer.illegal>><span class='red'><<lanSwitch 'These are stolen or illicit goods. You can refuse the job or return the shipment; completing a witnessed handover leaves theft evidence.' '货物涉及盗窃或违禁交易。可以拒绝接单或退货。被认出仍继续交货，会留下经手赃物的证据。'>></span><br><br><</if>>
   <<lanSwitch 'Fee: ' '报酬：'>><<printmoney _streetOffer.fee>> · <<lanSwitch 'Delivery deadline: ' '交货时限：'>><span class='teal'><<= _streetOffer.deadline_hours>></span> <<lanSwitch 'hours' '小时'>><br>
   <span class='blue'>
     <<if _streetOffer.grace_hours>>

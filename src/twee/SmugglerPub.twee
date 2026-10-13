@@ -58,7 +58,7 @@
     <<option 'EN'>>
       The rock ceiling holds the noise close: scraping chairs, clinking glasses, a laugh from behind a wooden partition. Lanterns hang from stout posts rather than the stone. The bar stands on a raised platform at the back, with bottles tucked between its shelves. Cups, folded papers and a cloth-covered case occupy the tables nearer the entrance.
     <<option 'CN'>>
-      岩顶把声音拢在近处：拖动椅子的响动、碰杯声，还有木隔墙后传来的一声笑。灯笼吊在粗木柱上，没有钉进岩石。后方抬高的平台上是吧台，几排酒瓶塞在架间；靠入口的桌上放着杯子、折好的纸，还有一只盖着布的箱子。
+      岩顶把声音拢在近处：拖动椅子的响动、碰杯声，还有木隔墙后传来的一声笑。灯笼吊在粗木柱上，没有钉进岩石。后方抬高的平台上是吧台，几排酒瓶塞在架间。靠入口的桌上放着杯子、折好的纸，还有一只盖着布的箱子。
   <</language>><br><br>
   <<language>>
     <<option 'EN'>>
@@ -238,13 +238,13 @@
   <<option 'EN'>>
     At two small tables beyond the partition, a regular deals blackjack and a few customers play hold'em. Coins and notes sit beside the cards; they count each bet aloud before moving it into the middle.
   <<option 'CN'>>
-    隔墙后的两张小桌边，一位熟客坐庄玩二十一点，几名客人围着另一桌打德州扑克。硬币和钞票就放在纸牌旁；每次下注，他们都先报清金额，再把钱推到桌子中间。
+    隔墙后的两张小桌边，一位熟客坐庄玩二十一点，几名客人围着另一桌打德州扑克。硬币和钞票就放在纸牌旁。每次下注，他们都先报清金额，再把钱推到桌子中间。
 <</language>><br><br>
 <<if _pub.gamblingAvailable>>
   <<icon 'casino/blackjack.png'>><<lanLink ['Join the cash blackjack table', '加入现金二十一点牌桌'] 'Deadwood Smuggler Pub Blackjack'>>
     <<run _pub.cards.enter('blackjack')>>
   <</lanLink>><br>
-  <<icon 'casino/watch-hand.png'>><<lanLink ["Join the cash hold'em table", '加入现金德州扑克牌桌'] 'Deadwood Smuggler Pub Holdem'>>
+  <<icon 'casino/holdem.png'>><<lanLink ["Join the cash hold'em table", '加入现金德州扑克牌桌'] 'Deadwood Smuggler Pub Holdem'>>
     <<run _pub.cards.enter('holdem')>>
   <</lanLink>><br>
 <<else>>

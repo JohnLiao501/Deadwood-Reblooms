@@ -233,7 +233,7 @@
     <<option 'EN'>>
       The quotation covers a closed processing bench and packing equipment. Your existing <span class='blue'>packaging line</span> is required, together with <span class='blue'>one spare workshop bay</span>. Installation takes three days. A technician must be hired separately.<br><br>You can continue selling Alex's original phials to the compound for <span class='gold'><<printmoney 100000>> each</span>. Processing consumes those phials, or known strange flowers, to make packs of pills. It does not create more original phials.
     <<option 'CN'>>
-      报价包括封闭工作台和分装设备。需要已有的<span class='blue'>包装产线</span>，以及<span class='blue'>一个空余的厂房间</span>。安装需三天，还得另聘技术员。<br><br>艾利克斯的原装药剂仍可按<span class='gold'>每瓶 <<printmoney 100000>></span>卖给大院。加工会消耗原装药剂，或已经认识的诡异的花，制成片剂包装；不会凭空增加原装药剂。
+      报价包括封闭工作台和分装设备。需要已有的<span class='blue'>包装产线</span>，以及<span class='blue'>一个空余的厂房间</span>。安装需三天，还得另聘技术员。<br><br>艾利克斯的原装药剂仍可按<span class='gold'>每瓶 <<printmoney 100000>></span>卖给大院。加工会消耗原装药剂，或已经认识的诡异的花，制成片剂包装。不会凭空增加原装药剂。
   <</language>>
   <br><br>
   <<deadwood-reblooms-finance-money _lab.terms.installation>><br>
@@ -394,7 +394,7 @@
         <<option 'EN'>>
           Material costs start at <<printmoney 42000>> per phial lot or <<printmoney 8000>> per flower lot. Each additional lot reduces the unit cost by 3%, to a maximum 25% discount. Wages and site bills are additional.
         <<option 'CN'>>
-          加工材料费每份药剂起价 <<printmoney 42000>>，每份花料起价 <<printmoney 8000>>。批次每增加一份，单位材料费降低 3%，最多减价 25%；工资和厂房费用另计。
+          加工材料费每份药剂起价 <<printmoney 42000>>，每份花料起价 <<printmoney 8000>>。批次每增加一份，单位材料费降低 3%，最多减价 25%。工资和厂房费用另计。
       <</language>>
       <br>
       <<icon 'industry/phials.png'>><<lanLink ['Process the phials (0:15)', '加工原装药剂 (0:15)'] 'Deadwood Reblooms Factory Laboratory'>>
@@ -439,7 +439,7 @@
       <<option 'EN'>>
         This comes out of the saleable stock. The pack goes into your usual inventory; it is not automatically carried or consumed.
       <<option 'CN'>>
-        领取会扣除一包可售库存，放进原有物品栏；不会自动携带或服用。
+        领取会扣除一包可售库存，放进原有物品栏。不会自动携带或服用。
     <</language>>
     <br><br>
   <</if>>
@@ -773,9 +773,9 @@
         <br><br>
         Harper works with <span class='blue'>one workshop at a time</span>. The prepaid term runs even while your workshop is closed; there is no automatic renewal or refund. An on-site technician remains necessary, and guidance stops if Harper becomes unavailable.
       <<option 'CN'>>
-        指导期间，加工进度提高<span class='green'>50%</span>，批次失败概率降至<span class='green'>2%</span>，成功批次产量为额定产量的<span class='teal'>95%—100%</span>；失败仍会损失原料。周末、工资、停工、过期和买家欠款照常结算。
+        指导期间，加工进度提高<span class='green'>50%</span>，批次失败概率降至<span class='green'>2%</span>，成功批次产量为额定产量的<span class='teal'>95%—100%</span>。失败仍会损失原料。周末、工资、停工、过期和买家欠款照常结算。
         <br><br>
-        哈珀同时只指导<span class='blue'>一间厂房</span>。厂房停工也照常消耗预付的顾问期，不自动续约，不退款。仍需驻厂技术员；哈珀无法工作时，指导暂停。
+        哈珀同时只指导<span class='blue'>一间厂房</span>。厂房停工也照常消耗预付的顾问期，不自动续约，不退款。仍需驻厂技术员。哈珀无法工作时，指导暂停。
     <</language>><br><br>
     <<if _lab.trade.harper_until gt Math.floor(Time.days)>>
       <<if _lab.trade.harper_site is maplebirch.get('Finance').industry.state.site>>

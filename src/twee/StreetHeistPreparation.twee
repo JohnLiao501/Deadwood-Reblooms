@@ -181,7 +181,7 @@
         <<option 'EN'>>
           You can talk through the roles, holding the discussion together when someone disagrees, or try a harmless practice load with the carrier. One tests your ability to explain yourself and remain composed; the other tests your strength and fitness. Neither guarantees how the real job will go.
         <<option 'CN'>>
-          你可以带着大家理清分工，遇到分歧时把话谈下去；也可以与搬运员一起试搬练习用的重物。前者考验表达与意志，后者考验体能与运动本领。无论选哪一种，都不能保证真正行动时一切顺利。
+          你可以带着大家理清分工，遇到分歧时把话谈下去。也可以与搬运员一起试搬练习用的重物。前者考验表达与意志，后者考验体能与运动本领。无论选哪一种，都不能保证真正行动时一切顺利。
       <</language>><br><br>
   <</switch>>
   <<for _streetOption range _streetPrep.options>>

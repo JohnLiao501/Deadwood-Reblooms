@@ -245,7 +245,7 @@
                 <<option 'EN'>>
                   Processing room: <span class='teal'><<= _factory_state.laboratory.batches.reduce((sum, batch) => sum + (batch.expires_day > Math.floor(Time.days) ? batch.units : 0), 0)>></span> packs on the shelf; <span class='red'><<= _factory_state.laboratory.spoiled>></span> lost to expiry.
                 <<option 'CN'>>
-                  加工间：<span class='teal'><<= _factory_state.laboratory.batches.reduce((sum, batch) => sum + (batch.expires_day > Math.floor(Time.days) ? batch.units : 0), 0)>></span>包在库；<span class='red'><<= _factory_state.laboratory.spoiled>></span>包已过期。
+                  加工间：<span class='teal'><<= _factory_state.laboratory.batches.reduce((sum, batch) => sum + (batch.expires_day > Math.floor(Time.days) ? batch.units : 0), 0)>></span>包在库，<span class='red'><<= _factory_state.laboratory.spoiled>></span>包已过期。
               <</language>>
             </li>
             <<if $Finance.industry.distribution.harper_site is _factory_state.site>>
@@ -549,7 +549,7 @@
       <<option 'EN'>>
         Expected weekly figures; vacant rooms and unpaid rent can leave you with less.
       <<option 'CN'>>
-        预计每周收支；空置或欠租时，实际到账可能更少。
+        预计每周收支。空置或欠租时，实际到账可能更少。
     <</language>>
     <div class='dr-finance-summary'>
       <<for _account_property range _estate.properties>>
@@ -1108,7 +1108,7 @@
       </div>
       <ul class='journal'>
         <li><<lanSwitch 'The weapon seller at the smugglers’ pub stocks ammunition.' '走私者酒馆的武器卖家也出售弹药。'>></li>
-        <li><<lanSwitch 'Practice with Eden improves your aim; pain makes it harder to keep steady.' '与伊甸练枪有助于瞄准；疼痛会让你更难保持稳定。'>></li>
+        <li><<lanSwitch 'Practice with Eden improves your aim; pain makes it harder to keep steady.' '与伊甸练枪有助于瞄准。疼痛会让你更难保持稳定。'>></li>
       </ul>
     <</deadwood-card>><hr>
   <</if>>

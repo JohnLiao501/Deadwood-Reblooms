@@ -6,7 +6,7 @@
     <<sydneySchedule>>
   <</if>>
   <<set _cleaningLink to $exposed lt 1 and Time.dayState isnot 'night' and $temple_quarters lt 100 and !pcAreArmsBound('both')>>
-  <<set _showDormLink to _dormAccess and $temple_rank is 'monk' and $stress lt $stressmax and _position is (_cleaningLink ? 2 : 1)>>
+  <<set _showDormLink to _dormAccess and ['monk', 'priest'].includes($temple_rank) and $stress lt $stressmax and _position is (_cleaningLink ? 2 : 1)>>
   <</silently>>
   <<if _showDormLink and !$SydneyExpansion.dormInvited and _sydneyWorking>>
     <<icon 'temple/sydney-quarters.png'>><<lanLink ['Ask Sydney to sit by the bunk', '问悉尼能否来床铺旁坐坐'] 'Deadwood Reblooms Sydney Dorm Bunk Invitation'>><</lanLink>><br>
@@ -55,7 +55,7 @@
 :: Deadwood Reblooms Sydney Dorm Bunk Invitation
 <<set $outside to 0>><<set $location to 'temple'>><<temple_effects>><<effects>><<sydneySchedule>>
 <<npc Sydney>><<person1>>
-<<if _dormAccess and $temple_rank is 'monk' and _sydneyWorking>>
+<<if _dormAccess and ['monk', 'priest'].includes($temple_rank) and _sydneyWorking>>
   <<set $SydneyExpansion.dormInvited to true>>
   <<language>>
     <<option 'EN'>>
@@ -947,7 +947,7 @@
       <<if $SydneyExpansion.dormScene is 'screen'>>
         悉尼把屏风拉到床边，隔出一小块地方。屏风和床沿之间只剩一个身位，
         你靠近时，<<his>>膝盖先一步顶进你两腿之间，两个人都没来得及拦。走廊上传来几句说话声，
-        又渐渐远向晚祷的方向；<<he>>一直用手掌捂着你的嘴，直到脚步声消失，眼睛没有离开过你的脸。
+        又渐渐远向晚祷的方向。<<he>>一直用手掌捂着你的嘴，直到脚步声消失，眼睛没有离开过你的脸。
         <br><br>
         <<if _sydneyStatus.includes('pure')>>
           “<span class='teal'>你想停下来的时候，我们就停。</span>”<<he>>轻声说，等你回答后才吻你。

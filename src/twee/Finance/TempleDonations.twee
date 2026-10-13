@@ -373,7 +373,7 @@
     <</language>><br><br>
     <<deadwood-card 'Benefactor arrangements' '资助者待遇'>>
       <<lanSwitch 'Quiet room: one 30-minute rest each day; reduces stress and fatigue.' '安静房间：每天可休息 30 分钟一次，减少压力与疲劳。'>><br>
-      <<lanSwitch 'Private audience: once each week, 20 minutes; personal prayer and a say in relief priorities.' '私人接见：每周一次，20 分钟；共同祈祷，并商议救济物资的优先用途。'>><br>
+      <<lanSwitch 'Private audience: once each week, 20 minutes; personal prayer and a say in relief priorities.' '私人接见：每周一次，20 分钟，共同祈祷，并商议救济物资的优先用途。'>><br>
       <<if _temple_aid.canGrant('temple')>>
         <<icon 'company/agreement.png'>><<lanLink ['Agree to these arrangements (0:10)', '确认这些安排 (0:10)']>>
           <<set _temple_source to $passage>>

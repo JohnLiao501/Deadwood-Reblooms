@@ -46,7 +46,7 @@
         <<option 'EN'>>
           "The usual arrangement still stands. Something for something." Mickey points past you towards Landry. "Tell me which part of your reputation you want to change. I tell you what I need." The latch shifts against the door. "I can't make everyone forget what they saw. Especially when you've given them something new to talk about."
         <<option 'CN'>>
-          “还是老规矩，你帮我，我帮你。”米奇指了指你身后的兰德里。“想改哪方面的名声，先说清楚；我再告诉你需要什么。”门闩贴着门动了一下。“不是谁亲眼看见了什么，我都能让人忘掉。尤其是你还不断给他们添新谈资的时候。”
+          “还是老规矩，你帮我，我帮你。”米奇指了指你身后的兰德里。“想改哪方面的名声，先说清楚。我再告诉你需要什么。”门闩贴着门动了一下。“不是谁亲眼看见了什么，我都能让人忘掉。尤其是你还不断给他们添新谈资的时候。”
       <</language>><br><br>
     <<case 'information'>>
       <<language>>

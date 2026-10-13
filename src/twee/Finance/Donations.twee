@@ -73,7 +73,7 @@
       柜员把一张推到你面前。“选好给哪家。这里开收据，再转到对应的账上。”
   <</language>>
   <br><br>
-  <span class='blue'><<lanSwitch 'Named contributions earn 5 kindness per accumulated £1,000, up to each funding target. Signing for the delivery earns another 25 kindness.' '实名资助每累计 £1,000 获得 5 善名，计至各项募资目标；完成签收再获得 25 善名。'>></span><br><br>
+  <span class='blue'><<lanSwitch 'Named contributions earn 5 kindness per accumulated £1,000, up to each funding target. Signing for the delivery earns another 25 kindness.' '实名资助每累计 £1,000 获得 5 善名，计至各项募资目标。完成签收再获得 25 善名。'>></span><br><br>
   <div id='deadwood-donation-projects'><<deadwood-finance-donations-projects>></div>
   <br>
   <<set _donation_fund to 'orphanage'>><<set _donation_amount to 100>><<set _donation_anonymous to false>>

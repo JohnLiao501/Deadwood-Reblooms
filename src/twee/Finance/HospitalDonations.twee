@@ -370,7 +370,7 @@
     <</language>><br><br>
     <<deadwood-card 'Hospital benefactor arrangements' '医院资助者待遇'>>
       <<lanSwitch 'Private parasite treatment: 25% off the usual fee.' '私密寄生虫治疗：费用减免 25%。'>><br>
-      <<lanSwitch 'Routine consultation: one 20-minute appointment each week; reduces pain and stress.' '常规咨询：每周一次，20 分钟；减少疼痛与压力。'>><br>
+      <<lanSwitch 'Routine consultation: one 20-minute appointment each week; reduces pain and stress.' '常规咨询：每周一次，20 分钟，减少疼痛与压力。'>><br>
       <<if _hospital_aid.canGrant('hospital')>>
         <<icon 'company/agreement.png'>><<lanLink ['Accept the written arrangements (0:10)', '确认书面安排 (0:10)']>>
           <<set _hospital_source to $passage>>

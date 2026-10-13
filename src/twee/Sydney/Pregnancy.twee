@@ -44,7 +44,7 @@
       <<option 'EN'>>
         You ask Sydney to choose something that is not a guidebook. <<He>> finds a short story and starts reading aloud. At first <<he>> gives every character the same careful voice; then a particularly foolish one gets a voice so unlike <<his>> own that you both laugh.
       <<option 'CN'>>
-        你请悉尼挑一本不是指南的书。<<He>>找了个短故事，开始读给你听。起初，每个角色都是同样认真的声音；后来，一个格外傻气的角色被<<he>>读得腔调全变，你们都笑出了声。
+        你请悉尼挑一本不是指南的书。<<He>>找了个短故事，开始读给你听。起初，每个角色都是同样认真的声音。后来，一个格外傻气的角色被<<he>>读得腔调全变，你们都笑出了声。
     <</language>><br><br>
     <<if _sydneyStatus.includes('corrupt')>>
       <<language>>

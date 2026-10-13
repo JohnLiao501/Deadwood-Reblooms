@@ -281,7 +281,7 @@
     <<option 'EN'>>
       The children will be cared for in the orphanage nursery. You can visit there; care and fees follow the orphanage's usual arrangements.
     <<option 'CN'>>
-      孩子将由孤儿院育儿室照料，你可以前去探望；照料与费用按孤儿院的既有规则处理。
+      孩子将由孤儿院育儿室照料，你可以前去探望。照料与费用按孤儿院的既有规则处理。
   <</language>></i></span><br><br>
   <<deadwood-pregnancy-care-links 'Deadwood Pregnancy After'>>
 <<else>>

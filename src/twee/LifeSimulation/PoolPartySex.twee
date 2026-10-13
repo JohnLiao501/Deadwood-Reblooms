@@ -243,7 +243,7 @@
 :: Deadwood Reblooms Pool Party Group Sex
 <<set $outside to 0>><<set $location to 'pool'>><<schooleffects>><<effects>>
 <<if !$combat>>
-  <span class='lewd'><<lanSwitch 'The water around the deep end is cloudy in ways the filter will not fix before morning, and the shallow end is full of students who are not even pretending to swim.' '深水区那片水浑得厉害，过滤一晚上也干净不了；浅水区站着一群学生，装都懒得装出在游泳的样子。'>></span><br><br>
+  <span class='lewd'><<lanSwitch 'The water around the deep end is cloudy in ways the filter will not fix before morning, and the shallow end is full of students who are not even pretending to swim.' '深水区那片水浑得厉害，过滤一晚上也干净不了。浅水区站着一群学生，装都懒得装出在游泳的样子。'>></span><br><br>
   <<getouticon>><<lanLink ['Back to the pool', '回到泳池'] 'School Pool'>><</lanLink>>
 <<else>>
   <<deadwood-reblooms-pool-party-sex-loop 'Deadwood Reblooms Pool Party Group Sex'>>

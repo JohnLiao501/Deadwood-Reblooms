@@ -195,7 +195,7 @@
     <<option 'CN'>>
       “现在还什么都没做。”兰德里把纸收回手边。“不想接，就到此为止。”伦恩稍稍举起酒杯。“要接，就先把分成谈清楚，别急着逞能。”
   <</language>><br><br>
-  <span class='red'><<lanSwitch 'This is a robbery. Accepting starts preparations; entering the bank for the job creates evidence against you. Violence can create further evidence, and you can be arrested.' '这是一起抢劫。接下后开始筹备，正式进入银行实施行动会留下犯罪证据；暴力行为可能留下更多罪证，也可能导致被捕。'>></span><br><br>
+  <span class='red'><<lanSwitch 'This is a robbery. Accepting starts preparations; entering the bank for the job creates evidence against you. Violence can create further evidence, and you can be arrested.' '这是一起抢劫。接下后开始筹备，正式进入银行实施行动会留下犯罪证据。暴力行为可能留下更多罪证，也可能导致被捕。'>></span><br><br>
   <<if _streetHeist.available and _streetHeist.unlocked and _streetHeist.meetingAvailable>>
     <<icon 'street/heist-plan.png'>><<lanLink ['Agree to prepare the job', '同意筹备这桩买卖'] 'Deadwood Street Heist Plan'>>
       <<if _streetHeist.available and _streetHeist.unlocked and _streetHeist.meetingAvailable and _streetHeist.state.appointment and _streetHeist.state.stage is 'idle'>>
@@ -275,7 +275,7 @@
       <<option 'EN'>>
         You need one scout and one carrier. A hire charges an advance as well as a share of the haul. The advance pays for their time even if you later withdraw.
       <<option 'CN'>>
-        你需要一名侦察员和一名搬运员。人手先收一笔定金，事成后再抽成；即便之后退出，定金也不会退还。
+        你需要一名侦察员和一名搬运员。人手先收一笔定金，事成后再抽成。即便之后退出，定金也不会退还。
     <</language>><br>
     <<if !_streetHeist.state.candidates.length and !_streetHeist.state.crew.length>>
       <<socialiseicon 'ask'>><<lanLink ['Ask Landry to introduce three candidates (0:15)', '请兰德里介绍三个人选 (0:15)'] 'Deadwood Street Heist Plan'>>
@@ -320,7 +320,7 @@
       <<option 'EN'>>
         You can leave on foot. For a vehicle, park your own roadworthy car on High Street, with enough fuel and room for Wren and both hires. The driver must have a licence and be fit to drive.
       <<option 'CN'>>
-        可以徒步离开。若要用车，请把自己的汽车停在商业街，备足燃油，并为伦恩和两名雇员留出乘客座位；你也要有驾照，并处于能够驾驶的状态。
+        可以徒步离开。若要用车，请把自己的汽车停在商业街，备足燃油，并为伦恩和两名雇员留出乘客座位。你也要有驾照，并处于能够驾驶的状态。
     <</language>><br>
     <<if _streetHeist.state.vehicle is null>>
       <span class='gold'><<lanSwitch 'On foot' '徒步'>></span><br>
@@ -358,7 +358,7 @@
 <<else>>
   <<deadwood-street-heist-status>>
   <<if _streetHeist.inAction>>
-    <span class='blue'><<lanSwitch 'The job has begun. Return to the financial centre bank counter on High Street to continue; these preparations can no longer be changed.' '行动已经开始。到商业街金融中心的银行柜台继续；这里的准备事项已经不能更改。'>></span><br>
+    <span class='blue'><<lanSwitch 'The job has begun. Return to the financial centre bank counter on High Street to continue; these preparations can no longer be changed.' '行动已经开始。到商业街金融中心的银行柜台继续。这里的准备事项已经不能更改。'>></span><br>
   <<elseif _streetHeist.state.stage is 'settlement'>>
     <<if ['reported', 'sting'].includes(_streetHeist.state.outcome)>>
       <span class='blue'><<lanSwitch 'Speak to Grant at the police station to settle the verified outcome.' '到警局找格兰特，结算核实后的结果。'>></span><br>
