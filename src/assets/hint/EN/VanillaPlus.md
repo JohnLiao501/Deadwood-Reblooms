@@ -27,6 +27,10 @@ The seventh-level exhibitionism trait permits naked travel around town once the 
 
 **Settings**: The hypnosis setting does not affect it. Disabling VanillaPlus restores normal decay. Re-enabling it applies the effect according to this save's feat record.
 
+### Iron Will
+
+Once your fallen angel form reaches its stable stage, Iron Will prevents willpower decay and caps non-combat arousal at **1 below the orgasm threshold**, preventing accumulated arousal from triggering an orgasm during ordinary travel. Combat retains the native arousal ceiling.
+
 ### Trinity
 
 **Prerequisites**: Enable VanillaPlus and divine transformations in the game settings. Pray in the temple's prayer room and encounter each of the three vanilla presences: warmth, stone and empty darkness. Both embracing a presence and snapping out of it count as experiencing that contact. Your fallen angel form must have **settled into its stable stage**, and you must wear a **dark pendant** when praying.

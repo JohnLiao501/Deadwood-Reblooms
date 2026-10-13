@@ -186,6 +186,11 @@
   from: 'V.milk_amount + amount'
   to: 'V.milk_amount + (maplebirch.get("VanillaPlus")?.divineTransformations.fluidChange(amount) ?? amount)'
 
+- comment: '钢铁意志限制非战斗性奋；共用原版钳制，战斗上限与主动剧情结算照常。'
+  fileName: 'stat-changes.js'
+  from: 'V.arousal = Math.clamp(V.arousal, minArousal(), V.arousalmax);'
+  to: 'V.arousal = Math.clamp(V.arousal, minArousal(), maplebirch.get("VanillaPlus")?.divineTransformations.arousalLimit ?? V.arousalmax);'
+
 - comment: '意志承伤层在疼痛钳制前吸收伤害。'
   fileName: 'stat-changes.js'
   from: 'V.pain = Math.clamp(V.pain, minPain(), 200);'

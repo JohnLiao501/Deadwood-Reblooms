@@ -38,6 +38,10 @@ class DivineTransformations {
     return Number(V.fallenangel) >= 4;
   }
 
+  public get arousalLimit(): number {
+    return this.fallenAngel && V.combat !== 1 ? V.arousalmax - 1 : V.arousalmax;
+  }
+
   public get demon(): boolean {
     return Number(V.demon) >= 6;
   }
@@ -117,6 +121,7 @@ class DivineTransformations {
   public update(): void {
     this.syncBeauty();
     this.restoreFluids();
+    if (this.fallenAngel && V.combat !== 1) V.arousal = Math.min(V.arousal, this.arousalLimit);
     if (V.combat !== 1 && this.state) this.state.expungeUsed = false;
   }
 
