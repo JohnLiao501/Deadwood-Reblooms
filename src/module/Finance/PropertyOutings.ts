@@ -4,6 +4,15 @@ import type RealEstate from './RealEstate';
 import Catalog from '../Transport/Catalog';
 
 export type OutingActivity = 'meal' | 'shopping' | 'walk';
+export interface OutingMemory {
+  name: string;
+  property: string;
+  activity: OutingActivity;
+  at: number;
+  short: boolean;
+  wet: boolean;
+  seen: boolean;
+}
 export interface PropertyOutingState {
   plan: {
     name: string;
@@ -12,18 +21,24 @@ export interface PropertyOutingState {
     hour: number;
     at: number;
     activity: OutingActivity;
-    stage: 'booked' | 'out' | 'visit' | 'return' | 'done' | 'cancelled' | 'missed';
+    stage: 'offered' | 'booked' | 'out' | 'visit' | 'return' | 'done' | 'cancelled' | 'missed';
     vehicle: number | null;
     enjoyed: boolean;
     intimate?: boolean;
+    source?: 'partner';
+    offered_at?: number;
+    moved?: number;
+    wet?: boolean;
   } | null;
   visits: Record<string, { property: string; until: number; at: string }>;
   note: { name: string; property: string; day: number; kind: 'ride' | 'outing'; short: boolean; done: boolean } | null;
+  offer_day: number;
+  memories: Record<string, OutingMemory>;
 }
 
 /** 房屋只保存约定和短暂来访；道路、车辆、费用与正文沿用已有模块。 */
 export default class PropertyOutings {
-  public static readonly defaults: PropertyOutingState = { plan: null, visits: {}, note: null };
+  public static readonly defaults: PropertyOutingState = { plan: null, visits: {}, note: null, offer_day: -7, memories: {} };
 
   public constructor(
     private readonly estate: RealEstate,
@@ -31,7 +46,10 @@ export default class PropertyOutings {
   ) {}
 
   public get state(): PropertyOutingState {
-    return (V.Finance.real_estate.outings ??= structuredClone(PropertyOutings.defaults));
+    const state = (V.Finance.real_estate.outings ??= structuredClone(PropertyOutings.defaults));
+    state.offer_day ??= -7;
+    state.memories ??= {};
+    return state;
   }
 
   public get plan(): PropertyOutingState['plan'] {
@@ -55,7 +73,7 @@ export default class PropertyOutings {
   }
 
   public get live(): boolean {
-    return !!this.plan && ['booked', 'out', 'visit', 'return'].includes(this.plan.stage) && this.valid(this.plan.name, this.plan.property);
+    return !!this.plan && ['offered', 'booked', 'out', 'visit', 'return'].includes(this.plan.stage) && this.valid(this.plan.name, this.plan.property);
   }
 
   public get travelling(): boolean {
@@ -75,8 +93,163 @@ export default class PropertyOutings {
     const weekDay = ((Time.weekDay - 1 + day - Math.floor(Time.days)) % 7) + 1;
     if (name === 'Robin' && this.core.get('Robin') && V.RobinExpansion?.shop) return 21;
     if (name !== 'Sydney') return 18;
+    const date = new DateTime(this.at(day, 18));
+    if ((date.month === 10 && date.day === 31) || (date.month === 12 && date.day === 25)) return null;
     if ((weekDay === 7 && V.adultshopopeningsydney) || (weekDay === 1 && V.sydney.rank === 'initiate')) return null;
     return weekDay === 7 ? 20 : 19;
+  }
+
+  private at(day: number, hour: number): number {
+    return Time.date.timeStamp + (day - Math.floor(Time.days)) * 86400 + (hour * 60 - Time.hour * 60 - Time.minute) * 60 - Time.date.second;
+  }
+
+  private day(at: number): number {
+    const midnight = new DateTime(Time.year, Time.month, Time.monthDay).timeStamp;
+    return Math.floor(Time.days) + Math.floor((at - midnight) / 86400);
+  }
+
+  private present(name: string, property: string): boolean {
+    const end = name === 'Sydney' ? 6 : 7;
+    return (
+      !V.combat &&
+      !V.possessed &&
+      !V.nextPassageCheck &&
+      this.valid(name, property) &&
+      this.estate.current?.id === property &&
+      this.estate.residentsHome(property).some(resident => resident.id === name) &&
+      (Time.hour >= end || Time.hour * 60 + Time.minute + 5 <= end * 60)
+    );
+  }
+
+  public get choices(): OutingActivity[] {
+    if (!this.plan) return [];
+    return this.plan.hour < 20 ? ['meal', 'shopping', 'walk'] : this.plan.hour < 21 ? ['shopping', 'walk'] : ['walk'];
+  }
+
+  public get offer(): PropertyOutingState['plan'] {
+    const plan = this.plan;
+    return plan?.stage === 'offered' &&
+      plan.at > Time.date.timeStamp &&
+      Time.date.timeStamp < (plan.offered_at ?? 0) + 86400 &&
+      this.hour(plan.name, this.day(plan.at)) === plan.hour &&
+      this.present(plan.name, plan.property)
+      ? plan
+      : null;
+  }
+
+  /** 由既有的居家日常入口提出邀约；刷新正文不会重新抽选。 */
+  public propose(): boolean {
+    const property = this.estate.current;
+    const transport = this.core.get('Transport');
+    if (
+      !property ||
+      this.core.passage.title !== 'Deadwood Reblooms Property Home' ||
+      this.live ||
+      this.note ||
+      this.memory ||
+      this.estate.banquet.active ||
+      this.state.offer_day > Math.floor(Time.days) - 7 ||
+      !transport?.state.school.motor_vehicle.licensed ||
+      !transport.state.vehicles.some(vehicle => !vehicle.stolen && Catalog.models.some(model => model.id === vehicle.model && model.kind === 'motor_vehicle' && model.seats > 0))
+    )
+      return false;
+    const candidates = this.estate.residentsHome(property.id).flatMap(resident => {
+      if (!window.isLoveInterest(resident.id) || !this.present(resident.id, property.id) || (resident.id === 'Robin' && C.npc.Robin.trauma >= 80)) return [];
+      const day = this.days.find(day => this.hour(resident.id, day) !== null);
+      return day === undefined ? [] : [{ name: resident.id, day, hour: this.hour(resident.id, day)! }];
+    });
+    if (!candidates.length) return false;
+    const pick = this.core.SugarCube.Scripting.evalJavaScript('random') as (min: number, max: number) => number;
+    const { name, day, hour } = candidates[pick(0, candidates.length - 1)];
+    const activity: OutingActivity = hour >= 21 ? 'walk' : name === 'Robin' && hour < 20 ? 'meal' : name === 'Sydney' || name === 'Whitney' ? 'shopping' : 'walk';
+    this.state.plan = { name, property: property.id, day, hour, at: this.at(day, hour), activity, stage: 'offered', source: 'partner', offered_at: Time.date.timeStamp, vehicle: null, enjoyed: false };
+    this.state.offer_day = Math.floor(Time.days);
+    return true;
+  }
+
+  public accept(activity: OutingActivity): boolean {
+    const plan = this.offer;
+    if (V.passage !== 'Deadwood Reblooms Property Outing Invitation' || !plan || !this.choices.includes(activity)) return false;
+    // 邀约跨过 07:00 后重算游戏日标签，约好的实际日期保持不变。
+    const day = this.day(plan.at);
+    if (this.hour(plan.name, day) !== plan.hour) return false;
+    plan.day = day;
+    plan.activity = activity;
+    plan.stage = 'booked';
+    return true;
+  }
+
+  public decline(): boolean {
+    if (V.passage !== 'Deadwood Reblooms Property Outing Invitation' || !this.offer) return false;
+    this.plan!.stage = 'cancelled';
+    return true;
+  }
+
+  public get weather(): boolean {
+    return this.waiting && this.plan!.activity === 'walk' && Weather.precipitation !== 'none' && this.present(this.plan!.name, this.plan!.property);
+  }
+
+  public get alternatives(): OutingActivity[] {
+    return this.weather ? this.choices.filter(activity => activity !== 'walk' && this.indoor(activity)) : [];
+  }
+
+  public reschedule(day: number, activity: OutingActivity): boolean {
+    const plan = this.plan;
+    if (V.passage !== 'Deadwood Reblooms Property Outing Weather' || !this.weather || !plan || !['meal', 'shopping', 'walk'].includes(activity)) return false;
+    const today = day === Math.floor(Time.days);
+    const hour = today ? plan.hour : this.hour(plan.name, day);
+    if ((!today && !this.days.includes(day)) || hour === null || (activity === 'meal' && hour >= 20) || (activity === 'shopping' && hour >= 21)) return false;
+    if (today && (activity === 'walk' || !this.indoor(activity))) return false;
+    plan.moved ??= plan.at;
+    if (!today) {
+      plan.day = day;
+      plan.hour = hour;
+      plan.at = this.at(day, hour);
+    } else {
+      plan.at = Time.date.timeStamp + 120;
+      plan.day = day;
+      plan.hour = new DateTime(plan.at).hour;
+    }
+    plan.activity = activity;
+    return true;
+  }
+
+  private indoor(activity: OutingActivity): boolean {
+    const property = this.estate.current;
+    const transport = this.core.get('Transport');
+    const from = property?.street === 'Office Lobby' ? 'high' : property && Catalog.point(property.street);
+    const distance = from ? Catalog.distance(from, activity === 'meal' ? 'cliff' : 'high') : null;
+    if (!property || !transport || distance === null) return false;
+    return transport.state.vehicles.some(vehicle => {
+      const model = Catalog.models.find(model => model.id === vehicle.model);
+      if (
+        !model ||
+        model.kind !== 'motor_vehicle' ||
+        !model.seats ||
+        vehicle.stolen ||
+        vehicle.condition <= 0 ||
+        (vehicle.arrears ?? 0) > 0 ||
+        vehicle.fuel < Math.ceil((distance * 2 + 4) * model.fuel_use * 100) / 100 ||
+        (vehicle.garage !== property.id && !(vehicle.garage === null && vehicle.point === from))
+      )
+        return false;
+      const drive = transport.journeyMinutes(model, distance + 2);
+      const now = Time.hour * 60 + Time.minute + 3;
+      return now + drive + 20 < (activity === 'meal' ? 20 : 21) * 60 && (this.plan!.name !== 'Sydney' || now + drive * 2 + 20 < 21 * 60);
+    });
+  }
+
+  public get memory(): OutingMemory | undefined {
+    if (this.note || this.waiting || this.travelling || this.estate.banquet.active) return;
+    const midnight = new DateTime(Time.year, Time.month, Time.monthDay).timeStamp;
+    return Object.values(this.state.memories).find(memory => !memory.seen && memory.at < midnight && Time.date.timeStamp - memory.at < 259200 && this.present(memory.name, memory.property));
+  }
+
+  public recall(name: string): boolean {
+    const memory = this.memory;
+    if (V.passage !== 'Deadwood Reblooms Property Outing Recall' || memory?.name !== name) return false;
+    memory.seen = true;
+    return true;
   }
 
   public book(name: string, day: number, activity: OutingActivity): boolean {
@@ -95,13 +268,13 @@ export default class PropertyOutings {
       !this.valid(name, property.id)
     )
       return false;
-    const at = Time.date.timeStamp + (day - Math.floor(Time.days)) * 86400 + (hour * 60 - Time.hour * 60 - Time.minute) * 60 - Time.date.second;
+    const at = this.at(day, hour);
     this.state.plan = { name, property: property.id, day, hour, at, activity, stage: 'booked', vehicle: null, enjoyed: false };
     return true;
   }
 
   public cancel(): boolean {
-    if (!this.plan || this.plan.stage !== 'booked') return false;
+    if (!this.plan || !['offered', 'booked'].includes(this.plan.stage)) return false;
     this.plan.stage = 'cancelled';
     return true;
   }
@@ -191,6 +364,7 @@ export default class PropertyOutings {
     else if (plan.stage === 'return' && this.estate.current?.id === plan.property) {
       plan.stage = 'done';
       this.receive(plan.name, plan.property, 'outing');
+      this.state.memories[plan.name] = { name: plan.name, property: plan.property, activity: plan.activity, at: Time.date.timeStamp, short: !plan.enjoyed, wet: !!plan.wet, seen: false };
     }
   }
 
@@ -227,6 +401,7 @@ export default class PropertyOutings {
     if (this.plan!.stage === 'out' && !transport.state.trip?.settled) return false;
     this.plan!.stage = 'return';
     this.plan!.enjoyed = enjoyed;
+    this.plan!.wet = !enjoyed && this.plan!.activity === 'walk' && Weather.precipitation !== 'none';
     transport.state.trip = null;
     transport.state.return_passage = Catalog.passage(transport.vehicle.point);
     return true;
@@ -306,12 +481,17 @@ export default class PropertyOutings {
   private advance(): void {
     if (!V.Finance?.real_estate || V.replayScene || V.statFreeze) return;
     for (const [name, visit] of Object.entries(this.state.visits)) if (visit.until <= Time.date.timeStamp || !this.valid(name, visit.property)) delete this.state.visits[name];
+    for (const [name, memory] of Object.entries(this.state.memories)) if (Time.date.timeStamp - memory.at >= 259200 || !this.valid(name, memory.property)) delete this.state.memories[name];
     const plan = this.plan;
-    if (!plan || !['booked', 'out', 'visit', 'return'].includes(plan.stage)) return;
+    if (!plan || !['offered', 'booked', 'out', 'visit', 'return'].includes(plan.stage)) return;
+    if (plan.stage === 'offered' && Time.date.timeStamp >= Math.min(plan.at, (plan.offered_at ?? 0) + 86400)) {
+      plan.stage = 'cancelled';
+      return;
+    }
     if (!this.valid(plan.name, plan.property)) {
       this.abandon();
       plan.stage = 'cancelled';
-    } else if (Time.date.timeStamp >= plan.at + (plan.stage === 'booked' ? 1800 : 21600)) {
+    } else if (plan.stage !== 'offered' && Time.date.timeStamp >= plan.at + (plan.stage === 'booked' ? 1800 : 21600)) {
       this.abandon();
       plan.stage = 'missed';
     }
@@ -324,5 +504,6 @@ export default class PropertyOutings {
     }
     if (this.state.note?.property === property) this.state.note = null;
     for (const [name, visit] of Object.entries(this.state.visits)) if (visit.property === property) delete this.state.visits[name];
+    for (const [name, memory] of Object.entries(this.state.memories)) if (memory.property === property) delete this.state.memories[name];
   }
 }

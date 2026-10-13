@@ -39,6 +39,7 @@
       <</for>><br>
     <</if>>
     <<deadwood-home-outing-departure>>
+    <<deadwood-outing-weather-link>>
     <<deadwood-outing-arrival>>
     <<deadwood-home-rides>>
     <<if _transport.garage>>

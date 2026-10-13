@@ -438,6 +438,7 @@
 <</language>><br><br>
 <<if maplebirch.get('Transport')>>
   <<deadwood-home-outing-departure>>
+  <<deadwood-outing-weather-link>>
   <<deadwood-transport-garage>><br>
 <</if>>
 <<deadwood-home-exit 'garage'>>

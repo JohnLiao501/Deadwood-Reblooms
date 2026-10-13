@@ -873,6 +873,7 @@
   <span class='green'><<lanSwitch 'This is one of your homes.' '这里也是你的住所。'>></span><br><br>
   <<deadwood-home-staff-presence>>
   <<deadwood-home-return-link>>
+  <<deadwood-home-outing-life-links>>
   <<deadwood-home-daily-link>>
   <<for _resident range maplebirch.get("Finance").realEstate.household.common>>
     <<capture _resident>>

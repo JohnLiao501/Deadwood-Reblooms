@@ -84,8 +84,17 @@
 <<deadwood-dynamicblock 'deadwood-home-outing-plan'>>
 <<set _outings to maplebirch.get('Finance').realEstate.outings>>
 <<if _outings.live>>
-  <<print maplebirch.auto(_outings.plan.name)>> · <span class='blue'><<print getFormattedDate(new DateTime(_outings.plan.at))>> <<print _outings.plan.hour>>:00</span><br>
+  <<print maplebirch.auto(_outings.plan.name)>> · <span class='blue'><<print getFormattedDate(new DateTime(_outings.plan.at))>> <<print _outings.plan.hour>>:<<print String(new DateTime(_outings.plan.at).minute).padStart(2, '0')>></span><br>
   <<deadwood-outing-activity _outings.plan.activity>><br><br>
+  <<if _outings.plan.stage is 'offered'>>
+    <<if _outings.offer>>
+      <<socialiseicon>><<lanLink ['Discuss the invitation', '聊聊这次邀约'] 'Deadwood Reblooms Property Outing Invitation'>><</lanLink>><br><br>
+    <</if>>
+    <<icon 'company/minutes.png'>><<lanLink ['Leave a note declining the invitation (0:02)', '留张纸条谢绝邀约 (0:02)']>>
+      <<set _outing_source to $passage>>
+      <<if maplebirch.get('Finance').realEstate.outings.cancel()>><<pass 2>><<if $passage is _outing_source>><<run Dynamic.render('deadwood-home-outing-plan')>><</if>><</if>>
+    <</lanLink>><br><br>
+  <</if>>
   <<if _outings.plan.stage is 'booked'>>
     <<language>>
       <<option 'EN'>>
@@ -95,6 +104,9 @@
         你们约好在共同居住的住宅碰面。把车准备在车库或门前的街道上，就能一起出发。
         <<if _outings.plan.name is 'Sydney'>>悉尼在事务之间留出一小段空闲，你们得在九点前回来。<</if>>
     <</language>><br><br>
+    <<if _outings.weather>>
+      <<socialiseicon>><<lanLink ['Discuss the weather and your plans', '商量天气与出门安排'] 'Deadwood Reblooms Property Outing Weather'>><</lanLink>><br><br>
+    <</if>>
     <<icon 'company/minutes.png'>><<lanLink ['Leave a note cancelling the outing (0:02)', '留张纸条取消这次外出 (0:02)']>>
       <<set _outing_source to $passage>>
       <<if maplebirch.get('Finance').realEstate.outings.cancel()>><<pass 2>><<if $passage is _outing_source>><<run Dynamic.render('deadwood-home-outing-plan')>><</if>><</if>>
@@ -102,7 +114,7 @@
   <</if>>
 <<else>>
   <<if _outings.plan?.stage is 'cancelled'>>
-    <<lanSwitch 'You have cancelled the arrangement. The note is left where your housemate will find it.' '这次约定已经取消。纸条留在同住恋人能看见的地方。'>><br><br>
+    <<if _outings.plan.source is 'partner'>><<lanSwitch 'That invitation has been set aside.' '这次邀约暂时搁下了。'>><<else>><<lanSwitch 'You have cancelled the arrangement. The note is left where your housemate will find it.' '这次约定已经取消。纸条留在同住恋人能看见的地方。'>><</if>><br><br>
   <<elseif _outings.plan?.stage is 'missed'>>
     <span class='purple'><<lanSwitch 'The agreed meeting time has passed. You will need to make a new arrangement.' '约好的碰面时间已经过去了。想一起出门，得重新约个时间。'>></span><br><br>
   <</if>>

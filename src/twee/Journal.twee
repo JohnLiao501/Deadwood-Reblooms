@@ -1236,11 +1236,13 @@
   <<set _journal_outings to maplebirch.get('Finance').realEstate.outings>>
   <<set _journal_outing to _journal_outings.plan>>
   <<if _journal_outings.live and _journal_outing.property is _args[0]>>
-    <br><<socialiseicon 'ask'>><<print maplebirch.auto(_journal_outing.name)>> · <span class='blue'><<print getFormattedDate(new DateTime(_journal_outing.at))>> <<print _journal_outing.hour>>:00</span>
+    <br><<socialiseicon 'ask'>><<print maplebirch.auto(_journal_outing.name)>> · <span class='blue'><<print getFormattedDate(new DateTime(_journal_outing.at))>> <<print _journal_outing.hour>>:<<print String(new DateTime(_journal_outing.at).minute).padStart(2, '0')>></span>
     <br><<deadwood-outing-activity _journal_outing.activity>>
-    <<if _journal_outing.stage is 'booked'>> · <<lanSwitch 'Meet at your shared home.' '在共同居住的住宅碰面。'>>
+    <<if _journal_outing.stage is 'offered'>> · <<lanSwitch 'Your housemate has suggested this outing.' '同住恋人提出了这次外出邀约。'>>
+    <<elseif _journal_outing.stage is 'booked'>> · <<lanSwitch 'Meet at your shared home.' '在共同居住的住宅碰面。'>>
     <<elseif _journal_outing.stage is 'return'>> · <<lanSwitch 'On the way home.' '准备一起回家。'>>
     <<else>> · <<lanSwitch 'Out together.' '正在一起外出。'>><</if>>
     <<if _journal_outing.name is 'Sydney'>> <span class='purple'>| <<lanSwitch 'Return before 21:00.' '21:00 前回来。'>></span><</if>>
+    <<if _journal_outing.moved>><br><span class='blue'><<lanSwitch 'Weather change agreed; the date above is current.' '已因天气调整安排，以上为当前约定。'>></span><</if>>
   <</if>>
 <</widget>>

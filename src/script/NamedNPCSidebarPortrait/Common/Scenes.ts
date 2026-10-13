@@ -39,6 +39,9 @@ export default function scene(core: MaplebirchCore, name: string): string | unde
     return banquet.state.formal && ['Robin', 'Whitney', 'Kylar', 'Avery', 'Harper'].includes(name) ? 'formal' : casual[name];
   }
   if ((title === 'Deadwood Reblooms Property Outing' || title.startsWith('Deadwood Reblooms Property Outing Closeness')) && estate?.outings.plan?.name === name) return outside;
+  if (title === 'Deadwood Reblooms Property Outing Weather' && estate?.outings.plan?.name === name) return casual[name];
+  if (title === 'Deadwood Reblooms Property Outing Invitation' && estate?.outings.offer?.name === name) return Time.hour < (name === 'Sydney' ? 6 : 7) ? sleep[name] : casual[name];
+  if (title === 'Deadwood Reblooms Property Outing Recall' && estate?.outings.memory?.name === name) return Time.hour < (name === 'Sydney' ? 6 : 7) ? sleep[name] : casual[name];
   if (title === 'Deadwood Reblooms Property Return') {
     const note = estate?.outings.state.note;
     if (note?.name === name && !note.done) return note.kind === 'ride' && name !== 'Sydney' ? school[name] : outside;

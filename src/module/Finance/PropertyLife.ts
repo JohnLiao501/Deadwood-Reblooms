@@ -53,6 +53,8 @@ export default class PropertyLife {
     const daily = this.daily;
     const property = this.estate.current;
     if (!daily || daily.choice || !property || daily.property !== property.id || daily.day !== Math.floor(Time.days) || !this.core.get('Finance')?.company.available) return false;
+    const outings = this.estate.outings;
+    if (outings.note || outings.memory || outings.offer || outings.waiting || outings.travelling || this.estate.banquet.active) return false;
     if (this.estate.managementFor(property.id).auction_day !== null) return false;
     if (daily.kind === 'staff') return !!daily.role && this.estate.staff.active(daily.role) && !!V.per_npc?.[this.estate.staff.key(daily.role)];
     if (daily.kind === 'resident') return !!daily.partner && this.estate.residentsHome(property.id).some(resident => resident.id === daily.partner) && this.free(daily.partner, 10);
@@ -61,7 +63,20 @@ export default class PropertyLife {
 
   public arrive(): void {
     const property = this.estate.current;
-    if (!property || !this.core.get('Finance')?.company.available || this.estate.managementFor(property.id).auction_day !== null || this.state.daily_day >= Math.floor(Time.days)) return;
+    if (
+      !property ||
+      !this.core.get('Finance')?.company.available ||
+      this.estate.managementFor(property.id).auction_day !== null ||
+      V.replayScene ||
+      V.statFreeze ||
+      V.combat ||
+      V.possessed ||
+      V.nextPassageCheck
+    )
+      return;
+    const outings = this.estate.outings;
+    if (outings.note || outings.memory || outings.offer || outings.waiting || outings.travelling || this.estate.banquet.active || outings.propose()) return;
+    if (this.state.daily_day >= Math.floor(Time.days)) return;
     const residents = this.estate.household.home.filter(resident => (Time.hour >= 21 || (Time.hour >= 5 && Time.hour < 7)) && this.free(resident.id, 10));
     const roles = this.estate.staff.roles.filter(role => this.estate.staff.active(role) && V.per_npc?.[this.estate.staff.key(role)]);
     const kinds: Array<'resident' | 'staff' | 'house'> = ['house'];
