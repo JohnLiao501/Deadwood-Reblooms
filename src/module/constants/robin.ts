@@ -6,6 +6,8 @@ import investmentTerms from '../../assets/finance/shop-investment.json';
 export type BalloonRoute = 'none' | 'cooperate' | 'compete' | 'resolved';
 /** 收容所（精神病院）路线状态。 */
 export type AsylumStatus = 'home' | 'admitted' | 'recovering';
+/** 医生游戏的进度。0 未入门，1 已玩过，2 会由罗宾主动提出。 */
+export type DoctorStage = 0 | 1 | 2;
 /** 罗宾店铺的开办阶段。 */
 export type ShopStage = 'none' | 'planning' | 'applied' | 'site' | 'inspected' | 'permitted';
 
@@ -158,6 +160,15 @@ export interface RobinExpansionState {
   school_drinks_day: number;
   /** 上次校园叫醒事件的游戏日。 */
   school_wake_day: number;
+  /** 医生游戏：PC 教罗宾玩的那个游戏。 */
+  doctor: {
+    /** 罗宾学到哪一步。 */
+    stage: DoctorStage;
+    /** 上次一起玩的游戏日，用于限制每天一次。 */
+    day: number;
+    /** 累计玩过的次数，玩够两次罗宾就会自己开口。 */
+    count: number;
+  };
   /** 上次夜间事件的游戏日。 */
   night_day: number;
   /** 上次夜间事件结算的游戏日。 */
@@ -281,6 +292,11 @@ export const DEFAULT_ROBIN_EXPANSION_STATE: RobinExpansionState = {
   sale_event_day: -1,
   school_drinks_day: -1,
   school_wake_day: -1,
+  doctor: {
+    stage: 0,
+    day: -1,
+    count: 0
+  },
   night_day: -1,
   night_outcome_day: -1,
   asylum: {

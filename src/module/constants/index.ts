@@ -14,7 +14,7 @@ export {
   type PoolPartyCompanion,
   type PoolPartyState
 } from './life-simulation';
-export { DEFAULT_ROBIN_EXPANSION_STATE, type BalloonRoute, type RobinExpansionState, type ShopStage } from './robin';
+export { DEFAULT_ROBIN_EXPANSION_STATE, type BalloonRoute, type DoctorStage, type RobinExpansionState, type ShopStage } from './robin';
 export { DEFAULT_SYDNEY_EXPANSION_STATE, type SydneyExpansionState } from './sydney';
 export { DEFAULT_WHITNEY_EXPANSION_STATE, type WhitneyExpansionState } from './whitney';
 export { DEFAULT_KYLAR_EXPANSION_STATE, type KylarExpansionState } from './kylar';
