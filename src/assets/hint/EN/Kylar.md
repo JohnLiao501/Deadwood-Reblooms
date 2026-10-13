@@ -1,57 +1,21 @@
-### Prerequisites and entrance
+### Receive another overnight invitation
 
-Enable **Kylar** and reload. Complete the first vanilla manor stay, progress the relationship and select Kylar as a love interest. <span class="teal">Manor invitation and PC-property residency are separate records.</span>
+Complete the original first overnight event at the manor and select Kylar as a love interest on the Attitudes page. When Kylar is available, visit the bedroom after 18:00 and ask whether you may stay again. During the day, Kylar must actually be in the bedroom.
 
-### Unlocking repeat stays
+Once invited, use the wardrobe, mirror and bed, including sleepwear and sleep duration choices. Original manor events still occur, and night dialogue depends on Kylar's presence rather than happening every night.
 
-1. Complete the first manor stay rather than merely visiting.
-2. Confirm love-interest selection in Attitudes.
-3. Ask while Kylar is active and available at the manor after 18:00, or explicitly scheduled in the manor bedroom.
-4. Acceptance enables the bedroom wardrobe, mirror, clothing and sleep options.
+### Daily time together
 
-Invitation does not cancel family stories. Moving to a PC home transfers some companionship rather than placing Kylar in both houses.
+| Place    | Activities                                                                                                                               |
+| -------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Bedroom  | Play a game and sort notes once each day; repairing or checking exercises requires the relevant English skill                            |
+| Kitchen  | Make tea once a day, including by yourself when Kylar is absent                                                                          |
+| Garden   | After the overnight invitation, find Kylar between 08:00 and before 09:00 when there is no school commitment; help or respond to worries |
+| Bathroom | You may meet Kylar between 18:00 and before 23:00; bathe or answer through the door                                                      |
+| Park     | Once the original relationship allows Kylar to draw you openly, ask about the drawing once daily; wait, praise it or stop asking         |
 
-### Manor activities
+Choices bring different dialogue, affection and stress changes. Notes and helping require usable arms, and the garden also requires suitable clothing. A school role changes some conversations without replacing study skills.
 
-| Place      | Action                   | Effects and limits                                                                                   |
-| ---------- | ------------------------ | ---------------------------------------------------------------------------------------------------- |
-| Bedroom    | Wardrobe, mirror and bed | A place to stay, with separate VanillaPlus eerie-mirror requirements                                 |
-| Computer   | Shared gaming            | Available evening presence, love and stress benefits                                                 |
-| Schoolbook | Notes and exercises      | Once daily, with ability-dependent repair or review choices                                          |
-| Kitchen    | Tea                      | Once daily, also available alone                                                                     |
-| Garden     | Questions and pruning    | Daytime 08:00 until before 09:00 outside school hours, unexposed and not both arms bound, once daily |
-| Bathroom   | Bathe or answer Kylar    | One possible encounter daily, from 18:00 until before 23:00 while Kylar is at the manor              |
+### Manor visits and living in your home
 
-### Notes choices
-
-Playing together and copying notes require at least one unbound arm. You can still listen to Kylar with both arms bound.
-
-Listen first or repair exercises when English ability qualifies. Listening improves love, while repair also improves English. The school grade letter and this ability check are separate records, so one high exam grade does not guarantee the option.
-
-Prefect or president status changes questions without replacing the ability requirement.
-
-<span class="teal">The repaired page remains in the book.</span> Later visits can cover new exercises. Shared games also resume the previous save, which Kylar leaves untouched while you are away.
-
-### Garden and jealousy
-
-After invitation, ask, help or respond to worries in the garden before Kylar leaves in the morning. Helping increases love and reduces stress. Higher jealousy opens concern about other people. Responding slightly lowers jealousy without erasing possessiveness.
-
-The garden entrance also requires Kylar not registered at a PC-owned home, avoiding simultaneous companionship in both places.
-
-### Park sketch
-
-At **Park → Kylar**, once vanilla relationship status allows showing the sketch, active Kylar actually at the park offers **ask what they are drawing (0:10)** once daily.
-
-Wait for them to show it, praise the path or stop asking. Responses differ in dialogue and love without forcing the sketchbook away. The park interaction uses vanilla sketch-sharing eligibility.
-
-Kylar remembers the last response. Waiting or praising changes how they show the sketchbook next time. Stopping your questions does not reduce love.
-
-### Sleep versus residency
-
-Manor sleep reads presence. Rain, monitor light and meteors can produce night-waking dialogue rather than guaranteed nightly events. Clothing, sleep and vanilla event states remain relevant.
-
-See Finance to invite Kylar into an owned home. High jealousy can block another resident, and past friendship with Sydney does not establish agreement to shared intimacy.
-
-### Troubleshooting
-
-Check first stay, invitation, selection, active state, time, daily usage and PC-home residency. Sketches additionally check park relationship status. Garden additionally checks exposure and arms. These are separate blockers.
+Use the housing process in Finance to invite Kylar into a purchased home. Some interactions then move to that home, without a second Kylar appearing at the manor. Jealousy still affects time together and invitations to other residents; overnight permission does not remove those relationship limits.

@@ -1,7 +1,21 @@
+## Getting started
+
+Choose a vehicle for the work you want to do. Bicycles suit short trips; motorcycles need a helmet and the corresponding qualification. Cars carry passengers, and some models carry cargo or work as taxis. Begin motor-vehicle training at the Elk Street driving school. After buying, remember where you parked and choose destinations from the vehicle's street menu.
+
+| Goal                            | Prepare                                                | Read next                                   |
+| ------------------------------- | ------------------------------------------------------ | ------------------------------------------- |
+| Cycle around town               | Bicycle, suitable route and working condition          | Buying and using vehicles; Roads and trails |
+| Drive a motor vehicle           | ID, qualification and fuel; a helmet for motorcycles   | Learning to drive; Parking and maintenance  |
+| Give someone a lift             | Nearby car, spare seat, fuel and a compatible schedule | Companions and homes                        |
+| Work as a taxi driver           | Full car licence, ID and registration fee              | Taxi work                                   |
+| Move cargo or arrange an escape | A suitable vehicle with cargo space or passenger seats | [Street Life](#deadwood-guide-StreetLife)   |
+
+The journal shows vehicle locations, arrears and current bookings. Statistics shows existing qualifications, vehicles and taxi pay actually settled. Driving proficiency alone does not grant a licence.
+
 ## Buying and using vehicles
 
 You can own one vehicle of each model. Select Sell on an owned model in the showroom when it is parked there. The journal records parking, condition, fuel and arrears.
-Bicycles start at **£1,500**. Buy them in the <span class="blue">shopping centre</span>, and motorcycles and cars on <span class="blue">Harvest Street</span>. Everyday runabouts and luxury sports cars differ in price, journey times and suitable terrain. Registering a motor vehicle requires an <span class="teal">ID</span>.
+Bicycles start at **<span class="gold">£1,500</span>**. Buy them in the <span class="blue">shopping centre</span>, and motorcycles and cars on <span class="blue">Harvest Street</span>. Everyday runabouts and luxury sports cars differ in price, journey times and suitable terrain. Registering a motor vehicle requires an <span class="teal">ID</span>.
 
 | Place              | Entrance                          | Services                                                |
 | ------------------ | --------------------------------- | ------------------------------------------------------- |
@@ -30,7 +44,7 @@ Vehicles stay where you last parked them. Return to the parking spot to use them
 
 Visit the petrol station for fuel and the garage for repairs. Repair costs depend on the vehicle's value and damage, making luxury vehicles more expensive to maintain. Each model has its own wear rate. Road travel wears condition by **0.28%–0.55% per hour** for bicycles, **0.22%–0.38%** for motorcycles and **0.14%–0.34%** for cars. Unpaved trails usually cause **1.5 times** the wear, reduced to **1.15 times** for a mountain bicycle or **1.2 times** for a trail motorcycle. The restored lake road uses the road rate. <span class="red">A vehicle at zero condition needs repairs before it can be driven.</span> Showroom buybacks start at half the purchase price and fall with condition.
 
-Each residential garage holds **four 20-litre petrol cans**. Choose a delivery address at the petrol station to buy a full can or refill stored cans. Delivery costs **£5** and takes **30 minutes**. A new can costs another **£20**. Fuel costs **£1.70 per litre**, the same as the pumps.
+Each residential garage holds **four 20-litre petrol cans**. Choose a delivery address at the petrol station to buy a full can or refill stored cans. Delivery costs **<span class="gold">£5</span>** and takes **30 minutes**. A new can costs another **<span class="gold">£20</span>**. Fuel costs **<span class="gold">£1.70</span> per litre**, the same as the pumps.
 
 Park a vehicle inside that garage to refuel from a can. This takes **5 minutes** and transfers only what fits in the tank. Spare fuel remains in storage, and empty cans can be refilled. Each property has its own fuel stock.
 
@@ -61,12 +75,12 @@ Ordinary road journeys lasting at least **5 minutes** can meet a roadblock, aggr
 
 Encounters pause the journey partway through. Time, fuel and wear already spent remain spent. You can give way or attempt a risky manoeuvre. <span class="teal">Driving, athletics, physique, housekeeping and skulduggery</span> help with judging gaps, handling bicycles, clearing obstacles, repairing tyres and spotting a trap. Stress, fatigue, condition, chassis and weather affect the displayed chance of making a gap. Physique requirements scale with your current body capacity.
 
-- **Roadblocks**: turning back and taking another road costs **10 minutes**. At **400 skulduggery**, you can read the ambush and slip past. You can offer **£50 in cash** or attempt the gap. <span class="red">Failing to clear the gap starts a fight.</span> You can also fight back directly, using the original combat actions. Defeat the attackers or attract help to keep your vehicle and continue if you are fit to travel. If you are too hurt to resist, stop resisting or surrender the vehicle, it is stolen.
+- **Roadblocks**: turning back and taking another road costs **10 minutes**. At **400 skulduggery**, you can read the ambush and slip past. You can offer **<span class="gold">£50</span> in cash** or attempt the gap. <span class="red">Failing to clear the gap starts a fight.</span> You can also fight back directly, using the original combat actions. Defeat the attackers or attract help to keep your vehicle and continue if you are fit to travel. If you are too hurt to resist, stop resisting or surrender the vehicle, it is stolen.
 - **Dangerous overtaking and spilled cargo**: giving way takes **4 minutes**; waiting for crates to be cleared takes **8 minutes**. Strong characters can help shift the crates. Failed risky manoeuvres damage the vehicle.
-- **Punctures**: **300 housekeeping**, the appropriate tools and one repair supply allow a repair. A passing driver can contact the workshop: **£20** for a bicycle or **£50** for a motor vehicle, with a **30-minute** wait. Limping onwards adds **15 minutes** and costs **6%** condition. You can also leave the vehicle and continue on foot.
+- **Punctures**: **300 housekeeping**, the appropriate tools and one repair supply allow a repair. A passing driver can contact the workshop: **<span class="gold">£20</span>** for a bicycle or **<span class="gold">£50</span>** for a motor vehicle, with a **30-minute** wait. Limping onwards adds **15 minutes** and costs **6%** condition. You can also leave the vehicle and continue on foot.
 - **Unwanted touching**: a taxi passenger may reach into the front seat during a fare, with drunk passengers more likely to do so. Willpower, English and current stress affect a firm warning; sufficient physique lets you stop and force the passenger out. A failed warning or active resistance starts an original combat encounter with the same passenger who boarded. Ejecting the passenger or ending the encounter cancels the fare and leaves the car at the incident location. An unfinished journey earns no fare.
 
-Stolen private vehicles are marked in the journal and can be traced at the workshop. This adds **£50** to the normal collection charge, takes **3 hours**, and leaves the recovered vehicle with **8%** less condition. Report a stolen company car to dispatch; the company handles the search and pays completed bookings. Stopping with a passenger cancels the unfinished booking without paying its fare.
+Stolen private vehicles are marked in the journal and can be traced at the workshop. This adds **<span class="gold">£50</span>** to the normal collection charge, takes **3 hours**, and leaves the recovered vehicle with **8%** less condition. Report a stolen company car to dispatch; the company handles the search and pays completed bookings. Stopping with a passenger cancels the unfinished booking without paying its fare.
 
 Picking up spilled shopping takes **2 minutes**; arranging workshop help takes **5 minutes** and slightly reduces stress. At **300 housekeeping**, motor repair tools and supplies also let you fix a loose connector on another driver's car.
 
@@ -84,15 +98,15 @@ Exposure, bound arms or shackles prevent departure. Drinking, drugs or maximum s
 
 ## Taxi work
 
-Register at the <span class="blue">taxi desk in the Harvest Street dealership</span>. Bring your ID and full car licence. Registration and a radio cost **£75**, take **15 minutes**, and remain valid. The desk opens **08:00–18:00**. Once on duty, the radio continues dispatching evening bookings.
+Register at the <span class="blue">taxi desk in the Harvest Street dealership</span>. Bring your ID and full car licence. Registration and a radio cost **<span class="gold">£75</span>**, take **15 minutes**, and remain valid. The desk opens **08:00–18:00**. Once on duty, the radio continues dispatching evening bookings.
 
 - **Company car:** collect a fully fuelled four-door saloon. The company covers petrol and upkeep. You receive **55%** of fares and all tips when you return the keys. The working car has its own record.
 - **Your own car:** use a used, four-door or long-wheelbase saloon with at least **50%** condition and paid upkeep. Receive **80%** of fares and all tips after each journey, while paying your own fuel and maintenance costs. Registered drivers can also start work from their saloon's street menu. <span class="teal">Long-wheelbase saloons can take executive bookings at a 35% higher tariff.</span>
 
 Waiting for dispatch takes **5 minutes** and offers up to three bookings, each valid for **45 minutes**. Commuters, shoppers, hospital passengers, seaside visitors and evening customers appear at suitable hours. Passenger and luggage capacity affect the bookings. Drive empty to the pickup point, then deliver the passenger to the agreed street. Both legs consume fuel and condition. Check that the tank covers both before accepting.
 
-Fares start at **£8** and rise with road distance. The **20:00–06:00** night tariff is **25%** higher. Driving proficiency shortens the journey; at **600**, an uneventful, on-time journey adds **£1** to the tip. Helping with luggage, taking bends gently or chatting at the lights also affects tips. Housekeeping improves luggage assistance. Gentle driving adds two minutes. If a passenger offers less than agreed, accept it or spend three minutes pursuing payment. At **300** skulduggery, you recognise the excuse and recover the full fare.
+Fares start at **<span class="gold">£8</span>** and rise with road distance. The **20:00–06:00** night tariff is **25%** higher. Driving proficiency shortens the journey; at **600**, an uneventful, on-time journey adds **<span class="gold">£1</span>** to the tip. Helping with luggage, taking bends gently or chatting at the lights also affects tips. Housekeeping improves luggage assistance. Gentle driving adds two minutes. If a passenger offers less than agreed, accept it or spend three minutes pursuing payment. At **300** skulduggery, you recognise the excuse and recover the full fare.
 
 Refuse a passenger before departure or notify dispatch to cancel an interrupted journey. Completed bookings add a little fatigue and stress. Business fame increases up to five times a day. The journal records completed bookings, total pay received and uncollected company-car wages.
 
-Own-car drivers can sign off at the final street. Return a company car to Harvest Street to finish the shift. If you cannot keep driving, ask the company to collect it: wait **20 minutes**, with up to **£30** taken from shift earnings. Complete or cancel the current booking before signing off.
+Own-car drivers can sign off at the final street. Return a company car to Harvest Street to finish the shift. If you cannot keep driving, ask the company to collect it: wait **20 minutes**, with up to **<span class="gold">£30</span>** taken from shift earnings. Complete or cancel the current booking before signing off.

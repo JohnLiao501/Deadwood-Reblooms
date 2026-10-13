@@ -1,104 +1,34 @@
-### Requirements
+### Unlock the two orchards
 
-Enable the Orchard module. At the temple, become a monk or priest and fully clear the garden. At the farm, clear all nine vanilla fields. Completing the introduction and preparing the ground opens each orchard.
+With Orchard enabled, complete the land preparation event by day, suitably dressed, with both arms not simultaneously bound and stress below its maximum:
 
-### Locations and unlocking
+| Place                    | First requirement                                                                | Initial and maximum plots                    |
+| ------------------------ | -------------------------------------------------------------------------------- | -------------------------------------------- |
+| Behind the temple garden | Monk or priest rank and a fully cleared garden                                   | 5 initially, 6 maximum; one mature plum tree |
+| Alex's farm              | Clear all nine original fields and ask while Alex handles cottage administration | 3 initially, 12 maximum                      |
 
-- **Temple garden → Follow the monk beyond the flower beds → Help prepare the ground → Orchard**: five plots initially, with one mature plum tree and four empty plots, up to six plots in total. The plum tree fruits throughout the year, with higher yields in summer and autumn, with no stored fruit when the orchard opens. You keep roughly half of each fruit type and contribute the remainder to the kitchen. Contributing fruit also grants grace.
-- **Farm fields → Find Alex to talk about fruit trees → Help prepare the ground → Orchard**: three plots initially, up to twelve. You keep the harvest. Farm attacks and dangerous events still apply.
-- The initial farm invitation requires Alex to be doing paperwork in the farmhouse. Return later if Alex is busy elsewhere.
-- Both introductions require daylight, unbound arms, suitable clothing and stress below the fainting threshold. Marking out and preparing the ground together takes one hour, using vanilla physique and fatigue effects, and opens five plots at the temple or three at the farm.
-- A previously opened temple orchard stays open when the garden needs clearing again, but you must retain monk or priest rank.
+Initial preparation takes an hour. Later, **Continue clearing** works in 40-minute sessions; each new temple plot needs 80 minutes total, and a farm plot 120. Progress can be completed over several visits.
 
-### Time with Alex
+About half the temple harvest is yours; the kitchen receives the rest and grants grace. Farm harvests belong to you. Temple access still needs the relevant rank, while farm attacks must be handled first.
 
-In the unlocked farm orchard, invite Alex over while they are doing paperwork during the day. Walk the rows for fifteen minutes to gain a little tending experience, rest by the hedge for twenty minutes to reduce stress and fatigue, or share an unreserved apple for ten minutes. These choices share one daily opportunity and grant a little vanilla affection.
+### Find seeds, plant and care
 
-Walks reflect the season and irrigation. Breaks vary with weather, affection and Alex's dominance. Attacks, combat, bound arms and inability to speak block these interactions. They do not produce extra fruit or replace actual orchard work.
+Original picking can reveal apple, pear, peach, plum, orange and lemon seeds. Lime seeds come from collecting limes in the temple garden; cherry seeds cost <span class="gold">£1,000</span> at the supermarket. **Unlock each seed source once; later planting does not consume more seeds.**
 
-Supermarket seeds use the Finance module's merchant payment API and the sidebar payment preference. Without Finance, vanilla cash is used.
+Select a species and drag a tool onto a plot; on mobile, tap the tool and then the plot. Plant in cleared empty plots, and tap a plot to check water, fertiliser, soil and growth.
 
-### Clearing more ground
+- **Water**: restore seven days of moisture when dry. Rain replenishes it, and irrigating all nine original farm fields also supplies the farm orchard automatically.
+- **Young trees**: one bag of fertiliser lasts 30 days and doubles growth while watered. Dry trees stop growing; fertiliser cannot replace water.
+- **Mature trees**: C-grade plant care allows soil improvement for better yield. It normally expires with the fertiliser, while Green Thumb retains the improvement permanently.
+- **Harvest**: collect all ripe fruit on that tree. Removing a tree requires confirmation and loses its fruit, while cleared land remains available.
 
-<span class="gold">Six and twelve plots are the orchards' capacity limits. They are not all ready to plant on your first visit.</span> The temple starts with five plots and the farm with three. Use the "Continue clearing" link to clear the next adjoining plot, working along the orchard in order.
+Fertiliser shares the original field supply. Risk stealing it while searching dock cargo at night once you can identify it, or buy an occasional <span class="gold">£1,000</span> bag from the special market's gardening stall.
 
-- Each clearing action takes forty minutes and uses vanilla solo-clearing physique and fatigue effects. A new temple plot needs eighty minutes of work in total, while a farm plot needs two hours. You can complete this over several visits.
-- Each plot saves its own progress. Leaving, sleeping or being interrupted by an event does not erase completed work. Uncleared ground stays out of the map; a new plot appears when the work is finished.
-- Clearing spends neither money nor fertiliser and grants no tending experience. You cannot plant, water, fertilise or harvest uncleared ground, and do not need to select it.
-- Removing a tree keeps the ground cleared. Using the same shovel on a planted plot requires confirmation before removing the tree.
-- Clearing and tree care remain available throughout the year. Darkness, exposure, bound arms and stress restrictions still apply. Vanilla fainting and farm attacks remain active after each work action.
+### Maturity, seasons and blood lemons
 
-### Finding seeds
+Most trees mature after 28 watered growth days, cherries after 26 and limes after 31. Mature trees produce a batch every seven watered days and retain at most three batches. Production pauses when full; harvesting frees space.
 
-Unlock each seed variety once. **Known seeds can be planted repeatedly without consuming stock or buying another seedling.** Both orchards share known varieties.
-
-| Variety                                 | Unlocking                                                                                                            |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
-| Apple, pear, peach, plum, orange, lemon | A chance to save seeds when gathering these fruits through vanilla picking. Higher tending grades improve the chance |
-| Lime                                    | Save seeds when temple garden work assigns you to gather limes                                                       |
-| Cherry                                  | Buy cherry seeds once while the supermarket is open, permanently unlocking the variety                               |
-
-You can discover seeds before opening either orchard. Eating, cooking, gifts, buying ordinary fruit and collecting orchard harvests do not unlock seeds. Planting is disabled until you discover a variety. Try gathering fruit or working in the temple garden first.
-
-The selector lists only unlocked varieties. Changing it does not change planted trees. Special seeds are not offered during closing time, night-time break-ins or fainting scenes.
-
-### Controls
-
-Each plot spans three soil tiles. Icons and tiles remain 30×30 pixels. Narrow screens wrap whole plots onto the next soil strip. Drag a tool onto a plot, or select the tool and then tap the plot.
-
-| Action            | Requirements                                                           | Effect                                                                                    |
-| ----------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Plant             | Cleared empty plot, known selected variety                             | Plant that variety without consuming its seeds                                            |
-| Water             | Tree with exhausted soil moisture                                      | Supply seven days of moisture to either young or mature trees                             |
-| Fertilise         | Young tree, fertiliser, no remaining effect                            | Use one bag to speed growth while the soil is moist                                       |
-| Fertilise         | Mature tree, C-grade tending, improvable soil and no active fertiliser | Use one bag to improve soil by one grade for thirty days                                  |
-| Pick              | Plot displays ripe fruit and its quantity                              | Collect all stored ripe fruit from that tree and keep the tree                            |
-| Continue clearing | Next uncleared plot adjoining the cleared ground                       | Work for forty minutes and save progress, planting becomes possible when clearing is done |
-| Shovel            | Planted tree, explicit confirmation                                    | Remove the tree without refunding fertiliser or stored fruit, keeping the ground cleared  |
-
-The orchard uses vanilla bags of fertiliser, sharing stock with the farm fields and orphanage garden. Fertilising a young tree or improving a mature tree's soil consumes one bag and counts towards vanilla fertiliser use. The orchard does not sell fertiliser. Selecting varieties takes no time.
-
-- **Docks**: sneak in at night and search the cargo. C-grade tending lets you recognise fertiliser. Stealing one bag takes five minutes and increases theft crime; breaking in also carries risks.
-- **Special markets**: a gardening stall sometimes offers one bag for **£1000**. It is not always available.
-- **Optional DoLP source**: in DoLP, the farm's compost bin can also produce fertiliser. Build and use it under that version's vanilla requirements. Ordinary vanilla has no such option.
-
-Successful planting, watering, fertilising, picking and removal advance game time and add a little fatigue and tending experience. Clearing instead uses the physical-work effects described above. Invalid actions spend no supplies or time and grant no experience. Darkness, exposure and bound arms prevent work. Excessive stress and farm attacks require handling the vanilla event first.
-
-### Growing young trees
-
-Eight varieties grow from seedlings into saplings and then mature trees. Each stage has its own PNG. Cherry trees mature slightly sooner, lime trees slightly later.
-
-- **Moisture**: one watering supports seven days of growth and fruiting. Plot details show the remaining days. Dry young trees stop growing and mature trees pause their fruiting progress. Rain replenishes fruit trees even while you are away from the orchard. A long time skip does not apply its final day's rainfall to every preceding day.
-- **Young-tree fertiliser**: one bag lasts thirty days and doubles daily growth progress while the young tree has water. It cannot replace watering or mature a tree immediately. Apply another portion after the effect expires.
-- **Progress**: the selected plot displays a growth bar. Neglect delays growth instead of immediately destroying the tree.
-- **Seasons**: do not restrict planting, young-tree growth, watering or fertilising. Winter care works normally; seasons only affect the quantity of new fruit produced by mature trees.
-
-### Farm irrigation and help
-
-- **Irrigation**: once all nine vanilla fields are connected, the orchard shares the farm's water supply and young and mature trees stay watered. The temple orchard still relies on manual watering or rain.
-- **Alex**: while Alex is doing paperwork, you can ask for help once per day, provided it is light and you can work safely. Clearing together takes twenty minutes for forty minutes of progress; watering one dry fruit tree takes two and a half minutes; picking one tree takes five minutes. These actions share one daily opportunity. Help is unavailable during farm attacks.
-- **Orchard worker**: after opening the farm orchard, spend thirty minutes looking for help through the pub's normal menu. This is a new mod employee with a separate NPC record, rather than the vanilla farm guard or their wage rules.
-- **Wages**: **£250 per week**, with seven days paid in advance when hiring. Pay for another week when no more than seven paid days remain, keeping at most fourteen days prepaid. Work stops on expiry without accumulating unpaid wages. Renewal extends the current paid period, or starts at the current time if it has expired. Dismissal requires confirmation; prepaid wages are not refunded.
-- **Work**: one shift at eight each morning. The worker waters fruit trees only when their moisture runs out. You can also ask them to pick ripe fruit, putting the harvest directly into your vanilla food storage. The date, trees watered, bags used and fruit collected in the latest shift appear below the map. An ongoing farm assault stops work. Watering and picking continue normally in winter.
-- **Reports**: after the morning shift, choose **Ask your worker about the orchard** between eight and noon at the farm orchard. Wages must be current, and you must be dressed and able to work, with no farm attack underway. Your worker reports the actual watering and harvest, remembers fruit left for you to pick, and mentions trees producing less outside their season. The record also notes when rain or irrigation supplied the water. The latest record remains available at other times. Talking does not grant the harvest again.
-- **Automatic fertilising**: select **Allow the worker to use your fertiliser** below the orchard map. Future shifts replenish young trees after their previous fertiliser expires. Mature trees use the same C-grade tending and improvable-soil requirements as manual care. Each eligible tree consumes one existing bag. Active applications are not refreshed, and the worker neither buys fertiliser nor borrows it. Shortages appear in the record and dialogue. You can return fertilising to manual care; changes take effect at the next morning shift.
-- The worker does not plant, clear ground or remove trees, and does not grant PC tending experience or fatigue. This worker is only available for the farm orchard.
-
-### Tree age, soil and yield
-
-Mature trees produce a batch after seven days of watered growth. A tree starts its first fruiting cycle after reaching maturity. **Yield follows the old orchard's rules**: tending skill determines the random yield range, modified by tree age, variety and soil quality. The Green Thumb trait and vanilla crop-yield setting also apply.
-
-- **Tree age**: newly bearing trees have a lower yield. Three successful harvests make it a medium tree, and nine make it a large tree, raising its yield ceiling. Collecting several stored batches counts as one harvest. Replacing a tree resets its age.
-- **Variety**: cherries retain the old extra yield multiplier. Other available varieties use their own data.
-- **Soil**: base quality is determined when opening the orchard. Plot details follow vanilla descriptions: poor, decent, good or excellent soil. Removing trees or reopening the interface does not reroll quality.
-- **Fertilising mature trees**: with C-grade tending, improve soil by one grade, up to excellent soil. An application lasts thirty days, during which another cannot be applied. It does not change fruit already produced.
-- **Fading improvements**: ordinary soil improvements return to base quality when the thirty-day effect ends. Harvesting does not shorten the effect. Green Thumb improvements remain permanently, although another application still requires the previous effect to end. Removing a tree clears ordinary temporary improvements.
-
-Fruit enters vanilla food storage and follows vanilla rules for eating, cooking, gifts and sales.
-
-### Peak seasons
-
-| Tree          | Peak season            |
+| Tree          | Productive seasons     |
 | ------------- | ---------------------- |
 | Apple, pear   | Autumn                 |
 | Peach, orange | Summer                 |
@@ -106,126 +36,56 @@ Fruit enters vanilla food storage and follows vanilla rules for eating, cooking,
 | Cherry        | Spring                 |
 | Lemon, lime   | Spring, summer, autumn |
 
-The selector shows the chosen variety's peak seasons. **Peak seasons retain normal yield; other seasons, including winter, produce 50% of normal yield, rounded down.** Seasons never block fruit production or change fruit already stored. Mature trees also need water, with one watering lasting seven days. Fertiliser improves yield and is not required for each harvest.
+Other seasons, including winter, yield half the productive-season amount. Plant care, soil and age also matter; three and nine successful harvests respectively reach higher yield stages.
 
-### Fruiting cycles and stored harvests
+New fruit produced by a lemon tree during a blood moon becomes **blood lemons**. Existing lemons remain unchanged, and blood lemons remain after dawn. Harvest a full three-batch tree in advance to make room.
 
-Each mature tree has its own seven-day fruiting progress and stores up to three batches. With continuous water, a full tree holds three completed cycles. Plot details show how many days remain until the next batch.
+### Alex and orchard help
 
-- The number beside the fruit icon shows the actual quantity. Full branches are noted in the plot details.
-- A full tree stops producing additional fruit. Existing fruit remains without accumulating indefinitely.
-- Picking collects every stored harvest from that tree. It can then resume its fruiting cycle.
-- Changing seasons does not remove or recalculate existing fruit. You can still pick it in daylight.
-- Reopening the interface, repeated clicks and loading saves do not grant another day's growth. Long sleeps process each calendar date crossed.
+When Alex handles administration by day, tour the orchard, rest or share an apple once daily. You can separately ask for clearing, watering or harvesting help once daily to shorten the work.
 
-### Blood moons and blood lemons
+After opening the farm orchard, spend 30 minutes seeking a worker at the pub. Wages are <span class="gold">£250</span> weekly, with seven days paid on hiring and up to fourteen days prepaid. Unpaid work pauses; dismissing the worker does not refund wages.
 
-When a lemon tree produces during a blood moon, **that night's new fruit becomes blood lemons**. They use vanilla icons and item effects, with the yield calculated from the same lemon tree.
+The worker tends trees at 08:00 daily, watering by default. You can also authorise harvesting and use of existing fertiliser. The worker does not plant, clear or remove trees, or give the PC plant-care experience. Ask about actual work from 08:00 until noon. Work pauses during attacks.
 
-Existing ordinary lemons stay unchanged, and blood lemons remain after sunrise. A tree can store both types, with separate quantities in its details. A full tree produces no extra blood lemons, so pick beforehand to leave space for that night's harvest. Other varieties, including lime, do not undergo this change.
+### Fruit sales and orders
 
-### Missing options
+Open **Fruit stock and sales** from an orchard and set how much of each fruit to reserve. Deliveries only take the surplus, and matching fruit picked elsewhere can also be sold.
 
-Check that the module is enabled and the game has been reloaded, then check temple rank, garden clearing or farm progress. The initial farm invitation also requires Alex to be doing paperwork.
+| Channel               | How it works                                                                                                                                                                                                                      |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Original market       | Choose which fruit to display; ordinary market sales are not limited by delivery reserves                                                                                                                                         |
+| Farm purchases        | Deliver while Alex can arrange shipments, at 70% of the original sale price, up to 100 fruit total per day; 30 minutes per delivery                                                                                               |
+| Robin's drinks shop   | Discuss lemon or orange orders after opening, with Robin present. Price is 70% of the original; the trial needs 10 fruit and repeats 20, with winter repeats halved. Deliver within three days, with one new order per seven days |
+| Alex's standing order | Choose 50, 100 or 200 fruit at 85% of the original sale price and pay a 20% deposit. Deliver the entire order within a week for payment and deposit return; lateness loses the deposit and trust                                  |
 
-Unknown seeds, uncleared ground, occupied plots, remaining moisture, active fertiliser, soil already at its highest quality, insufficient tending skill, no ripe fruit and work restrictions can prevent an action. Only the next adjoining plot can be cleared. Use "Continue clearing" to keep working; a progress bar appears once clearing has begun. The summary lists harvestable trees and trees needing water. Select a cleared plot to inspect its soil. Return to the farm fields when an attack interrupts work.
+Robin must have enough shop funds, and your reserves must allow delivery. Supplying grants <span class="gold">£5</span> off the next drinks restock without stacking. Cancellation or expiry does not immediately reset the seven-day order interval. Harvest your own lemons or oranges and then supply the same fruit to earn **From Branch to Counter**.
 
-### Fruit inventory, market stalls and farm deliveries
+A new market regular can buy five displayed fruit at the original price once daily. Farm, shop and regular-customer sales have ledger entries; viewing them does not pay twice.
 
-- **Where**: “Fruit inventory and sales” in an unlocked orchard. Uses the vanilla food inventory, including fruit gathered elsewhere. The temple kitchen’s share never enters your inventory.
-- **Market stall**: Toggle each fruit’s vanilla display setting. Vanilla customers and sales events continue normally. Bulk delivery reserves do not restrict stall sales; keep a type off display if you do not want to sell it there.
-- **Reserves**: Enter a minimum quantity for each fruit and save that row. Farm deliveries only take stock above the reserve.
-- **Bulk delivery**: Available from the farm orchard when Alex handles administration and you can work during daylight. Pays 70% of each fruit’s vanilla selling price, with a shared limit of 100 fruit per day. Each delivery takes thirty minutes and uses the farm income route. Attacks and inability to work block delivery.
-- **Accounts**: Tracks bulk income, seed purchases and worker wages, with the latest forty deliveries. Past expenses are not reconstructed for old saves. Market stall earnings and shared fertiliser purchases are outside this ledger.
+### Later automation and transport
 
-### Drinks shop orders and a market regular
+With Finance enabled and a debit card, authorise bank wage renewal and hire a carrier for morning deliveries. Both require your approval. Insufficient funds pause them, without backdated wages for missed work.
 
-Harvest your own lemons or oranges, then fulfil a drinks-shop order for the same fruit to earn **From Branch to Counter**. Accepting an order, buying fruit without harvesting, or a failed delivery does not count.
+Transport uses the usual 70% purchase price and shared 100-fruit daily limit, charging <span class="gold">£5</span> per trip and depositing net takings into the bank. It only sends fruit beyond reserves and pending orders, excludes blood lemons and does not sign standing orders or pay their deposits. Attacks pause transport; dismissing the orchard worker cancels renewal and transport arrangements.
 
-- **Shop entry**: Enable Robin Expansion, open the drinks shop and visit while a healthy Robin is there. At least one orchard must be unlocked. Choose “Discuss fruit supplies”.
-- **Trial orders**: Supply lemons or oranges for existing drinks. The first order requests ten fruit, later orders twenty. Delivery is due within three days; agreements are at least seven days apart. The quote locks at 70% of the vanilla selling price.
-- **Payment**: Reserves apply. Robin pays from business funds with the existing rent protection. Insufficient stock or funds does not consume fruit. Delivery takes ten minutes, increases Robin’s love and reduces the next normal drinks restock by £5. This discount does not stack or replace cocoa and other ingredients.
-- **Cancellation**: Tell Robin if you cannot supply an active order. No love penalty applies; cancelling does not bypass the weekly interval. Overdue orders expire and Robin turns to the usual supplier.
-- **Market regular**: In vanilla stall management, attend to a fruit customer. One purchase per game day: five displayed fruit at the vanilla price, taking twenty minutes. The same per_npc character returns, with dialogue based on completed purchases. Reserves only restrict supply deliveries; stall display settings control this purchase.
-- **Farm cooperation**: Alex arranges crates and transport. Only the first successful delivery each day increases love.
-- **Ledger**: New shop orders and regular purchases enter the orchard ledger. Other vanilla stall sales remain in vanilla records to avoid double counting.
+### Remy: begin at the riding school
 
-Repeat fruit orders halve in winter, when hot chocolate is more popular. Trial quantities remain unchanged. Signed orders retain their agreed quantities and prices. After three purchases, the regular prefers the first fruit purchased; when it is not displayed or fewer than five remain, another displayed fruit can be chosen. Ledger entries identify farm, shop and regular sales; older entries retain a generic sale label.
+Remy's route comes with Orchard, **without needing to unlock planting land**. Complete the original first riding-school meeting, then use **Approach Remy** in the ordinary daytime menu. Late closing hours, combat and forced events prevent meetings.
 
-### Alex's weekly fruit contracts
+1. Have an ordinary conversation once daily for 10 minutes. Teaching and care topics build familiarity; confronting farm conflict, the mask or captivity is separate and does not count towards relationship conversations.
+2. Give one stocked dish or fruit daily. Scones are a favourite, and reserved orchard fruit is not gifted.
+3. After three conversations and 20 affection, arrive early to suggest 45 minutes alone, once daily. Tea is indoors, with a walk by the fence in warm clear weather.
+4. After at least five conversations, two dates and 30 affection, discuss dating explicitly. Agreement makes Remy eligible; select Remy on the Attitudes page afterwards.
 
-Open **fruit inventory and sales** at the farm orchard while Alex can arrange deliveries, then discuss a weekly contract. Choose an unlocked fruit and batch size, check the quote and pay a cash deposit to reserve space for one week. The signed price stays fixed.
+Once familiar, spend another 15 minutes daily resting, checking tack or reviewing lessons. After dating and two dates, warm clear weather allows a pasture picnic. Ending the relationship requires confirmation and removes the selected love interest; ordinary conversation and food gifts remain possible.
 
-Deliver the whole batch together. Reserved fruit is excluded. Timely delivery pays the agreed amount and returns the deposit; missing the deadline forfeits the deposit and affects Alex's trust. Contracts use a separate arrangement from the ordinary daily bulk-buying allowance.
+### Captivity route and farm conflict
 
-Recent completed supplies to Robin's drinks shop contribute extra weekly sales. That contribution lapses without a fresh delivery. Orchard sales records also support a business-purpose bank loan, with PC responsible for repayment.
+Call Remy back after the original captive visit to ask questions or end a relationship. Captivity conversations do not replace riding-school dates or open the cell door.
 
-### Standing wage and delivery instructions
+You may ask Remy to remain for five more minutes once daily, adding 20 attachment, 1 affection and 2 obedience. At 50 attachment, 60 original obedience and 25 affection, explicitly choosing to stay can grant **Stockholm Syndrome: Remy** and love-interest eligibility. This is a separate, optional route, not a required stage of ordinary dating.
 
-With finance enabled and a debit card issued, authorise your orchard worker to collect wages automatically, and meet a separate delivery worker beside the orchard to arrange morning loads. Both start disabled. The same delivery worker returns, charges per load, and keeps the latest collection record; you can stop or resume the arrangement when you meet. After a paid period ends, the first eligible morning charges £250 from the bank before starting a new seven-day period. Missed shifts are not billed retroactively. Insufficient funds or an unavailable card suspend renewal. Dismissing the orchard worker also cancels wage renewal and delivery arrangements.
+Conflict with Alex's farm continues; public dating, gifts and estate shares do not purchase a truce. You can tell Alex about your contact in the farm orchard, and your choices affect the response and trust.
 
-Deliveries share the manual delivery price (70% of the vanilla price) and the combined limit of 100 fruit per day. Each load costs another £5. Reserved quantities, blood lemons and fruit promised to unexpired pending orders are retained; a load whose gross payment cannot cover the fee is left in storage. Proceeds enter the bank and transport costs appear separately in the ledger. Deliveries grant no PC tending experience or Alex affection. Attacks suspend transport. The worker does not accept contracts, pay bonds or fulfil those contracts for you.
-
-### Remy: riding school and relationship
-
-Remy relationships and captivity dialogue are part of Orchard. Opening orchard land is not required. After the vanilla riding school introduction, **Approach Remy** appears in the normal daytime menu. Closing time, night, combat, fainting and compulsory scenes block the entrance.
-
-- **Conversation:** once daily, ten minutes. Discuss teaching and care after lessons, with vanilla riding skill and speech attitude differences. After witnessing the vanilla farm conflict, challenge Remy's pressure on Alex; planted fruit trees add a response. This costs a little affection and does not count towards courtship conversations. The vanilla mask event unlocks a mask question; captivity unlocks questions about the barn. Enabled, displayed horse ears unlock another topic. Mask, barn and business topics grant no affection. All topics share the daily opportunity.
-- **Food gifts:** offer one dish or fruit daily, using native food inventory and the daily gift record. Orchard reserves stay with PC. In this expansion Remy favours scones; giving them reveals the preference through the native system. Ordinary food grants two affection, drinks one and scones three; spicy food and raw lemons grant none. Food containing alcohol grants one and is kept for after work. Mentioning your farm harvest is optional, and grants no affection after witnessing the conflict with Alex. Gifts do not unlock romance directly.
-- **Time together:** after three conversations and twenty vanilla affection, ask for forty-five minutes together. Once daily, with enough time before closing. The weather determines whether you have tea in the office or walk beside the paddock. Talk about the school or enjoy the quiet; after confirming a relationship you may offer your hand. First, later and romantic visits have different dialogue. Responses within the scene spend no additional time and grant no additional affection.
-- **Relationship:** after five conversations, two private visits and thirty affection, you can discuss what you want. Only explicitly accepting the relationship unlocks Remy as a candidate through the framework. Select Remy in Attitudes afterwards if you wish.
-- **Ending the relationship:** available during public visits and captivity visits, with confirmation. This also removes Remy from your selected love interests.
-
-The framework places Remy among important NPCs on the social page, retaining vanilla records and affection. Explicit confirmation still controls romance eligibility. School visits and captivity do not select a love interest for you.
-
-Social descriptions distinguish acquaintance, courtship, a relationship, closeness and a breakup, using Remy's affection, dominance and lust. Captivity takes precedence over the riding school's relationship description.
-
-### Remy: attachment at the farm
-
-Call after Remy following a vanilla cell visit. Once daily, asking for five more minutes adds twenty attachment, one affection and two obedience. Accepting vanilla petting does not automatically add attachment. Asking to leave or challenging your agreement removes twenty attachment until the trait has been acquired.
-
-At fifty attachment, sixty vanilla obedience and twenty-five affection, you can say you want to stay with Remy. Confirming that you want to be together grants **Stockholm Syndrome: Remy** and unlocks romance eligibility. PC can also develop this attachment after establishing a relationship at the school. The trait reads, "Being good makes Remy kinder to you."
-
-The trait remains after leaving the farm, with separate school and social descriptions. Explicitly ending the relationship clears the trait and attachment, and removes Remy from selected love interests. Locks, labour, escape and vanilla farm events retain their usual behaviour.
-
-### Business and the farm conflict
-
-**Discuss your other business** reads completed orders for Robin's drinks shop, an outstanding orchard-purpose bank loan and settled ordinary shares in Remy's estate. Topics require the relevant experience. Leveraged positions and unsettled shares do not qualify as holdings. PC chooses to disclose these details; Remy does not know their orders or debts beforehand.
-
-Remy uses the orchard debt to press for a sale, rather than offering to repay it. Estate shares grant neither cheaper lessons nor a truce. Courtesy at the school and a public relationship leave vanilla farm attacks intact. Dates and relationship talks acknowledge the conflict, and gifts do not make Remy support Alex.
-
-After spending time with Remy, tell Alex in the farm orchard. The ten-minute conversation uses the shared daily break opportunity. Promise to keep defending the farm, or insist on choosing your own company; these responses respectively raise or lower affection a little. Alex does not become willing to trust Remy.
-
-### Captivity and returning after escape
-
-After Remy's vanilla cell visit, you can call after them. Prior school acquaintance, a confirmed relationship and whether you pulled away from the petting produce different dialogue. Ask to leave, question the agreement, ask about work or end the relationship. Speech attitude, vanilla obedience and winter arrangements also affect the responses.
-
-Captivity conversations do not count towards school visits or automatically unlock romance. Vanilla obedience, petting, work, locks and escape continue to operate. Ending a relationship does not open the gate.
-
-School visits preserve PC's memories without deciding whether Remy recognises them. A public relationship does not make Remy relinquish control at the farm.
-
-### Reference
-
-The relationship direction draws on `C1.2_Remy.Love.Mod.mod_v0.5.10-1.zip`. Entrances, state and bilingual dialogue are rewritten for the current game and framework. Pregnancy scenes are reconstructed around native pregnancy and child records; old items and full passage replacements are not imported. Original author: 查查查茶子.
-
-### Remy: pregnancy and children
-
-School conversations and conversations across the farm gate support both PC and Remy pregnancies. Native records govern progression, paternity tests, birth and child care. Framework pregnancy registration retains native conception rules and game settings.
-
-- **Disclosure:** both carriers have separate conversations, including simultaneous pregnancies. Possible parentage remains uncertain until native knowledge confirms it; consult the hospital about testing.
-- **Time together:** early, middle, late and labour stages have different openings. Sit together, organise arrangements, discuss names or express your choices. Science and English skills affect the preparation and naming conversations. Each topic takes ten minutes; the first interaction per pregnancy per day gives one affection and stress relief. Captivity conversations grant neither.
-- **Relationships:** established courtship and deeper familiarity affect Remy's response. Ending courtship and captivity retain distinct reactions. Pregnancy does not end captivity or attacks on Alex's farm.
-- **Birth:** offer an ambulance when Remy is in labour at the school, using the native birth and naming interface. Offscreen births retain native handling. PC birth scenes stay native; discuss the children when you next meet.
-- **Afterwards:** care, visits and names read actual births and PC knowledge, including multiple children. Native systems retain custody, child locations and fees.
-
-After a PC hospital birth, choose what to ask Remy at your next meeting: shared care or keeping the arrangements in your own hands. An ended pregnancy has its own conversation without assuming why it ended.
-
-Ask Remy at the school for a voluntary sample, then apply at the hospital paternity desk. Testing costs £5,000 in cash and takes an hour. Positive results confirm parentage; negative results remove that candidate. Samples and results belong to each pregnancy separately.
-
-### Remy: daily company and dates
-
-After becoming familiar with the school, spend fifteen minutes together once a day: rest between lessons, check tack, review the rota, or discuss time together and contact after a breakup. Hand, riding and maths skills affect dialogue. Rest gives modest stress and fatigue relief. Breakup-boundary conversations grant no affection.
-
-Choose office tea or a paddock walk. After confirming the relationship and spending time together twice, a picnic is available in fair, warm weather. Rain, snow and winter keep the office tea option. Dates retain the daily forty-five-minute opportunity and three affection. Familiarity, dominance, absence and the conflict with Alex affect reactions.
-
-Disclosed pregnancies and child-care discussions carry into gifts, company and dates. Hidden pregnancy records do not reveal parentage. After a breakup, ordinary visits and food gifts remain available; restarting the relationship requires an explicit choice.
+Remy's relationship expansion draws on the original Remy Love Mod made available by 查查查茶子.

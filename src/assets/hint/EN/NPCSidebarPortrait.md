@@ -1,22 +1,7 @@
-### Prerequisites and entrance
+### See portraits in scenes
 
-Enable **NPCSidebarPortrait** and reload. Portraits appear when the vanilla scene recognises a supported character as present.
+With NPC Sidebar Portrait enabled, enter a scene where a supported person is present. Their sidebar portrait updates its outfit, pose and expression with the scene; you do not need to choose images manually.
 
-### Where and how it appears
+Only people and variants with supplied artwork can appear. Enabling portraits does not bring someone back from an outing, captivity or another scene.
 
-1. Enter an actual character interaction and check prose and the sidebar NPC area.
-2. Portraits automatically select character, outfit, pose and state variants as the scene changes.
-3. Outfits vary by location. If one variant is missing, compare another normal scene to check default fallback.
-4. Portrait count in a multi-character scene is not residency count. Presence comes from prose and schedules.
-
-### Difference from social avatars
-
-MoreLoveInterestsAndNPCAvatars supplies small Social-card images. This module supplies larger scene/sidebar portraits. Their toggles are independent.
-
-### Effects and limits
-
-Visual only: no love gains, schedule changes or summoning absent characters. An NPC outfit image does not grant or unlock that clothing for the PC.
-
-### Troubleshooting
-
-Check **actual presence → enabled module and reload → loaded resources → another scene for the same character**. Prose saying the character is away explains absence. For a missing variant, report character, location, outfit and resource errors.
+Small portraits on social cards belong to More Love Interests and NPC Avatars. The two display features can be enabled separately, and portraits do not give you clothing or change anyone's schedule.

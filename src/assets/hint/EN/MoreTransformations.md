@@ -1,91 +1,40 @@
-### Prerequisites and choosing a route
+### Choose a starting route
 
-Enable **MoreTransformations**, reload and check transformation progress on the character page. Horse and whale each have six stages but different starting actions. Use a reliable start below before relying on random gains and retention accessories.
+Horse, whale and raven transformations each have six stages. Check growth on the character page and choose visible parts at a mirror. Stage growth and appearance settings are separate; hiding a part does not erase progress.
 
-| Goal      | Reliable starting point                   | Preparation                                          | Check afterwards                                  |
-| --------- | ----------------------------------------- | ---------------------------------------------------- | ------------------------------------------------- |
-| Horse     | Fruit grove during a riding-school lesson | £25 per lesson, with a random fruit event            | Horse build on the character page after eating    |
-| Whale     | Lounge in the beach rocks pool            | Reach the pool through vanilla swimming and climbing | Ten minutes gives one whale build                 |
-| Retention | Shopping-centre second-floor clothes shop | Buy and actually wear the matching accessory         | Character progress and mirror visibility settings |
+| Transformation | Where to start                                                                                                                                                                           | Further growth                                                                                                                                         |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Horse          | Take a <span class="gold">£25</span> lesson at Remy's riding school. If the grove fruit event appears, pick and eat the fruit for 5 points; it has a drug effect and the event is random | After horse transformation begins, successfully chase a runaway farm horse and groom it for 1 point; successful moor riding also offers growth chances |
+| Whale          | Swim from the beach towards the rocks, climb up and enter the rock pool. Float in the pool for 10 minutes to gain 1 point                                                                | Repeat floating; ordinary swimming and completed underwater actions also offer growth chances                                                          |
+| Raven          | Explore the forest by day or at dusk. Follow the black birds or leave a blackberry, strawberry or apple for the first 5 points                                                           | Find the flock again; feeding adds 2 points once daily, while calling and preening visible plumage each add 1 point once daily                         |
 
-Build does not equal a visible part. Parts appear at their stages. Clothing, mirror visibility and transformation suppression also affect appearance.
+Forest pursuit and blood moons prevent stopping with the ravens. Following takes 15 minutes and leads deeper into the forest; feeding takes 5 minutes, calling and preening 10 minutes each.
 
-### Horse transformation: starting the route
+After discovering the original orphanage loft and having River install its kitchen, cook white rice there for whale growth: one bowl takes 10 minutes and adds 1 point; three take 30 minutes and add 3. The kitchen costs <span class="gold">£10,000</span> and 3 hours to install, with at least three portions of rice replenished daily thereafter.
 
-**Reliable first gain:** On Harvest Street, choose **“Leave town”** and follow the farm road to the farmland. Enter Remy's **riding school** during the day and pay £25 for a riding lesson. A random part of the lesson leads through a grove with fruit. Choose **“Grab one”**, then **“Eat it anyway”** despite Remy's warning that the untreated fruit is poisonous. Finishing the fruit scene adds **5 horse transformation build**. The fruit grove is a random lesson event: if it does not appear, take another lesson. The fruit is not in the farm stables.
+### Abilities by stage
 
-| Where to go next | What to do                                                                                                                                                                                                 | Horse build                                                                                                                                           |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Alex's farm      | Take the farm job, let the horses out, then choose to brush a horse. If it runs away, chase it and successfully catch it, reaching the brushing sequence                                                   | Adds 1 only after horse transformation has already begun. Ordinary brushing displays a hint but does not add build                                    |
-| The moor         | Enter from the farmland. Encounter a horse and mount it successfully. During the ride, choose to calm the horse, grip with your thighs, or stay on. After succeeding, choose to ride farther into the moor | Once horse transformation has begun, continuing the ride makes a random growth check. Falling or dismounting does not grant growth through this route |
-| Horse encounters | Reach the vanilla beast ejaculation resolution with a horse, horseboy, or horsegirl                                                                                                                        | The corresponding resolution adds 1. This is an optional route                                                                                        |
+| Transformation | Stages and effects                                                                                                                                                                                                                               |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Horse          | Stage 2 **Hooves** triples kick defiance; stage 3 **Sweat Blood** halves temperature changes away from normal; stage 4 gives horse ears, and stage 6 a tail and slower tiredness growth                                                          |
+| Whale          | Stage 2 **Deep Diver** reduces underwater oxygen use by 75%; stage 3 **Finned Limbs** increases effective swimming skill by 10%; stage 4 gives ear fins; stage 6 gives a whale tail and halves underwater action time, to a minimum of 1 second  |
+| Raven          | Stage 2 gives **Sharp Eyes**, increasing effective skulduggery by 5%; stage 4 gives plumage and tail feathers, with **Dark Plumage** reducing new pain from blows by 15%; stage 6 gives full wings and 25% stronger speech effects in encounters |
 
-**Start with the fruit.** The farm chase and moor ride require existing horse transformation progress. The ordinary farm brushing action does not give build by itself. Only the branch where a horse runs, you successfully catch it, and the brushing sequence follows does.
+Dark Plumage does not remove existing pain, and Sharp Eyes does not stack with the same trait from other animal transformations. Horse-related encounters are another optional source of horse growth.
 
-### Stages and keeping horse form
+### Preserve transformations and choose mixed appearances
 
-Horse transformation progresses through stages 1 to 6 shown on the character page. Stage 2 grants **hooves**, strengthening the defiance effect of a combat kick. Stage 3 grants **sweatblood**, halving body temperature changes that move farther from normal. Horse ears appear at stage 4, and the tail and complete form at stage 6. Check transformation progress and general traits on the character page.
+The shopping centre's second-floor clothing shop sells preservation accessories. **Wear them** to stop the corresponding natural decay and suppression by other animal transformations:
 
-Horse build gradually decays without further gains. The **clothing shop on the second floor of the shopping centre** sells the head item **Mane ribbon** and neck item **Golden carrot pendant**. Wearing either prevents natural horse decay and suppression by other animal transformations. At stage 6, if both horse and demon tails are visible, the mirror's mixed-transformation settings offer a demon-horse tail display switch.
+- Horse: **mane ribbon** headwear or **golden carrot pendant** neckwear.
+- Whale: **pearl shell hair clip** headwear.
+- Raven: **raven feather necklace**, <span class="gold">£45</span>.
 
-### Whale transformation: places and actions
+To preserve horse and whale together, use horse neckwear and reserve the headwear slot for whale. Once horse and demon tails, or raven and divine wings, have formed together, choose their mixed appearance at the mirror. These choices do not grant growth or control the abilities below.
 
-**Reliable route:** At the beach, swim to the rocks, climb onto them, then **slip into the pool**. At the **rocks pool**, choose the added **“Float in the pool (0:10)”** option before diving. Each use gives **1 whale transformation build** and reduces stress slightly. It works from zero build.
+### Two combined abilities
 
-**River's rice route:** Advance the vanilla orphanage events until you discover the loft. Become close enough to River to discuss installing a kitchen by helping or interacting with him at the **Wolf Street soup kitchen**. Tell him about the loft there, then pay **£10,000** and spend **3 hours** to install the loft kitchen. River begins supplying rice the next day. In **orphanage loft → kitchen**, “Cook and eat a bowl of rice (0:10)” uses 1 portion of loft rice for 1 whale build. With at least 3 portions, “Cook and eat three bowls of rice (0:30)” uses 3 portions for 3 build. River replenishes the supply to at least 3 each day. This action appears only in the loft kitchen. It does not use rice carried by the PC and does not appear at Alex's cottage or other kitchens.
+- **Ominous Prophecy**: full raven transformation plus the fallen angel stage that grants **Disparage**. Use Disparage twice per encounter; control recovery and trauma relief are doubled after the raven bonus, and each use relieves 15% of current pain. Original speech restrictions still apply.
+- **Foxfire**: full angel and fox transformations together. A successful **Banish** can hit another living tentacle for one quarter of the actual damage to the primary target, without another use consumed. Without a second target, only the original Banish applies.
 
-Ordinary swimming skill resolutions and completed underwater actions also have separate random growth checks. If the loft action is absent, confirm that River has installed the kitchen. Discovering the loft alone is insufficient.
-
-Whale transformation likewise advances through the stages shown on the character page. Stage 2 grants **Deep Diver**, reducing underwater oxygen consumption to one quarter. Stage 3 grants **Finned Limbs**, increasing effective swimming skill by roughly 10%. Fins appear at stage 4. Stage 6 adds the tail and halves underwater action time, with a minimum of one second.
-
-The second-floor clothing shop in the shopping centre sells the **Pearl shell hair clip**. Wearing it prevents natural whale decay and suppression by other animal transformations. You can wear only one head item at a time. To maintain both forms, use the **Golden carrot pendant** for horse form and keep the head slot for the shell clip.
-
-**If progress stalls:** Check that MoreTransformations is enabled. Build and stage are different values on the character page. Horse brushing, riding, and swimming have conditions or random checks. Use the riding-school fruit and rocks-pool lounging actions for reliable starting points. If a part has reached its stage but is invisible, check its mirror display setting and whether clothing covers it.
-
-### Raven transformation: starting the route
-
-**Requirements and location:** Enable MoreTransformations and reload. Explore the forest during daylight or dusk while you are not being hunted. The flock may appear in a vanilla safe encounter. The entry is unavailable during a blood moon.
-
-**First acquisition:** Follow the birds or leave some fruit to begin the change. Following takes fifteen minutes and leads you deeper into the forest. Feeding takes five minutes and consumes one blackberry, strawberry or apple from native food stock, selected in that order. Wings and the Great Hawk route are not required.
-
-**Further growth:** After the first interaction, ordinary forest travel pages offer “Look for the raven flock”. Finding them takes five minutes. Feed them once per day or imitate their calls once per day. Calling takes ten minutes and slightly increases tiredness. Once visible plumage has grown, spend ten minutes preening it once per day to ease stress and build the transformation. Completed actions disappear for the rest of the day and return the next day. Looking for the flock, returning to the path and redrawing the page do not grant build.
-
-**Checking progress:** The character page shows your stage. The mirror controls visible parts. **Mods Transformation → Raven** in framework cheats can still set, clear or adjust build. Stage changes use framework transformation settlement. These actions remain available to rebuild after decay.
-
-### Raven stages and retention
-
-Raven transformation likewise advances through stages 1 to 6 on the character page. Distant movement catches your attention at stage 1. Stage 2 changes your eyes and grants the vanilla **Sharp Eyes** trait, increasing effective skulduggery by 5%. Your skin begins to itch at stage 3. Stage 4 adds dark plumage and a feathered tail, granting **Dark Plumage**. Wings begin growing at stage 5 and become complete at stage 6, granting the **Raven Boy / Raven Girl** trait.
-
-**Dark Plumage:** New pain from marked physical blows in combat is reduced by 15%. Existing pain, stress, trauma and other attack results are unchanged. Choking, neck restraints and other sources of pain do not receive this reduction.
-
-**Complete transformation:** Speech effects affected by the vanilla English trait are enhanced by 25%, multiplied after the original English trait bonus. This does not change English rank, story dialogue requirements or an NPC's refusal conditions.
-
-Sharp Eyes is shared with vanilla cat, bird, fox and other eligible transformations. Its bonus is applied only once. Raven form uses independent black wings, wedge-shaped tail feathers and plumage sprites. Standing and combat models retain the vanilla bird attachment points, animations and masking. Feather colours do not follow hair colour. Natural decay and suppression by other animal transformations apply unless you wear a raven feather necklace. No dedicated flight training story has been added. This feature requires framework 5.2.0 with the shared transformation trait fix.
-
-### Ominous Prophecy: raven and fallen angel
-
-**Requirements:** Complete raven transformation and reach the fallen angel stage that unlocks Disparage. **Ominous Prophecy** appears under General Traits. Eligibility depends on transformation stages. Mirror visibility and chimera wing settings do not affect it. The trait stops working when either transformation falls below its required stage.
-
-**How to use:** Choose the existing mouth action **Disparage** in non-consensual encounters where vanilla offers it. Ominous Prophecy allows two uses per encounter, with no extra action button. The native choking failure branch still applies without consuming a use. Uses are stored in the current save, are not restored by loading it and reset when vanilla ends combat. Ordinary fallen angels retain one use. Opponents who cannot understand your language still prevent the control recovery from hitting their insecurity.
-
-**Effects:** Disparage first receives the usual 25% raven speech bonus, then doubles the control restored and trauma relieved. It also relieves **15% of current pain**, rather than reducing all later damage. Stress, anger and boldness retain the usual raven speech bonus without receiving the additional fusion multiplier. Defiance follows native settlement. Ordinary mocking and other speech actions retain the usual raven effects. Control recovery still respects the native encounter starting limit, and trauma cannot fall below zero. Pain relief still respects the native minimum pain floor.
-
-When demon, angel or fallen angel wings and raven wings are visible, the mirror offers the corresponding **demon raven wings**, **angel raven wings** or **fallen angel raven wings**. Demon fusion uses the dark violet raven wing variants. Angel fusion retains narrow black raven wings with ivory and pale gold coverts. Fallen angel fusion uses warm grey and charcoal feathers. The native `fallenplus` style retains dark wings with muted ivory and gold coverts. Standing and combat models each use one pair of dedicated fused raven wings, while the selected native halo remains visible. Hiding either pair or disabling its chimera option stops fusion. These settings control appearance only, do not grant build and do not determine whether Ominous Prophecy works.
-
-### Foxfire: angel and fox
-
-**Requirements:** Enable MoreTransformations and reload, then reach the complete native angel and fox transformations. **Foxfire** appears under General Traits. Eligibility depends on current transformation stages. Hiding the halo, wings or fox tail does not disable it, and no new chimera display setting is required. The trait stops working when either transformation falls below its complete stage.
-
-**How to use:** Choose the existing left- or right-hand **Banish** action wherever vanilla offers it against tentacles. Mixed encounters with a human or plant body and tentacles also qualify, with the effect confined to tentacles. Native targeting, action restrictions and daily uses still apply. There is no extra button, and the trait cannot make a Banish action succeed without an available use.
-
-**Effects:** The primary target takes its normal damage. Foxfire then scorches one other living tentacle or vine that has not finished, dealing weaker damage. The splash costs no additional use and cannot hit the primary target, a human body or an animal. With no other living tentacle, only the native Banish effect occurs. If the splash exhausts a target's health, its restraints are cleared immediately, while vanilla handles its departure.
-
-**Combined effects:** Maximum purity, a two-handed Banish and VanillaPlus's increased Banish damage all affect Foxfire because the splash follows damage actually dealt to the primary target. Banishing one target with both hands produces one splash and still costs the native number of uses. Successful Banish actions aimed at separate targets resolve separately. Teal Foxfire text appears only when another tentacle is actually scorched.
-
-### Accessories and icon questions
-
-Retention accessories must be worn in the correct slot. Storage in a wardrobe or inventory does not activate them. Horse retention uses a head ribbon or neck pendant, while whale uses a head clip. Maintain both with the **horse neck item plus whale head item**.
-
-Buy the **raven feather necklace (£45)** from the clothing shop's neckwear category. Wearing it prevents natural decay and suppression by other animal transformations; taking it off restores the normal rules. It does not grant transformation build or require complete raven form.
-
-Horse transformation icons follow hair colour while carrot decorations retain their original colour. Whale fins stay blue. The raven icon is a single dark feather with a quill and fixed colours. Check build, trait effects and mirror visibility separately. Hiding an image is not losing its trait.
+If a transformation decays, abilities requiring its stage pause until you restore it through the same activities. Completing the three transformations earns **Hooves on the Wind**, **Whale of the Wide Blue** and **Night on Black Wings** respectively.

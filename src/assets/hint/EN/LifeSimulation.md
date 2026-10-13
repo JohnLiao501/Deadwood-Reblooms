@@ -1,234 +1,100 @@
-### Prerequisites and map
+### School: two independent paths
 
-Enable **LifeSimulation** and reload. School uses vanilla grades and social evaluations. The gym is independent, while weapons require vanilla borrowing.
+An **attendance exemption** prevents absences counting as truancy. **Prefect → student council president** opens duties and school affairs. You can obtain both, but one does not replace the other.
 
-| Feature             | Where                                                  | Start                                             |
-| ------------------- | ------------------------------------------------------ | ------------------------------------------------- |
-| Exemption           | Headteacher and Bailey offices                         | Maximum grades and Leighton's permission          |
-| Prefect             | Office and courtyard                                   | Vanilla teacher and pupil evaluations             |
-| President and rules | Office and noticeboard                                 | Duties on distinct dates, order and support       |
-| History             | Class, library, museum, lake and home project entrance | Relevant vanilla paintings returned and discussed |
-| Gym                 | Cliff Street                                           | Admission during opening hours                    |
-| Weapons             | Hand actions against eligible nonanimal tentacles      | Borrowed vanilla whip or baton                    |
+- **Attendance exemption**: reach the highest A\* tier in all four subjects and overall results, then apply to Leighton on a school day. Leighton must be willing or you must hold the original blackmail leverage. Obtain Bailey's signature, then return the form to the headteacher's office. Orphanage signing is at 07:00–09:00 and normally needs three consecutive paid rent weeks; visit the Barb Street flat if Bailey has left. Grades can still change.
+- **Prefect**: reach the original **model student** teacher reputation and at least **very cool** school reputation, then formally apply to Leighton. Patrol the front courtyard at 07:00–09:00 on school days, once daily. You may decide whether to attend detention after appointment.
+- **President**: personally complete morning duty on five different school days, with order, student reputation and staff trust all at 25, then apply to Leighton.
 
-### Attendance exemption
+Enforcement, mediation, pressure and overlooking affect school standing and relationships. Read the action feedback. The corridor noticeboard and journal track the added school progress, while original teacher and student evaluations remain separate.
 
-**Requirements**: vanilla **A\*** in science, maths, English and history, with maximum overall performance. Leighton must agree or the PC must possess vanilla leverage.
+### Council room and dress policies
 
-1. Apply in the office on a schoolday.
-2. Obtain Bailey's signature. At the orphanage, visit **07:00–09:00**, normally after three consecutive on-time rent payments.
-3. After Robin's resistance moves Bailey out, visit his **Barb Street flat**, without the three-payment requirement.
-4. **Return the form to Leighton** to activate it. Two verbal approvals alone are insufficient.
+Enter from the corridor at 07:00–17:00 on school days. Ordinary students can organise affairs for 15 minutes daily; officeholders can rest, study and handle appeals. Presidents may delegate duty before 09:00, using the day's affairs opportunity without adding a personal patrol.
 
-Exemption avoids truancy penalties, not grade decay or every school responsibility. Leverage replaces private approval, not grades.
+Propose policies in order through the headteacher: uniform, free dress, revealing dress, optional nudity, nude day and mandatory nudity. Later policies require more support and corruption; pressure does not bypass shared requirements.
 
-### Prefect and morning duty
+A passed proposal starts a seven-day trial before office review. Failure rolls it back with a three-day cooldown. Nude day applies only during Friday school hours. Policies formally retained can be selected again.
 
-Attendance exemption and council appointments are independent: you may pursue either or both. Reach vanilla teacher evaluation **Model student** and school popularity at least **Cool**, then apply to Leighton. Leighton must agree or you must possess vanilla leverage.
+Prefects and presidents can also order council drinks at Robin's shop and prepare after-school materials at their home desk or Sirris's study. Personal invitations still need the other person's willingness; a badge is not permission.
 
-Duty is **07:00–09:00 on schooldays**, once daily. Robin, Sydney, Kylar and Whitney follow their locations rather than all appearing together.
+### History exhibition
 
-| Response | Direction                         | Consideration                     |
-| -------- | --------------------------------- | --------------------------------- |
-| Enforce  | Order and staff evaluation        | Different reactions to punishment |
-| Mediate  | Relationships and student opinion | Different order benefits          |
-| Pressure | Enforcement and conflict          | Possible resentment or corruption |
-| Overlook | Character responses and order     | Not consequence-free              |
+Return the original blood moon or snake-woman painting to the museum and complete its discussion, then attend history for Winter's project offer. Acceptance gives 25 days to prepare; follow the journal:
 
-Actual effects appear beside prose. Prefects may decide about detention attendance, not ignore every responsibility.
+1. Research library archives for an hour.
+2. Compare museum records and the painting for an hour.
+3. Optionally investigate the forest lake ruins for two hours, before the deadline at 06:00–18:00 while the lake is unfrozen.
+4. Prepare the exhibition at home for an hour.
+5. Present it at the museum for two hours.
 
-### Council room: daily privileges and work
+Research and answers determine the score. English skill 300 enables closer wording checks, and A\* history unlocks earliest-source research. **Evidence Matters** also requires recording the lake find's position and respecting the evidence's limits in writing and presentation. Robin can help when available, but you can finish alone.
 
-Visit from the hallways on **schooldays, 07:00–17:00**. Ordinary students may sort paperwork for **15 minutes once a day**, improving vanilla teacher and pupil evaluations alongside a little council standing. Officeholders gain recurring privileges and decisions:
+### Gym and body growth
 
-- **Rest corner**: Once daily, 15 minutes to reduce tiredness and stress.
-- **Study desk**: Once daily, 15 minutes of practice in one of the four subjects. This does not count as lesson attendance.
-- **Complaints**: One case per day. Twenty minutes of mediation favours student standing; fifteen minutes applying the rule and reporting it favours order and staff trust, at the cost of student support.
-- **Presidential delegation**: Before 09:00, spend five minutes arranging cover for morning duty. This replaces your personal duty that day and uses the daily council work slot. It earns neither personal duty credit nor NPC affection, and cannot replace duty you have already started.
+Enter **Cliff Street → Gym**, open 06:00–22:00. Dress appropriately and buy entry at reception: <span class="gold">£20</span> single ticket, <span class="gold">£100</span> week, <span class="gold">£350</span> month or <span class="gold">£2,000</span> lifetime membership.
 
-Robin, Sydney, Kylar and Whitney may briefly visit before lessons, at lunch or after school, subject to their vanilla state and location.
+Train up to three times daily with weights, running, stretching or coastal jogging. Rain or frost closes the coastal deck while indoor training remains available. Changing-room clothes can still be retrieved during opening hours after entry expires.
 
-### Noticeboard, presidency and dress rules
+Ask the coach for a plan once daily and complete the recommended activity for an extra benefit, still using a normal training session. Higher fatigue or pain leads the coach to favour stretching.
 
-The corridor noticeboard records order, student standing, staff trust, school corruption and duties. These differ from vanilla teacher/popularity evaluations.
+To increase overall body size, actively consult and start a plan:
 
-Complete personal duties on **five distinct schooldays**, raise order, student standing and staff trust to **25** each and ask Leighton for presidency. Reopening one day's scene does not count five days.
+- **Training plan**: complete strength or running sessions on 30 different dates to grow one tier. Only one day counts per date; stretching is excluded, while running with Doren counts.
+- **Hospital treatment**: pay <span class="gold">£5,000</span> in the hospital foyer for two weeks of treatment and one tier of growth; stopping early gives no refund.
 
-Policies progress: standard uniform → free dress → revealing dress → optional nudity → nude day → mandatory nudity. Appointment does not immediately unlock the final policy.
+Only one plan can run at a time, up to the original maximum body size. It changes overall size without increasing other body measurements.
 
-1. Review the noticeboard and propose the next policy in the office.
-2. Choose an eligible formal application, petition or pressure route, each with distinct support/Leighton requirements.
-3. More permissive rules share corruption requirements which pressure cannot bypass.
-4. Maintain support and order through a **seven-day trial**.
-5. Return for review. Insufficient standing rolls back with a **three-day cooldown**.
+### Two handheld items and medicine gifts
 
-Nude day concerns Friday school hours, unlike daily mandatory nudity. Previously retained policies can be selected under their respective rules.
+Choose a second compatible item in the wardrobe's **Handheld** category to retain the first, and use **Swap** to change the main hand. You cannot carry the same item twice or two items sharing a functional type; ordinary and school occasion tags do not prevent combinations. Umbrella and bag functions remain usable. Bindings or curses can prevent swapping.
 
-### Private invitations and study activities
+Prepare original breast, penis or bottom growth/reduction pills and speak normally to a present, selected love interest to offer medicine. Common entries include Robin's room, Kylar's manor, Whitney's flat, Sydney's temple, Alex's cottage, Avery's home, Remy's riding school and time with residents in your home.
 
-Private invitations also require vanilla **promiscuity level three** and individual willingness. Robin needs trust and low trauma, Sydney appropriate corruption rather than purity, Kylar manageable jealousy and Whitney love or established romance. A badge does not guarantee agreement.
+Each person accepts one dose daily, consuming your pills. Seven net growth or reduction doses for one body part change it by one tier; opposite directions cancel progress, and size limits prevent further doses. Pregnancy pauses this interaction, and medicine does not replace relationship progress.
 
-| Activity       | Preparation                                  | Effects and limits                                                       |
-| -------------- | -------------------------------------------- | ------------------------------------------------------------------------ |
-| Council drinks | Robin at shop, special stock, £20 bank funds | Once daily, standing and trust                                           |
-| Home notes     | Owned-home desk                              | Prefect/president daily activity                                         |
-| Estate lesson  | Sirris study with Sirris or Sydney           | Shared daily limit with home study, ability-dependent science correction |
+### Hospital pharmacy
 
-### History project unlock
+The pharmacy adds calming, sleep, stimulant, focus and soothing pills. Buy them and use them manually from the medicine cabinet. Packaging and medical traits show their effects and intervals.
 
-Return and discuss the vanilla **red-moon or snake-woman painting** at the museum, then attend history for Winter's project. Arbitrary antiques, browsing or visiting the lake alone do not start it.
+Calming pills relieve stress but add fatigue; sleep pills help sleep recovery; stimulants temporarily suppress fatigue; focus pills improve actual learning; soothing pills temporarily ease trauma burden. Temporarily suppressed burdens can return when effects end.
 
-Accept for **25 preparation days**. Follow journal deadlines, investigate and draft before the deadline, then exhibit at the museum.
-
-You work alone while Robin is missing, injured or confined. Library assistance is only available while Robin is at school.
-
-| Order | Place and action          | Time      | Requirements and result                                         |
-| ----- | ------------------------- | --------- | --------------------------------------------------------------- |
-| 1     | Library archival research | One hour  | Accepted project, source investigation                          |
-| 2     | Museum object research    | One hour  | Archive done, compare object                                    |
-| 3     | Forest lake ruins         | Two hours | Both previous steps, unfrozen lake, 06:00–18:00 before deadline |
-| 4     | Home drafting             | One hour  | Archive and museum done, choices affect score                   |
-| 5     | Museum exhibition         | Two hours | Project date reached, answer evidence questions                 |
-
-At **300 effective English**, you can compare the wording of the archive sources while retaining disagreements. This produces better notes than copying the catalogue and grants English practice on the first archive visit. It does not replace the source research available with A\* history.
-
-Lake evidence supplements investigation rather than automatically proving painting claims. Drafting can occur without it, but the full evidence achievement needs recorded recovery.
-
-### Evidence Matters and honours
-
-1. With history **A\***, investigate the earliest source at the library.
-2. Compare records with the object at the museum.
-3. Record the priestess statue's find location at the lake.
-4. Mark evidence limits in the draft rather than inventing a story.
-5. Answer within the evidence: raid records do not prove prediction, and a painting's age and changing tale do not prove its depicted event.
-
-<span class="teal">Grades open choices, but you must choose them.</span> History, science, maths and the English play have separate honours, not automatic rewards for four A\* grades.
-
-### Gym admission
-
-Enter **Cliff Street → Gym**, **06:00–22:00**, while unexposed. Buy admission at reception.
-
-| Option   | Cost   | Duration                       |
-| -------- | ------ | ------------------------------ |
-| Single   | £20    | This visit, expires on leaving |
-| Weekly   | £100   | Seven days                     |
-| Monthly  | £350   | Calendar month                 |
-| Lifetime | £2,000 | No periodic renewal            |
-
-Active weekly/monthly members can upgrade to lifetime. Other short-term cards do not freely stack extensions. Cards need VanillaPlus banking and merchant eligibility.
-
-### Gym rooms and activities
-
-Choose weights, running, stretching or outdoor jogging, up to three sessions daily. Options and prose show time and effects. Training generally adds tiredness, while stretching can reduce stress.
-
-- Machines require usable arms.
-- Rain or frost closes the outdoor platform, not every indoor entrance.
-- Independent lockers use the wardrobe interface, with retrieval available during opening hours after admission expires.
-- The basin provides one daily wash to admitted players.
-
-#### Coach guidance and training habits
-
-Choose **Ask the coach about your routine** on the training floor. You can ask once daily with valid admission, appropriate clothing, usable arms and a training session remaining.
-
-The coach introduces themselves and keeps your training card. Completed weights, indoor runs, outdoor runs and stretches enter the record. Returning keeps the same coach. If you have spent more time lifting than running, they suggest a run. Otherwise, they recommend weights. High tiredness, noticeable pain or a week away from training takes priority and leads to stretching.
-
-Following that day's advice gives a small extra physique or athletics gain, or additional stress relief from stretching. It uses a normal training session, and the extra benefit applies only once daily. After several completed sessions, the coach reviews your previous training rather than treating you as a newcomer.
+Taking doses too early or repeatedly over several days can build dependence; repeated doses do not stack the effect. Harper's treatment includes a medication question when you recently used pills or have dependence. You can disclose or conceal it, but consultation does not immediately remove dependence.
 
 ### Temple weapons
 
-Borrow a vanilla whip or baton, one at a time. Use a free unbound hand in a **nonconsensual, nonvore**, nonhuman/nonanimal tentacle encounter.
+Borrow a whip or baton through the original temple process. In a suitable forced tentacle encounter, use a free hand to select a tentacle, vine, root, shoot or tendril and strike. Proficiency improves the effect, and selecting the weapon with both hands still strikes only once.
 
-1. Switch the hand target to tentacles.
-2. Select a particular tentacle, vine, root, sprout or tendril.
-3. Select whip or baton attack. Ghost or plant-person mixed encounters permit eligible tentacles, not their bodies.
-4. Hits deal fixed-plus-proportional damage improved by proficiency, below angelic banishment's base damage.
+Borrowed weapons target tentacles, including tentacles in mixed encounters. See Street Life for its weapons and ammunition.
 
-Hits train the existing weapon proficiency and add some tiredness. Both hands selecting the attack still produce only one strike. Humans, animals and consensual scenes are excluded.
+### Casino and chips
 
-### Troubleshooting
+The upstairs gambling room on Connudatus Street opens 18:00–04:00. Entry requires a formal ID obtained from Briar; a student ID is insufficient. Keep suitably dressed with stress below its maximum.
 
-School: grades, evaluations, returned forms and waiting days. Policies: trial and support. History: painting discussion, deadline and order. Gym: hours, admission, weather and daily sessions. Weapons: loan, free hand, selected target and encounter type.
+Exchange cash or an opened account's debit funds at the cashier, <span class="gold">£1</span> for <span class="gold">£1</span> in chips, up to <span class="gold">£100,000</span> per exchange. Games share the chip balance; leaving a Hold'em table returns its buy-in balance. **Leaving does not cash out**: redeem at the cashier for cash or bank deposits, including after closing.
 
-### Hospital tablets
+| Game             | Main rules                                                                                                                                               |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Blackjack        | Hit or stand by total; dealer stands on 17, with a separate natural-blackjack reward                                                                     |
+| Texas Hold'em    | Six- or nine-seat tables, <span class="gold">£500</span>–<span class="gold">£100,000</span> buy-ins, all-ins and side pots, with rake shown at the table |
+| Three-card poker | Three-, six- or nine-seat tables; play blind, look or compare, with mixed 235 beating trips                                                              |
+| Sic Bo           | Three dice; bet on small/big, odd/even, single faces, totals or triples. Triples lose all small/big and odd/even bets                                    |
+| Slots            | <span class="gold">£5</span> a spin, settled by that machine's symbols                                                                                   |
 
-With Life Simulation enabled and reloaded, the hospital pharmacy sells calming, sleeping, wakefulness, concentration and soothing tablets. Purchase a packet and take tablets manually through the original medicine drawer.
+For Sic Bo, choose an amount and place bets. Click the same amount on the same square to withdraw it. Rolling deducts and settles the layout together; check the table rules for odds.
 
-- **Calming tablets** ease stress but cause fatigue.
-- **Sleeping tablets** cause drowsiness and improve fatigue recovery during sleep. They do not remove hypnosis or prevent every nightmare.
-- **Wakefulness tablets** temporarily mask fatigue, which returns when the effect expires.
-- **Concentration tablets** improve actual study gains while active. Taking a tablet alone gives no academic progress.
-- **Soothing tablets** temporarily ease trauma. The suppressed portion returns when the effect expires, without permanently erasing past experiences.
+Rest, watch or talk in the lounge. Train as a dealer with Marlow for an hour to take shifts: <span class="gold">£30</span> base pay plus <span class="gold">£10</span> for correctly handling a dispute. No new shifts after 03:00. Finish your own game first, keep hands and mouth usable and avoid high tiredness. High wariness or regaining your seat through a bribe that night prevents dealer work.
 
-Follow the interval printed on the packet. Early repeat use can increase dependence. Another dose while an effect is active does not stack or extend the benefit. Consecutive daily use can also gradually increase dependence, and established dependence weakens some benefits. Going without may cause unease, which gradually subsides with time away from the tablets.
+Cheating can lose the night's seating permission. Asking Marlow privately for another chance requires sufficient trust or work performance, costs cash and can be attempted once nightly. Even acceptance does not restore permission to work.
 
-The character page's Medicinal Traits describe active effects and the consequences of dependence. Read the instructions on the pharmacy packets. Temporary relief does not mean you have recovered.
+### Feats and games at home
 
-If you have recently taken these tablets or still have a dependence, Harper asks about your medication during hospital appointments, at most once per game day. You can disclose the tablets or conceal them. Harper responds to frequent use, dependence and current drowsiness, and your answer is recorded. The discussion does not instantly remove dependence or replace the existing prescription, hypnosis or examination.
+**On a Roll** requires five consecutive table profits; draws and losses break it. Slots and Sic Bo do not count. Claim the one-time larger pepper-spray reward at the cashier afterwards. **A Good Night** needs <span class="gold">£10,000</span> net profit in a night; **Steady Hands** needs ten correctly handled shifts; **Giant Killer** needs mixed 235 to actually beat trips in comparison and collect the payout, not an opponent folding.
 
-### Casino and card tables
-
-The gambling room above the bar on Connudatus Street opens from **18:00 to 04:00**. It needs skulduggery at **grade D** and the **formal ID** Briar arranges; a school card is handed straight back.
-
-Exchange cash or use the Financial Centre's **debit card** at the counter, at £1 for £1. Card exchanges require an open account, an issued debit card and enough savings. Every casino table and the slot machine use your casino chip balance. Hold'em chips stay at the table until you return them to that balance. At the cashier, select an amount and cash or bank payment. Exchange chips to keep playing, or redeem your full balance to cash or the same bank account. The maximum exchange is £100,000 at a time. Leaving settles your tables and keeps your chips on the casino account. You must redeem them manually at the cashier for cash or a bank transfer. Redemption remains available after closing.
-
-You can rest, watch a table or talk to a server in the lounge. Attendants keep watch over the room and its walkways.
-
-Ask **Marlow** (card dealer, not a love interest) for work. One training hour unlocks regular shifts at £30 base pay, plus £10 for a table handled correctly, and it affects later dialogue.
-
-Marlow's social stats are **Trust** and **Wariness**. Conversation builds trust without erasing trouble at the tables. An apology slightly eases wariness; correctly completed shifts help more. With high wariness, Marlow allows ordinary play but refuses to let you deal.
-
-After being barred for cheating, you can quietly offer cash for one more chance to sit down. Marlow may accept from someone familiar or a worker with several correctly completed shifts, provided your wariness is not severe and you have not repeatedly been caught. The price increases with that night's cheating incidents. Only cash is accepted, refusals cost nothing, and you can try once per night. Acceptance restores seating only: it neither raises trust nor erases cheating records or restores work eligibility. The tables watch you more closely, and another incident bars you again.
-
-| Table        | Stakes and buy-in                     | Notes                                                             |
-| ------------ | ------------------------------------- | ----------------------------------------------------------------- |
-| Blackjack    | £50 / £250 / £500 (arcade and casino) | Vanilla scoring, stands on all seventeens, starting 21 pays 2.5x  |
-| Hold'em      | Buy in £500 / £2,500 / £5,000         | Blinds scale with the buy-in, all-ins and side pots, 5% house fee |
-| Three card   | Ante £10 / £50 / £100                 | Play blind or seen, compare or show down                          |
-| Slot machine | £5 a play                             | Three of a kind pays, any two cherries returns the stake          |
-
-Three card uses the **unsuited 235 beats three of a kind** rule. A 235 that is not all one suit beats any three of a kind, but ranks as ordinary high card against other hands. A suited 235 remains a flush. At a multiplayer showdown, first eliminate three-of-a-kind hands beaten by an unsuited 235, then compare the remaining hands normally.
-
-**Giant Killer**: Beat three of a kind with an unsuited 235 in a comparison or showdown, win the hand and collect your winnings. An ordinary opponent fold does not count.
-
-After a five-hand winning streak, collect a larger pepper spray canister at the cashier once. It increases capacity by one use and replenishes your spray.
-
-Casino feats: **On a Roll** requires five consecutive profitable card hands in one night. A tie or loss breaks the streak. **A Good Night** requires a net casino profit of **£10,000** in one night. **Steady Hands** requires ten table disputes handled correctly while working as a dealer. Exchanging chips, returned stakes and watching do not count as profit. Slots do not count towards the card streak. Gambling totals and longest streaks appear in Mod Statistics.
-
-**Wren** may appear at the casino on Wednesday and Friday after 22:00. His dialogue reads the vanilla meeting flags but does not add new ones.
-
-### Strip blackjack at your own property
-
-At a property you own, invite a resident lover to play blackjack in the sitting room or bedroom. Choose **cards only** or **lose a hand, remove one garment**.
-
-- Only **upper clothing, lower clothing, upper underwear and lower underwear** count as stake garments, outermost first. Coats and accessories are excluded.
-- Each losing player removes one garment. Anyone who runs out is eliminated; the others continue until one winner remains.
-- If everyone busts, no garments are removed. Tied highest hands mean every tied winner keeps their clothes.
-- Clothes removed at the table are put back on when you leave or when the game ends. Vanilla wardrobes and confiscation are untouched.
-- Before dealing, or between hands, you can declare the game **clothes only**. After that no invitation appears, and losing never counts as consent.
-- When the match ends, each lover at the table can be invited separately. If the table was Robin and Sydney and both still agree, an extra **Invite both of them to stay** entry opens the property's three-way encounter. The household relationship decides consent; the table only provides the entry.
-
-### Troubleshooting the casino
-
-If the room is closed, check the opening hours first. If you cannot enter at all, check skulduggery grade D and the formal ID. If a table is unavailable, check the opening hours, your state of dress and your stress. If the property table has no opponent, check that a resident lover is home and that the pair will not refuse to share the table. If the strip game will not start, check that both you and your lover still have stake garments left.
-
-### Body growth
-
-- **Where**: “Discuss a growth programme” on the gym training floor, with valid admission; “Body growth consultation” in the Hospital Foyer.
-- **Training**: Opt in, then complete strength training, running or coastal running on thirty separate days to increase by one vanilla body size. Running with Doren counts too. Only one credit per day; stretching does not count.
-- **Clinic**: Pay £5,000 for a fourteen-day course. Game days advance its progress; completing it increases body size by one level. Uses your selected payment method. Stopping early gives no refund.
-- **Limits**: One programme at a time, one size per programme, up to the vanilla largest size. Consultation pages show remaining days and allow stopping. Completed growth remains. An external body-size change ends the old programme.
-- **Effects**: Overall size increases. The vanilla size calculation updates physique capacity while preserving your current physique proportion. Other body-part sizes remain unchanged.
+Invite resident love interests at home to blackjack in the lounge or bedroom, with ordinary or clothing stakes. Clothing stakes go from outer to inner layers, with each loser removing one item; tied winners keep theirs, and leaving restores the clothes. You may explicitly choose **Strip only, nothing more**. Later invitations require separate willingness.
 
 ### Pool party
 
-<span class="teal">Entrance: after hearing about the school pool party and before entering, invite an established lover at the relevant location.</span> Each invitation takes ten minutes.
+After hearing about the school pool party and before entering, invite Robin, Whitney, Kylar and Sydney separately, taking 10 minutes each. Relationships, their state and the day's commitments decide acceptance; pure Sydney refuses.
 
-Robin needs enough affection and a stable condition; Whitney agrees when your relationship is close enough; Kylar needs high affection and an active state. Pure Sydney refuses; corrupted Sydney needs established route progress.
-
-During the party, you can spend time alone. Robin and Sydney's shared branch requires Revelation's **Chaotic Vow** and low Robin trauma. Kylar's shared branch first requires time alone, plus high affection, sufficient lust, low dominance and low jealousy; the other companion must be a willing Robin or Sydney.
-
-<span class="red">Companions react to you approaching others; Kylar reaching the rage tier ends the party.</span> Changing, surrounded and combat states hide voluntary interactions. Enter one party with all four lovers to earn **Poolside Rendezvous**. Attendance across separate parties does not count.
-
-### Chip denominations and larger stakes
-
-The cashier breaks the balance into denominations, including £100, £1,000, £5,000 and £10,000 chips. Tables and redemption share one account. Larger exchanges and higher blackjack, three-card and hold'em stakes are available at the gambling room. Leaving a table or venue does not automatically redeem the remaining chips.
+Bring all four to the same party and actually enter to earn **Poolside Rendezvous**. People react to you becoming close to others; intense Kylar jealousy can end the party. Group invitations still require everyone's willingness.

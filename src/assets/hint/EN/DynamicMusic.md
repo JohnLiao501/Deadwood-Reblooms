@@ -1,28 +1,12 @@
-### Prerequisites
+### Start listening
 
-Enable **DynamicMusic** and install the separate **deadwood-reblooms-audio** pack. The main mod schedules playback, while the pack supplies configuration and tracks. Both are needed.
+1. Load the separate **Deadwood Reblooms Audio Pack** in the mod loader and enable Dynamic Music.
+2. Tick **Enable Dynamic Music** under **Mod Settings → Dynamic Music**.
+3. Adjust music and ambience separately; their defaults are 50% and 25%.
+4. Click the game page to allow browser audio, then play normally.
 
-### Activation steps
+Music changes with the scene, time of day, encounters and celestial events. Weather ambience can play alongside it. Available tracks depend on the loaded audio pack.
 
-1. Confirm the loader loaded the pack rather than leaving it in Downloads.
-2. Save and reload module changes.
-3. Tick enable in **Mod settings → Dynamic music**. This playback option is separate from the module toggle.
-4. Adjust music and ambience independently, defaulting to 50% and 25%. Muting one does not mute the other.
-5. Click inside the game to permit browser audio, then enter a configured scene.
+### If there is no sound
 
-### Track selection
-
-| Layer    | Priority                                                     | Basis                                |
-| -------- | ------------------------------------------------------------ | ------------------------------------ |
-| Music    | Combat → eclipse → blood moon → meteors → ordinary day/night | Current state and pack configuration |
-| Ambience | Thunderstorm → rain → snowy wind                             | Weather and pack configuration       |
-
-Ambience is independent. Time, weather and scene changes refresh playback. Clicking does not randomly choose a new track every time.
-
-### Effects and limits
-
-Sound only, without changing dates, weather or dates with characters. Eclipse and meteor scheduling belongs to CelestialAnomalies. A track does not establish date eligibility. Ordinary blood moons do not need the eclipse toggle.
-
-### Troubleshooting
-
-Check **pack loaded → module reload → playback enabled → both volumes → game master volume → tab mute / autoplay → resource errors**. For one missing weather sound, check that the pack actually includes it. Volume cannot create missing tracks.
+Check that the audio pack is loaded, playback is enabled and neither volume is zero. Then check the game master volume, whether the page is muted and browser audio permission. A missing weather sound may simply have no track in the pack.

@@ -1,47 +1,19 @@
-### Prerequisites and route choice
+### Underground brothel rescue
 
-Enable **Whitney** and reload. Rescue and romantic daily life are independent. Romance does not establish rescue, and rescue does not complete the vanilla home route.
+When both the PC and Whitney are confined in the underground brothel, listen by the cell door and wait for a guard to open it. If you reach backstage, choose to undo the fastening or push away the guard according to your skulduggery or physique. Robin can distract a guard if also confined.
 
-| Route              | Entrance                              | Required state                                |
-| ------------------ | ------------------------------------- | --------------------------------------------- |
-| Underground rescue | Cell door                             | Both PC and Whitney captive                   |
-| Reunion            | School courtyard                      | Escaped together and Whitney available        |
-| Dock walk          | Dock interaction                      | Romance, daytime and unexposed PC             |
-| Flat activities    | Knocking and inside-flat conversation | Home progression, romance and sufficient love |
+The route can fail, adding stress, pain and trauma. Prepare the relevant skills and **escape with Whitney** to complete the rescue and earn **Thanks Won't Come Out**. Escaping alone does not count.
 
-### Rescue steps
+### Reunion after escape
 
-1. While both captive, **listen beyond the door (0:01)** to recognise Whitney.
-2. **Wait for the guard (0:30)** for the backstage opportunity.
-3. Unfasten the clasp or push the guard, about five minutes each, checking skulduggery or physique respectively.
-4. Captive Robin can distract the guard and escape with you.
-5. Escape with Whitney. Leaving alone does not count or grant the rescue achievement.
+Visit the **school front courtyard between 07:00 and 18:00 on a school day**, when Whitney is available, for the reunion. Later daily conversations, walks and responses vary for love interests and prefects.
 
-<span class="red">Escape is not guaranteed.</span> Skills and Robin's help improve chances. Failure returns to the cell with stress, pain and trauma. Retrying remains possible but has costs. The module does not force imprisonment to start the route.
+Other courtyard events, Whitney's recovery, your exposure or having already spent time together that day can temporarily prevent the added interactions.
 
-Rescue uses native skulduggery and physique checks and practice gains. Robin lowers the first skulduggery difficulty, while temple burden can still cause failure. Revisiting the resolved rescue attempt does not grant another workout or inflict another injury.
+### Docks and flat
 
-### Reunion and school life
+- **Dockside walk**: establish Whitney's romance and visit the docks between 09:00 and before 17:00, suitably dressed, once daily.
+- **At the flat door**: advance the original home relationship and romance, then knock while Whitney is at home for added conversation.
+- **Listen to music**: enter the flat and use the original conversation menu, once daily. Sitting down to listen improves affection and relieves stress.
 
-After rescue, check the courtyard **07:00–18:00 on a schoolday**. Ask how Whitney is doing, with hand-holding responses for lovers. Later daily scenes are once per day and depend on availability and events.
-
-Romantic walks read relationship status, while a prefect badge changes responses. Competing vanilla events, unavailable Whitney, exposure or today's used conversation block repetition.
-
-### Dock steps and effects
-
-With romance, active/rescued Whitney and an unexposed PC, check the docks **09:00 until before 17:00, outside nighttime**. Once daily. Choose responses for relationship activity, not a new dock skill or permanent job.
-
-### Flat doorstep and music
-
-**Doorstep activities** need romance, sufficient love and progressed vanilla home access. Check the knocking page at dawn or suitable daytime home schedules. School, weather and particular dates still matter.
-
-**Music** is once daily through the vanilla flat conversation. Listening increases love and reduces stress. Track questions are dialogue, not a singing-skill unlock.
-
-### Effects, limits and troubleshooting
-
-Adds rescue, reunion and daily life without cancelling vanilla bullying dynamics, captivity or schedules.
-
-- Missing rescue: both actually captive, with the door-listening step completed.
-- Missing reunion: escaped together, schoolday and Whitney available.
-- Missing flat activity: vanilla home progression, not merely love-interest selection.
-- Missing daily scene: location, time, exposure, competing events and daily usage.
+A successful rescue does not complete the flat route or automatically make Whitney your love interest. Original schedules, relationship changes and confinement still affect later meetings.

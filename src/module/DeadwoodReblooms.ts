@@ -20,6 +20,14 @@ import Hint_NPCSidebarPortrait_CN from '@/assets/hint/CN/NPCSidebarPortrait.md';
 import Hint_NPCSidebarPortrait_EN from '@/assets/hint/EN/NPCSidebarPortrait.md';
 import Hint_Finance_CN from '@/assets/hint/CN/Finance.md';
 import Hint_Finance_EN from '@/assets/hint/EN/Finance.md';
+import Hint_FinanceBanking_CN from '@/assets/hint/CN/FinanceBanking.md';
+import Hint_FinanceBanking_EN from '@/assets/hint/EN/FinanceBanking.md';
+import Hint_FinanceBusiness_CN from '@/assets/hint/CN/FinanceBusiness.md';
+import Hint_FinanceBusiness_EN from '@/assets/hint/EN/FinanceBusiness.md';
+import Hint_FinanceHomes_CN from '@/assets/hint/CN/FinanceHomes.md';
+import Hint_FinanceHomes_EN from '@/assets/hint/EN/FinanceHomes.md';
+import Hint_StreetLife_CN from '@/assets/hint/CN/StreetLife.md';
+import Hint_StreetLife_EN from '@/assets/hint/EN/StreetLife.md';
 import Hint_VanillaPlus_CN from '@/assets/hint/CN/VanillaPlus.md';
 import Hint_VanillaPlus_EN from '@/assets/hint/EN/VanillaPlus.md';
 import Hint_Sydney_CN from '@/assets/hint/CN/Sydney.md';
@@ -57,6 +65,10 @@ const guideSections = {
   MoreTransformations:               { EN: Hint_MoreTransformations_EN              , CN: Hint_MoreTransformations_CN              , title: { EN: 'Transformations'             , CN: '更多转化' } },
   NPCSidebarPortrait:                { EN: Hint_NPCSidebarPortrait_EN               , CN: Hint_NPCSidebarPortrait_CN               , title: { EN: 'Sidebar portraits'           , CN: 'NPC 侧边栏立绘' } },
   Finance:                           { EN: Hint_Finance_EN                          , CN: Hint_Finance_CN                          , title: { EN: 'Finance'                     , CN: '金融系统' } },
+  FinanceBanking:                    { EN: Hint_FinanceBanking_EN                   , CN: Hint_FinanceBanking_CN                   , title: { EN: 'Banking and investing'       , CN: '银行与投资' }, module: undefined },
+  FinanceBusiness:                   { EN: Hint_FinanceBusiness_EN                  , CN: Hint_FinanceBusiness_CN                  , title: { EN: 'Business and governance'    , CN: '企业与治理' }, module: undefined },
+  FinanceHomes:                      { EN: Hint_FinanceHomes_EN                     , CN: Hint_FinanceHomes_CN                     , title: { EN: 'Homes and living'            , CN: '住宅与生活' }, module: undefined },
+  StreetLife:                        { EN: Hint_StreetLife_EN                       , CN: Hint_StreetLife_CN                       , title: { EN: 'Street Life'                 , CN: '街头生活' } },
   VanillaPlus:                       { EN: Hint_VanillaPlus_EN                      , CN: Hint_VanillaPlus_CN                      , title: { EN: 'Vanilla Plus'                , CN: '原版增强' } },
   Sydney:                            { EN: Hint_Sydney_EN                           , CN: Hint_Sydney_CN                           , title: { EN: 'Sydney'                      , CN: '悉尼拓展' } },
   Robin:                             { EN: Hint_Robin_EN                            , CN: Hint_Robin_CN                            , title: { EN: 'Robin'                       , CN: '罗宾拓展' } },
@@ -80,7 +92,11 @@ const guideOrder = [
   'Orchard',
   'BirdTower',
   'Transport',
+  'StreetLife',
   'Finance',
+  'FinanceBanking',
+  'FinanceBusiness',
+  'FinanceHomes',
   'VanillaPlus',
   'CelestialAnomalies',
   'MoreTransformations',
@@ -207,7 +223,7 @@ class DeadwoodReblooms extends Module {
       guideOrder.map(name => {
         const section = guideSections[name];
         const title = lanSwitch(section.title.EN, section.title.CN);
-        return { id: name, title, content: lanSwitch(section.EN, section.CN), module: name === 'Credits' ? undefined : name };
+        return { id: name, title, content: lanSwitch(section.EN, section.CN), module: 'module' in section ? section.module : name === 'Credits' ? undefined : name };
       })
     );
   }
