@@ -6,6 +6,10 @@ export default function Hands(maplebirch: typeof window.maplebirch): void {
   maplebirch.tool.inject({
     widgetPassage: {
       'Widgets variablesStatic': [{ src: '<<set setup.wardrobeSkip to', applybefore: '<<run maplebirch.get("LifeSimulation").hands.setup()>>\n', expected: 1 }],
+      'Widgets Clothing': [
+        // 损坏主手物品时，只检查该物品；副手鱼竿仍在，不应清除它的鱼饵。
+        { src: '<<if $worn.handheld.type.includes("fishing_rod")>>', to: '<<if Array.prototype.includes.call($worn.handheld.type, "fishing_rod")>>', expected: 1 }
+      ],
       'Widgets Wardrobe': [
         // 使用一个衣柜标签，两个内部槽仍交给原版存取，避免改写暂存记录。
         { src: '<<set _eIndextemNames to []>>', applybefore: '<<run _equip.push("handheld_left")>>\n', expected: 1 },
@@ -158,6 +162,14 @@ export default function Hands(maplebirch: typeof window.maplebirch): void {
         return result;
       });
     }
+
+    extend('generalRuined', function (original) {
+      const slot = this.args[0];
+      const rod = ['handheld', 'handheld_left'].includes(slot) && Array.prototype.includes.call(V.worn[slot]?.type ?? [], 'fishing_rod');
+      const result = original();
+      if (rod && V.worn[slot]?.name === 'naked') delete V.fishing.currentBait;
+      return result;
+    });
 
     // 快捷宏扩展两个槽；刷新由它们调用的通用宏负责，storeon 无需再次包装。
     for (const name of ['handheldstrip', 'handheldundress', 'handheldon', 'storeonhandheld']) {

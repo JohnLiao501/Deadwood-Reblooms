@@ -40,8 +40,7 @@ export default class PartnerMedicine {
   }
 
   public willing(name: Partner): boolean {
-    if (!this.nearby.includes(name) || window.npcIsPregnant(name)) return false;
-    return C.npc[name].love >= 60;
+    return this.nearby.includes(name) && !window.npcIsPregnant(name);
   }
 
   public canTake(name: Partner, part: Part, direction: Direction): boolean {

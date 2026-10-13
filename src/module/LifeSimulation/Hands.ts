@@ -32,7 +32,7 @@ export default class Hands {
     if (V.lastWardrobeSlot === 'handheld_left') V.lastWardrobeSlot = 'handheld';
     const types: string[] | undefined = V.worn?.handheld?.type;
     if (!types || this.views.has(types)) return;
-    const capabilities = new Set(['bookbag', 'rainproof', 'shade', 'maid']);
+    const capabilities = new Set(['bookbag', 'rainproof', 'shade', 'maid', 'fishing_rod']);
     const core = this.core;
     Object.defineProperty(types, 'includes', {
       configurable: true,
