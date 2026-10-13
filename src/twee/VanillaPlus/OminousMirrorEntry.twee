@@ -1,0 +1,8 @@
+:: Widgets Deadwood Ominous Mirror [widget]
+<<widget "deadwood-ominous-mirror-entry">>
+	<<if random(1, 100) lte 2>>
+		<<set $VanillaPlus.orphanEvents.mirrorStage to 0>>
+		<<set $daily.mirrorTentacles to 1>>
+		<<goto "Ominous Mirror">>
+	<</if>>
+<</widget>>

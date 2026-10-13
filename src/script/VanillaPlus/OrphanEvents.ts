@@ -1,6 +1,27 @@
 // ./src/script/VanillaPlus/OrphanEvents.ts
 
+import mirrorMark from '../../assets/vanilla-plus/mirror-mark.json';
+
 export default function OrphanEvents(maplebirch: typeof window.maplebirch): void {
+  maplebirch.tool.patch.bodywriting.add('deadwood_mirror_mark', mirrorMark);
+  maplebirch.dynamic.regStateEvent('gate', 'deadwood-ominous-mirror', {
+    extra: { passage: ['Mirror'] },
+    output: 'deadwood-ominous-mirror-entry',
+    cond: () =>
+      V.VanillaPlus != null &&
+      !V.replayScene &&
+      !V.statFreeze &&
+      !V.VanillaPlus.orphanEvents.mirrorDone &&
+      V.VanillaPlus.orphanEvents.mirrorDay !== Math.floor(Time.days) &&
+      V.settings.tentaclesEnabled &&
+      V.daily.mirrorTentacles !== 1 &&
+      V.nextPassageCheck !== 'Mirror' &&
+      maplebirch.SugarCube.State.peek(1)?.title === 'Bedroom',
+    action: () => {
+      V.VanillaPlus.orphanEvents.mirrorDay = Math.floor(Time.days);
+    }
+  });
+
   maplebirch.tool.inject({
     widgetPassage: {
       'Widgets Home Events': [

@@ -9,6 +9,12 @@ export type VanillaPlusTrait = VanillaPlusAttribute | 'incorrigible';
 
 // 模块 VanillaPlus 的存档结构，对应 V.VanillaPlus。
 export interface VanillaPlusState {
+  /** 孤儿院事件进度；镜子检定按游戏日记录，不借用原版 daily。 */
+  orphanEvents: {
+    mirrorDay: number;
+    mirrorDone: boolean;
+    mirrorStage: number;
+  };
   /** 各属性的突破结算锁。为 true 表示该属性的突破已经结算过，不再重复触发。 */
   lock: Record<VanillaPlusAttribute, boolean>;
   /** 各属性特质是否已解锁，incorrigible 需六项属性全部满值后才置位。 */
@@ -130,6 +136,11 @@ export interface VanillaPlusState {
 }
 
 export const DEFAULT_VANILLA_PLUS_STATE: VanillaPlusState = {
+  orphanEvents: {
+    mirrorDay: -1,
+    mirrorDone: false,
+    mirrorStage: 0
+  },
   lock: {
     physique: false,
     willpower: false,
