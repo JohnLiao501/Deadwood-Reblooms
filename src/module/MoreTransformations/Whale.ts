@@ -122,12 +122,6 @@ class Whale extends Transformation {
   };
 
   protected override extend(maplebirch: MaplebirchCore): void {
-    const descriptions = () => {
-      const item = setup.clothes.head.find((item: Record<string, string>) => item.variable === 'pearl_shell_hair_clip');
-      if (item) item.description = maplebirch.t('deadwood-reblooms:clothes:pearl_shell_hair_clip:description');
-    };
-    maplebirch.tool.onInit(descriptions);
-    maplebirch.on(':language', descriptions);
     maplebirch.dynamic.regTimeEvent('onDay', 'deadwood-reblooms-loft-rice', {
       exact: true,
       cond: () => V.loft_river === 1,

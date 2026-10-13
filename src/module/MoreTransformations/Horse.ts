@@ -170,18 +170,6 @@ class Horse extends Transformation {
   };
 
   protected override extend(maplebirch: MaplebirchCore): void {
-    const descriptions = () => {
-      for (const [slot, variable] of [
-        ['head', 'mane_ribbon'],
-        ['neck', 'golden_carrot_pendant']
-      ] as const) {
-        const item = setup.clothes[slot].find((item: Record<string, string>) => item.variable === variable);
-        if (item) item.description = maplebirch.t(`deadwood-reblooms:clothes:${variable}:description`);
-      }
-    };
-    maplebirch.tool.onInit(descriptions);
-    maplebirch.on(':language', descriptions);
-
     maplebirch.tool.patch.traits.add(
       {
         title: 'General Traits',

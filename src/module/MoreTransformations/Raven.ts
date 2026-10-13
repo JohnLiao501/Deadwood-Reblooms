@@ -234,13 +234,6 @@ class Raven extends Transformation {
   }
 
   protected override extend(maplebirch: MaplebirchCore): void {
-    const descriptions = () => {
-      const item = setup.clothes.neck.find((item: Record<string, string>) => item.variable === 'raven_feather_necklace');
-      if (item) item.description = maplebirch.t('deadwood-reblooms:clothes:raven_feather_necklace:description');
-    };
-    maplebirch.tool.onInit(descriptions);
-    maplebirch.on(':language', descriptions);
-
     maplebirch.tool.patch.traits.add(
       {
         title: 'General Traits',
