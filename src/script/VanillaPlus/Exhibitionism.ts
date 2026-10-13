@@ -36,6 +36,28 @@ export default function (maplebirch: typeof window.maplebirch) {
           expected: 1
         }
       ],
+      'Temple Cloister': [
+        // 约旦单独许可的内部通行，保留原版强制事件与职阶入口。
+        {
+          src: '<<elseif $exposed gte 1',
+          applyafter: ' and !maplebirch.get("VanillaPlus").exhibitionism.canRoamTemple',
+          expected: 1
+        }
+      ],
+      'Temple Garden': [
+        {
+          src: '<<if $exposed gte 1',
+          applyafter: ' and !maplebirch.get("VanillaPlus").exhibitionism.canRoamTemple',
+          expected: 1
+        }
+      ],
+      'Temple Quarters': [
+        {
+          src: '<<if $exposed gte 1',
+          applyafter: ' and !maplebirch.get("VanillaPlus").exhibitionism.canRoamTemple',
+          expected: 1
+        }
+      ],
       'Photo High Start': [
         // 在拍摄初始化后清空商业街裸奔临时标记，防止上一次拍摄结果污染新事件。
         {

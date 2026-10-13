@@ -5,9 +5,30 @@ import type VanillaPlus from '../VanillaPlus';
 class Exhibitionism {
   public constructor(private readonly vanillaPlus: VanillaPlus) {}
 
-  public get canRoamTown(): boolean {
+  public get comfortable(): boolean {
     if (!V.VanillaPlus || !this.vanillaPlus.hasTrait('exhibitionism') || V.exposedRaw < 1) return false;
     return V.exposedRaw >= 2 ? V.uncomfortable.nude === false : V.uncomfortable.underwear === false;
+  }
+
+  public get canRoamTown(): boolean {
+    return this.comfortable;
+  }
+
+  public get canRoamTemple(): boolean {
+    const aid = this.vanillaPlus.core.get('Finance')?.donations.aid;
+    return (
+      this.comfortable &&
+      ['initiate', 'monk', 'priest'].includes(V.temple_rank) &&
+      aid?.has('temple') === true &&
+      aid.state('temple').privacy === true &&
+      V.stress < V.stressmax &&
+      !V.combat &&
+      !V.possessed &&
+      !V.nextPassageCheck &&
+      !V.replayScene &&
+      !V.statFreeze &&
+      !window.isPregnancyEnding()
+    );
   }
 
   public get unlock(): boolean {

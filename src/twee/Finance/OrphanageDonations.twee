@@ -1,0 +1,405 @@
+:: Deadwood Reblooms Orphanage Donation Widgets [widget]
+
+<<widget 'deadwood-orphanage-donation-exit'>>
+  <<main_hall_icon>><<lanLink ['Return to the main hall (0:01)', '返回大厅 (0:01)']>>
+    <<set _aid_source to $passage>><<endevent>><<pass 1>>
+    <<if $passage is _aid_source>><<goto 'Orphanage'>><</if>>
+  <</lanLink>><br>
+<</widget>>
+
+<<widget 'deadwood-orphanage-donation-progress'>><<silently>>
+  <<set _aid to maplebirch.get('Finance').donations.aid>>
+  <<set _aid_show to _aid.canAudit('orphanage') or _aid.canInspect('orphanage') or _aid.canSign('orphanage')>>
+<</silently>><<if _aid_show>>
+  <<if _aid.canAudit('orphanage')>>
+    <<icon 'school/procurement-audit.png'>><<lanLink ['Review the procurement records', '核对采购记录'] 'Deadwood Reblooms Orphanage Donation Accounts'>><</lanLink>><br>
+  <</if>>
+  <<if _aid.canInspect('orphanage')>>
+    <<icon 'finance/bedding-supplies.png'>><<lanLink ['Check the delivered bedding and supplies', '检查送来的床品和用品'] 'Deadwood Reblooms Orphanage Donation Inspection'>><</lanLink>><br>
+  <</if>>
+  <<if _aid.canSign('orphanage')>>
+    <<icon 'school/delivery-receipt.png'>><<lanLink ['Finish the delivery paperwork', '完成物资签收手续'] 'Deadwood Reblooms Orphanage Donation Receipt'>><</lanLink>><br>
+  <</if>>
+<</if>><</widget>>
+
+<<widget 'deadwood-orphanage-donation-office'>><<silently>>
+  <<set _aid to maplebirch.get('Finance').donations.aid>>
+  <<set _aid_show to $passage is "Bailey's Office" and _options is 1 and _aid.available('orphanage') and (_aid.canMeet('orphanage') or _aid.canAudit('orphanage') or _aid.canInspect('orphanage') or _aid.canSign('orphanage') or _aid.canFollow('orphanage') or _aid.canGrant('orphanage') or _aid.has('orphanage'))>>
+<</silently>><<if _aid_show>>
+  <<if _aid.canMeet('orphanage')>>
+    <<icon 'finance/bedding-supplies.png'>><<lanLink ['Discuss the donated orphanage supplies', '谈谈捐给孤儿院的物资'] 'Deadwood Reblooms Orphanage Donation Meeting'>><</lanLink>><br>
+  <</if>>
+  <<deadwood-orphanage-donation-progress>>
+  <<if _aid.canFollow('orphanage')>>
+    <<socialiseicon 'ask'>><<lanLink ['Ask what became of the new supplies', '问问新物资用到哪里了'] 'Deadwood Reblooms Orphanage Donation Followup'>><</lanLink>><br>
+  <</if>>
+  <<deadwood-orphanage-donation-benefits>>
+<</if>><</widget>>
+
+<<widget 'deadwood-orphanage-donation-hall'>><<silently>>
+  <<set _aid to maplebirch.get('Finance').donations.aid>>
+  <<set _aid_links to new maplebirch.tool.link()>><<run _aid_links.detect()>>
+  <<set _aid_show to $passage is 'Orphanage' and !$combat and !$possessed and !$nextPassageCheck and !$replayScene and !$statFreeze and _aid.ready('orphanage') and _aid_links.links.some(link => link.getAttribute('data-passage') === 'Garden') and _aid_links.links.some(link => link.getAttribute('data-passage') === 'Bedroom')>>
+<</silently>><<if _aid_show>>
+  <<language>>
+    <<option 'EN'>>
+      New bedding is stacked beside the laundry basket, still bearing the supplier's labels. The cupboard holds fresh bars of soap and packets of cleaning supplies. <<if V.RobinExpansion?.bailey_defeated>>The staff who remain have received the delivery and put it within reach of the washrooms.<</if>> <<if maplebirch.get('Finance').donations.state.named.orphanage gt 0>>A delivery sheet lists your contribution.<<else>>A note on the sheet thanks the anonymous donors.<</if>>
+    <<option 'CN'>>
+      洗衣篮旁整齐堆着新床品，还贴着供应商的标签。柜里添了新的肥皂和一包包清洁用品。<<if V.RobinExpansion?.bailey_defeated>>留守的工作人员接了货，将用品放在盥洗室旁，方便取用。<</if>><<if maplebirch.get('Finance').donations.state.named.orphanage gt 0>>送货单上记着你的资助。<<else>>单子附了一句对匿名捐赠者的感谢。<</if>>
+  <</language>><br>
+  <<deadwood-orphanage-donation-benefits>>
+<</if>><</widget>>
+
+<<widget 'deadwood-orphanage-donation-benefits'>><<silently>>
+  <<set _aid to maplebirch.get('Finance').donations.aid>>
+  <<set _aid_rights to _aid.available('orphanage') and (_aid.canGrant('orphanage') or _aid.has('orphanage'))>>
+<</silently>><<if _aid_rights>>
+  <<if $passage isnot 'Deadwood Reblooms Orphanage Donation Privileges'>>
+    <<officeicon>><<lanLink ["Discuss Bailey's terms for your support", '商谈贝利给予资助者的条件'] 'Deadwood Reblooms Orphanage Donation Privileges'>><</lanLink>><br>
+  <</if>>
+<</if>><</widget>>
+
+:: Deadwood Reblooms Orphanage Donation Meeting
+<<set $outside to 0>><<set $location to 'home'>><<effects>>
+<<set _aid to maplebirch.get('Finance').donations.aid>>
+<<if _aid.canMeet('orphanage')>>
+  <<npc Bailey>><<person1>>
+  <div id='deadwood-orphanage-donation-meeting'>
+    <<language>>
+      <<option 'EN'>>
+        You put the donation receipt on Bailey's desk. <<He>> reads the amount, then pulls a sheet from beneath <<his>> elbow. "Bedding and household supplies. That's what the paperwork says."
+        <br><br>
+        You ask to see what reaches the orphanage. Bailey looks up. "Want to count every bar of soap? Fine. Tell me what you want written down."
+        <<if maplebirch.get('Finance').orphanage.pcFree or maplebirch.get('Finance').orphanage.robinFree>><<He>> takes a new folder from the drawer, beside the one holding your buyout paperwork.<</if>>
+      <<option 'CN'>>
+        你把捐款收据放到贝利桌上。<<He>>看过金额，从肘下抽出一张表。“床品和生活用品。单子上是这么写的。”
+        <br><br>
+        你问起实际送进孤儿院的物资。贝利抬起头。“每块肥皂都想数一遍？行。说吧，要我记些什么。”
+        <<if maplebirch.get('Finance').orphanage.pcFree or maplebirch.get('Finance').orphanage.robinFree>><<He>>从抽屉里取出新的档案夹，旁边收着你付过款的房租买断文件。<</if>>
+    <</language>><br><br>
+    <<deadwood-card 'Procurement arrangements' '采购安排'>>
+      <<icon 'school/procurement-audit.png'>><<lanLink ['Request the invoices and spending record (0:10)', '要求查看发票与开支记录 (0:10)']>>
+        <<set _aid_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.agree('orphanage', 'accounts')>>
+          <<pass 10>>
+          <<if $passage is _aid_source>>
+            <<replace '#deadwood-orphanage-donation-meeting'>>
+              <<language>>
+                <<option 'EN'>>
+                  "Receipts for everything," Bailey repeats. <<He>> writes a note across the top of the file. "You'll get the supplier's list and the expense sheet. Come back when the delivery's here." <<He>> pushes your copy across the desk. "Keep it. I don't want to explain this twice."
+                <<option 'CN'>>
+                  “什么都要收据。”贝利重复了一遍，在档案首页记下一笔。“供应商清单和开支表，都给你看。货到了再来。”<<He>>把副本推过桌面。“收好。我不想再解释一遍。”
+              <</language>><br><br>
+              <span class='gold'><<lanSwitch 'Agreed: itemised purchase records and a delivery inspection.' '已谈妥：逐项采购记录与到货点验。'>></span><br><br>
+              <<deadwood-orphanage-donation-progress>><<deadwood-orphanage-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>><br>
+      <<icon 'finance/bedding-supplies.png'>><<lanLink ['Arrange to inspect the bedding and supplies (0:10)', '商定点验床品和用品 (0:10)']>>
+        <<set _aid_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.agree('orphanage', 'delivery')>>
+          <<pass 10>>
+          <<if $passage is _aid_source>>
+            <<replace '#deadwood-orphanage-donation-meeting'>>
+              <<language>>
+                <<option 'EN'>>
+                  Bailey marks the order. "You can check the boxes before they're put away. Then sign the delivery sheet." <<He>> turns the copy towards you. "The supplier's name is on there. If something's wrong, point it out before you sign."
+                <<option 'CN'>>
+                  贝利在订单上做了标记。“收起来之前，你可以检查那些箱子。检查完就签送货单。”<<He>>把副本转向你。“供应商的名字在上面。有哪件不对，签字前指出来。”
+              <</language>><br><br>
+              <span class='gold'><<lanSwitch 'Agreed: a physical inspection before signing for the supplies.' '已谈妥：先点验实物，再签收。'>></span><br><br>
+              <<deadwood-orphanage-donation-progress>><<deadwood-orphanage-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>><br>
+    <</deadwood-card>>
+    <<deadwood-orphanage-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'Bailey is not available to discuss the supplies now.' '现在无法和贝利商谈这批物资。'>><br><br>
+  <<deadwood-orphanage-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Orphanage Donation Accounts
+<<set $outside to 0>><<set $location to 'home'>><<effects>>
+<<set _aid to maplebirch.get('Finance').donations.aid>>
+<<if _aid.canAudit('orphanage')>>
+  <<npc Bailey>><<person1>>
+  <div id='deadwood-orphanage-donation-accounts'>
+    <<language>>
+      <<option 'EN'>>
+        Bailey puts the expense sheet beside the supplier's invoice. "Five thousand. There's your record." The invoice separates the goods from a <span class='gold'>£200</span> delivery charge. The expense sheet combines transport and handling.
+      <<option 'CN'>>
+        贝利把开支表放在供应商发票旁。“五千镑。记录在这儿。”发票将货物与<span class='gold'>£200</span>运费分别列出，开支表则把运输和经办费合在了一项。
+    <</language>><br><br>
+    <<deadwood-card 'Supplies account' '物资账目'>>
+      <<lanSwitch 'Bedding' '床品'>>：<span class='gold'>£3,000</span><br>
+      <<lanSwitch 'Household supplies' '生活用品'>>：<span class='gold'>£1,500</span><br>
+      <<lanSwitch 'Transport and handling' '运输与经办'>>：<span class='gold'>£500</span><br>
+      <<lanSwitch 'Total' '合计'>>：<span class='gold'>£5,000</span><br>
+    <</deadwood-card>>
+    <<if currentSkillValue('maths') gte 400>>
+      <<icon 'school/procurement-audit.png'>><<lanLink ['Separate the £300 handling allowance and require it to fund supplies (0:10)', '指出 £300 经办余款，要求列入用品经费 (0:10)']>>
+        <<set _aid_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.audit('orphanage', true)>>
+          <<pass 10>>
+          <<if $passage is _aid_source>>
+            <<replace '#deadwood-orphanage-donation-accounts'>>
+              <<language>>
+                <<option 'EN'>>
+                  You set the two sheets side by side and point to the delivery charge. "Someone has to receive the stuff," Bailey says. You ask <<him>> to list that expense separately and account for it. <<He>> stares at you, then strikes through the heading. "Three hundred for replenishing the cupboard. There."
+                <<option 'CN'>>
+                  你把两张表并排放好，指出运费。“总得有人接这些货。”贝利说。你请<<him>>将这项费用另列，并说明用途。<<He>>盯着你，随后划掉原来的项目。“三百镑，用来补柜里的用品。行了。”
+              <</language>><br><br>
+              <span class='green'><<lanSwitch 'The record now assigns £1,800 to household supplies and £200 to delivery.' '记录已改为生活用品 £1,800、运输 £200。'>></span><br><br>
+              <<deadwood-orphanage-donation-progress>><<deadwood-orphanage-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='blue'><<lanSwitch 'Maths' '数学'>></span><br>
+    <</if>>
+    <<icon 'school/procurement-audit.png'>><<lanLink ['Acknowledge the expense sheet (0:10)', '确认这份开支表 (0:10)']>>
+      <<set _aid_source to $passage>>
+      <<if maplebirch.get('Finance').donations.aid.audit('orphanage', false)>>
+        <<pass 10>>
+        <<if $passage is _aid_source>>
+          <<replace '#deadwood-orphanage-donation-accounts'>>
+            <<lanSwitch 'You finish reading the papers. Bailey makes a mark beside your name and pulls the file back. "Now go look at the delivery, if that is what you want."' '你读完了那些文件。贝利在你的名字旁做了记号，把档案拉回去。“想检查送来的东西，现在就去看。”'>><br><br>
+            <<deadwood-orphanage-donation-progress>><<deadwood-orphanage-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br><br>
+    <<deadwood-orphanage-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'The supply accounts cannot be reviewed now.' '现在无法核对物资账目。'>><br><br>
+  <<deadwood-orphanage-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Orphanage Donation Inspection
+<<set $outside to 0>><<set $location to 'home'>><<effects>>
+<<set _aid to maplebirch.get('Finance').donations.aid>>
+<<if _aid.canInspect('orphanage')>>
+  <<npc Bailey>><<person1>>
+  <div id='deadwood-orphanage-donation-inspection'>
+    <<language>>
+      <<option 'EN'>>
+        Bailey unlocks the cupboard beside the hall and gives you the packing list. Sheets and towels fill the open boxes. Bars of soap and cleaning supplies are sealed in another carton. "Count them," <<he>> says. "The supplier's waiting for a signature."
+        <<if currentSkillValue('housekeeping') gte 400>><br><br>You unfold a sheet and examine the hem. One bundle has loose stitching. The edge begins to unravel when you straighten it; a few washes would make it worse.<</if>>
+      <<option 'CN'>>
+        贝利打开大厅旁的储物柜，把装箱单交给你。打开的箱子里装满床单和毛巾，另一箱封着肥皂和清洁用品。“数吧。”<<He>>说。“供应商还等着签字。”
+        <<if currentSkillValue('housekeeping') gte 400>><br><br>你展开床单，检查缝边。一包床品的针脚松散，你把边缘拉平时，就有线头散开。洗过几次，只会更糟。<</if>>
+    <</language>><br><br>
+    <<if currentSkillValue('housekeeping') gte 400>>
+      <<icon 'finance/bedding-supplies.png'>><<lanLink ['Require a replacement for the poorly stitched bedding (0:15)', '要求更换缝制不牢的床品 (0:15)']>>
+        <<set _aid_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.inspect('orphanage', 'replace')>>
+          <<pass 15>>
+          <<if $passage is _aid_source>>
+            <<replace '#deadwood-orphanage-donation-inspection'>>
+              <<language>>
+                <<option 'EN'>>
+                  You show Bailey the loose seam. <<He>> runs a finger over it, then closes the box. "I'm not paying to have those replaced twice." <<He>> calls the supplier and reads the batch number from the label. "They'll send another bundle. Check it when it comes."
+                <<option 'CN'>>
+                  你给贝利看松脱的缝线。<<He>>用手指拂过，随即合上箱子。“我可不想付两遍换新的钱。”<<He>>给供应商打电话，照着标签念出批号。“会另送一包来。到了再检查。”
+              <</language>><br><br>
+              <span class='blue'><<lanSwitch 'The replacement bedding is due in one day.' '更换的床品将在一天后送达。'>></span><br><br>
+              <<deadwood-orphanage-donation-progress>><<deadwood-orphanage-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='blue'><<lanSwitch 'Housekeeping' '家务'>></span><br>
+    <</if>>
+    <<icon 'finance/bedding-supplies.png'>><<lanLink ['Accept the counted supplies (0:15)', '接受清点过的物资 (0:15)']>>
+      <<set _aid_source to $passage>>
+      <<if maplebirch.get('Finance').donations.aid.inspect('orphanage', 'accept')>>
+        <<pass 15>>
+        <<if $passage is _aid_source>>
+          <<replace '#deadwood-orphanage-donation-inspection'>>
+            <<lanSwitch 'You count the packages against the list. Bailey takes it back and marks the inspection complete. "That is the lot. Come and sign for it."' '你按清单数过包裹。贝利收回清单，记下点验已完成。“东西都在这里。过来签收。”'>><br><br>
+            <<deadwood-orphanage-donation-progress>><<deadwood-orphanage-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br><br>
+    <<deadwood-orphanage-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'You cannot inspect the supplies now.' '现在无法点验这批物资。'>><br><br>
+  <<deadwood-orphanage-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Orphanage Donation Receipt
+<<set $outside to 0>><<set $location to 'home'>><<effects>>
+<<set _aid to maplebirch.get('Finance').donations.aid>>
+<<if _aid.canSign('orphanage')>>
+  <<npc Bailey>><<person1>>
+  <div id='deadwood-orphanage-donation-receipt'>
+    <<language>>
+      <<option 'EN'>>
+        Bailey sets out the delivery sheet. <<if _aid.state('orphanage').equipment is 'replaced'>>You check the replacement bundle beside it. Its hems hold when you unfold the fabric.<</if>> "Name there," <<he>> says, pointing with <<his>> pen. "Then the supplier gets their copy."
+      <<option 'CN'>>
+        贝利摆好送货单。<<if _aid.state('orphanage').equipment is 'replaced'>>你检查了旁边补送的床品。展开布料时，缝边牢牢地连着。<</if>>“名字签这儿。”<<He>>用笔指出位置。“然后把供应商那份交回去。”
+    <</language>><br><br>
+    <<icon 'school/delivery-receipt.png'>><<lanLink ['Sign the itemised delivery sheet (0:05)', '签署逐项送货单 (0:05)']>>
+      <<set _aid_source to $passage>>
+      <<if maplebirch.get('Finance').donations.aid.sign('orphanage')>>
+        <<pass 5>>
+        <<if $passage is _aid_source>>
+          <<replace '#deadwood-orphanage-donation-receipt'>>
+            <<language>>
+              <<option 'EN'>>
+                Bailey checks your signature, tears off a copy and hands it to you. "Bedding and supplies. All recorded." <<He>> leaves the boxes beside the laundry cupboard. "If you've more money to put towards this place, you know where I am."
+              <<option 'CN'>>
+                贝利核对了你的签名，撕下副本，交到你手里。“床品和用品，都记好了。”<<He>>把箱子留在洗衣柜旁。“还有钱想投到这里，知道该去哪儿找我。”
+            <</language>><br><br>
+            <span class='green'><<lanSwitch 'The delivery is signed for. You keep a copy of the supply record.' '物资已签收，你留下一份用品记录。'>></span><br><br>
+            <<deadwood-orphanage-donation-benefits>>
+            <<deadwood-orphanage-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br><br>
+    <<deadwood-orphanage-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'The delivery paperwork is not ready to be signed now.' '现在还无法签署送货手续。'>><br><br>
+  <<deadwood-orphanage-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Orphanage Donation Followup
+<<set $outside to 0>><<set $location to 'home'>><<effects>>
+<<set _aid to maplebirch.get('Finance').donations.aid>>
+<<if _aid.canFollow('orphanage')>>
+  <<npc Bailey>><<person1>>
+  <div id='deadwood-orphanage-donation-followup'>
+    <<lanSwitch 'Bailey has the supply record open on the desk. "They have been handed out," <<he>> says when you ask. "You want that written down too?"' '贝利桌上摊着物资记录。你问起来时，<<he>>说：“已经分下去了。这也要写下来？”'>><br><br>
+    <<socialiseicon 'ask'>><<lanLink ['Check where the supplies went (0:05)', '确认物资的去向 (0:05)']>>
+      <<set _aid_source to $passage>>
+      <<if maplebirch.get('Finance').donations.aid.follow('orphanage')>>
+        <<pass 5>>
+        <<if $passage is _aid_source>>
+          <<replace '#deadwood-orphanage-donation-followup'>>
+            <<language>>
+              <<option 'EN'>>
+                Bailey shows you the cupboard list and the laundry record. The new sheets have been issued to replace worn sets, and the soap has reached the washrooms. <<if maplebirch.get('Finance').donations.aid.state('orphanage').accounts is 'corrected'>>The remaining three hundred is listed against household supplies.<<else>><<He>> keeps a finger on the page while you read.<</if>> "Satisfied?"
+                <br><br>
+                You step back into the hall. A younger orphan carries a folded towel past you, then stops to show you the soft edge. "This one's new." Another asks whether the matching sheets will be on their bed.
+              <<option 'CN'>>
+                贝利给你看储物柜清单和洗衣记录。新床单已经发下去替换磨损的旧床品，肥皂也分到了盥洗室。<<if maplebirch.get('Finance').donations.aid.state('orphanage').accounts is 'corrected'>>余下三百镑列在生活用品经费里。<<else>>你读的时候，<<he>>仍用手指按着那一页。<</if>>“满意了？”
+                <br><br>
+                你走回大厅。一个年幼的孩子抱着叠好的毛巾经过，又停下给你看柔软的边缘。“这个是新的。”另一个问，同套的床单是不是也会铺到自己的床上。
+            <</language>><br><br>
+            <<language>>
+              <<option 'EN'>>
+                The supply sheet on the hall noticeboard names you as the benefactor. Staff and visitors stop to read it. Bailey adds that if your factory supplies suitable storage goods, <<he>> can ask for a quote when the next cupboard order is due.
+              <<option 'CN'>>
+                大厅告示板上的物资清单记着你的资助。工作人员和访客在那儿停下阅读。贝利补了一句：你的工厂供应合适的储物用品，下次补货时，<<he>>可以要一份报价。
+            <</language>><br><br>
+            <<endevent>>
+            <<if C.npc.Robin.init is 1 and C.npc.Robin.state is 'active' and !V.robinmissing and V.robin.timer.hurt is 0 and V.RobinExpansion?.asylum.status isnot 'admitted' and getRobinLocation() is 'orphanage'>>
+              <<npc Robin>><<person1>>
+              <<language>>
+                <<option 'EN'>>
+                  Robin comes out of <<his>> room and notices the towel. <<if C.npc.Robin.trauma gte 40>>"I'm glad those reached them." <<He>> touches the folded fabric. "It helps to have something clean."<<elseif C.npc.Robin.dom gte 60>>"The kids have been asking who sent them." Robin looks at you. "I'm glad you checked where the money went."<<else>>"They were excited when these arrived." Robin smiles at you. "Thank you for helping."<</if>>
+                  <<if V.RobinExpansion?.shop>>"One of them asked if the delivery came from my shop. I told them this was something you arranged."<</if>>
+                <<option 'CN'>>
+                  罗宾从房间出来，注意到那条毛巾。<<if C.npc.Robin.trauma gte 40>>“能送到他们手里，真好。”<<He>>摸了摸叠好的布料。“有干净的东西用，会好一些。”<<elseif C.npc.Robin.dom gte 60>>“孩子们一直问是谁送来的。”罗宾看着你。“还好你核对了钱用到哪里。”<<else>>“刚送到时，他们可高兴了。”罗宾朝你笑了笑。“谢谢你帮忙。”<</if>>
+                  <<if V.RobinExpansion?.shop>>“有个孩子还问，是不是从我的店里送来的。我告诉他们，这件事是你安排的。”<</if>>
+              <</language>><br><br>
+            <</if>>
+            <<deadwood-orphanage-donation-benefits>>
+            <<deadwood-orphanage-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br><br>
+    <<deadwood-orphanage-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'There is no new supply record to discuss now.' '现在没有新的物资记录可以讨论。'>><br><br>
+  <<deadwood-orphanage-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Orphanage Donation Privileges
+<<set $outside to 0>><<set $location to 'home'>><<effects>>
+<<set _aid to maplebirch.get('Finance').donations.aid>>
+<<if _aid.available('orphanage') and (_aid.canGrant('orphanage') or _aid.has('orphanage'))>>
+  <<npc Bailey>><<person1>>
+  <div id='deadwood-orphanage-privileges'>
+    <<language>>
+      <<option 'EN'>>
+        Bailey taps the amount on your donation receipt. "You want something for it. Of course you do." You ask for your business to be heard without being bundled out of the office. <<He>> leans back, weighing the paper in <<his>> hand. "Once a week. Morning, same as always. I'll put the other callers off while we deal with it."
+        <<if !maplebirch.get('Finance').orphanage.pcFree>>"And one extra week to get a rent payment together. Tell me before it's overdue." <<He>> puts the receipt down. "A little breathing room keeps the money coming in."<<else>>"You still have an interest in the place. If there's something worth paying for, I'll hear it."<</if>>
+      <<option 'CN'>>
+        贝利用指头敲了敲捐款收据上的金额。“想换点什么。就知道会这样。”你要求谈正事时，别被几句话赶出办公室。<<He>>向后靠着，掂了掂手里的纸。“每周一次。早上，还是原来的时间。谈你的事时，其他人先等着。”
+        <<if !maplebirch.get('Finance').orphanage.pcFree>>“再给你一次多筹一周房租的机会。到期之前告诉我。”<<He>>放下收据。“留点余地，钱才会接着来。”<<else>>“你对这里还有兴趣。有值得付钱的事，我会听。”<</if>>
+    <</language>><br><br>
+    <<deadwood-card "Bailey's agreement" '贝利的约定'>>
+      <<lanSwitch 'Private business: one appointment each week, between 07:00 and 10:00, arranged from the main hall.' '私人事务：每周一次，07:00–10:00，可从大厅安排接待。'>><br>
+      <<if !maplebirch.get('Finance').orphanage.pcFree>>
+        <<lanSwitch 'Rent extension: one payment can be deferred by seven days when requested before it is overdue.' '租金延期：到期前可将一次付款延后七天。'>><br>
+      <</if>>
+      <<if _aid.canGrant('orphanage')>>
+        <<icon 'company/agreement.png'>><<lanLink ['Have these terms written down (0:10)', '要求将条件写下来 (0:10)']>>
+          <<set _aid_source to $passage>>
+          <<if maplebirch.get('Finance').donations.aid.grant('orphanage')>>
+            <<control 3>><<pass 10>>
+            <<if $passage is _aid_source>>
+              <<replace '#deadwood-orphanage-privileges'>>
+                <<lanSwitch 'Bailey writes the agreement beneath your name. "There. Bring something worth my time." You take the copy before <<he>> can slide it back beneath the other papers.' '贝利在你的名字下面写好约定。“行了。来谈点值得我花时间的事。”你拿走副本，没让<<he>>把它重新压到其他文件下面。'>><<gcontrol>><br><br>
+                <span class='green'><<lanSwitch 'Your private business appointment and rent terms are recorded.' '私人事务接待与租金条件已记入约定。'>></span><br>
+                <<deadwood-orphanage-donation-benefits>><<deadwood-orphanage-donation-exit>>
+              <</replace>><<run updateMoment()>>
+            <</if>>
+          <</if>>
+        <</lanLink>> | <span class='green'><<lanSwitch 'Control' '自控'>></span><br>
+      <<else>>
+        <span class='green'><<lanSwitch 'These terms are recorded.' '这些条件已经记入约定。'>></span><br>
+      <</if>>
+    <</deadwood-card>>
+    <<if _aid.canUse('orphanage', 'delay')>>
+      <<icon 'finance/rent-extension.png'>><<lanLink ['Use your seven-day rent extension (0:05)', '使用七天租金延期 (0:05)']>>
+        <<set _aid_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.use('orphanage', 'delay')>>
+          <<pass 5>>
+          <<if $passage is _aid_source>>
+            <<replace '#deadwood-orphanage-privileges'>>
+              <<lanSwitch 'Bailey crosses out the collection date and writes a new one seven days later. "Once. As agreed." <<He>> closes the ledger. You have the extra time in writing.' '贝利划掉收租日期，重写到七天之后。“一次，照约定来。”<<He>>合上账本。多出来的时间，已经写在纸上。'>><br><br>
+              <span class='green'><<lanSwitch 'Rent collection has been deferred by seven days.' '收租时间已延后七天。'>></span><br><br>
+              <<deadwood-orphanage-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>><br>
+    <</if>>
+    <<if _aid.canUse('orphanage', 'visit')>>
+      <<socialiseicon 'ask'>><<lanLink ['Use your private business appointment (0:20)', '按约定私下谈正事 (0:20)']>>
+        <<set _aid_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.use('orphanage', 'visit')>>
+          <<pass 20>>
+          <<if $passage is _aid_source>>
+            <<replace '#deadwood-orphanage-privileges'>>
+              <<lanSwitch 'Bailey shuts the door when someone knocks. "Later." <<He>> spreads the rent and supply files across the desk for you. "All right. What are you putting on the table?" You have <<his>> attention for the business you came to settle.' '有人敲门，贝利将门关好。“等会儿。”<<He>>把房租和物资档案摊到桌上。“说吧。准备拿什么来谈？”这次，你要办的事得到了<<his>>的注意。'>><br><br>
+              <<if maplebirch.get('Finance').orphanage.canNegotiate and Time.hour * 60 + Time.minute + 10 lte 10 * 60>>
+                <<officeicon>><<lanLink ['Discuss a rent buyout', '商谈房租买断'] 'Deadwood Reblooms Orphanage Buyout'>><</lanLink>><br>
+              <</if>>
+              <<deadwood-orphanage-donation-progress>>
+              <<if maplebirch.get('Finance').donations.aid.canFollow('orphanage')>>
+                <<icon 'school/procurement-audit.png'>><<lanLink ['Review how the donated supplies were used', '查看捐赠物资的使用记录'] 'Deadwood Reblooms Orphanage Donation Followup'>><</lanLink>><br>
+              <</if>>
+              <<deadwood-orphanage-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>><br>
+    <</if>>
+    <<deadwood-orphanage-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'Bailey cannot discuss these terms with you now.' '现在无法和贝利商谈这些条件。'>><br><br>
+  <<deadwood-orphanage-donation-exit>>
+<</if>>

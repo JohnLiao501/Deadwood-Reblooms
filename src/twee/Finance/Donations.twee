@@ -9,17 +9,56 @@
 <<widget 'deadwood-finance-donations-projects'>>
   <<for _donation_project range maplebirch.get('Finance').donations.projects>>
     <<deadwood-card `maplebirch.t(_donation_project.name)` `maplebirch.t(_donation_project.name)`>>
-      <<print maplebirch.t(_donation_project.project)>><br>
+      <<icon _donation_project.icon>><<print maplebirch.t(_donation_project.project)>><br>
       <<lanSwitch 'Donated: ' '累计捐款：'>><<deadwood-reblooms-finance-money _donation_project.donated>><br>
       <<lanSwitch 'Target: ' '目标：'>><<deadwood-reblooms-finance-money _donation_project.goal>><br>
+      <<lanSwitch 'Maximum kindness from named funding and signed delivery: ' '实名资助与签收最多获得：'>><span class='green'>+<<print Math.floor(_donation_project.goal / 100000) * 5 + 25>> <<lanSwitch 'kindness' '善名'>></span><br>
+      <<lanSwitch 'Follow-up meeting: ' '后续会面：'>><span class='green'>+10 <<lanSwitch 'social fame' '社交名声'>></span><br>
+      <<switch _donation_project.id>>
+        <<case 'school'>><<lanSwitch 'Discuss equipment access, a minor detention review and meetings with Leighton.' '可与礼顿商量器材使用、轻微留堂复核与资助者接见。'>>
+        <<case 'temple'>><<lanSwitch 'Discuss quiet-room use, private meetings and arrangements for relief work with Jordan.' '可与约旦商量安静房间的使用、私人接见与救济事务安排。'>>
+        <<case 'hospital'>><<lanSwitch 'Discuss routine treatment concessions and health consultations with Harper.' '可与哈珀商量常规治疗优惠与健康咨询。'>>
+        <<case 'orphanage'>><<lanSwitch 'Discuss a rent extension and private appointments with Bailey.' '可与贝利商量租金宽限与私人预约。'>>
+      <</switch>><br>
       <<if _donation_project.funded>>
-        <span class='green'><<lanSwitch 'Target met. Funds are reserved for the listed supplies.' '目标已募足，款项留作所列物资的采购。'>></span><br>
+        <<if _donation_project.id is 'school'>>
+          <<set _donation_school to maplebirch.get('Finance').donations.school>>
+          <<if _donation_school.ready>>
+            <span class='green'><<lanSwitch 'The equipment and teaching supplies have arrived at the school.' '器材与教学用品已送到学校。'>></span><br>
+          <<else>>
+            <<if _donation_school.state.replacement_at isnot null>><<lanSwitch 'Replacement fittings are due on ' '替换配件预计送达日期：'>><<else>><<lanSwitch 'The school has ordered the supplies. Expected delivery: ' '学校已订购物资。预计送达日期：'>><</if>>
+            <span class='blue'><<print getFormattedDate(new DateTime(_donation_school.due))>> <<print new DateTime(_donation_school.due).hour>>:<<print String(new DateTime(_donation_school.due).minute).padStart(2, '0')>></span><br>
+          <</if>>
+        <<else>>
+          <<set _donation_aid to maplebirch.get('Finance').donations.aid>>
+          <<if _donation_aid.ready(_donation_project.id)>>
+            <span class='green'><<lanSwitch 'The supplies have reached their destination.' '物资已送到受助地点。'>></span><br>
+          <<else>>
+            <<if _donation_aid.state(_donation_project.id).replacement_at isnot null>><<lanSwitch 'Replacement supplies are due on ' '替换物资预计送达日期：'>><<else>><<lanSwitch 'The supplies have been ordered. Expected delivery: ' '物资已订购。预计送达日期：'>><</if>>
+            <span class='blue'><<print getFormattedDate(new DateTime(_donation_aid.due(_donation_project.id)))>> <<print new DateTime(_donation_aid.due(_donation_project.id)).hour>>:<<print String(new DateTime(_donation_aid.due(_donation_project.id)).minute).padStart(2, '0')>></span><br>
+          <</if>>
+        <</if>>
+      <</if>>
+      <<if _donation_project.id is 'school' and maplebirch.get('Finance').donations.school.state.terms is null>>
+        <<if maplebirch.get('Finance').donations.school.eligible>>
+          <<lanSwitch 'Take your named receipt to the school office to discuss the project.' '可携实名收据到校长办公室商量项目安排。'>>
+        <<else>>
+          <<lanSwitch 'Named contributions of £5,000 let you discuss project arrangements with the head.' '实名资助达到 £5,000 后，可与校长商量项目安排。'>>
+        <</if>><br>
+      <<elseif _donation_project.id isnot 'school' and maplebirch.get('Finance').donations.aid.state(_donation_project.id).terms is null>>
+        <<if maplebirch.get('Finance').donations.aid.eligible(_donation_project.id)>>
+          <<switch _donation_project.id>>
+            <<case 'temple'>><<lanSwitch 'Take your receipt to Jordan to discuss the relief supplies.' '可携收据找约旦商量救济物资的安排。'>>
+            <<case 'hospital'>><<lanSwitch 'Ask at the hospital reception about your equipment contribution.' '可到医院前台询问设备资助的安排。'>>
+            <<case 'orphanage'>><<lanSwitch "Take your receipt to Bailey's office to discuss the new supplies." '可携收据到贝利办公室商量新物资的安排。'>>
+          <</switch>>
+        <<else>>
+          <<lanSwitch 'Named contributions of £5,000 let you discuss the purchases with the recipient.' '实名资助达到 £5,000 后，可与受助方商量采购安排。'>>
+        <</if>><br>
       <</if>>
     <</deadwood-card>>
   <</for>>
 <</widget>>
-
-
 
 :: Deadwood Reblooms Donations
 <<set $outside to 0>><<set $location to 'townhall'>><<effects>>
@@ -34,6 +73,7 @@
       柜员把一张推到你面前。“选好给哪家。这里开收据，再转到对应的账上。”
   <</language>>
   <br><br>
+  <span class='blue'><<lanSwitch 'Named contributions earn 5 kindness per accumulated £1,000, up to each funding target. Signing for the delivery earns another 25 kindness.' '实名资助每累计 £1,000 获得 5 善名，计至各项募资目标；完成签收再获得 25 善名。'>></span><br><br>
   <div id='deadwood-donation-projects'><<deadwood-finance-donations-projects>></div>
   <br>
   <<set _donation_fund to 'orphanage'>><<set _donation_amount to 100>><<set _donation_anonymous to false>>
@@ -53,17 +93,21 @@
     <</language>>
   </i></span><br><br>
   <<icon 'finance/donations.png'>><<lanLink ['Donate (0:05)', '捐款 (0:05)']>>
+    <<set _donation_source to $passage>>
     <<replace '#deadwood-donation-receipt'>>
       <<if maplebirch.get('Finance').donations.donate(_donation_fund, _donation_amount, _donation_anonymous)>>
         <<pass 5>>
-        <<replace '#deadwood-donation-projects'>><<deadwood-finance-donations-projects>><</replace>>
-        <<language>>
-          <<option 'EN'>>
-            The clerk stamps your receipt and passes it through the slot. You put it away.
-          <<option 'CN'>>
-            柜员在收据上盖章，从窗口递出来。你把它收好。
-        <</language>><br>
-        <span class='green'><<print maplebirch.t('deadwood-reblooms:donations:' + _donation_fund)>>: <<deadwood-reblooms-finance-money `Math.round(_donation_amount * 100)`>></span>
+        <<if $passage is _donation_source>>
+          <<replace '#deadwood-donation-projects'>><<deadwood-finance-donations-projects>><</replace>>
+          <<language>>
+            <<option 'EN'>>
+              The clerk stamps your receipt and passes it through the slot. You put it away.
+            <<option 'CN'>>
+              柜员在收据上盖章，从窗口递出来。你把它收好。
+          <</language>><br>
+          <span class='green'><<print maplebirch.t('deadwood-reblooms:donations:' + _donation_fund)>>: <<deadwood-reblooms-finance-money `Math.round(_donation_amount * 100)`>></span>
+          <<run updateMoment()>>
+        <</if>>
       <<else>>
         <span class='red'><<lanSwitch 'The donation could not be taken. Check the amount, your funds and the opening hours.' '这笔捐款没能受理。请检查金额、可用资金与开放时间。'>></span>
       <</if>>

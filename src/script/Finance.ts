@@ -160,7 +160,7 @@ export default function Finance(maplebirch: typeof window.maplebirch): void {
         // 私人除虫手术的 £250 门槛改为三种支付方式联合判断。
         {
           src: '<<if $money gte 25000>>',
-          to: '<<if maplebirch.get("Finance").canPay(25000, "hospitalParasiteRemoval")>>',
+          to: '<<if maplebirch.get("Finance").canPay(maplebirch.get("Finance").donations.aid.fee, "hospitalParasiteRemoval")>>',
           expected: 1
         }
       ],

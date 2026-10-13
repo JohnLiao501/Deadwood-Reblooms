@@ -1,0 +1,417 @@
+:: Deadwood Reblooms Hospital Donation Widgets [widget]
+
+<<widget 'deadwood-hospital-donation-exit'>>
+  <<getouticon>><<lanLink ['Return to the foyer (0:01)', '返回大厅 (0:01)']>>
+    <<set _hospital_source to $passage>><<endevent>><<pass 1>>
+    <<if $passage is _hospital_source>><<goto 'Hospital Foyer'>><</if>>
+  <</lanLink>><br>
+<</widget>>
+
+<<widget 'deadwood-hospital-donation-progress'>><<silently>>
+  <<set _hospital_aid to maplebirch.get('Finance').donations.aid>>
+  <<set _hospital_show to _hospital_aid.canAudit('hospital') or _hospital_aid.canInspect('hospital') or _hospital_aid.canSign('hospital')>>
+<</silently>><<if _hospital_show>>
+  <<if _hospital_aid.canAudit('hospital')>>
+    <<icon 'school/procurement-audit.png'>><<lanLink ['Review the procurement accounts', '继续核对采购账目'] 'Deadwood Reblooms Hospital Donation Accounts'>><</lanLink>><br>
+  <</if>>
+  <<if _hospital_aid.canInspect('hospital')>>
+    <<icon 'medicine/equipment-check.png'>><<lanLink ['Check the emergency equipment with Harper', '和哈珀一起检查急救设备'] 'Deadwood Reblooms Hospital Donation Inspection'>><</lanLink>><br>
+  <</if>>
+  <<if _hospital_aid.canSign('hospital')>>
+    <<icon 'school/delivery-receipt.png'>><<lanLink ['Finish the delivery paperwork', '完成物资签收手续'] 'Deadwood Reblooms Hospital Donation Receipt'>><</lanLink>><br>
+  <</if>>
+<</if>><</widget>>
+
+<<widget 'deadwood-hospital-donation-link'>><<silently>>
+  <<set _hospital_aid to maplebirch.get('Finance').donations.aid>>
+  <<set _hospital_links to new maplebirch.tool.link()>><<run _hospital_links.detect()>>
+  <<set _hospital_show to $passage is 'Hospital Foyer' and _hospital_aid.available('hospital') and _hospital_links.links.some(link => link.getAttribute('data-passage') === 'Pharmacy') and _hospital_links.links.some(link => link.getAttribute('data-passage') === 'Hospital front') and (_hospital_aid.canMeet('hospital') or _hospital_aid.canAudit('hospital') or _hospital_aid.canInspect('hospital') or _hospital_aid.canSign('hospital') or _hospital_aid.canFollow('hospital') or _hospital_aid.canGrant('hospital') or _hospital_aid.has('hospital'))>>
+<</silently>><<if _hospital_show>>
+  <<if _hospital_aid.canMeet('hospital')>>
+    <<icon 'medicine/emergency-supplies.png'>><<lanLink ['Ask to discuss your support for the hospital', '询问医院资助的项目安排'] 'Deadwood Reblooms Hospital Donation Meeting'>><</lanLink>><br>
+  <</if>>
+  <<if _hospital_aid.canAudit('hospital')>>
+    <<icon 'school/procurement-audit.png'>><<lanLink ['Ask for the hospital procurement accounts', '索取医院采购账目'] 'Deadwood Reblooms Hospital Donation Accounts'>><</lanLink>><br>
+  <</if>>
+  <<if _hospital_aid.canInspect('hospital')>>
+    <<icon 'medicine/equipment-check.png'>><<lanLink ['Ask to check the donated emergency equipment', '检查捐赠的急救设备'] 'Deadwood Reblooms Hospital Donation Inspection'>><</lanLink>><br>
+  <</if>>
+  <<if _hospital_aid.canSign('hospital')>>
+    <<icon 'school/delivery-receipt.png'>><<lanLink ['Sign for the hospital delivery', '签收医院物资'] 'Deadwood Reblooms Hospital Donation Receipt'>><</lanLink>><br>
+  <</if>>
+  <<if _hospital_aid.canFollow('hospital')>>
+    <<socialiseicon>><<lanLink ['Ask how the emergency supplies are being used', '问问急救物资的使用情况'] 'Deadwood Reblooms Hospital Donation Followup'>><</lanLink>><br>
+  <</if>>
+  <<deadwood-hospital-donation-benefits>>
+<</if>><</widget>>
+
+<<widget 'deadwood-hospital-donation-supplies'>><<silently>>
+  <<set _hospital_aid to maplebirch.get('Finance').donations.aid>>
+  <<set _hospital_links to new maplebirch.tool.link()>><<run _hospital_links.detect()>>
+  <<set _hospital_show to $passage is 'Hospital Foyer' and !$combat and !$possessed and !$nextPassageCheck and !$replayScene and !$statFreeze and _hospital_aid.ready('hospital') and _hospital_links.links.some(link => link.getAttribute('data-passage') === 'Pharmacy') and _hospital_links.links.some(link => link.getAttribute('data-passage') === 'Hospital front')>>
+<</silently>><<if _hospital_show>>
+  <<language>>
+    <<option 'EN'>>
+      A notice beside reception thanks the contributors to the emergency equipment fund. <<if maplebirch.get('Finance').donations.state.named.hospital gt 0>>Your name is among them.<<else>>It includes a line thanking anonymous donors.<</if>> Through the corridor doors, you see a supply trolley carrying new boxes of dressings. A nurse checks each box against a list before wheeling it towards the wards.
+    <<option 'CN'>>
+      前台旁的告示感谢了急救设备募款的资助者。<<if maplebirch.get('Finance').donations.state.named.hospital gt 0>>你的名字也在其中。<<else>>其中还有一句对匿名捐赠者的感谢。<</if>>透过走廊的门，你看见物资推车上放着几盒新敷料。护士逐盒对照清单，随后把车推向病房。
+  <</language>><br>
+<</if>><</widget>>
+
+<<widget 'deadwood-hospital-donation-benefits'>><<silently>>
+  <<set _hospital_aid to maplebirch.get('Finance').donations.aid>>
+  <<set _hospital_rights to _hospital_aid.available('hospital') and (_hospital_aid.canGrant('hospital') or _hospital_aid.has('hospital'))>>
+<</silently>><<if _hospital_rights>>
+  <<if $passage isnot 'Deadwood Reblooms Hospital Donation Privileges'>>
+    <<icon 'medicine/routine-consultation.png'>><<lanLink ['Discuss your hospital benefactor arrangements', '商谈医院资助者的待遇'] 'Deadwood Reblooms Hospital Donation Privileges'>><</lanLink>><br>
+  <</if>>
+<</if>><</widget>>
+
+:: Deadwood Reblooms Hospital Donation Meeting
+<<set $outside to 0>><<set $location to 'hospital'>><<effects>>
+<<set _hospital_aid to maplebirch.get('Finance').donations.aid>>
+<<if _hospital_aid.canMeet('hospital')>>
+  <<npc Harper>><<person1>>
+  <div id='deadwood-hospital-meeting'>
+    <<language>>
+      <<option 'EN'>>
+        The receptionist takes your receipt to the adjoining office. Doctor Harper emerges a little later, a clipboard beneath <<his>> arm.
+        <<if !$harperSeen.includes('hospital')>>
+          <<if $harperSeen.includes('livestock')>>You recognise the doctor from Remy's farm. <<He>> gives you a practised smile. "Hello, I'm Doctor Harper." Nothing in <<his>> expression acknowledges the place where you last met.
+          <<elseif $harperSeen.includes('party')>>"We met at Avery's party. How thoughtful." Harper glances at the receipt. "Come in. We can discuss where this will go."
+          <<else>>"Hello, I'm Doctor Harper." <<He>> brushes <<his>> blond fringe away from <<his>> eyes. "I understand you've been supporting our emergency equipment fund. Please, come in."<</if>>
+        <<else>>"It's good to see you taking an interest," Harper says, glancing from the receipt to your face. "Please, sit down."<</if>>
+        <br><br>
+        <<He>> sets the donation receipt beside a supply catalogue. "Monitoring equipment, oxygen fittings and disposable supplies. There is always something to replace." <<His>> finger rests on the name written on your receipt. "How would you like to follow the work?"
+        <<if maplebirch.get('Finance').company.ascension.active>><br><br>Harper's eyes pause on you. "How have you been sleeping since the tower?" You indicate the catalogue. <<He>> smiles and turns the page back. "The delivery first, then."<</if>>
+      <<option 'CN'>>
+        前台把你的收据送进旁边的办公室。过了一会儿，哈珀医生夹着记录板走了出来。
+        <<if !$harperSeen.includes('hospital')>>
+          <<if $harperSeen.includes('livestock')>>你认出了雷米农场里的那位医生。<<He>>露出惯常的微笑。“你好，我是哈珀医生。”<<His>>的神情没有流露出对上次见面地点的任何反应。
+          <<elseif $harperSeen.includes('party')>>“我们在艾弗里的聚会上见过。真周到。”哈珀看了看收据。“请进。我们可以谈谈这些钱的用途。”
+          <<else>>“你好，我是哈珀医生。”<<He>>把金色刘海拨开。“听说你在支持我们的急救设备募款。请进。”<</if>>
+        <<else>>“很高兴你愿意关心这些。”哈珀说，目光从收据移到你的脸上。“请坐。”<</if>>
+        <br><br>
+        <<He>>把捐款收据放在一本物资目录旁。“监测设备、氧气接头，还有一次性耗材。总有东西需要补充。”<<His>>的手指停在收据上的姓名旁。“你希望怎样了解这项工作？”
+        <<if maplebirch.get('Finance').company.ascension.active>><br><br>哈珀的目光在你身上停了一下。“塔楼那晚之后，你睡得怎么样？”你指了指目录。<<He>>笑了笑，把目录翻回刚才那页。“那就先谈交付。”<</if>>
+    <</language>>
+    <<run $harperSeen.pushUnique('hospital')>><br><br>
+    <<deadwood-card 'Following the hospital fund' '参与医院资助项目'>>
+      <<icon 'school/procurement-audit.png'>><<lanLink ['Request the purchase records (0:10)', '要求查看采购记录 (0:10)']>>
+        <<set _hospital_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.agree('hospital', 'accounts')>>
+          <<pass 10>>
+          <<if $passage is _hospital_source>>
+            <<replace '#deadwood-hospital-meeting'>>
+              <<language>>
+                <<option 'EN'>>
+                  Harper draws the catalogue closer. "You would like the figures as well as the thank-you letter." <<He>> writes a note on your receipt. "The invoices and the delivery report. We can go through them when the order arrives."
+                <<option 'CN'>>
+                  哈珀把目录拉近。“除了感谢信，你还想看具体的数字。”<<He>>在收据上记了一笔。“发票和交付报告。等订单送到，我们可以一起核对。”
+              <</language>><br><br>
+              <span class='gold'><<lanSwitch 'Agreed: a review of the hospital purchases and delivery charges.' '已谈妥：核对医院采购与交付费用。'>></span><br><br>
+              <<deadwood-hospital-donation-progress>>
+              <<deadwood-hospital-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='blue'><<lanSwitch 'Procurement accounts' '采购账目'>></span><br>
+      <<icon 'medicine/equipment-check.png'>><<lanLink ['Arrange to check the delivery (0:10)', '商定现场点验交付 (0:10)']>>
+        <<set _hospital_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.agree('hospital', 'delivery')>>
+          <<pass 10>>
+          <<if $passage is _hospital_source>>
+            <<replace '#deadwood-hospital-meeting'>>
+              <<language>>
+                <<option 'EN'>>
+                  "A look at the equipment itself." Harper marks the packing list. "That can be arranged. Bring your receipt to reception once the delivery is here. I'll show you the supplies before the ward staff take them through."
+                <<option 'CN'>>
+                  “想看看设备本身。”哈珀在装箱单上做了标记。“可以安排。等物资送到，把收据拿给前台。我会在病房工作人员领走之前，带你看看。”
+              <</language>><br><br>
+              <span class='gold'><<lanSwitch 'Agreed: check the donated equipment and supplies with Harper.' '已谈妥：与哈珀一起点验捐赠设备和耗材。'>></span><br><br>
+              <<deadwood-hospital-donation-progress>>
+              <<deadwood-hospital-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='blue'><<lanSwitch 'Equipment and supplies' '设备与耗材'>></span><br>
+    <</deadwood-card>>
+    <<deadwood-hospital-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'The receptionist asks you to return during a weekday office session to discuss the hospital fund.' '前台请你在工作日办公时段回来，商谈医院资助项目。'>><br><br>
+  <<deadwood-hospital-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Hospital Donation Accounts
+<<set $outside to 0>><<set $location to 'hospital'>><<effects>>
+<<set _hospital_aid to maplebirch.get('Finance').donations.aid>>
+<<if _hospital_aid.canAudit('hospital')>>
+  <<npc Harper>><<person1>>
+  <div id='deadwood-hospital-accounts'>
+    <<language>>
+      <<option 'EN'>>
+        Harper sets a purchase report on the desk, the supplier invoices clipped behind it. The installation and delivery invoice comes to <span class='gold'>£1,200</span>; the report sets aside <span class='gold'>£2,000</span> for that work.
+      <<option 'CN'>>
+        哈珀把采购报告放在桌上，供应商发票夹在后面。安装与交付发票的金额是<span class='gold'>£1,200</span>，报告却为这项工作列了<span class='gold'>£2,000</span>。
+    <</language>><br><br>
+    <<deadwood-card 'Hospital procurement report' '医院采购报告'>>
+      <<lanSwitch 'Monitoring and oxygen equipment' '监测与供氧设备'>>：<span class='gold'>£12,000</span><br>
+      <<lanSwitch 'Dressings and disposable supplies' '敷料与一次性耗材'>>：<span class='gold'>£6,000</span><br>
+      <<lanSwitch 'Installation and delivery' '安装与交付'>>：<span class='gold'>£2,000</span><br>
+      <<lanSwitch 'Total' '合计'>>：<span class='gold'>£20,000</span><br>
+    <</deadwood-card>>
+    <<if currentSkillValue('maths') gte 400>>
+      <<icon 'school/procurement-audit.png'>><<lanLink ['Ask for the £800 balance to replenish emergency supplies (0:10)', '要求将 £800 差额用于补充急救耗材 (0:10)']>>
+        <<set _hospital_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.audit('hospital', true)>>
+          <<pass 10>>
+          <<if $passage is _hospital_source>>
+            <<replace '#deadwood-hospital-accounts'>>
+              <<language>>
+                <<option 'EN'>>
+                  You match the invoice numbers to the delivery sheet and ask where the remaining eight hundred is going. Harper looks at your notes, then at you. "A reserve against further costs." You ask <<him>> to list those costs, or keep the money with the supplies the fund was raised for. <<He>> turns the report and writes a new figure. "The next replenishment, then. You do follow the details."
+                <<option 'CN'>>
+                  你对照发票号码与送货单，问剩下的八百镑会用在哪里。哈珀看了看你的笔记，又看向你。“预留给后续费用。”你请<<him>>列出那些费用，或把钱用于募款原本要补充的耗材。<<He>>转过报告，写上新的数字。“那就留给下次补充。你倒很注意细节。”
+              <</language>><br><br>
+              <span class='green'><<lanSwitch 'The report now lists £6,800 for emergency supplies and £1,200 for installation and delivery.' '报告已改为急救耗材 £6,800、安装与交付 £1,200。'>></span><br><br>
+              <<deadwood-hospital-donation-progress>>
+              <<deadwood-hospital-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='blue'><<lanSwitch 'Maths' '数学'>></span><br>
+    <</if>>
+    <<icon 'school/procurement-audit.png'>><<lanLink ['Acknowledge the report (0:10)', '确认这份报告 (0:10)']>>
+      <<set _hospital_source to $passage>>
+      <<if maplebirch.get('Finance').donations.aid.audit('hospital', false)>>
+        <<pass 10>>
+        <<if $passage is _hospital_source>>
+          <<replace '#deadwood-hospital-accounts'>>
+            <<lanSwitch 'You finish reading the report and return it. Harper adds your acknowledgement to the project file. "Thank you. We can look at the delivery as well."' '你读完报告，把它递了回去。哈珀将你的确认附在项目档案里。“谢谢。我们还可以看看送来的物资。”'>><br><br>
+            <<deadwood-hospital-donation-progress>>
+            <<deadwood-hospital-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br><br>
+    <<deadwood-hospital-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'The hospital purchase report is not available for review now.' '现在无法核对医院采购报告。'>><br><br>
+  <<deadwood-hospital-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Hospital Donation Inspection
+<<set $outside to 0>><<set $location to 'hospital'>><<effects>>
+<<set _hospital_aid to maplebirch.get('Finance').donations.aid>>
+<<if _hospital_aid.canInspect('hospital')>>
+  <<npc Harper>><<person1>>
+  <div id='deadwood-hospital-inspection'>
+    <<language>>
+      <<option 'EN'>>
+        Harper takes you to a room beside the supply store. A nurse opens the boxes while <<he>> reads from the packing list. There are wound dressings, sealed tubes, monitoring leads and oxygen fittings. Each unopened pack carries its batch number and expiry date.
+        <<if currentSkillValue('science') gte 400>><br><br>You compare the fittings with the equipment specification. One adaptor has the wrong connection. It belongs to another model.<</if>>
+      <<option 'CN'>>
+        哈珀带你来到物资库旁的一间房间。护士拆开箱子，<<he>>逐项读着装箱单。里面有伤口敷料、密封导管、监测导线和氧气接头。每包未拆封的耗材都印着批号与有效期。
+        <<if currentSkillValue('science') gte 400>><br><br>你对照设备规格检查接头。其中一个转接件的接口不对，是给另一种型号使用的。<</if>>
+    <</language>><br><br>
+    <<if currentSkillValue('science') gte 400>>
+      <<icon 'medicine/equipment-check.png'>><<lanLink ['Request the correct oxygen adaptor (0:15)', '要求补送正确的氧气转接件 (0:15)']>>
+        <<set _hospital_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.inspect('hospital', 'replace')>>
+          <<pass 15>>
+          <<if $passage is _hospital_source>>
+            <<replace '#deadwood-hospital-inspection'>>
+              <<language>>
+                <<option 'EN'>>
+                  You put the adaptor beside the specification. Harper reads both, then hands the part to the nurse. "Keep this one aside. I'll speak to the supplier." <<He>> circles the model number on the list. "We'll have the correct fitting tomorrow. Come back to confirm the completed delivery."
+                <<option 'CN'>>
+                  你把转接件放在规格表旁。哈珀对照看过，把零件交给护士。“先把这个单独放好。我会联系供应商。”<<He>>圈出清单上的型号。“明天会送来正确的接头。到时候再来确认完整的交付。”
+              <</language>><br><br>
+              <span class='blue'><<lanSwitch 'The replacement is due in one day.' '替换配件将在一天后送达。'>></span><br><br>
+              <<deadwood-hospital-donation-progress>>
+              <<deadwood-hospital-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='blue'><<lanSwitch 'Science' '科学'>></span><br>
+    <</if>>
+    <<icon 'medicine/emergency-supplies.png'>><<lanLink ['Accept the listed delivery (0:15)', '接受清单上的这批物资 (0:15)']>>
+      <<set _hospital_source to $passage>>
+      <<if maplebirch.get('Finance').donations.aid.inspect('hospital', 'accept')>>
+        <<pass 15>>
+        <<if $passage is _hospital_source>>
+          <<replace '#deadwood-hospital-inspection'>>
+            <<lanSwitch 'You finish matching the boxes to the packing list. Harper makes a note beside your receipt. "The ward staff will check the equipment before use. Let us finish the paperwork."' '你对照装箱单检查完箱子。哈珀在你的收据旁做了记录。“病房工作人员会在使用前检查设备。我们把手续办完吧。”'>><br><br>
+            <<deadwood-hospital-donation-progress>>
+            <<deadwood-hospital-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br><br>
+    <<deadwood-hospital-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'The emergency equipment delivery is not ready for inspection now.' '这批急救设备现在还无法点验。'>><br><br>
+  <<deadwood-hospital-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Hospital Donation Receipt
+<<set $outside to 0>><<set $location to 'hospital'>><<effects>>
+<<set _hospital_aid to maplebirch.get('Finance').donations.aid>>
+<<if _hospital_aid.canSign('hospital')>>
+  <<npc Harper>><<person1>>
+  <div id='deadwood-hospital-receipt'>
+    <<language>>
+      <<option 'EN'>>
+        Harper lays the delivery receipt across the desk. <<if _hospital_aid.state('hospital').equipment is 'replaced'>>The correct adaptor has been added to the list, with the supplier's replacement note attached.<</if>> <<He>> points to the acknowledgement. "This records the delivery you came to see. Reception will keep a copy for you."
+      <<option 'CN'>>
+        哈珀把物资收据铺在桌上。<<if _hospital_aid.state('hospital').equipment is 'replaced'>>正确的转接件已经补进清单，旁边附着供应商的换货说明。<</if>><<He>>指向确认栏。“这里记录你来核对的交付。前台会替你留一份副本。”
+    <</language>><br><br>
+    <<icon 'school/delivery-receipt.png'>><<lanLink ['Sign the delivery acknowledgement (0:05)', '签署物资交付确认 (0:05)']>>
+      <<set _hospital_source to $passage>>
+      <<if maplebirch.get('Finance').donations.aid.sign('hospital')>>
+        <<pass 5>>
+        <<if $passage is _hospital_source>>
+          <<replace '#deadwood-hospital-receipt'>>
+            <<language>>
+              <<option 'EN'>>
+                Harper stamps the document and hands you your copy. "Very useful. I hope you'll keep taking an interest." <<He>> puts the project folder to one side and looks at you again. "If you want to hear how the supplies are being used, ask at reception another day."
+                <br><br>
+                <<if $harper_appointments?.enabled>>"Your regular appointment is still on Friday. Reception keeps that booking separately."<<elseif $schoolPsych>>"I see the school has referred you. Show reception the card when you want to discuss that appointment."<<else>>"Reception can explain the ordinary appointments and procedures when you need them."<</if>> <<He>> opens the office door for you.
+              <<option 'CN'>>
+                哈珀在文件上盖章，把副本递给你。“很有用。希望你今后也愿意关心这些。”<<He>>把项目档案放到一边，又看向你。“想了解物资的使用情况，可以改天向前台问一声。”
+                <br><br>
+                <<if $harper_appointments?.enabled>>“你的常规预约仍在周五。前台会另外保留那份预约。”<<elseif $schoolPsych>>“学校已经替你转介了。想商量那次预约时，把卡片给前台看。”<<else>>“有需要时，前台可以向你说明普通预约与诊疗项目。”<</if>><<He>>为你打开办公室的门。
+            <</language>><br><br>
+            <span class='green'><<lanSwitch 'The hospital delivery has been recorded.' '医院物资交付已完成登记。'>></span><br><br>
+            <<deadwood-hospital-donation-benefits>>
+            <<deadwood-hospital-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br><br>
+    <<deadwood-hospital-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'The hospital delivery acknowledgement is not ready to be signed now.' '现在还无法签署医院物资交付确认。'>><br><br>
+  <<deadwood-hospital-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Hospital Donation Followup
+<<set $outside to 0>><<set $location to 'hospital'>><<effects>>
+<<set _hospital_aid to maplebirch.get('Finance').donations.aid>>
+<<if _hospital_aid.canFollow('hospital')>>
+  <<npc Harper>><<person1>>
+  <div id='deadwood-hospital-followup'>
+    <<language>>
+      <<option 'EN'>>
+        The receptionist sends a message through to Harper. <<He>> meets you beside the supply corridor, holding a stock sheet. "You wanted to hear what came of your support?"
+      <<option 'CN'>>
+        前台向哈珀传了话。<<He>>拿着库存单，在物资走廊旁与你见面。“你想了解那笔资助的后续？”
+    <</language>><br><br>
+    <<socialiseicon>><<lanLink ['Ask about the equipment and ward supplies (0:05)', '聊聊设备和病房耗材的使用情况 (0:05)']>>
+      <<set _hospital_source to $passage>>
+      <<if maplebirch.get('Finance').donations.aid.follow('hospital')>>
+        <<pass 5>>
+        <<if $passage is _hospital_source>>
+          <<replace '#deadwood-hospital-followup'>>
+            <<language>>
+              <<option 'EN'>>
+                "The new monitoring equipment is in the treatment rooms. The dressings are already on the ward trolleys." Harper runs a finger down the stock sheet. "A donation is useful when people can reach what they need."
+                <<if maplebirch.get('Finance').donations.aid.state('hospital').equipment is 'replaced'>><br><br>"The replacement fitting passed the staff check." <<He>> looks up at you. "You spotted that before the delivery was signed off. A good eye."<</if>>
+                <<if maplebirch.get('Finance').donations.aid.state('hospital').accounts is 'corrected'>><br><br>"And the remaining eight hundred stays with the emergency supplies. It is marked on the next replenishment sheet." <<He>> turns the sheet so you can read the entry.<</if>>
+                <br><br>
+                <<if maplebirch.get('Finance').company.ascension.active>>Harper lowers <<his>> voice. "I'd still like to hear about your sleep." You keep your answer brief. <<He>> watches you for a moment, then folds the sheet. "Another time, perhaps."
+                <<elseif $harperSeen.includes('livestock')>>Harper notices your glance towards the treatment rooms. "The equipment here is for these wards," <<he>> says. <<His>> smile remains in place as <<he>> folds the sheet.
+                <<else>>"You've been very attentive," Harper says. <<His>> gaze returns to your face. "I hope you're looking after yourself as carefully." <<He>> folds the sheet.<</if>>
+              <<option 'CN'>>
+                “新的监测设备已经放进诊疗室。敷料也补到了病房推车上。”哈珀沿着库存单划过一行。“有人能拿到需要的东西，资助才算有用。”
+                <<if maplebirch.get('Finance').donations.aid.state('hospital').equipment is 'replaced'>><br><br>“补送的接头通过了工作人员的检查。”<<He>>抬头看向你。“签收之前，你就发现了。眼力不错。”<</if>>
+                <<if maplebirch.get('Finance').donations.aid.state('hospital').accounts is 'corrected'>><br><br>“剩下的八百镑，也留在急救耗材项目里。下一次补充的清单上已经注明了。”<<He>>把纸转向你，让你看那条记录。<</if>>
+                <br><br>
+                <<if maplebirch.get('Finance').company.ascension.active>>哈珀压低声音。“我还是想听听你最近睡得怎样。”你只简短答了几句。<<He>>看了你片刻，随后把库存单叠好。“也许，下次再谈。”
+                <<elseif $harperSeen.includes('livestock')>>哈珀察觉到你看向诊疗室的目光。“这里的设备用于这些病房。”<<He>>说。叠起库存单时，<<his>>的微笑仍留在脸上。
+                <<else>>“你很上心。”哈珀说，目光又回到你的脸上。“希望你照顾自己时，也同样仔细。”<<He>>把库存单叠好。<</if>>
+            <</language>><br><br>
+            <<language>>
+              <<option 'EN'>>
+                The receptionist shows you a short account of the delivery prepared for the hospital noticeboard. Your contribution is named beside the new equipment. Harper says that a factory producing suitable storage goods can be sent routine purchasing enquiries.
+              <<option 'CN'>>
+                前台给你看准备贴上医院告示板的交付简报。新设备旁记着你的资助。哈珀说，生产合适储物用品的工厂，可以收到日常采购询价。
+            <</language>><br><br>
+            <<deadwood-hospital-donation-benefits>>
+            <<deadwood-hospital-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br><br>
+    <<deadwood-hospital-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'Harper has no new supply report to discuss with you now.' '哈珀现在没有新的物资使用报告可和你讨论。'>><br><br>
+  <<deadwood-hospital-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Hospital Donation Privileges
+<<set $outside to 0>><<set $location to 'hospital'>><<effects>>
+<<set _hospital_aid to maplebirch.get('Finance').donations.aid>>
+<<if _hospital_aid.available('hospital') and (_hospital_aid.canGrant('hospital') or _hospital_aid.has('hospital'))>>
+  <<npc Harper>><<person1>>
+  <div id='deadwood-hospital-privileges'>
+    <<language>>
+      <<option 'EN'>>
+        Harper takes the completed donation file from a shelf. "A hospital ought to look after the people who look after it." <<He>> smiles, keeping a finger between the pages. "I can arrange a reduced fee for our private parasite treatment. And reception can reserve a short consultation each week. You can tell me how you've been keeping."
+        <<if $harperSeen.includes('party') or maplebirch.get('Finance').company.ascension.active>>"We have plenty to talk about, I'm sure." <<His>> smile lingers a little too long.<</if>>
+      <<option 'CN'>>
+        哈珀从架上取下办完的捐款档案。“医院应该照顾愿意照顾它的人。”<<He>>微笑着，一根手指夹在书页间。“我们的私密寄生虫治疗，可以给你减免部分费用。前台也能每周留出一次简短的咨询时间。你可以告诉我，最近身体怎么样。”
+        <<if $harperSeen.includes('party') or maplebirch.get('Finance').company.ascension.active>>“我想，我们有不少可以聊的。”<<His>>的笑容停留得稍久了些。<</if>>
+    <</language>><br><br>
+    <<deadwood-card 'Hospital benefactor arrangements' '医院资助者待遇'>>
+      <<lanSwitch 'Private parasite treatment: 25% off the usual fee.' '私密寄生虫治疗：费用减免 25%。'>><br>
+      <<lanSwitch 'Routine consultation: one 20-minute appointment each week; reduces pain and stress.' '常规咨询：每周一次，20 分钟；减少疼痛与压力。'>><br>
+      <<if _hospital_aid.canGrant('hospital')>>
+        <<icon 'company/agreement.png'>><<lanLink ['Accept the written arrangements (0:10)', '确认书面安排 (0:10)']>>
+          <<set _hospital_source to $passage>>
+          <<if maplebirch.get('Finance').donations.aid.grant('hospital')>>
+            <<control 3>><<pass 10>>
+            <<if $passage is _hospital_source>>
+              <<replace '#deadwood-hospital-privileges'>>
+                <<lanSwitch 'Harper signs the fee arrangement and sends a copy to reception. "Show them this when you come for treatment. They will know who you are." You keep the copy bearing your name.' '哈珀签好费用安排，将一份交给前台。“来治疗时，给他们看这个。他们会知道你是谁。”你收好写着自己姓名的副本。'>><<gcontrol>><br><br>
+                <span class='green'><<lanSwitch 'Your reduced treatment fee and weekly consultation are active.' '治疗费用优惠与每周咨询已生效。'>></span><br>
+                <<deadwood-hospital-donation-benefits>><<deadwood-hospital-donation-exit>>
+              <</replace>><<run updateMoment()>>
+            <</if>>
+          <</if>>
+        <</lanLink>> | <span class='green'><<lanSwitch 'Control' '自控'>></span><br>
+      <<else>>
+        <span class='green'><<lanSwitch 'These arrangements are active.' '这些安排已经生效。'>></span><br>
+      <</if>>
+    <</deadwood-card>>
+    <<if _hospital_aid.canUse('hospital', 'visit')>>
+      <<icon 'medicine/routine-consultation.png'>><<lanLink ['Use your routine consultation (0:20)', '接受常规健康咨询 (0:20)']>>
+        <<set _hospital_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.use('hospital', 'visit')>>
+          <<pass 20>>
+          <<if $passage is _hospital_source>>
+            <<pain -12>><<stress -6>>
+            <<replace '#deadwood-hospital-privileges'>>
+              <<language>>
+                <<option 'EN'>>
+                  Harper asks about sleep, food and any aches you've noticed. <<He>> takes your pulse with practised fingers, then checks the notes in your file. "Take the opportunity to rest when you can. You have rather a lot going on." A nurse brings a cold compress and stays while you use it. You feel steadier when you stand to leave. Harper watches you put the compress down before closing the file.
+                <<option 'CN'>>
+                  哈珀问起睡眠、饮食和近来的疼痛。<<He>>熟练地按着你的脉搏，又核对档案里的记录。“有机会就休息一下。你要操心的事情可不少。”护士送来冷敷袋，在一旁等着你用完。起身准备离开时，你觉得舒缓了些。哈珀看着你放下冷敷袋，才合上档案。
+              <</language>><<lpain>><<lstress>><br><br>
+              <<deadwood-hospital-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='green'><<lanSwitch '− Pain, − Stress' '− 疼痛，− 压力'>></span><br>
+    <</if>>
+    <<deadwood-hospital-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'The hospital cannot arrange a benefactor consultation now.' '医院现在无法安排资助者咨询。'>><br><br>
+  <<deadwood-hospital-donation-exit>>
+<</if>>

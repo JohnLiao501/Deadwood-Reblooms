@@ -1,0 +1,479 @@
+:: Deadwood Reblooms Temple Donation Widgets [widget]
+
+<<widget 'deadwood-temple-donation-exit'>>
+  <<getouticon>><<lanLink ['Step away', '走开'] 'Temple'>><<endevent>><</lanLink>><br>
+<</widget>>
+
+<<widget 'deadwood-temple-donation-progress'>><<silently>>
+  <<set _temple_aid to maplebirch.get('Finance').donations.aid>>
+  <<set _temple_show to _temple_aid.canAudit('temple') or _temple_aid.canInspect('temple') or _temple_aid.canSign('temple')>>
+<</silently>><<if _temple_show>>
+  <<if _temple_aid.canAudit('temple')>>
+    <<icon 'school/procurement-audit.png'>><<lanLink ['Review the relief purchases', '核对救济物资的采购账目'] 'Deadwood Reblooms Temple Donation Accounts'>><</lanLink>><br>
+  <</if>>
+  <<if _temple_aid.canInspect('temple')>>
+    <<icon 'temple/relief-supplies.png'>><<lanLink ['Check the delivered supplies with Jordan', '和约旦一起点验物资'] 'Deadwood Reblooms Temple Donation Inspection'>><</lanLink>><br>
+  <</if>>
+  <<if _temple_aid.canSign('temple')>>
+    <<icon 'school/delivery-receipt.png'>><<lanLink ['Sign the delivery record', '签署交付记录'] 'Deadwood Reblooms Temple Donation Receipt'>><</lanLink>><br>
+  <</if>>
+<</if>><</widget>>
+
+<<widget 'deadwood-temple-donation-links'>><<silently>>
+  <<set _temple_aid to maplebirch.get('Finance').donations.aid>>
+  <<set _temple_show to $passage is 'Temple Jordan' and _temple_aid.available('temple') and (_temple_aid.canMeet('temple') or _temple_aid.canAudit('temple') or _temple_aid.canInspect('temple') or _temple_aid.canSign('temple') or _temple_aid.canFollow('temple') or _temple_aid.canGrant('temple') or _temple_aid.has('temple'))>>
+<</silently>><<if _temple_show>>
+  <<if _temple_aid.canMeet('temple')>>
+    <<icon 'temple/relief-supplies.png'>><<lanLink ['Discuss the relief fund with Jordan', '和约旦商谈救济资助'] 'Deadwood Reblooms Temple Donation Meeting'>><</lanLink>><br>
+  <</if>>
+  <<deadwood-temple-donation-progress>>
+  <<if _temple_aid.canFollow('temple')>>
+    <<socialiseicon 'ask'>><<lanLink ['Ask where the supplies went', '问问物资送到了哪里'] 'Deadwood Reblooms Temple Donation Followup'>><</lanLink>><br>
+  <</if>>
+  <<deadwood-temple-donation-benefits>>
+<</if>><</widget>>
+
+<<widget 'deadwood-temple-donation-supplies'>><<silently>>
+  <<set _temple_aid to maplebirch.get('Finance').donations.aid>>
+  <<set _temple_links to new maplebirch.tool.link()>><<run _temple_links.detect()>>
+  <<set _temple_normal to $passage is 'Temple' and _temple_links.links.some(link => link.getAttribute('data-passage') === 'Wolf Street') or $passage is 'Soup Kitchen' and Time.hour gte 18 and Time.hour lt 21 and _temple_links.links.some(link => link.getAttribute('data-passage') === 'Soup Kitchen Work')>>
+  <<set _temple_show to _temple_aid.ready('temple') and _temple_normal and !$combat and !$possessed and !$nextPassageCheck and !$replayScene and !$statFreeze>>
+<</silently>><<if _temple_show>>
+  <<if $passage is 'Soup Kitchen'>>
+    <<language>>
+      <<option 'EN'>>
+        A delivery notice beside the kitchen door records food bought through the temple relief fund. The shelves hold new sacks of rice and tins of vegetables. <<if maplebirch.get('Finance').donations.state.named.temple gt 0>>Your name appears among the contributors.<<else>>The notice thanks the anonymous contributors.<</if>>
+      <<option 'CN'>>
+        厨房门旁的交货告示记着神殿救济基金购置的食物。货架上添了米袋和蔬菜罐头。<<if maplebirch.get('Finance').donations.state.named.temple gt 0>>你的名字列在资助者之中。<<else>>告示上写着对匿名资助者的感谢。<</if>>
+    <</language>><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        A list beside the side door records the relief fund's deliveries: food for the soup kitchen and blankets for distribution. Folded blankets fill the shelves beyond the doorway. <<if maplebirch.get('Finance').donations.state.named.temple gt 0>>Your name appears among the contributors.<<else>>A line at the bottom thanks the anonymous contributors.<</if>>
+      <<option 'CN'>>
+        侧门旁的清单记着救济基金的交货情况：送往施粥处的食物，以及待分发的毯子。门后的货架上，毯子叠放得整整齐齐。<<if maplebirch.get('Finance').donations.state.named.temple gt 0>>你的名字列在资助者之中。<<else>>清单末尾写着对匿名资助者的感谢。<</if>>
+    <</language>><br>
+  <</if>>
+  <<deadwood-temple-donation-benefits>>
+<</if>><</widget>>
+
+<<widget 'deadwood-temple-donation-benefits'>><<silently>>
+  <<set _temple_aid to maplebirch.get('Finance').donations.aid>>
+  <<set _temple_rights to _temple_aid.available('temple') and (_temple_aid.canGrant('temple') or _temple_aid.has('temple'))>>
+<</silently>><<if _temple_rights>>
+  <<if $passage isnot 'Deadwood Reblooms Temple Donation Privileges'>>
+    <<socialiseicon 'ask'>><<lanLink ['Discuss your arrangements as a temple benefactor', '商谈神殿资助者的待遇'] 'Deadwood Reblooms Temple Donation Privileges'>><</lanLink>><br>
+  <</if>>
+  <<if _temple_aid.canUse('temple', 'rest')>>
+    <<icon 'temple/quiet-room.png'>><<lanLink ['Use the quiet room', '借用安静的房间'] 'Deadwood Reblooms Temple Donation Rest'>><</lanLink>><br>
+  <</if>>
+<</if>><</widget>>
+
+<<widget 'deadwood-temple-donation-refusal'>>
+  <<language>>
+    <<option 'EN'>>
+      Jordan closes the ledger. "No, child. Keep yourself covered in this place." <<His>> voice loses its earlier warmth. "You know what is expected of our members."
+    <<option 'CN'>>
+      约旦合上账簿。“不行，我的孩子。在这里，穿好衣服。”<<His>>的声音不再像先前那样温和。“你知道，我们对成员有什么要求。”
+  <</language>><br><br>
+  <<if maplebirch.get('Finance').donations.aid.canPrivacy>>
+    <<socialiseicon 'ask'>><<lanLink ['Insist on an exception in the private residential areas (0:05)', '坚持要求在私人居住区域通融 (0:05)']>>
+      <<set _temple_source to $passage>>
+      <<if maplebirch.get('Finance').donations.aid.privacy()>>
+        <<pass 5>>
+        <<if $passage is _temple_source>>
+          <<replace '#deadwood-temple-privileges'>>
+            <<language>>
+              <<option 'EN'>>
+                You ask again, limiting the request to the rooms away from visitors. Jordan holds your gaze, then exhales through <<his>> nose. "I have heard you." <<He>> presses a finger against the closed ledger. "The cloister, garden and dormitory. Quietly. I will tolerate it there." <<His>> expression remains stern. "Come to me clothed. And dress properly for the public services."
+              <<option 'CN'>>
+                你再次提出要求，只限于远离访客的那些地方。约旦盯着你，从鼻间缓缓呼出一口气。“我听见了。”<<He>>用一根手指按着合好的账簿。“回廊、花园和宿舍。安静些。在那几个地方，我勉强容忍。”<<His>>的神色仍然严肃。“来见我时，穿好衣服。参加公开仪式时，也要穿着整齐。”
+            <</language>><br><br>
+            <span class='blue'><<lanSwitch 'Jordan reluctantly tolerates unclothed use of the private residential areas.' '约旦勉强容忍你在私人居住区域裸身活动。'>></span><br><br>
+            <<deadwood-temple-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br>
+  <</if>>
+<</widget>>
+
+:: Deadwood Reblooms Temple Donation Meeting
+<<set $outside to 0>><<location 'temple'>><<temple_effects>><<effects>>
+<<set _temple_aid to maplebirch.get('Finance').donations.aid>>
+<<if _temple_aid.canMeet('temple')>>
+  <<npc Jordan>><<person1>>
+  <div id='deadwood-temple-meeting'>
+    <<language>>
+      <<option 'EN'>>
+        Jordan studies the receipt you hand over, then unfolds the relief fund's list. "Thank you, my child. Food and blankets can make a difficult week a little easier."
+        <<if ['initiate', 'monk', 'priest'].includes($temple_rank)>><<if $grace gte 80>><<He>> looks up at you. "You've already given us your time. We can put this to good use as well."<<else>><<He>> rests a finger on the list. "Perhaps you've seen how quickly the supplies are used."<</if>><<else>>"You can see where it goes," <<he>> continues, setting the receipt beside the list.<</if>>
+        <br><br>
+        "River uses the food at the soup kitchen. Our members will distribute the blankets." <<He>> draws a blank form towards <<himself>>. "Would you like to review the purchases, or help us settle the delivery arrangements?"
+      <<option 'CN'>>
+        约旦看过你递来的收据，展开救济基金的物资清单。“谢谢你，我的孩子。有了食物和毯子，难熬的一周也能好过一些。”
+        <<if ['initiate', 'monk', 'priest'].includes($temple_rank)>><<if $grace gte 80>><<He>>抬头看向你。“你已经为这里付出过时间。这笔资助，我们也会用好。”<<else>><<He>>把手指放在清单上。“也许你已经见过，物资用起来有多快。”<</if>><<else>>“你可以看看它们送去了哪里。”<<he>>接着说，将收据放在清单旁。<</if>>
+        <br><br>
+        “瑞沃会在施粥处使用这些食物。毯子由我们的成员分发。”<<He>>拉过一张空白表格。“你想查看采购情况，还是参与安排交货？”
+    <</language>><br><br>
+    <<deadwood-card 'Relief arrangements' '救济安排'>>
+      <<icon 'school/procurement-audit.png'>><<lanLink ['Request the procurement records (0:10)', '要求提供采购记录 (0:10)']>>
+        <<set _temple_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.agree('temple', 'accounts')>>
+          <<pass 10>>
+          <<if $passage is _temple_source>>
+            <<replace '#deadwood-temple-meeting'>>
+              <<language>>
+                <<option 'EN'>>
+                  Jordan writes your request on the form. "The invoices and delivery notes will be kept together. You can compare them with the supplies when they arrive." <<He>> smooths the paper against the desk. "Tell me if something doesn't agree."
+                <<option 'CN'>>
+                  约旦把你的要求写在表格上。“发票和交货单会放在一起。到货后，你可以对照物资检查。”<<He>>将纸张在桌面上抚平。“哪里对不上，就告诉我。”
+              <</language>><br><br>
+              <span class='gold'><<lanSwitch 'Agreed: procurement records and delivery notes.' '已谈妥：提供采购记录与交货单。'>></span><br><br>
+              <<deadwood-temple-donation-progress>>
+              <<deadwood-temple-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='blue'><<lanSwitch 'Review the cost and quantities' '核对费用与数量'>></span><br>
+      <<icon 'temple/relief-supplies.png'>><<lanLink ['Help arrange the delivery (0:10)', '参与安排物资交付 (0:10)']>>
+        <<set _temple_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.agree('temple', 'delivery')>>
+          <<pass 10>>
+          <<if $passage is _temple_source>>
+            <<replace '#deadwood-temple-meeting'>>
+              <<language>>
+                <<option 'EN'>>
+                  You ask for the food to be set aside for the kitchen before the blankets are sorted for distribution. Jordan adds the arrangement to the delivery sheet. "Then River can check the food before the evening service. Come and count the supplies with me once they're here."
+                <<option 'CN'>>
+                  你提议先分出送往施粥处的食物，再整理待分发的毯子。约旦把安排添到交货单上。“这样，瑞沃就能在晚间开饭前检查食物。等东西到了，你来和我一起点数。”
+              <</language>><br><br>
+              <span class='gold'><<lanSwitch 'Agreed: check and separate the supplies before distribution.' '已谈妥：分发前点验物资，并按去向分装。'>></span><br><br>
+              <<deadwood-temple-donation-progress>>
+              <<deadwood-temple-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='blue'><<lanSwitch 'Food for the kitchen and blankets for relief' '食物送往施粥处，毯子用于救济'>></span><br>
+    <</deadwood-card>>
+    <<deadwood-temple-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'You cannot discuss the relief fund with Jordan at the moment.' '你现在无法和约旦商谈救济资助。'>><br><br>
+  <<deadwood-temple-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Temple Donation Accounts
+<<set $outside to 0>><<location 'temple'>><<temple_effects>><<effects>>
+<<set _temple_aid to maplebirch.get('Finance').donations.aid>>
+<<if _temple_aid.canAudit('temple')>>
+  <<npc Jordan>><<person1>>
+  <div id='deadwood-temple-accounts'>
+    <<language>>
+      <<option 'EN'>>
+        Jordan lays the invoices beside the delivery notes. Food, blankets and transport each have their own entry. <<if currentSkillValue('maths') gte 400>>You follow the figures across the page. A delivery charge has been included in the food total, then charged again at the bottom.<</if>>
+      <<option 'CN'>>
+        约旦将发票放在交货单旁。食物、毯子和运输各列一项。<<if currentSkillValue('maths') gte 400>>你顺着页面上的数字核算下去。运费已计入食物总价，却又在页面底部收了一次。<</if>>
+    <</language>><br><br>
+    <<if currentSkillValue('maths') gte 400>>
+      <<icon 'school/procurement-audit.png'>><<lanLink ['Check the totals and request a correction (0:10)', '核对总额，要求更正账目 (0:10)']>>
+        <<set _temple_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.audit('temple', true)>>
+          <<pass 10>>
+          <<if $passage is _temple_source>>
+            <<replace '#deadwood-temple-accounts'>>
+              <<language>>
+                <<option 'EN'>>
+                  You add the charges again and point out the repeated entry. Jordan follows your figures, then circles the delivery charge. "You're right. I'll have them correct this before we close the account." <<He>> places your calculation beside the invoice. "The difference will remain in the relief fund."
+                <<option 'CN'>>
+                  你重新加了一遍各项费用，指出重复的那一笔。约旦沿着你的算式看下去，圈出运费。“你说得对。结账前，我会让他们更正。”<<He>>把你的计算放在发票旁。“差额仍留在救济基金里。”
+              <</language>><br><br>
+              <span class='green'><<lanSwitch 'The duplicated transport charge has been identified.' '已查明重复收取的运费。'>></span><br><br>
+              <<deadwood-temple-donation-progress>>
+              <<deadwood-temple-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='blue'><<lanSwitch 'Maths' '数学'>></span><br>
+    <</if>>
+    <<icon 'school/procurement-audit.png'>><<lanLink ['Read the purchasing summary (0:10)', '查看采购摘要 (0:10)']>>
+      <<set _temple_source to $passage>>
+      <<if maplebirch.get('Finance').donations.aid.audit('temple', false)>>
+        <<pass 10>>
+        <<if $passage is _temple_source>>
+          <<replace '#deadwood-temple-accounts'>>
+            <<lanSwitch 'You read through the list of purchases. Jordan notes that you have seen the records, then gathers them back into their folder.' '你看过采购清单。约旦记下你已经查阅，将记录收回档案夹。'>><br><br>
+            <<deadwood-temple-donation-progress>>
+            <<deadwood-temple-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br>
+    <<deadwood-temple-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'The relief accounts are not available for review now.' '现在无法查阅救济物资的账目。'>><br><br>
+  <<deadwood-temple-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Temple Donation Inspection
+<<set $outside to 0>><<location 'temple'>><<temple_effects>><<effects>>
+<<set _temple_aid to maplebirch.get('Finance').donations.aid>>
+<<if _temple_aid.canInspect('temple')>>
+  <<npc Jordan>><<person1>>
+  <div id='deadwood-temple-inspection'>
+    <<language>>
+      <<option 'EN'>>
+        Jordan leads you to a shelf beside the side door. Sacks of rice stand beneath boxes of tinned vegetables, with bundles of blankets piled separately. <<He>> holds the delivery note while you check the labels. The supplier has entered the blankets by the bundle; the order lists individual blankets.
+        <<if currentSkillValue('housekeeping') gte 400>>You turn a sack to check its seam and set the intact food packages together.<</if>>
+      <<option 'CN'>>
+        约旦带你来到侧门旁的货架。米袋上放着蔬菜罐头箱，成捆的毯子另堆一边。<<He>>拿着交货单，你检查标签。供应商按捆填写毯子的数量，订单上列的却是条数。
+        <<if currentSkillValue('housekeeping') gte 400>>你转过一只米袋检查缝口，将包装完好的食物摆在一起。<</if>>
+    <</language>><br><br>
+    <<if currentSkillValue('maths') gte 400>>
+      <<icon 'temple/relief-supplies.png'>><<lanLink ['Count the blankets and request the missing ones (0:15)', '点清毯子，要求补齐缺货 (0:15)']>>
+        <<set _temple_source to $passage>>
+        <<if maplebirch.get('Finance').donations.aid.inspect('temple', 'replace')>>
+          <<pass 15>>
+          <<if $passage is _temple_source>>
+            <<replace '#deadwood-temple-inspection'>>
+              <<language>>
+                <<option 'EN'>>
+                  You open the bundles and count their contents against the order. Several blankets are missing. Jordan checks your total, then writes the shortage on the delivery note. "They'll send the rest. We'll keep these apart until the order is complete."
+                <<option 'CN'>>
+                  你拆开捆包，对照订单逐条点数，发现少了几条。约旦核对你的总数，在交货单上记下缺货。“他们会把余下的送来。订单补齐前，这些先另放一边。”
+              <</language>><br><br>
+              <span class='blue'><<lanSwitch 'The missing blankets are due the following day.' '缺少的毯子预计次日补送。'>></span><br><br>
+              <<deadwood-temple-donation-progress>>
+              <<deadwood-temple-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='blue'><<lanSwitch 'Maths' '数学'>></span><br>
+    <</if>>
+    <<icon 'temple/relief-supplies.png'>><<lanLink ['Check the packages and accept the delivery (0:15)', '检查包装，接受这批交货 (0:15)']>>
+      <<set _temple_source to $passage>>
+      <<if maplebirch.get('Finance').donations.aid.inspect('temple', 'accept')>>
+        <<pass 15>>
+        <<if $passage is _temple_source>>
+          <<replace '#deadwood-temple-inspection'>>
+            <<lanSwitch 'You check the sealed packages and look over the blankets. Jordan marks the delivery as inspected. The supplies are ready to be signed into the relief stock.' '你检查了密封包装，翻看毯子。约旦记下物资已经点验。这批物资可以办理签收了。'>><br><br>
+            <<deadwood-temple-donation-progress>>
+            <<deadwood-temple-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br>
+    <<deadwood-temple-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'Jordan cannot inspect the relief supplies with you now.' '约旦现在无法和你一起点验救济物资。'>><br><br>
+  <<deadwood-temple-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Temple Donation Receipt
+<<set $outside to 0>><<location 'temple'>><<temple_effects>><<effects>>
+<<set _temple_aid to maplebirch.get('Finance').donations.aid>>
+<<if _temple_aid.canSign('temple')>>
+  <<npc Jordan>><<person1>>
+  <div id='deadwood-temple-receipt'>
+    <<language>>
+      <<option 'EN'>>
+        Jordan places the delivery record before you. Food for the soup kitchen is listed separately from the blankets. <<if _temple_aid.state('temple').equipment is 'replaced'>>The additional blankets have arrived, and their quantity is written beneath the original entry.<</if>> "We can send these on," <<he>> says, offering you a pen.
+      <<option 'CN'>>
+        约旦将交付记录放到你面前。送往施粥处的食物和毯子分开列着。<<if _temple_aid.state('temple').equipment is 'replaced'>>补送的毯子已经到了，数量写在原有记录下方。<</if>>“可以往下送了。”<<he>>说，将笔递给你。
+    <</language>><br><br>
+    <<icon 'school/delivery-receipt.png'>><<lanLink ['Sign the relief delivery record (0:05)', '签署救济物资交付记录 (0:05)']>>
+      <<set _temple_source to $passage>>
+      <<if maplebirch.get('Finance').donations.aid.sign('temple')>>
+        <<pass 5>>
+        <<if $passage is _temple_source>>
+          <<replace '#deadwood-temple-receipt'>>
+            <<set $soup_kitchen_known to 1>>
+            <<language>>
+              <<option 'EN'>>
+                You sign beside the quantities you checked. Jordan adds <<his>> signature, then passes the kitchen's copy to a waiting <<monk>>. "The grey building next door, on Wolf Street," <<he>> tells you. "River serves there between six and nine in the evening. You can see the food being used, or offer a hand."
+                <<if maplebirch.get('Finance').company.ascension.state.jordan_told>><br><br><<He>> glances briefly at your chest, then back at your face. "Take care of yourself as well, my child."<</if>>
+              <<option 'CN'>>
+                你在核对过的数量旁签名。约旦也签好，将施粥处那份递给等候的<<monk>>。“就在狼街，隔壁的灰色楼房。”<<he>>告诉你。“瑞沃晚上六点到九点在那里开饭。你可以看看食物怎样用，也可以搭把手。”
+                <<if maplebirch.get('Finance').company.ascension.state.jordan_told>><br><br><<He>>短暂看向你的胸口，又望回你的脸。“也照顾好自己，我的孩子。”<</if>>
+            <</language>><br><br>
+            <span class='green'><<lanSwitch 'The relief supplies have been signed in.' '救济物资已完成签收。'>></span><br><br>
+            <<deadwood-temple-donation-benefits>>
+            <<deadwood-temple-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br>
+    <<deadwood-temple-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'The relief delivery is not ready to be signed in now.' '这批救济物资现在还无法签收。'>><br><br>
+  <<deadwood-temple-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Temple Donation Followup
+<<set $outside to 0>><<location 'temple'>><<temple_effects>><<effects>>
+<<set _temple_aid to maplebirch.get('Finance').donations.aid>>
+<<if _temple_aid.canFollow('temple')>>
+  <<npc Jordan>><<person1>>
+  <div id='deadwood-temple-followup'>
+    <<language>>
+      <<option 'EN'>>
+        You ask what became of the supplies. Jordan turns to a page of signed delivery notes. "The food reached River. Some of the blankets have gone out, and the rest are being kept for the next distribution." <<He>> shows you the dates beside the entries.
+      <<option 'CN'>>
+        你问起物资的去向。约旦翻到一页签过字的交货单。“食物送到瑞沃那里了。毯子已经发出一部分，余下的留待下一次分发。”<<He>>把记录旁的日期指给你看。
+    <</language>><br><br>
+    <<socialiseicon 'ask'>><<lanLink ['Hear Jordan’s report (0:05)', '听约旦说明后续情况 (0:05)']>>
+      <<set _temple_source to $passage>>
+      <<if maplebirch.get('Finance').donations.aid.follow('temple')>>
+        <<pass 5>>
+        <<if $passage is _temple_source>>
+          <<replace '#deadwood-temple-followup'>>
+            <<language>>
+              <<option 'EN'>>
+                <<if _temple_aid.state('temple').accounts is 'corrected' or _temple_aid.state('temple').equipment is 'replaced'>>"Keeping the records properly saved us trouble," Jordan says. "I'll have the next delivery checked against the order before it is put away."<<else>>"It has helped us keep the shelves stocked," Jordan says. "Thank you for seeing it through."<</if>>
+                <<if ['initiate', 'monk', 'priest'].includes($temple_rank)>><<if $grace gte 80>><br><br>"If you notice another need in the course of your duties, tell me. A clear list makes it easier to arrange."<<else>><br><br>"When you're carrying out your duties, you may see something we've missed. You can bring it to me."<</if>><<else>><br><br>"You are welcome to ask about the supplies again," <<he>> adds. "River can show you the kitchen's work."<</if>>
+              <<option 'CN'>>
+                <<if _temple_aid.state('temple').accounts is 'corrected' or _temple_aid.state('temple').equipment is 'replaced'>>“把记录做好，替我们省了些麻烦。”约旦说。“下次到货，我会让他们对照订单检查，再收进库里。”<<else>>“有了这批物资，货架上的东西能接得上。”约旦说。“谢谢你一直过问到现在。”<</if>>
+                <<if ['initiate', 'monk', 'priest'].includes($temple_rank)>><<if $grace gte 80>><br><br>“履行职责时，若发现别处还缺什么，就告诉我。列清楚，也好安排。”<<else>><br><br>“履行职责时，也许你会发现我们遗漏的地方。可以拿来和我说。”<</if>><<else>><br><br>“以后也欢迎你来问物资的情况。”<<he>>补充道。“瑞沃可以让你看看施粥处的工作。”<</if>>
+            <</language>><br><br>
+            <<language>>
+              <<option 'EN'>>
+                Jordan introduces you to the members handling the deliveries as one of the relief fund’s benefactors. Your name is added to their next public update. "If your factory makes suitable storage goods, we can send an enquiry for the regular supplies."
+              <<option 'CN'>>
+                约旦向经手交货的成员介绍了你的资助，下一次公开简报也会提到你的名字。“你的工厂生产合适的储物用品，我们可以为日常补给发送询价。”
+            <</language>><br><br>
+            <<deadwood-temple-donation-benefits>>
+            <<deadwood-temple-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br>
+    <<deadwood-temple-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'Jordan cannot go through the relief report with you now.' '约旦现在无法和你核对救济物资的后续情况。'>><br><br>
+  <<deadwood-temple-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Temple Donation Privileges
+<<set $outside to 0>><<location 'temple'>><<temple_effects>><<effects>>
+<<set _temple_aid to maplebirch.get('Finance').donations.aid>>
+<<if _temple_aid.available('temple') and (_temple_aid.canGrant('temple') or _temple_aid.has('temple'))>>
+  <<npc Jordan>><<person1>>
+  <div id='deadwood-temple-privileges'>
+    <<language>>
+      <<option 'EN'>>
+        Jordan puts aside the relief ledger when you ask what voice your contribution gives you. "You can come to me about the fund, my child. I would rather hear your concerns than lose the help you've given us." <<His>> fingers rest on the closed book. "There is a small room beside the stores. You may have some quiet there, and I can set aside time for you each week."
+        <<if $temple_rank is 'priest' or $temple_rank is 'monk'>>"You know the needs of this place. Tell me which supplies ought to come first."<<else>>"You have seen what is being used. We can discuss the next delivery together."<</if>>
+      <<option 'CN'>>
+        你问起这笔资助能让你说上多少话，约旦将救济账簿放到一旁。“基金的事，你可以直接来找我，我的孩子。与其失去你给予的帮助，我更愿意听听你的顾虑。”<<His>>的手指搭在合好的书上。“储物间旁边有个小房间。你可以在那里安静地待一会儿，我也可以每周为你留出一些时间。”
+        <<if $temple_rank is 'priest' or $temple_rank is 'monk'>>“你了解这里的需要。哪些物资该优先补充，可以告诉我。”<<else>>“你已经见过物资怎样使用。下一次的交货，我们可以一起商量。”<</if>>
+    <</language>><br><br>
+    <<deadwood-card 'Benefactor arrangements' '资助者待遇'>>
+      <<lanSwitch 'Quiet room: one 30-minute rest each day; reduces stress and fatigue.' '安静房间：每天可休息 30 分钟一次，减少压力与疲劳。'>><br>
+      <<lanSwitch 'Private audience: once each week, 20 minutes; personal prayer and a say in relief priorities.' '私人接见：每周一次，20 分钟；共同祈祷，并商议救济物资的优先用途。'>><br>
+      <<if _temple_aid.canGrant('temple')>>
+        <<icon 'company/agreement.png'>><<lanLink ['Agree to these arrangements (0:10)', '确认这些安排 (0:10)']>>
+          <<set _temple_source to $passage>>
+          <<if maplebirch.get('Finance').donations.aid.grant('temple')>>
+            <<control 3>><<pass 10>>
+            <<if $passage is _temple_source>>
+              <<replace '#deadwood-temple-privileges'>>
+                <<lanSwitch 'Jordan writes your name beside the room booking and your weekly audience. "Come to me directly about the relief work." You keep the signed copy.' '约旦在房间预约和每周接见安排旁写下你的名字。“救济工作有什么事，直接来找我。”你收好签过名的副本。'>><<gcontrol>><br><br>
+                <span class='green'><<lanSwitch 'Your benefactor arrangements are active.' '资助者待遇已生效。'>></span><br>
+                <<deadwood-temple-donation-benefits>><<deadwood-temple-donation-exit>>
+              <</replace>><<run updateMoment()>>
+            <</if>>
+          <</if>>
+        <</lanLink>> | <span class='green'><<lanSwitch 'Control' '自控'>></span><br>
+      <<else>>
+        <span class='green'><<lanSwitch 'These arrangements are active.' '这些安排已经生效。'>></span><br>
+      <</if>>
+    <</deadwood-card>>
+    <<if _temple_aid.has('temple')>>
+      <<if _temple_aid.canUse('temple', 'visit')>>
+        <<lanSwitch 'For the next relief purchase, you can ask Jordan to give priority to:' '下一次救济采购，你可以请约旦优先安排：'>><br>
+        <<for _temple_priority range ['food', 'blankets']>>
+          <<capture _temple_priority>>
+            <<templeicon 'pray'>><<lanLink [_temple_priority is 'food' ? 'Discuss food supplies and pray together (0:20)' : 'Discuss blankets and pray together (0:20)', _temple_priority is 'food' ? '商议食物供应，一同祈祷 (0:20)' : '商议毯子供应，一同祈祷 (0:20)']>>
+              <<set _temple_source to $passage>>
+              <<if maplebirch.get('Finance').donations.aid.use('temple', 'visit')>>
+                <<set $Finance.donations.aid.temple.priority to _temple_priority>><<pass 20>>
+                <<if $passage is _temple_source>>
+                  <<stress -12>><<trauma -6>>
+                  <<if ['initiate', 'monk', 'priest'].includes($temple_rank)>><<grace 1>><</if>>
+                  <<replace '#deadwood-temple-privileges'>>
+                    <<language>>
+                      <<option 'EN'>>
+                        Jordan notes your request. <<if _temple_priority is 'food'>>"I'll ask River what the kitchen is running short of."<<else>>"We'll check the blanket cupboard before the next order."<</if>> <<He>> closes the ledger and sits with you. The prayer is quiet, away from the congregation. When your words falter, <<he>> waits for you to find them. "You have a place here, child."
+                      <<option 'CN'>>
+                        约旦记下你的要求。<<if _temple_priority is 'food'>>“我会问问瑞沃，厨房缺些什么。”<<else>>“下一次下单前，我们先检查存放毯子的柜子。”<</if>> <<He>>合上账簿，在你身旁坐下。祷告声很轻，远离会众。你的话语断了，<<he>>便等着你重新开口。“这里有你的位置，我的孩子。”
+                    <</language>><<llstress>><<ltrauma>><br><br>
+                    <<deadwood-temple-donation-benefits>><<deadwood-temple-donation-exit>>
+                  <</replace>><<run updateMoment()>>
+                <</if>>
+              <</if>>
+            <</lanLink>> | <span class='green'><<lanSwitch '− Stress, − Trauma' '− 压力，− 创伤'>></span><br>
+          <</capture>>
+        <</for>>
+      <</if>>
+      <<if _temple_aid.canPrivacy>>
+        <div id='deadwood-temple-privacy'>
+          <<if !_temple_aid.state('temple').privacy_asked>>
+            <<socialiseicon 'ask'>><<lanLink ['Ask to go unclothed in the residential areas (0:05)', '请求在居住区域不穿衣物活动 (0:05)']>>
+              <<set _temple_source to $passage>>
+              <<if $passage is 'Deadwood Reblooms Temple Donation Privileges' and maplebirch.get('Finance').donations.aid.canPrivacy>>
+                <<set $Finance.donations.aid.temple.privacy_asked to true>><<pass 5>>
+                <<if $passage is _temple_source>>
+                  <<replace '#deadwood-temple-privacy'>>
+                    <<deadwood-temple-donation-refusal>>
+                  <</replace>><<run updateMoment()>>
+                <</if>>
+              <</if>>
+            <</lanLink>><br>
+          <<else>>
+            <<deadwood-temple-donation-refusal>>
+          <</if>>
+        </div>
+      <<elseif _temple_aid.state('temple').privacy>>
+        <span class='blue'><<lanSwitch 'Jordan reluctantly tolerates unclothed use of the private residential areas. Keep covered when you speak to him.' '约旦勉强容忍你在私人居住区域裸身活动。与他见面时，要穿好衣服。'>></span><br>
+      <</if>>
+    <</if>>
+    <<deadwood-temple-donation-exit>>
+  </div>
+<<else>>
+  <<if $exposed gt 0 and C.npc.Jordan.init is 1 and C.npc.Jordan.state is 'active' and Time.hour gte 8 and Time.hour lt 18 and Time.dayState isnot 'night' and !$daily.jordanMissing and !$combat and !$possessed and !$nextPassageCheck and !$replayScene and !$statFreeze>>
+    <<npc Jordan>><<person1>>
+    <<lanSwitch 'Jordan raises a hand to stop you. "Clothes, child. Get dressed before you come to speak to me." <<He>> waits for you to leave.' '约旦抬起手，制止你靠近。“衣服，我的孩子。穿好以后，再来找我谈。”<<He>>等着你离开。'>><br><br>
+  <<else>>
+    <<lanSwitch 'Jordan cannot discuss these arrangements with you now.' '约旦现在无法和你商议这些安排。'>><br><br>
+  <</if>>
+  <<deadwood-temple-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms Temple Donation Rest
+<<set $outside to 0>><<location 'temple'>><<temple_effects>><<effects>><<clearnpc>>
+<<if maplebirch.get('Finance').donations.aid.canUse('temple', 'rest')>>
+  <div id='deadwood-temple-rest'>
+    <<lanSwitch 'A member opens the small room beside the stores after checking your name. A chair stands beneath a narrow window. The noise of the hall fades when you close the door.' '照管房间的成员核对你的名字，打开储物间旁的小房间。窄窗下摆着一张椅子。你合上门，大厅的嘈杂声渐渐远去。'>><br><br>
+    <<icon 'temple/quiet-room.png'>><<lanLink ['Rest in private (0:30)', '独自休息 (0:30)']>>
+      <<set _temple_source to $passage>>
+      <<if maplebirch.get('Finance').donations.aid.use('temple', 'rest')>>
+        <<pass 30>>
+        <<if $passage is _temple_source>>
+          <<stress -6>><<tiredness -12>>
+          <<replace '#deadwood-temple-rest'>>
+            <<lanSwitch 'You settle into the chair. Light moves across the wall while you rest, undisturbed. By the time you rise, your breathing has slowed and the ache of the day feels less pressing.' '你靠进椅子。光线慢慢移过墙面，休息期间没有人打扰。起身时，你的呼吸已经平缓，白日积累的倦意也减轻了些。'>><<lstress>><<ltiredness>><br><br>
+            <<deadwood-temple-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>> | <span class='green'><<lanSwitch '− Stress, − Fatigue' '− 压力，− 疲劳'>></span><br><br>
+    <<deadwood-temple-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'The room is not available for another rest now.' '现在无法再次借用房间休息。'>><br><br>
+  <<deadwood-temple-donation-exit>>
+<</if>>

@@ -295,7 +295,7 @@
 <!-- 账户、证券与房产账目 -->
 
 <<widget 'deadwood-reblooms-finance-journal'>>
-  <<if $Finance and ($Finance.bank.opened or $Finance.brokerage.opened or $Finance.company.name or maplebirch.get('Finance').industry.owned.length or maplebirch.get('Orchard')?.state.worker.hired or maplebirch.get('Orchard')?.staff.employed or $Finance.newspaper.report or $Finance.orphanage.offer isnot null or Object.values($Finance.real_estate.owned).some(Boolean) or $Finance.collection.amount gt 0 or $Finance.donations.receipts.length)>>
+  <<if $Finance and ($Finance.bank.opened or $Finance.brokerage.opened or $Finance.company.name or maplebirch.get('Finance').industry.owned.length or maplebirch.get('Orchard')?.state.worker.hired or maplebirch.get('Orchard')?.staff.employed or $Finance.newspaper.report or $Finance.orphanage.offer isnot null or Object.values($Finance.real_estate.owned).some(Boolean) or $Finance.collection.amount gt 0 or $Finance.donations.receipts.length or Object.values($Finance.donations.total).some(value => value > 0))>>
     <<set _finance_mortgage to maplebirch.get("Finance").realEstate.mortgage.current>>
     <div class='gold bold'><<lanSwitch 'Finances' '财务'>></div>
     <<deadwood-finance-risk-summary true>>
@@ -305,6 +305,8 @@
     <<if $Finance.brokerage.margin.history.length>><<deadwood-finance-closing-records>><</if>>
     <<if Object.values($Finance.real_estate.owned).some(Boolean)>><<deadwood-finance-property-accounts>><</if>>
     <<deadwood-finance-donation-receipts>>
+    <<deadwood-finance-school-donation-journal>>
+    <<deadwood-finance-aid-journal>>
     <ul class='journal'>
       <<if $Finance.orphanage.pc_bought_out or $Finance.orphanage.robin_bought_out>>
         <li class='green'>
@@ -1307,6 +1309,108 @@
       </ul>
     <</deadwood-card>>
   <</if>>
+<</widget>>
+
+<<widget 'deadwood-donation-rewards'>>
+  <<set _donation_reward to maplebirch.get('Finance').donations.state.rewards[_args[0]]>>
+  <<lanSwitch 'Fame awarded: good ' '已获名声：善名 '>><span class='green'><<= _donation_reward.named + (_donation_reward.signed ? 25 : 0)>></span> / <<lanSwitch 'social ' '社交 '>><span class='teal'><<= _donation_reward.followed ? 10 : 0>></span><br>
+<</widget>>
+
+<<widget 'deadwood-finance-school-donation-journal'>>
+  <<if $Finance.donations.total.school gt 0>>
+    <<set _school_fund to maplebirch.get('Finance').donations.school>>
+    <<deadwood-card 'School funding' '学校资助'>>
+      <div class='dr-finance-summary'>
+        <span><<lanSwitch 'Total donated' '累计捐款'>></span><span><<deadwood-reblooms-finance-money $Finance.donations.total.school>></span>
+        <span><<lanSwitch 'Named contributions' '实名资助'>></span><span><<deadwood-reblooms-finance-money $Finance.donations.named.school>></span>
+      </div>
+      <<deadwood-donation-rewards 'school'>>
+      <<if !_school_fund.funded>>
+        <<lanSwitch 'Laboratory equipment and teaching supplies are awaiting full funding.' '实验器材与教学用品仍在募资。'>>
+      <<elseif !_school_fund.ready>>
+        <<if _school_fund.state.replacement_at isnot null>><<lanSwitch 'The supplier is replacing the microscope fittings.' '供应商正在更换显微镜配件。'>><<else>><<lanSwitch 'The school has placed the supply order.' '学校已订购器材与教学用品。'>><</if>>
+        <br><<lanSwitch 'Expected delivery: ' '预计送达：'>><span class='blue'><<print getFormattedDate(new DateTime(_school_fund.due))>> <<print new DateTime(_school_fund.due).hour>>:<<print String(new DateTime(_school_fund.due).minute).padStart(2, '0')>></span>
+      <<else>>
+        <span class='green'><<lanSwitch 'The equipment and teaching supplies have arrived.' '器材与教学用品已送达。'>></span>
+      <</if>>
+      <<if _school_fund.eligible>>
+        <<if _school_fund.state.terms is null>>
+          <br><<lanSwitch "Take your receipt to Leighton's office during the school day to discuss the project." '上学日可携收据到礼顿办公室商量项目安排。'>>
+        <<elseif _school_fund.state.signed_at is null>>
+          <<if _school_fund.ready>>
+            <br><<lanSwitch 'Review the delivery and sign the receipt at the school office.' '到校长办公室核对交付，并签收物资。'>>
+          <</if>>
+        <<else>>
+          <<if _school_fund.state.terms is 'access'>>
+            <br><<lanSwitch 'Equipment use: school days, 15:00–16:44; one short session each day.' '器材使用：上学日 15:00–16:44，每天一次短时练习。'>>
+          <</if>>
+          <<if !_school_fund.state.favour_used and $headnodetention isnot 1>>
+            <br><<lanSwitch 'Leighton will review one minor detention with you.' '你还可向礼顿申请一次轻微留堂复核。'>>
+          <</if>>
+          <<if _school_fund.state.followed>><br><<lanSwitch 'A factory with a suitable production line may receive enquiries for routine supplies.' '经营相应生产线的工厂可能收到日常用品询价。'>><</if>>
+          <br><<lanSwitch 'Benefactor appointment: one 20-minute meeting each school week, arranged from the corridors.' '资助者接见：上学日每周一次，20 分钟，可从走廊安排。'>>
+          <<if !_school_fund.state.followed>>
+            <br><<lanSwitch 'Check back with Leighton on a later school day about the supplies.' '之后的上学日，可向礼顿询问用品投入使用的情况。'>>
+          <</if>>
+        <</if>>
+      <</if>>
+    <</deadwood-card>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-finance-aid-journal'>>
+  <<set _aid to maplebirch.get('Finance').donations.aid>>
+  <<for _aid_project range maplebirch.get('Finance').donations.projects.filter(project => project.id !== 'school' && project.donated > 0)>>
+    <<set _aid_state to _aid.state(_aid_project.id)>>
+    <<deadwood-card `maplebirch.t(_aid_project.name)` `maplebirch.t(_aid_project.name)`>>
+      <div class='dr-finance-summary'>
+        <span><<lanSwitch 'Total donated' '累计捐款'>></span><span><<deadwood-reblooms-finance-money _aid_project.donated>></span>
+        <span><<lanSwitch 'Named contributions' '实名资助'>></span><span><<deadwood-reblooms-finance-money `$Finance.donations.named[_aid_project.id]`>></span>
+      </div>
+      <<print maplebirch.t(_aid_project.project)>><br>
+      <<deadwood-donation-rewards _aid_project.id>>
+      <<if !_aid_project.funded>>
+        <<lanSwitch 'Funding target: ' '募资目标：'>><<deadwood-reblooms-finance-money _aid_project.goal>>
+      <<elseif !_aid.ready(_aid_project.id)>>
+        <<if _aid_state.replacement_at isnot null>><<lanSwitch 'The supplier is replacing the unsuitable items.' '供应商正在更换不合用的物资。'>><<else>><<lanSwitch 'The supply order has been placed.' '物资已订购。'>><</if>>
+        <br><<lanSwitch 'Expected delivery: ' '预计送达：'>><span class='blue'><<print getFormattedDate(new DateTime(_aid.due(_aid_project.id)))>> <<print new DateTime(_aid.due(_aid_project.id)).hour>>:<<print String(new DateTime(_aid.due(_aid_project.id)).minute).padStart(2, '0')>></span>
+      <<else>>
+        <span class='green'><<lanSwitch 'The supplies have arrived.' '物资已送达。'>></span>
+      <</if>>
+      <<if _aid.has(_aid_project.id) and !(_aid_project.id is 'orphanage' and $RobinExpansion?.bailey_defeated)>>
+        <br><<switch _aid_project.id>>
+          <<case 'temple'>>
+            <<lanSwitch 'Quiet room: once daily, 30 minutes. Private prayer and relief priorities: once weekly, 20 minutes.' '安静房间：每天一次，30 分钟。私人祈祷与救济安排：每周一次，20 分钟。'>>
+            <<if _aid_state.privacy>><br><span class='blue'><<lanSwitch 'Jordan reluctantly tolerates unclothed use of the private residential areas. Keep covered when you speak to him.' '约旦勉强容忍你在私人居住区域裸身活动。与他见面时，要穿好衣服。'>></span><</if>>
+          <<case 'hospital'>>
+            <<lanSwitch 'Private parasite treatment: 25% off. Routine consultation: once weekly, 20 minutes.' '私密寄生虫治疗：费用减免 25%。常规健康咨询：每周一次，20 分钟。'>>
+          <<case 'orphanage'>>
+            <<if !$RobinExpansion?.bailey_defeated>>
+              <<lanSwitch 'Private business appointment: once weekly, 07:00–10:00, arranged from the hall.' '私人事务接待：每周一次，07:00–10:00，可从大厅安排。'>>
+              <<if !_aid_state.rent_used and !maplebirch.get('Finance').orphanage.pcFree>><br><<lanSwitch 'One seven-day rent extension remains; ask before the payment is overdue.' '还可申请一次七天租金延期，需在付款到期前提出。'>><</if>>
+            <</if>>
+        <</switch>>
+      <<elseif _aid_state.signed_at isnot null and _aid.eligible(_aid_project.id) and !(_aid_project.id is 'orphanage' and $RobinExpansion?.bailey_defeated)>>
+        <br><<lanSwitch 'Ask the recipient to put your benefactor arrangements in writing.' '可找负责人确认资助者待遇，并写入约定。'>>
+      <</if>>
+      <<if _aid_state.followed and _aid.eligible(_aid_project.id)>>
+        <br><<lanSwitch 'A factory with a suitable production line may receive enquiries for routine supplies.' '经营相应生产线的工厂可能收到日常用品询价。'>>
+      <</if>>
+      <<if _aid.eligible(_aid_project.id) and !(_aid_project.id is 'orphanage' and $RobinExpansion?.bailey_defeated)>>
+        <<if _aid_state.terms is null>>
+          <br><<switch _aid_project.id>>
+            <<case 'temple'>><<lanSwitch 'Discuss the relief supplies with Jordan during the day.' '白天可找约旦商量救济物资。'>>
+            <<case 'hospital'>><<lanSwitch 'Ask at the hospital reception on weekdays, 09:00–17:00.' '工作日 09:00–17:00，可到医院前台询问项目接待。'>>
+            <<case 'orphanage'>><<lanSwitch "Take the receipt to Bailey's office, 07:00–10:00." '07:00–10:00，可携收据到贝利办公室。'>>
+          <</switch>>
+        <<elseif _aid_state.signed_at is null and _aid.ready(_aid_project.id)>>
+          <br><<lanSwitch 'Review the delivery and complete the receipt with the recipient.' '可找受助方核对交付，并完成签收。'>>
+        <<elseif _aid_state.signed_at isnot null and !_aid_state.followed>>
+          <br><<lanSwitch 'Return on a later day to hear how the supplies are being used.' '之后可回来了解物资投入使用的情况。'>>
+        <</if>>
+      <</if>>
+    <</deadwood-card>>
+  <</for>>
 <</widget>>
 
 <<widget 'deadwood-transport-vehicle-record'>>

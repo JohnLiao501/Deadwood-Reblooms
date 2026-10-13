@@ -10,7 +10,7 @@
 <<widget 'deadwood-card' 'container'>>
   <section class='deadwood-card'>
     <<if _args.length gte 2>>
-      <h3 class='deadwood-card-title'><<lanSwitch _args[0] _args[1]>></h3>
+      <div class='deadwood-card-title bold'><<lanSwitch _args[0] _args[1]>></div>
     <</if>>
     <div class='deadwood-card-body'><<print _contents>></div>
   </section>

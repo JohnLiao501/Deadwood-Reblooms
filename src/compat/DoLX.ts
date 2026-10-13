@@ -105,6 +105,16 @@ export default function DoLX(core: MaplebirchCore): void {
   core.once(':addon:preparePatch', () => {
     const data = core.services.addonPlugin.SC2DataManager.getSC2DataInfoAfterPatch();
     if (!data.scriptFileItems.getByNameWithOrWithoutPath('xchange.js')) return;
+    if (core.get('Finance')) {
+      // 医疗减免沿用 DoLX 的通胀显示、余额判定与两条原生治疗分支。
+      const hospital = core.tool.zone.locationPassage['Hospital Parasite'] ?? [];
+      core.tool.zone.locationPassage['Hospital Parasite'] = [
+        ...hospital.filter(rule => !rule.to?.includes('donations.aid.fee')),
+        { srcmatchgroup: /<<printprice 25000>>/g, to: '<<printprice `maplebirch.get("Finance").donations.aid.fee`>>', expected: 4 },
+        { srcmatchgroup: /25000(?=, ["']hospitalParasiteRemoval["']\))/g, to: 'maplebirch.get("Finance").donations.aid.fee', expected: 2 },
+        { srcmatchgroup: /<<money -25000 (?=["']hospitalParasiteRemoval["']>>)/g, to: '<<money `-maplebirch.get("Finance").donations.aid.fee` ', expected: 2 }
+      ];
+    }
     // DoLX 已有独立 NPC 第 5 档；仅移除本模组为原版补缺的三组规则。
     for (const title of ['Widgets Effects Man', 'Widgets Combat Man-Combat', 'Widgets Ejaculation']) {
       const rules = core.tool.zone.widgetPassage[title];

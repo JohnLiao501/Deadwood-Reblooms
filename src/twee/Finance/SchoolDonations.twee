@@ -1,0 +1,513 @@
+:: Deadwood Reblooms School Donation Widgets [widget]
+
+<<widget 'deadwood-school-donation-exit'>>
+  <<getouticon>><<lanLink ['Return to the corridors (0:01)', '返回走廊 (0:01)']>>
+    <<set _school_source to $passage>>
+    <<if $passage isnot 'Deadwood Reblooms School Donation Practice'>><<set $daily.school.headInterrupted to 1>><</if>>
+    <<endevent>><<pass 1>>
+    <<if $passage is _school_source>><<goto 'Hallways'>><</if>>
+  <</lanLink>><br>
+<</widget>>
+
+<<widget 'deadwood-school-donation-practice-link'>><<silently>>
+  <<set _school_donation to maplebirch.get('Finance').donations.school>>
+  <<set _school_show to _school_donation.canPractice and Time.hour * 60 + Time.minute + 16 lte 17 * 60>>
+<</silently>><<if _school_show>>
+    <<icon 'school/teaching-practice.png'>><<lanLink ['Use the donated teaching equipment (0:01)', '去使用捐赠的教学器材 (0:01)']>>
+      <<if maplebirch.get('Finance').donations.school.canPractice and Time.hour * 60 + Time.minute + 16 lte 17 * 60>>
+        <<set _school_source to $passage>>
+        <<if $passage is "Head's Office">><<set $daily.school.headInterrupted to 1>><</if>>
+        <<endevent>><<pass 1>>
+        <<if $passage is _school_source>><<goto 'Deadwood Reblooms School Donation Practice'>><</if>>
+      <</if>>
+    <</lanLink>><br>
+<</if>><</widget>>
+
+<<widget 'deadwood-school-donation-progress'>><<silently>>
+  <<set _school_donation to maplebirch.get('Finance').donations.school>>
+  <<set _school_show to _school_donation.canAudit or _school_donation.canInspect or _school_donation.canSign>>
+<</silently>><<if _school_show>>
+  <<if _school_donation.canAudit>>
+    <<icon 'school/procurement-audit.png'>><<lanLink ['Review the procurement accounts', '继续核对采购账目'] 'Deadwood Reblooms School Donation Accounts'>><</lanLink>><br>
+  <</if>>
+  <<if _school_donation.canInspect>>
+    <<icon 'school/equipment-inspection.png'>><<lanLink ['Inspect the equipment with Leighton', '和礼顿一起检查器材'] 'Deadwood Reblooms School Donation Inspection'>><</lanLink>><br>
+  <</if>>
+  <<if _school_donation.canSign>>
+    <<icon 'school/delivery-receipt.png'>><<lanLink ['Finish the delivery paperwork in the office', '到办公室完成签收手续'] 'Deadwood Reblooms School Donation Receipt'>><</lanLink>><br>
+  <</if>>
+<</if>><</widget>>
+
+<<widget 'deadwood-school-donation-office'>><<silently>>
+  <<set _school_donation to maplebirch.get('Finance').donations.school>>
+  <<set _school_practice to _school_donation.canPractice and Time.hour * 60 + Time.minute + 16 lte 17 * 60>>
+  <<set _school_show to $passage is "Head's Office" and _school_donation.available and $daily.school.headInterrupted isnot 1 and (_school_donation.canMeet or _school_donation.canAudit or _school_donation.canInspect or _school_donation.canSign or _school_donation.canFollow or _school_donation.canFavour or _school_practice)>>
+<</silently>><<if _school_show>>
+    <<if _school_donation.canMeet>>
+      <<icon 'school/supplies-donation.png'>><<lanLink ['Discuss your support for the school', '谈谈你对学校的资助'] 'Deadwood Reblooms School Donation Meeting'>><</lanLink>><br>
+    <</if>>
+    <<if _school_donation.canAudit>>
+      <<icon 'school/procurement-audit.png'>><<lanLink ['Ask for the procurement accounts', '索取采购账目'] 'Deadwood Reblooms School Donation Accounts'>><</lanLink>><br>
+    <</if>>
+    <<if _school_donation.canInspect>>
+      <<icon 'school/equipment-inspection.png'>><<lanLink ['Check the donated equipment', '检查捐赠的器材'] 'Deadwood Reblooms School Donation Inspection'>><</lanLink>><br>
+    <</if>>
+    <<if _school_donation.canSign>>
+      <<icon 'school/delivery-receipt.png'>><<lanLink ['Sign the delivery receipt', '签署物资收据'] 'Deadwood Reblooms School Donation Receipt'>><</lanLink>><br>
+    <</if>>
+    <<if _school_donation.canFollow>>
+      <<socialiseicon>><<lanLink ['Ask how the new supplies are being used', '问问新物资的使用情况'] 'Deadwood Reblooms School Donation Followup'>><</lanLink>><br>
+    <</if>>
+    <<if _school_donation.canFavour>>
+      <<icon 'school/exemption.png'>><<lanLink ['Ask Leighton to review your detention', '请礼顿复核你的留堂记录'] 'Deadwood Reblooms School Donation Review'>><</lanLink>><br>
+    <</if>>
+    <<deadwood-school-donation-practice-link>>
+<</if>><</widget>>
+
+<<widget 'deadwood-school-donation-review-link'>><<silently>>
+  <<set _school_links to new maplebirch.tool.link()>><<run _school_links.detect()>>
+  <<set _school_show to $passage is 'Hallways' and _school_links.links.some(link => link.getAttribute('data-passage') === 'School Detention') and maplebirch.get('Finance').donations.school.canFavour and Time.hour * 60 + Time.minute + 6 lte 17 * 60>>
+<</silently>><<if _school_show>>
+    <<icon 'school/exemption.png'>><<lanLink ['Ask the head to review your detention (0:01)', '请校长复核你的留堂记录 (0:01)']>>
+      <<if maplebirch.get('Finance').donations.school.canFavour and Time.hour * 60 + Time.minute + 6 lte 17 * 60>>
+        <<set _school_source to $passage>><<endevent>><<pass 1>>
+        <<if $passage is _school_source>><<goto 'Deadwood Reblooms School Donation Review'>><</if>>
+      <</if>>
+    <</lanLink>><br>
+<</if>><</widget>>
+
+<<widget 'deadwood-school-donation-school'>><<silently>>
+  <<set _school_donation to maplebirch.get('Finance').donations.school>>
+  <<set _school_links to new maplebirch.tool.link()>><<run _school_links.detect()>>
+  <<set _school_practice to _school_donation.canPractice and Time.hour * 60 + Time.minute + 16 lte 17 * 60>>
+  <<set _school_show to $passage is 'School Library' and !$combat and !$possessed and !$nextPassageCheck and !$replayScene and !$statFreeze and _school_links.links.some(link => link.getAttribute('data-passage') === 'Hallways') and ((_school_donation.funded and _school_donation.ready) or _school_practice)>>
+<</silently>><<if _school_show>>
+    <<if _school_donation.funded and _school_donation.ready>>
+      <<language>>
+        <<option 'EN'>>
+          A notice beside the library desk lists new laboratory equipment and teaching supplies. <<if maplebirch.get('Finance').donations.state.named.school gt 0>>Your name appears among the donors.<<else>>A line at the bottom thanks the anonymous contributors.<</if>> Through the open storeroom door, you can see boxes of exercise books and neatly packed slides.
+        <<option 'CN'>>
+          图书馆柜台旁的告示列出了新购置的实验器材和教学用品。<<if maplebirch.get('Finance').donations.state.named.school gt 0>>你的名字也列在资助者之中。<<else>>告示末尾还有一句对匿名捐赠者的感谢。<</if>>透过储物间敞开的门，你看见一箱箱练习本和整齐包装的载玻片。
+      <</language>><br>
+    <</if>>
+    <<deadwood-school-donation-practice-link>>
+<</if>><</widget>>
+
+<<widget 'deadwood-school-donation-visit-link'>><<silently>>
+  <<set _school_donation to maplebirch.get('Finance').donations.school>>
+  <<set _school_links to new maplebirch.tool.link()>><<run _school_links.detect()>>
+  <<set _school_visit to _school_donation.canVisit and ($passage isnot 'Hallways' or _school_links.links.some(link => link.getAttribute('data-passage') === "Head's Office"))>>
+<</silently>><<if _school_visit>>
+  <<officeicon>><<lanLink ['Arrange your weekly meeting as a school benefactor', '安排每周的学校资助者会面'] 'Deadwood Reblooms School Donation Visit'>><</lanLink>><br>
+<</if>><</widget>>
+
+:: Deadwood Reblooms School Donation Meeting
+<<set $outside to 0>><<set $location to 'school'>><<schooleffects>><<effects>>
+<<set _school_donation to maplebirch.get('Finance').donations.school>>
+<<if _school_donation.canMeet>>
+  <<npc Leighton>><<person1>>
+  <div id='deadwood-school-meeting'>
+    <<language>>
+      <<option 'EN'>>
+        Leighton brings your donation receipt out from beneath a pile of correspondence. "A substantial contribution. I would have been happy to discuss it sooner."
+        <<if $headblackmailed is 1>><<His>> smile tightens as <<he>> looks at you. "Perhaps we can conduct this meeting on rather better terms."<<else>><<He>> draws a chair closer to the desk. "Please. Sit down."<</if>>
+        <br><br>
+        "The laboratory and teaching supplies are being funded together. We should settle how you would like to be kept involved." <<He>> taps the receipt. "The school will oversee their use. Further support would be very welcome."
+      <<option 'CN'>>
+        礼顿从一摞信件下面取出你的捐款收据。“这是一笔可观的资助。我很乐意早些和你谈谈。”
+        <<if $headblackmailed is 1>><<He>>望着你，笑容绷紧了些。“也许这次，我们可以换种更好的方式谈。”<<else>><<He>>把椅子拉近办公桌。“请，坐吧。”<</if>>
+        <br><br>
+        “这次募款用于实验器材和教学用品。我们该商量一下，你希望怎样参与。”<<He>>敲了敲收据。“使用安排由学校负责。后续资助，我们也很欢迎。”
+    <</language>><br><br>
+    <<deadwood-card 'Terms of support' '资助条件'>>
+      <<icon 'school/procurement-audit.png'>><<lanLink ['Request an account of the purchases (0:10)', '要求提供采购账目 (0:10)']>>
+        <<set _school_source to $passage>>
+        <<if maplebirch.get('Finance').donations.school.agree('accounts')>>
+          <<pass 10>>
+          <<if $passage is _school_source>>
+            <<replace '#deadwood-school-meeting'>>
+              <<language>>
+                <<option 'EN'>>
+                  "The invoices, as well?" Leighton pauses, then writes your request beside the receipt. "Very well. You can review the accounts with me once the delivery arrives." <<He>> folds the document into a file. "I hope a well-run project will encourage you to support the next one."
+                <<option 'CN'>>
+                  “连发票也要看？”礼顿停顿了一下，把你的要求写在收据旁。“好吧。物资到货后，你可以和我一起查看账目。”<<He>>把文件收进档案夹。“希望项目办得好，能让你愿意继续支持下一次。”
+              <</language>><br><br>
+              <span class='gold'><<lanSwitch 'Agreed: procurement accounts and supplier invoices.' '已谈妥：采购账目与供应商发票。'>></span><br><br>
+              <<deadwood-school-donation-progress>>
+              <<deadwood-school-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='blue'><<lanSwitch 'Review how the fund is spent' '核对款项用途'>></span><br>
+      <<icon 'school/teaching-practice.png'>><<lanLink ['Request an after-school equipment session (0:10)', '商定课后使用器材的时段 (0:10)']>>
+        <<set _school_source to $passage>>
+        <<if maplebirch.get('Finance').donations.school.agree('access')>>
+          <<pass 10>>
+          <<if $passage is _school_source>>
+            <<replace '#deadwood-school-meeting'>>
+              <<language>>
+                <<option 'EN'>>
+                  Leighton checks a timetable. "A short session after lessons, under staff supervision. That can be arranged." <<He>> writes your name beside the laboratory booking. "Come between three and five, once the supplies have been signed in. Leave time to put everything away."
+                <<option 'CN'>>
+                  礼顿查看了课程表。“课后安排一小段时间，由值班教师监督。可以商量。”<<He>>把你的名字记在实验室预约旁。“等物资签收后，下午三点到五点之间来，留好收拾器材的时间。”
+              <</language>><br><br>
+              <span class='gold'><<lanSwitch 'Agreed: one supervised fifteen-minute session each school day, finishing by 17:00.' '已谈妥：上学日可进行一次有教师监督的十五分钟练习，17:00 前结束。'>></span><br><br>
+              <<deadwood-school-donation-progress>>
+              <<deadwood-school-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='blue'><<lanSwitch 'A supervised fifteen-minute practice session' '有教师监督的十五分钟练习'>></span><br>
+    <</deadwood-card>>
+    <<deadwood-school-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'This is not a suitable time to discuss the school fund with Leighton.' '现在不适合和礼顿商谈学校资助。'>><br><br>
+  <<deadwood-school-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms School Donation Accounts
+<<set $outside to 0>><<set $location to 'school'>><<schooleffects>><<effects>>
+<<set _school_donation to maplebirch.get('Finance').donations.school>>
+<<if _school_donation.canAudit>>
+  <<npc Leighton>><<person1>>
+  <div id='deadwood-school-accounts'>
+    <<language>>
+      <<option 'EN'>>
+        Leighton lays a typed report on the desk. "The full fifteen thousand has been allocated." Supplier invoices are clipped behind it. The delivery note lists a transport charge of <span class='gold'>£500</span>.
+      <<option 'CN'>>
+        礼顿把打印好的报告铺在桌上。“一万五千镑已经全部列出用途。”供应商发票夹在后面。送货附页列出的实际运费是<span class='gold'>£500</span>。
+    <</language>><br><br>
+    <<deadwood-card 'Procurement report' '采购报告'>>
+      <<lanSwitch 'Laboratory equipment' '实验器材'>>：<span class='gold'>£9,000</span><br>
+      <<lanSwitch 'Teaching supplies' '教学用品'>>：<span class='gold'>£4,500</span><br>
+      <<lanSwitch 'Transport' '运输'>>：<span class='gold'>£1,500</span><br>
+      <<lanSwitch 'Total' '合计'>>：<span class='gold'>£15,000</span><br>
+    <</deadwood-card>>
+    <<if currentSkillValue('maths') gte 400>>
+      <<icon 'school/procurement-audit.png'>><<lanLink ['Question the £1,000 difference and request more teaching supplies (0:10)', '指出 £1,000 差额，要求增购教学用品 (0:10)']>>
+        <<set _school_source to $passage>>
+        <<if maplebirch.get('Finance').donations.school.audit(true)>>
+          <<pass 10>>
+          <<if $passage is _school_source>>
+            <<replace '#deadwood-school-accounts'>>
+              <<language>>
+                <<option 'EN'>>
+                  You put the delivery note beside the report and show Leighton the difference. "A provision for incidental costs," <<he>> says. You ask for it to be listed separately, or spent on the supplies the fund was raised for. <<He>> studies you for a moment, then crosses out two figures. "Another thousand for replenishing teaching supplies. I will revise the allocation."
+                <<option 'CN'>>
+                  你把送货附页放在报告旁，给礼顿看两者的差额。“那是预留的杂项费用。”<<He>>说。你请<<him>>另列用途，或用于募款原本要购买的用品。<<He>>打量了你片刻，划掉两处数字。“再拨一千镑，用于补充教学用品。我会重新列项。”
+              <</language>><br><br>
+              <span class='green'><<lanSwitch 'The report now lists £5,500 for teaching supplies and £500 for transport.' '报告已改为教学用品 £5,500、运输 £500。'>></span><br><br>
+              <<deadwood-school-donation-progress>>
+              <<deadwood-school-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='blue'><<lanSwitch 'Maths' '数学'>></span><br>
+    <</if>>
+    <<icon 'school/procurement-audit.png'>><<lanLink ['Accept the report as presented (0:10)', '接受这份报告 (0:10)']>>
+      <<set _school_source to $passage>>
+      <<if maplebirch.get('Finance').donations.school.audit(false)>>
+        <<pass 10>>
+        <<if $passage is _school_source>>
+          <<replace '#deadwood-school-accounts'>>
+            <<lanSwitch 'You read the report and return it. Leighton clips your acknowledgement to the file. "That settles the accounts. You may inspect the delivery as well."' '你读过报告，把它递了回去。礼顿将你的确认附在档案里。“账目就这样了。你还可以检查送来的物资。”'>><br><br>
+            <<deadwood-school-donation-progress>>
+            <<deadwood-school-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br><br>
+    <<deadwood-school-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'The procurement report is not available for review now.' '现在无法核对采购报告。'>><br><br>
+  <<deadwood-school-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms School Donation Inspection
+<<set $outside to 0>><<set $location to 'school'>><<schooleffects>><<effects>>
+<<set _school_donation to maplebirch.get('Finance').donations.school>>
+<<if _school_donation.canInspect>>
+  <<npc Leighton>><<person1>>
+  <div id='deadwood-school-inspection'>
+    <<language>>
+      <<option 'EN'>>
+        Leighton accompanies you to the storeroom. Boxes of exercise books stand beside cases of laboratory glassware. <<He>> opens a microscope case and holds out the packing list. "Here is what the school has received."
+        <<if currentSkillValue('science') gte 400>><br><br>You compare the parts with the specification. One slide holder is the wrong fitting. It will not attach to the microscope it was supplied with.<</if>>
+      <<option 'CN'>>
+        礼顿陪你来到储物间。一箱箱练习本堆在实验玻璃器皿旁。<<He>>打开显微镜箱，把装箱单递给你。“学校收到的物资都在这里。”
+        <<if currentSkillValue('science') gte 400>><br><br>你对照规格检查零件。一个载玻片夹的接口不对，无法装在同箱送来的显微镜上。<</if>>
+    <</language>><br><br>
+    <<if currentSkillValue('science') gte 400>>
+      <<icon 'school/equipment-inspection.png'>><<lanLink ['Ask the supplier to replace the mismatched part (0:15)', '要求供应商换掉不匹配的零件 (0:15)']>>
+        <<set _school_source to $passage>>
+        <<if maplebirch.get('Finance').donations.school.inspect('replace')>>
+          <<pass 15>>
+          <<if $passage is _school_source>>
+            <<replace '#deadwood-school-inspection'>>
+              <<language>>
+                <<option 'EN'>>
+                  You show Leighton the incompatible fitting. <<He>> tries it, sets it down and reaches for the telephone. "A replacement. The correct part, this time." <<He>> writes a note on the packing list. "The supplier will send it tomorrow. Come back then to sign for the completed delivery."
+                <<option 'CN'>>
+                  你给礼顿看了接口。<<He>>试着装了一下，放下零件，拿起电话。“换货。这次送对零件。”<<He>>在装箱单上记了一笔。“供应商明天会补送。到时候再来签收完整的物资。”
+              <</language>><br><br>
+              <span class='blue'><<lanSwitch 'The replacement is due in one day.' '换货将在一天后送达。'>></span><br><br>
+              <<deadwood-school-donation-progress>>
+              <<deadwood-school-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='blue'><<lanSwitch 'Science' '科学'>></span><br>
+    <</if>>
+    <<icon 'school/delivery-receipt.png'>><<lanLink ['Accept the delivery (0:15)', '接受这批物资 (0:15)']>>
+      <<set _school_source to $passage>>
+      <<if maplebirch.get('Finance').donations.school.inspect('accept')>>
+        <<pass 15>>
+        <<if $passage is _school_source>>
+          <<replace '#deadwood-school-inspection'>>
+            <<lanSwitch 'You finish checking the boxes against the list. Leighton takes the list back and marks the inspection complete. "Good. We can finish the paperwork in my office."' '你检查完箱子和清单。礼顿收回装箱单，记下检查已完成。“很好。剩下的手续回办公室办。”'>><br><br>
+            <<deadwood-school-donation-progress>>
+            <<deadwood-school-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br><br>
+    <<deadwood-school-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'The delivery is not ready for inspection now.' '这批物资现在还无法验收。'>><br><br>
+  <<deadwood-school-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms School Donation Receipt
+<<set $outside to 0>><<set $location to 'school'>><<schooleffects>><<effects>>
+<<set _school_donation to maplebirch.get('Finance').donations.school>>
+<<if _school_donation.canSign>>
+  <<npc Leighton>><<person1>>
+  <div id='deadwood-school-receipt'>
+    <<language>>
+      <<option 'EN'>>
+        The delivery receipt lies open on Leighton's desk. <<if _school_donation.state.equipment is 'replaced'>>The replacement part is listed beside the original shipment, with its correct specification.<</if>> <<He>> indicates the space for your signature. "The equipment can go into use once this is filed."
+      <<option 'CN'>>
+        物资收据摊在礼顿的办公桌上。<<if _school_donation.state.equipment is 'replaced'>>补送的零件列在原货物旁，规格也改对了。<</if>><<He>>指着留给你签字的位置。“归档后，器材就可以投入使用了。”
+    <</language>><br><br>
+    <<icon 'school/delivery-receipt.png'>><<lanLink ['Sign the completed delivery receipt (0:05)', '签署物资收据 (0:05)']>>
+      <<set _school_source to $passage>>
+      <<if maplebirch.get('Finance').donations.school.sign()>>
+        <<pass 5>>
+        <<if $passage is _school_source>>
+          <<replace '#deadwood-school-receipt'>>
+            <<language>>
+              <<option 'EN'>>
+                Leighton stamps the receipt and puts a copy in your hands. "A useful contribution. We have several more projects that could benefit from this sort of support."
+                <<if maplebirch.get('Finance').donations.school.state.terms is 'access'>><br><br>"Your after-school slot is recorded. Ask at the library desk when you want to use it."<</if>>
+                <<if $headnodetention isnot 1>><br><br>"Should a minor disciplinary matter arise, bring the record to me. I can review it on one occasion." <<He>> closes the file.<</if>>
+              <<option 'CN'>>
+                礼顿在收据上盖章，把副本交到你手里。“这笔资助很有用。学校还有几个项目，也能受益于这样的支持。”
+                <<if maplebirch.get('Finance').donations.school.state.terms is 'access'>><br><br>“课后时段已经记好了。想用的时候，到图书馆柜台问一声。”<</if>>
+                <<if $headnodetention isnot 1>><br><br>“以后遇到轻微的纪律问题，把记录拿来给我。我可以为你复核一次。”<<He>>合上档案夹。<</if>>
+            <</language>><br><br>
+            <span class='green'><<lanSwitch 'The donated supplies have been signed into use.' '捐赠物资已签收入库，开始投入使用。'>></span><br><br>
+            <<deadwood-school-donation-visit-link>>
+            <<deadwood-school-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br><br>
+    <<deadwood-school-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'The delivery receipt is not ready to be signed now.' '物资收据现在还无法签署。'>><br><br>
+  <<deadwood-school-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms School Donation Followup
+<<set $outside to 0>><<set $location to 'school'>><<schooleffects>><<effects>>
+<<set _school_donation to maplebirch.get('Finance').donations.school>>
+<<if _school_donation.canFollow>>
+  <<npc Leighton>><<person1>>
+  <div id='deadwood-school-followup'>
+    <<lanSwitch 'A marked lesson plan rests beside the donation file. Leighton looks from it to you. "You wanted to hear how the supplies are being used?"' '捐款档案旁放着一份做过批注的教案。礼顿看了看教案，又望向你。“你想了解那些物资的使用情况？”'>><br><br>
+    <<socialiseicon>><<lanLink ['Ask about the first lessons with the new equipment (0:05)', '聊聊新器材投入课堂后的情况 (0:05)']>>
+      <<set _school_source to $passage>>
+      <<if maplebirch.get('Finance').donations.school.follow()>>
+        <<pass 5>>
+        <<if $passage is _school_source>>
+          <<replace '#deadwood-school-followup'>>
+            <<language>>
+              <<option 'EN'>>
+                "The classes can work in smaller groups now. Fewer students waiting for a turn at the equipment." Leighton shows you a short note from the science department. Extra exercise books have reached the classrooms, too.
+                <<if maplebirch.get('Finance').donations.school.state.accounts is 'corrected' or maplebirch.get('Finance').donations.school.state.equipment is 'replaced'>><br><br>"The changes you requested have been dealt with." <<He>> puts the note away rather precisely. "I trust that meets your expectations."<<else>><br><br>"It has been well received." <<He>> closes the file with a smile. "A project worth continuing, I think."<</if>>
+                <<if $headblackmailed is 1>><br><br>"This arrangement is working," <<he>> adds. "I suggest we keep our dealings on this footing."<<else>><br><br>"If you hear of anyone else interested in supporting the school, do send them to me."<</if>>
+              <<option 'CN'>>
+                “现在能分成更小的组做实验了。等着轮到自己用器材的学生也少了。”礼顿给你看科学教研组的一张简报。新增的练习本也已经分到教室。
+                <<if maplebirch.get('Finance').donations.school.state.accounts is 'corrected' or maplebirch.get('Finance').donations.school.state.equipment is 'replaced'>><br><br>“你要求修改的地方已经处理好了。”<<He>>把简报收得格外整齐。“想必达到了你的要求。”<<else>><br><br>“反响不错。”<<He>>笑着合上档案夹。“我想，这是个值得继续做的项目。”<</if>>
+                <<if $headblackmailed is 1>><br><br>“这样的安排行得通。”<<He>>又说。“我建议，以后的往来也按这个方式来。”<<else>><br><br>“如果你听说还有人愿意支持学校，请让他们来找我。”<</if>>
+            <</language>><br><br>
+            <<language>>
+              <<option 'EN'>>
+                Leighton has included your named contribution in the school’s funding notice for staff and other benefactors. "A factory supplying suitable storage goods can receive enquiries through our usual purchasing process."
+              <<option 'CN'>>
+                礼顿已将你的具名资助写进发给教职员和其他资助者的项目简报。“供应合适储物用品的工厂，可以按正常采购流程收到询价。”
+            <</language>><br><br>
+            <<deadwood-school-donation-visit-link>>
+            <<deadwood-school-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br><br>
+    <<deadwood-school-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'There is no new report to discuss with Leighton now.' '现在没有新的使用报告可和礼顿讨论。'>><br><br>
+  <<deadwood-school-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms School Donation Review
+<<set $outside to 0>><<set $location to 'school'>><<schooleffects>><<effects>>
+<<set _school_donation to maplebirch.get('Finance').donations.school>>
+<<if _school_donation.canFavour>>
+  <<npc Leighton>><<person1>>
+  <div id='deadwood-school-review'>
+    <<lanSwitch 'You place your detention record beside the signed donation receipt. Leighton reads both. "I said I would review a minor matter. Let me see."' '你把留堂记录放在签好的捐款收据旁。礼顿看过两份文件。“我说过可以复核一次轻微的问题。让我看看。”'>><br><br>
+    <<icon 'school/exemption.png'>><<lanLink ['Request the promised review (0:05)', '请礼顿按约定复核 (0:05)']>>
+      <<set _school_source to $passage>>
+      <<if maplebirch.get('Finance').donations.school.favour()>>
+        <<pass 5>>
+        <<if $passage is _school_source>>
+          <<replace '#deadwood-school-review'>>
+            <<language>>
+              <<option 'EN'>>
+                Leighton draws a line through the pending detention. "I will settle this one administratively." <<if $headblackmailed is 1>><<He>> holds your gaze before putting the pen down. "You have your answer."<<else>><<He>> sets the record aside. "Put your time to better use."<</if>>
+              <<option 'CN'>>
+                礼顿划掉待执行的留堂。“这次我会按行政程序处理。”<<if $headblackmailed is 1>><<He>>盯着你看了一会儿，才放下笔。“你已经得到答复了。”<<else>><<He>>把记录放到一旁。“把时间用在更有价值的事上。”<</if>>
+            <</language>><br><br>
+            <span class='green'><<lanSwitch 'Your pending minor detention has been cleared.' '待执行的轻微留堂已撤销。'>></span><br><br>
+            <<deadwood-school-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>><br><br>
+    <<deadwood-school-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'There is no suitable detention record for Leighton to review now.' '现在没有适合请礼顿复核的留堂记录。'>><br><br>
+  <<deadwood-school-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms School Donation Practice
+<<set $outside to 0>><<set $location to 'school'>><<schooleffects>><<effects>><<clearnpc>>
+<<set _school_donation to maplebirch.get('Finance').donations.school>>
+<<if _school_donation.canPractice>>
+  <div id='deadwood-school-practice'>
+    <<language>>
+      <<option 'EN'>>
+        The teacher supervising the laboratory checks your booking and unlocks an equipment cupboard. Clean glassware stands beside a box of sample slides. You have fifteen minutes before the equipment must be returned.
+      <<option 'CN'>>
+        实验室的值班教师核对了你的预约，打开器材柜。干净的玻璃器皿旁放着一盒标本载玻片。你有十五分钟，结束后需要归还器材。
+    <</language>><br><br>
+    <<icon 'school/teaching-practice.png'>><<lanLink ['Examine samples and record your observations (0:15)', '观察标本并记录结果 (0:15)']>>
+      <<set _school_source to $passage>>
+      <<if maplebirch.get('Finance').donations.school.practice('science')>>
+        <<scienceskill `_school_donation.state.equipment === 'replaced' ? 5 : 3` 'no_star'>><<pass 15>>
+        <<if $passage is _school_source>>
+          <<replace '#deadwood-school-practice'>>
+            <<lanSwitch 'You adjust the focus, compare the samples and write down what changes between them. The supervising teacher checks your notes before you clean the slides and return the microscope.' '你调整焦距，对比标本，记下它们之间的差异。值班教师看过你的记录后，你清洁载玻片，把显微镜放回柜子。'>><br><br>
+            <span class='green'><<lanSwitch 'You have practised your science.' '你练习了科学。'>></span><br><br>
+            <<deadwood-school-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>> | <span class='green'><<lanSwitch '+ Science' '+ 科学'>></span><br>
+    <<mathicon>><<lanLink ['Measure the apparatus and calculate ratios (0:15)', '测量器材并计算比例 (0:15)']>>
+      <<set _school_source to $passage>>
+      <<if maplebirch.get('Finance').donations.school.practice('maths')>>
+        <<mathsskill 3 'no_star'>><<pass 15>>
+        <<if $passage is _school_source>>
+          <<replace '#deadwood-school-practice'>>
+            <<lanSwitch 'You measure out volumes, check the scale divisions and work through the proportions in your notebook. The supervising teacher checks your unit conversions. You finish the calculation and put the apparatus away.' '你量出体积，核对刻度，在笔记本上计算比例。值班教师核对了你的单位换算。你算完后，把器材收好。'>><br><br>
+            <span class='green'><<lanSwitch 'You have practised your maths.' '你练习了数学。'>></span><br><br>
+            <<deadwood-school-donation-exit>>
+          <</replace>><<run updateMoment()>>
+        <</if>>
+      <</if>>
+    <</lanLink>> | <span class='green'><<lanSwitch '+ Maths' '+ 数学'>></span><br><br>
+    <<deadwood-school-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'The supervised equipment session is not available now.' '现在无法使用这个有教师监督的器材时段。'>><br><br>
+  <<deadwood-school-donation-exit>>
+<</if>>
+
+:: Deadwood Reblooms School Donation Visit
+<<set $outside to 0>><<set $location to 'school'>><<schooleffects>><<effects>>
+<<set _school_donation to maplebirch.get('Finance').donations.school>>
+<<if _school_donation.canVisit>>
+  <<npc Leighton>><<person1>>
+  <div id='deadwood-school-visit'>
+    <<language>>
+      <<option 'EN'>>
+        The office assistant finds your name in the funding file and asks you to wait. Leighton opens the door a little later. "For the benefactor appointment? Come in." <<He>> leaves the file on the desk, facing you. "You have helped the school. It is reasonable for us to set aside time to hear you. What would you like to discuss?"
+        <<if $headblackmailed is 1>> <<His>> eyes narrow slightly. "I trust we can keep this meeting productive."<</if>>
+      <<option 'CN'>>
+        办公室助理在资助档案中找到你的名字，请你稍等。过了一会儿，礼顿打开门。“资助者预约？进来吧。”<<He>>将档案放在桌上，朝向你。“你帮助了学校。我们留出时间听听你的意见，也是合理的。想谈些什么？”
+        <<if $headblackmailed is 1>> <<His>>的眼睛微微眯起。“希望这次会谈能谈出点实际的东西。”<</if>>
+    <</language>><br><br>
+    <<deadwood-card 'School benefactor appointment' '学校资助者接见'>>
+      <<lanSwitch 'One 20-minute meeting each week during the school day. This appointment has its own place in the head’s diary.' '上学日每周可会面一次，20 分钟。这次接见在校长的日程里单独留有时间。'>><br>
+      <<if _school_donation.state.terms isnot 'access'>>
+        <<scienceicon>><<lanLink ['Ask to use the donated teaching equipment after school (0:20)', '要求放学后使用捐赠的教学器材 (0:20)']>>
+          <<set _school_source to $passage>>
+          <<if maplebirch.get('Finance').donations.school.visit('access')>>
+            <<pass 20>>
+            <<if $passage is _school_source>>
+              <<replace '#deadwood-school-visit'>>
+                <<lanSwitch 'Leighton reads the signed delivery record, then adds your name to the equipment booking sheet. "One short session after classes. Maths or science. Ask at the library desk." You keep a copy of the agreed hours.' '礼顿看过签好的交货记录，把你的名字添到器材预约表上。“放学后短时间使用，每天一次。数学或科学，到图书馆柜台询问。”你留下一份商定开放时间的副本。'>><br><br>
+                <span class='green'><<lanSwitch 'After-school equipment access is active: 15:00–16:44, one session daily.' '课后器材使用已生效：15:00–16:44，每天一次。'>></span><br>
+                <<deadwood-school-donation-practice-link>><<deadwood-school-donation-exit>>
+              <</replace>><<run updateMoment()>>
+            <</if>>
+          <</if>>
+        <</lanLink>><br>
+      <</if>>
+      <<if !_school_donation.state.favour_used and $detention gt 0 and $detention lte 10 and $daily.school.detentionAttended isnot 1 and $headnodetention isnot 1>>
+        <<icon 'school/exemption.png'>><<lanLink ['Use the promised minor detention review (0:20)', '使用约定的轻微留堂复核 (0:20)']>>
+          <<set _school_source to $passage>>
+          <<if maplebirch.get('Finance').donations.school.visit('review')>>
+            <<pass 20>>
+            <<if $passage is _school_source>>
+              <<replace '#deadwood-school-visit'>>
+                <<lanSwitch 'Leighton reads your record, then draws a line through the pending detention. "I agreed to look at one minor matter. This will be settled administratively." <<He>> signs the amendment and slides your copy across the desk.' '礼顿看过记录，划掉待执行的留堂。“我答应过复核一次轻微的问题。这次按行政程序处理。”<<He>>在更正处签名，将你的副本推过桌面。'>><br><br>
+                <span class='green'><<lanSwitch 'Your pending minor detention has been cleared. The agreed review has been used.' '待执行的轻微留堂已撤销，约定的复核机会已使用。'>></span><br><br>
+                <<deadwood-school-donation-exit>>
+              <</replace>><<run updateMoment()>>
+            <</if>>
+          <</if>>
+        <</lanLink>><br>
+      <</if>>
+      <<assignmenticon>><<lanLink ['Discuss the school’s supply needs (0:20)', '商谈学校的物资需求 (0:20)']>>
+        <<set _school_source to $passage>>
+        <<if maplebirch.get('Finance').donations.school.visit('project')>>
+          <<pass 20>>
+          <<if $passage is _school_source>>
+            <<stress -6>>
+            <<replace '#deadwood-school-visit'>>
+              <<language>>
+                <<option 'EN'>>
+                  Leighton shows you the departments' requests. <<if currentSkillValue('maths') gte 400>>You compare the quantities and question a duplicated request. <<He>> takes a pen to the list. "I'll have that checked before it is ordered."<<else>>You ask which supplies are needed most urgently. Leighton marks the requests the school can use first.<</if>> "If your business handles suitable goods, we can send an enquiry through the usual purchasing arrangements." For once, you leave with your questions answered rather than dismissed.
+                <<option 'CN'>>
+                  礼顿给你看各教研组提交的申请。<<if currentSkillValue('maths') gte 400>>你对照数量，问起一项重复的申请。<<He>>拿起笔，在清单上做了标记。“下单前，我会让人核实。”<<else>>你问起哪些物资最为急需。礼顿标出学校能优先使用的几项。<</if>>“你的企业经营合适的货品，我们可以按正常采购流程发送询价。”这次，你的疑问得到了答复，而没有被几句话打发掉。
+              <</language>><<lstress>><br><br>
+              <<deadwood-school-donation-exit>>
+            <</replace>><<run updateMoment()>>
+          <</if>>
+        <</if>>
+      <</lanLink>> | <span class='green'><<lanSwitch '− Stress' '− 压力'>></span><br>
+    <</deadwood-card>>
+    <<deadwood-school-donation-exit>>
+  </div>
+<<else>>
+  <<lanSwitch 'Your next benefactor appointment is not available now.' '现在无法安排下一次资助者接见。'>><br><br>
+  <<deadwood-school-donation-exit>>
+<</if>>

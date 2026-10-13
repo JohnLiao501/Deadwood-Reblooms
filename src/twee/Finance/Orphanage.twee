@@ -5,7 +5,7 @@
     <<socialiseicon 'ask'>><<lanLink ['Discuss ending your rent payments (0:05)', '谈谈不再交租的事 (0:05)'] 'Deadwood Reblooms Orphanage Buyout'>>
       <<pass 5>>
     <</lanLink>><br>
-  <</if>>
+  <</if>><<deadwood-orphanage-donation-office>>
 <</widget>>
 
 <<widget 'deadwood-finance-orphanage-robin-link'>>
