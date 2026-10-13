@@ -10,7 +10,8 @@ interface Job {
   due: number;
   vehicle: number | null;
   searches: number;
-  issue: 'none' | 'shortage' | 'price' | 'recognised';
+  issue: 'none' | 'shortage' | 'price' | 'recognised' | 'queue' | 'label';
+  handled: '' | 'checked' | 'waited' | 'negotiated';
   fee: number;
   late: boolean;
 }
@@ -19,12 +20,17 @@ interface JobsState {
   offer: string;
   site: Site;
   cooldowns: Record<string, number>;
+  day: number;
+  board: string[];
+  completed: number;
+  earned: number;
+  losses: number;
   report: { id: string; outcome: 'paid' | 'returned' | 'cancelled' | 'lost'; fee: number; late: boolean } | null;
 }
 
 /** 委托只保存本批货物；原版 blackmoney、黑箱与警方记录继续各自结算。 */
 export default class Jobs {
-  public static readonly defaults: JobsState = { active: null, offer: '', site: 'pub', cooldowns: {}, report: null };
+  public static readonly defaults: JobsState = { active: null, offer: '', site: 'pub', cooldowns: {}, day: -1, board: [], completed: 0, earned: 0, losses: 0, report: null };
   public readonly terms = terms;
 
   public constructor(private readonly street: StreetLife) {}
@@ -54,17 +60,42 @@ export default class Jobs {
 
   public get offers(): Contract[] {
     if (this.state.active) return [];
-    return terms.jobs.filter(
-      item =>
-        (this.state.cooldowns[item.id] ?? -1) <= Math.floor(Time.days) &&
-        this.street.reputation >= item.required_reputation &&
-        (item.id !== 'supplies' || (!!this.street.core.get('LifeSimulation') && V.id > 0)) &&
-        (item.id !== 'fence' || V.smuggler_pub_known === 1)
-    );
+    const candidates = this.state.board
+      .map(id => terms.jobs.find(item => item.id === id)!)
+      .filter(
+        item =>
+          (this.state.cooldowns[item.id] ?? -1) <= Math.floor(Time.days) &&
+          this.street.reputation >= item.required_reputation &&
+          (item.requires !== 'casino' || (!!this.street.core.get('LifeSimulation') && V.id > 0)) &&
+          (item.requires !== 'finance' || !!this.street.core.get('Finance')) &&
+          (item.requires !== 'underground' || V.smuggler_pub_known === 1)
+      );
+    // 当前条件过滤之后取三项合法、一项非法；当天随机顺序由 gate 保存。
+    return [...candidates.filter(item => !item.illegal).slice(0, 3), ...candidates.filter(item => item.illegal).slice(0, 1)];
+  }
+
+  public get receiving(): boolean {
+    switch (this.place) {
+      case 'casino':
+        return !!this.street.core.get('LifeSimulation')?.casino.open && V.id > 0;
+      case 'cafe':
+        return Time.openingHours() && V.chef_state !== 8 && !(V.chef_state === 7 && V.chef_rework <= 30);
+      case 'docks':
+      case 'townhall':
+        return Time.dayState !== 'night';
+      case 'tailor':
+        return Time.dayState !== 'night' && Time.hour !== 21;
+      case 'library':
+        return Time.schoolDay && Time.hour >= 7 && Time.hour < 17;
+      case 'finance':
+        return Time.weekDay >= 2 && Time.weekDay <= 6 && Time.hour >= 9 && Time.hour < 17;
+      default:
+        return true;
+    }
   }
 
   public get expired(): boolean {
-    return !!this.state.active && Time.date.timeStamp > this.state.active.due + terms.grace_hours * 3600;
+    return !!this.state.active && !!this.contract && Time.date.timeStamp > this.state.active.due + this.contract.grace_hours * 3600;
   }
 
   public get fee(): number {
@@ -107,7 +138,7 @@ export default class Jobs {
   }
 
   /** 页面仅展示；接货、交货、归还和付款都在点击时验证当前批次及地点。 */
-  public act(action: 'accept' | 'collect' | 'load' | 'unload' | 'deliver' | 'return' | 'cancel' | 'pay', value?: string | number): boolean {
+  public act(action: 'accept' | 'collect' | 'check' | 'wait' | 'negotiate' | 'load' | 'unload' | 'deliver' | 'return' | 'cancel' | 'pay', value?: string | number): boolean {
     if (!this.available) return false;
     const state = this.state;
     const title = this.street.core.passage.title;
@@ -116,7 +147,7 @@ export default class Jobs {
       if (title !== 'Deadwood Street Job Offer' || !offer || state.offer !== value) return false;
       // 货物问题只在接单时抽取一次；种类与概率留在目录中维护。
       const issue = offer.issues[random(1, offer.issues.length) - 1] as Job['issue'];
-      state.active = { id: offer.id, stage: 'pickup', due: Time.date.timeStamp + terms.deadline_hours * 3600, vehicle: null, searches: 0, issue, fee: offer.fee, late: false };
+      state.active = { id: offer.id, stage: 'pickup', due: Time.date.timeStamp + offer.deadline_hours * 3600, vehicle: null, searches: 0, issue, handled: '', fee: offer.fee, late: false };
       state.cooldowns[offer.id] = Math.floor(Time.days) + terms.cooldown_days;
       state.report = null;
       return true;
@@ -124,8 +155,33 @@ export default class Jobs {
     const job = state.active;
     const contract = this.contract;
     if (!job || !contract) return false;
-    if (action === 'collect') {
-      if (title !== 'Deadwood Street Cargo' || this.place !== contract.source || job.stage !== 'pickup' || this.expired) return false;
+    if (action === 'check' || action === 'wait' || action === 'negotiate') {
+      // 现场问题只在当前地点处理一次；展示页面与日志不会推进事件。
+      if (title !== 'Deadwood Street Cargo' || this.expired || !this.cargoHere || job.handled || !this.receiving) return false;
+      const pickup = job.stage === 'pickup' && this.place === contract.source;
+      const delivery = job.stage === 'carrying' && this.place === contract.target;
+      if (action === 'check') {
+        if (!pickup || !['shortage', 'label'].includes(job.issue)) return false;
+        job.handled = 'checked';
+      } else if (action === 'wait') {
+        if (job.issue !== 'queue' || !(job.id === 'recovery' ? pickup : delivery)) return false;
+        job.handled = 'waited';
+      } else {
+        if (!delivery || job.issue !== 'price' || window.currentSkillValue('english') < 400) return false;
+        job.handled = 'negotiated';
+      }
+      job.issue = 'none';
+    } else if (action === 'collect') {
+      if (
+        title !== 'Deadwood Street Cargo' ||
+        this.place !== contract.source ||
+        job.stage !== 'pickup' ||
+        this.expired ||
+        !this.receiving ||
+        job.issue === 'label' ||
+        (job.id === 'recovery' && job.issue === 'queue')
+      )
+        return false;
       if (
         contract.id === 'recovery' &&
         ++job.searches === 1 &&
@@ -143,8 +199,9 @@ export default class Jobs {
         job.vehicle = null;
       }
     } else if (action === 'deliver') {
-      if (title !== 'Deadwood Street Cargo' || this.place !== contract.target || job.stage !== 'carrying' || !this.cargoHere || this.expired) return false;
-      if (this.place === 'casino' && (!this.street.core.get('LifeSimulation')?.casino.open || V.id <= 0)) return false;
+      if (title !== 'Deadwood Street Cargo' || this.place !== contract.target || job.stage !== 'carrying' || !this.cargoHere || this.expired || job.issue === 'queue' || job.issue === 'label')
+        return false;
+      if (!this.receiving) return false;
       job.late = Time.date.timeStamp > job.due;
       job.fee = this.fee;
       job.stage = 'settlement';
@@ -154,18 +211,26 @@ export default class Jobs {
       if (title !== 'Deadwood Street Cargo' || job.stage !== 'carrying' || !this.cargoHere) return false;
       job.stage = 'return';
     } else {
-      if (this.place !== 'pub' || !['Deadwood Street Jobs', 'Deadwood Street Cargo'].includes(title)) return false;
+      if (!['Deadwood Street Jobs', 'Deadwood Street Cargo'].includes(title)) return false;
       if (action === 'pay') {
-        if (job.stage !== 'settlement') return false;
+        if (this.place !== 'pub' || job.stage !== 'settlement') return false;
         state.report = { id: job.id, outcome: 'paid', fee: job.fee, late: job.late };
         state.active = null;
+        state.completed++;
+        state.earned += job.fee;
         this.street.reputation += job.late ? 1 : contract.reputation;
         this.street.core.SugarCube.Wikifier.wikifyEval(`<<money ${job.fee} 'pub'>>`);
       } else {
+        const returnSite = job.stage === 'pickup' || this.lost ? 'pub' : contract.return_to;
+        if (this.place !== returnSite) return false;
+        if (job.stage === 'return' && !this.lost && !this.receiving) return false;
         if (job.stage === 'settlement' || (!this.lost && job.stage !== 'pickup' && (job.stage !== 'return' || !this.cargoHere))) return false;
         state.report = { id: job.id, outcome: this.lost ? 'lost' : job.stage === 'pickup' ? 'cancelled' : 'returned', fee: 0, late: false };
         state.active = null;
-        if (state.report.outcome === 'lost') this.street.reputation -= contract.reputation;
+        if (state.report.outcome === 'lost') {
+          state.losses++;
+          this.street.reputation -= contract.reputation;
+        }
       }
     }
     return true;

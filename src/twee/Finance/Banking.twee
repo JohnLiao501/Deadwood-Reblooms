@@ -752,6 +752,7 @@
 <</if>>
 <br>
 <<deadwood-reblooms-adrian-break-link>>
+<<deadwood-street-cargo-link 'finance'>>
 <<highicon>><<lanLink ["Return to High Street", "返回商业街"] 'High Street'>><</lanLink>><br>
 
 :: Deadwood Reblooms Financial Centre Bank

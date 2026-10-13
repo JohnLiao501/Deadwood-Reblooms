@@ -1002,8 +1002,13 @@
 <!-- 街头委托：只读当前货物、期限和回执；交接与报酬在委托页面结算。 -->
 
 <<widget 'deadwood-street-job-journal'>>
-  <<if $StreetLife.jobs.active or $StreetLife.jobs.report>>
+  <<if $StreetLife.jobs.active or $StreetLife.jobs.report or $StreetLife.jobs.completed or $StreetLife.jobs.losses>>
     <<deadwood-card 'Street work' '街头委托'>>
+      <div class='dr-finance-summary'>
+        <span><<lanSwitch 'Completed deliveries' '完成委托'>></span><span class='teal'><<= $StreetLife.jobs.completed>></span>
+        <span><<lanSwitch 'Fees collected' '累计实收'>></span><span><<printmoney $StreetLife.jobs.earned>></span>
+        <<if $StreetLife.jobs.losses>><span><<lanSwitch 'Shipments lost' '丢失货物'>></span><span class='red'><<= $StreetLife.jobs.losses>></span><</if>>
+      </div>
       <<deadwood-street-job-status>>
       <<if !$StreetLife.jobs.active and $StreetLife.jobs.report>>
         <<set _streetReport to $StreetLife.jobs.report>>

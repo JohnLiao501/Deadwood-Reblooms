@@ -1,0 +1,134 @@
+:: Deadwood Street Cargo Travel Widgets [widget]
+
+<!-- 只读已装车的委托和本次交通事件；不抽签、不改变货物或结算报酬。 -->
+<<widget 'deadwood-street-cargo-travel'>>
+  <<set _streetCargoJobs to maplebirch.get('StreetLife')?.jobs, _streetCargoTrip to $Transport?.trip, _streetCargoJob to _streetCargoJobs?.state.active>>
+  <<if _streetCargoTrip and !_streetCargoTrip.interrupted and _streetCargoJob and ['carrying', 'return'].includes(_streetCargoJob.stage) and _streetCargoJob.vehicle is _streetCargoTrip.vehicle and !_streetCargoJobs.lost and !$combat and !$nextPassageCheck and !['pending', 'active'].includes(_streetCargoTrip.event?.combat) and _streetCargoTrip.event?.outcome isnot 'stolen'>>
+    <<language>>
+      <<option 'EN'>>
+        <<switch _streetCargoJob.id>>
+          <<case 'supplies'>>
+            The bottles clink inside their crate whenever the vehicle rocks. The order remains tucked beneath the lid.
+          <<case 'recovery'>>
+            The grey case rattles against its catches. Its handle and scuffed corners look much the same as when you found it.
+          <<case 'fence'>>
+            The watches make a faint clicking sound inside their pouch. You know what the buyer is expecting to see.
+          <<case 'medical'>>
+            The hospital's address stands out on the plain carton. The paperwork travels with the order.
+          <<case 'books'>>
+            The books are tied together in their box. At each turn you hear paper shifting against paper.
+          <<case 'cafe'>>
+            The lightweight cartons rustle beside the sealed coffee packets.
+          <<case 'parts' 'stolen_tools'>>
+            Tools knock softly inside the case. You check that its catches remain closed.
+          <<case 'documents' 'bankpapers'>>
+            The sealed envelope sits with your belongings, its address facing upwards.
+          <<case 'uniforms'>>
+            You keep the garment bag away from the wheels and the dirty floor.
+          <<case 'drugs'>>
+            The tightly wrapped parcel remains where you put it. You remember what Landry told you about its contents.
+        <</switch>>
+        <<if _streetCargoJob.stage is 'return'>>
+          You are taking the goods back to the sender.
+        <</if>>
+        <<if _streetCargoTrip.event?.started>>
+          <<switch _streetCargoTrip.event.kind>>
+            <<case 'traffic'>>
+              <<if _streetCargoTrip.event.resolved>>
+                After the lorry's close pass, you check where you put the goods. <<if ['supplies', 'medical'].includes(_streetCargoJob.id)>>Your eyes return to the delivery time on the order.<</if>>
+              <<else>>
+                The lorry's horn bears down on you. <<if ['supplies', 'medical'].includes(_streetCargoJob.id)>>The order's delivery time weighs on your mind, along with the load.<<else>>With the cargo on board, the narrow space beside the lorry feels smaller still.<</if>>
+              <</if>>
+            <<case 'puncture'>>
+              <<if _streetCargoTrip.event.resolved>>
+                The trouble with the tyre has cost you time. You check where you put the goods before continuing.
+              <<else>>
+                The goods wait where you loaded them while you deal with the tyre. Nobody at the other end can see what is holding you up.
+              <</if>>
+            <<case 'load'>>
+              <<if _streetCargoTrip.event.resolved>>
+                Beyond the obstruction, you look back at your own load before continuing.
+              <<else>>
+                Another load blocks the road ahead. Yours will have to wait until you find a way through.
+              <</if>>
+            <<case 'roadblock'>>
+              <<if _streetCargoTrip.event.resolved>>
+                You keep an eye on the goods as you leave the obstruction behind.
+              <<else>>
+                With the road blocked, you are conscious of the goods travelling with you. You watch the people ahead before deciding what to do.
+              <</if>>
+          <</switch>>
+        <</if>>
+        <<if Weather.isSnow>>
+          Snow lies along the roadside. With the cargo on board, every jolt feels more noticeable.
+        <<elseif Weather.precipitation is 'rain'>>
+          Rain beats against the road. Water pools around the vehicle's wheels.
+        <</if>>
+        <<if _streetCargoTrip.settled>>
+          Now the vehicle has stopped, the goods are ready for you to unload.
+        <</if>>
+      <<option 'CN'>>
+        <<switch _streetCargoJob.id>>
+          <<case 'supplies'>>
+            车子一晃，木箱里的酒瓶就轻轻碰在一起。订单还夹在箱盖下面。
+          <<case 'recovery'>>
+            灰色手提箱的锁扣随着颠簸轻响。提手和磨花的边角，看起来还是你找到它时的样子。
+          <<case 'fence'>>
+            小袋子里的手表发出细微的碰撞声。你知道买家想见到的是什么。
+          <<case 'medical'>>
+            医院的地址贴在素色纸箱上，十分显眼。随货单据和这批订单放在一起。
+          <<case 'books'>>
+            书籍捆好装在箱里。每次转弯，你都听见纸页相互摩擦的声音。
+          <<case 'cafe'>>
+            轻薄的包装盒在封好的咖啡袋旁沙沙作响。
+          <<case 'parts' 'stolen_tools'>>
+            工具在箱里轻轻相碰。你确认锁扣仍然合着。
+          <<case 'documents' 'bankpapers'>>
+            封好的文件袋和随身物品放在一起，收件地址朝上。
+          <<case 'uniforms'>>
+            你把衣物袋放好，远离车轮和脏地面。
+          <<case 'drugs'>>
+            裹紧的包裹还在你放下的位置。你想起兰德里说过，里面装的是什么。
+        <</switch>>
+        <<if _streetCargoJob.stage is 'return'>>
+          你正把货物退给发货人。
+        <</if>>
+        <<if _streetCargoTrip.event?.started>>
+          <<switch _streetCargoTrip.event.kind>>
+            <<case 'traffic'>>
+              <<if _streetCargoTrip.event.resolved>>
+                卡车紧贴着经过后，你检查了一下放货的位置。<<if ['supplies', 'medical'].includes(_streetCargoJob.id)>>目光又落到订单的交货时间上。<</if>>
+              <<else>>
+                卡车的喇叭声紧逼过来。<<if ['supplies', 'medical'].includes(_streetCargoJob.id)>>你惦记着装好的货物，也惦记着订单上的交货时间。<<else>>带着这批货，卡车旁狭窄的空隙显得更挤了。<</if>>
+              <</if>>
+            <<case 'puncture'>>
+              <<if _streetCargoTrip.event.resolved>>
+                轮胎这一番折腾耽误了些时间。继续赶路前，你检查了一下放货的位置。
+              <<else>>
+                你处理轮胎时，货物还留在装车的位置。等着收货的人看不到这里出了什么事。
+              <</if>>
+            <<case 'load'>>
+              <<if _streetCargoTrip.event.resolved>>
+                越过障碍后，你又看了一眼自己的货物，才继续前行。
+              <<else>>
+                别人的货物挡住了前方的道路。找到办法过去之前，你这批也只能等着。
+              <</if>>
+            <<case 'roadblock'>>
+              <<if _streetCargoTrip.event.resolved>>
+                离开拦路的人时，你仍留意着带着的货物。
+              <<else>>
+                道路被人挡住，你不由得惦记起车上的货物。决定怎么办之前，你先看了看前方的人。
+              <</if>>
+          <</switch>>
+        <</if>>
+        <<if Weather.isSnow>>
+          路边覆着积雪。带着货物，每一下颠簸都显得更明显。
+        <<elseif Weather.precipitation is 'rain'>>
+          雨水拍打着路面，车轮旁积起了一汪汪水。
+        <</if>>
+        <<if _streetCargoTrip.settled>>
+          车子已经停稳，货物可以卸下来了。
+        <</if>>
+    <</language>><br><br>
+  <</if>>
+<</widget>>

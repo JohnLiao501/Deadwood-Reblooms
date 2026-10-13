@@ -149,6 +149,7 @@
   <<if _transport.events.combatPending or _transport.events.inCombat>>
     <<icon 'alert.png'>><<lanLink ['Continue', '继续'] 'Deadwood Transport Road Fight'>><</lanLink>>
   <<elseif _transport.events.atHazard>>
+    <<deadwood-street-cargo-travel>>
     <<deadwood-transport-hazard>>
   <<elseif !$Transport.trip or !$Transport.trip.settled or $Transport.trip.interrupted>>
     <<deadwood-transport-hazard-result>>
@@ -240,6 +241,7 @@
         <<deadwood-transport-road-scene>>
         到了<<print _transport.catalog.name($Transport.trip.to)>>，你停下车，把它留在路边。
     <</language>><br><br>
+    <<deadwood-street-cargo-travel>>
     <<if $Transport.trip.taxi>>
       <<deadwood-taxi-arrival>>
     <<else>>

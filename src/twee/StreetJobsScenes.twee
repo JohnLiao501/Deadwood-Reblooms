@@ -1,0 +1,642 @@
+:: Deadwood Street Job Scene Widgets [widget]
+
+<!-- 环境只读取当前地点、天气和载货状态；委托随机项在接单时确定。 -->
+<<widget 'deadwood-street-job-environment'>>
+  <<language>>
+    <<option 'EN'>>
+      <<switch $StreetLife.jobs.site>>
+        <<case 'pub'>>
+          A glass scrapes across a table as someone makes room for another drink. Behind the bar, empty bottles wait to be carried away. <<if Time.dayState is 'night'>>The light above the back door picks out muddy marks on the floor.<<else>>Daylight reaches the back door whenever someone opens it.<</if>>
+        <<case 'alley'>>
+          <<if Time.dayState is 'night'>>A strip of light lies beneath one of the loading doors. An engine idles out of sight.<<else>>Machinery hums beyond the loading doors. A worker wheels an empty trolley along the wall.<</if>> <<if Weather.precipitation is 'rain'>>Water trickles between the uneven paving stones. The pallets nearest the wall are dry beneath a narrow overhang.<<elseif Weather.isSnow>>Wheel tracks cut through the slush beside the loading doors.<<else>>Old tyre marks cross the paving between stacks of empty pallets.<</if>>
+        <<case 'casino'>>
+          <<if !maplebirch.get('LifeSimulation')?.casino.open>>
+            The door upstairs is closed. No one comes down to collect the delivery.
+          <<elseif $id lte 0>>
+            Chips click beyond the upstairs door, but you have not been admitted. You will need legal ID before taking the goods inside.
+          <<else>>
+            Chips click against the tables upstairs. A server picks a way between chairs with a tray held above the seated players. The stairwell is narrow enough that someone carrying a crate would have to let others pass.
+          <</if>>
+        <<case 'smuggler'>>
+          Footsteps knock against the wooden platforms. A drink slides across a table behind a partition; the conversation there lowers as you pass. Goods have to be carried through on foot; there is nowhere to bring a vehicle.
+        <<case 'hospital'>>
+          <<if Time.dayState is 'night'>>The foyer lights remain bright. Someone sleeps upright in a waiting chair while a trolley rattles past the reception desk.<<else>>People stop at the reception desk, unfold letters, and ask which way to go. A member of staff pushes a trolley through the crowd.<</if>> <<if Weather.precipitation is 'rain'>>Wet footprints lead from the entrance to the mats.<<elseif Weather.isSnow>>A damp coat hangs over the back of a waiting chair.<</if>>
+        <<case 'library'>>
+          <<if !_streetJobs.receiving>>
+            The desks are empty, and nobody is at the counter to check a delivery. You can keep the books with you until staff return.
+          <<else>>
+            Pages turn at the study desks. Beside a shelf, a basket holds returned books waiting to be sorted. You lower your voice before asking about the delivery.
+          <</if>>
+        <<case 'cafe'>>
+          <<if !_streetJobs.receiving>>
+            <<if $chef_state is 8 or ($chef_state is 7 and $chef_rework lte 30)>>The cafe is preparing to reopen. Nobody is accepting ordinary deliveries at the counter.<<else>>The cafe is closed. The tables are quiet, and there is nobody at the counter to sign for the goods.<</if>>
+          <<else>>
+            Cups clink behind the counter. A server wipes the last crumbs from a vacated table before taking another order. <<if Weather.precipitation is 'rain' or Weather.isFreezing>>The outdoor tables are empty, but the tables inside are busy.<<else>>Through the windows, you can see the sea beyond the outdoor tables.<</if>>
+          <</if>>
+        <<case 'docks'>>
+          <<if !_streetJobs.receiving>>
+            The cargo stacks are lit by passing security patrols. The working day is over; no one is there to take your delivery.
+          <<else>>
+            <<if Time.dayState is 'dawn'>>Vehicles arrive with cargo as the first workers gather by the ships.<<elseif Time.dayState is 'dusk'>>The last ships are leaving. A worker coils a rope beside the moored vessels.<<else>>Dockers move between the moored ships and the stacked cargo. A manager checks a clipboard on a raised platform.<</if>> <<if Weather.precipitation is 'rain'>>Rain shines on the paving, and workers pull their collars up as they pass.<<else>>Footsteps and the knock of cargo carry over the water.<</if>>
+          <</if>>
+        <<case 'townhall'>>
+          <<if !_streetJobs.receiving>>
+            The daytime queue has gone. The front desk is not accepting deliveries now; you still have the envelope with you.
+          <<else>>
+            A pen scratches across a form at the front desk. Along the waiting room, wooden doors open and shut as people are called through. You keep the envelope clear of the paperwork spread across the counter.
+          <</if>>
+        <<case 'tailor'>>
+          <<if !_streetJobs.receiving>>
+            The tailor's counter is unattended. The bundle will have to wait until the staff return.
+          <<else>>
+            A shop assistant straightens a folded garment while another customer compares fabrics. Behind the counter, finished orders wait with tags attached.
+          <</if>>
+        <<case 'finance'>>
+          <<if !_streetJobs.receiving>>
+            The financial centre's counter is closed. There is nobody to accept or sign for the envelope.
+          <<else>>
+            Forms and folders lie neatly on the counter. A staff member finishes a line of figures before looking up to see who is waiting.
+          <</if>>
+      <</switch>>
+    <<option 'CN'>>
+      <<switch $StreetLife.jobs.site>>
+        <<case 'pub'>>
+          有人挪动酒杯，杯底擦过桌面，腾出另一个位置。吧台后堆着等人搬走的空瓶。<<if Time.dayState is 'night'>>后门上方的灯照出地板上的泥脚印。<<else>>每当后门打开，日光就会照进来。<</if>>
+        <<case 'alley'>>
+          <<if Time.dayState is 'night'>>一扇装货门底下透着光，看不见的地方有引擎怠速运转。<<else>>机器声穿过装货门，一名工人沿墙推着空板车。<</if>><<if Weather.precipitation is 'rain'>>雨水沿着不平的铺路石往下流，紧贴墙壁的托盘躲在窄窄的雨棚下，还是干的。<<elseif Weather.isSnow>>装货门边的雪泥上压着车轮印。<<else>>托盘之间的地面交错着旧轮胎印。<</if>>
+        <<case 'casino'>>
+          <<if !maplebirch.get('LifeSimulation')?.casino.open>>
+            楼上的门关着，也没人下来接货。
+          <<elseif $id lte 0>>
+            楼上的门里传来筹码相碰的声音，你却还没获准进去。把货送进去之前，需要出示合法身份证。
+          <<else>>
+            楼上传来筹码相碰的声音。一名服务员举着托盘，从牌手的椅背之间穿过。楼梯间很窄，搬着货箱上楼的人得停下来，让旁人先过。
+          <</if>>
+        <<case 'smuggler'>>
+          脚步敲响木头平台。隔板后有人把酒杯推过桌面；你经过时，那边的谈话声低了下去。货物得靠人搬进去，车开不到这里。
+        <<case 'hospital'>>
+          <<if Time.dayState is 'night'>>大厅的灯依然明亮。有人靠在候诊椅上睡着了，一辆推车哐啷哐啷地经过接待台。<<else>>人们在接待台前停下，展开信件，询问该往哪边走。一名工作人员推着小车穿过人群。<</if>><<if Weather.precipitation is 'rain'>>湿脚印从入口一路延伸到地垫上。<<elseif Weather.isSnow>>候诊椅背上搭着一件潮湿的外套。<</if>>
+        <<case 'library'>>
+          <<if !_streetJobs.receiving>>
+            书桌空着，柜台也没有人在岗，无法核对送来的书。可以先把书带在身边，等工作人员回来。
+          <<else>>
+            自习桌那边传来翻书声。书架旁的篮子里放着归还后尚未整理的书。询问送书事宜之前，你先压低声音。
+          <</if>>
+        <<case 'cafe'>>
+          <<if !_streetJobs.receiving>>
+            <<if $chef_state is 8 or ($chef_state is 7 and $chef_rework lte 30)>>咖啡馆正在准备重新开张，柜台暂时不接收日常送货。<<else>>咖啡馆已经关门，餐桌那边静悄悄的，也没人来柜台签收货物。<</if>>
+          <<else>>
+            柜台后传来杯子相碰的声音。服务员擦掉刚空出来那张桌子上的碎屑，又去接下一份订单。<<if Weather.precipitation is 'rain' or Weather.isFreezing>>外头的桌子空着，室内却很忙。<<else>>透过窗户，可以望见露天餐桌那边的海面。<</if>>
+          <</if>>
+        <<case 'docks'>>
+          <<if !_streetJobs.receiving>>
+            巡逻保安的灯光扫过堆起的货物。装卸的工人已经下班，眼下没人接收你的送货。
+          <<else>>
+            <<if Time.dayState is 'dawn'>>车辆带着货物陆续抵达，第一批工人正在船边集合。<<elseif Time.dayState is 'dusk'>>最后几艘船正要离开，一名工人在停泊的船边盘起绳索。<<else>>码头工人来往于停泊的船只和堆放的货物之间，高台上的管理员翻看着写字板。<</if>><<if Weather.precipitation is 'rain'>>地面被雨水淋得发亮，经过的工人拉高了衣领。<<else>>脚步声和货物相碰的声音传向水面。<</if>>
+          <</if>>
+        <<case 'townhall'>>
+          <<if !_streetJobs.receiving>>
+            白天排队的人已经散去，前台眼下不接收送件。信封还留在你身边。
+          <<else>>
+            前台的笔尖划过表格。等待室里的木门开了又关，有人被叫进去。你拿着信封，没有把它压在柜台上摊开的材料里。
+          <</if>>
+        <<case 'tailor'>>
+          <<if !_streetJobs.receiving>>
+            裁缝店柜台没有人在岗，那捆衣服得等工作人员回来再取。
+          <<else>>
+            一名店员理好折起的衣物，旁边的客人还在比较布料。柜台后放着几份做完的订单，都附着标签。
+          <</if>>
+        <<case 'finance'>>
+          <<if !_streetJobs.receiving>>
+            金融中心的柜台已经关闭，没有人来接收文件袋或签字。
+          <<else>>
+            表格和文件夹整齐地摆在柜台上。一名工作人员写完一行数字，抬头看看是谁在等候。
+          <</if>>
+      <</switch>>
+  <</language>><br><br>
+  <<if _streetJob and ['carrying', 'return'].includes(_streetJob.stage) and _streetJobs.cargoHere>>
+    <<language>>
+      <<option 'EN'>>
+        <<if _streetJob.vehicle isnot null>>
+          The goods are still in the vehicle parked nearby. You will need to bring them over for the handover.
+        <<elseif _streetContract.id is 'fence'>>
+          You keep the little pouch close, its contents tapping together when you move.
+        <<elseif _streetContract.id is 'recovery'>>
+          The case's handle presses against your fingers. You set it down without letting go.
+        <<elseif ['parts', 'stolen_tools'].includes(_streetContract.id)>>
+          The tools shift against one another beneath the closed lid. You steady the box by its handle.
+        <<elseif ['documents', 'bankpapers'].includes(_streetContract.id)>>
+          You keep the document envelope flat beneath your arm, with the receipt still clipped to it.
+        <<elseif _streetContract.id is 'uniforms'>>
+          The clothes are light, but the wrapped bundle is awkward to hold. You tuck it more securely against your side.
+        <<elseif _streetContract.id is 'drugs'>>
+          The parcel remains closed in your hands. You keep hold of the sender's note.
+        <<elseif _streetContract.id is 'books'>>
+          You hold the tied stack against your chest, keeping the list tucked beneath the string.
+        <<else>>
+          You shift your grip beneath the carton, keeping it clear of the floor.
+        <</if>>
+      <<option 'CN'>>
+        <<if _streetJob.vehicle isnot null>>
+          货物还在停在附近的车里，交接时需要搬过来。
+        <<elseif _streetContract.id is 'fence'>>
+          你把小袋子放在身边，走动时，里面的东西轻轻碰在一起。
+        <<elseif _streetContract.id is 'recovery'>>
+          手提箱的把手压着手指。你把箱子放下，手却没松开。
+        <<elseif ['parts', 'stolen_tools'].includes(_streetContract.id)>>
+          盖子下面的工具互相碰撞。你抓紧把手，稳住箱子。
+        <<elseif ['documents', 'bankpapers'].includes(_streetContract.id)>>
+          你把文件袋平整地夹在手臂下，收条还夹在上面。
+        <<elseif _streetContract.id is 'uniforms'>>
+          衣服不重，包好的这一捆却不太好拿。你把它往身侧托稳了一些。
+        <<elseif _streetContract.id is 'drugs'>>
+          包裹在你手里，封口还在。发货人的纸条也没有丢。
+        <<elseif _streetContract.id is 'books'>>
+          你把捆好的书托在胸前，书单还夹在绳子下面。
+        <<else>>
+          你重新托稳纸箱底部，没有把它放在地上。
+        <</if>>
+    <</language>><br><br>
+  <</if>>
+<</widget>>
+
+<!-- 报价页说明来路、交接对象与退货去处；期限及金额由调用页列出。 -->
+<<widget 'deadwood-street-job-pitch'>>
+  <<language>>
+    <<option 'EN'>>
+      <<switch _streetContract.id>>
+        <<case 'supplies'>>
+          "Someone needs a crate taken to the gambling room above the bar on Connudatus Street," Landry says. "Bottled drinks. Paid for already. Ask at the bar here for the delivery, then take it upstairs when they're open. Get a receipt and bring it back to me."<br><br>
+          "Count it before you leave. If there's a bottle missing, have them put it right here. Otherwise the person at the other end may cut your fee. You can bring it back if you don't agree."
+        <<case 'recovery'>>
+          "A contact put a grey equipment case down in the industrial alleyways. It's still there, as far as anyone knows." Landry traces a short line on the table. "Near the loading doors, on this side of the road. You'll have to look around. Bring the case to me."<br><br>
+          "Don't go climbing into somebody's workshop. And if they're moving pallets, let them finish before you get underneath anything."
+        <<case 'fence'>>
+          Landry rests a hand over a small pouch. "Watches. Stolen. I'd rather you knew that before saying yes." <<He>> watches your expression.<br><br>
+          "There's a buyer in the smuggler's pub. They know what they're buying. If they change the offer, you can try talking them round, or bring the watches back. If someone recognises the goods, decide whether the fee is worth the trouble. I'll pay you when the buyer confirms the handover."
+        <<case 'medical'>>
+          Landry unfolds a delivery slip. "A supplier's short of a driver. A sealed carton for the hospital: contraceptive tablets, anti-parasite cream, and pregnancy tests. It's their stock, already ordered. They want someone to take it over and bring back the receipt."<br><br>
+          "Collect it by the loading doors in the industrial alleyways. Show the delivery slip at the hospital reception desk; they'll call someone to check it. Keep the packets sealed. If the label doesn't match, have the sender sort it out before you leave."<br><br>
+          "Keep this one moving. If they won't take it, return it to the supplier, untouched. Don't leave it with me."
+        <<case 'books'>>
+          Landry nudges a tied stack of books out from under the table. "Someone cleared out a cupboard and found these. School books. They want them back where they belong." The uppermost book has a library stamp inside its cover.<br><br>
+          "Take them to the school library while somebody's there. Ask the librarian to check the list before putting them in the returns basket. Get a note to say they've arrived. If there's nobody to take them, keep hold of them."
+        <<case 'cafe'>>
+          "A supplier has a carton for the Ocean Breeze," Landry says. "Paper takeaway cartons and sealed bags of coffee beans. Collect it from the loading doors, and take it to the counter while they're open."<br><br>
+          "Check the label with the sender. The cafe's ordered this lot; nobody's asking you to buy it first. If they can't take it, bring it back to the supplier."
+        <<case 'parts'>>
+          Landry unfolds a note bearing a ship's name. "A crew needs replacement tools. The supplier's packed them up by the industrial loading doors. Show this note to a manager at the docks. They'll find the person who ordered them."<br><br>
+          "Go while the dockers are working. You'll need a signature before the box goes aboard. If the numbers don't match, sort that out with the sender first. The supplier takes returns."
+        <<case 'stolen_tools'>>
+          Landry lowers the note onto the table. "Tools from a building site. Taken, not bought." <<He>> leaves it where you can read it. "A contact has the box in the industrial alleyways. There's a buyer down at the smuggler's pub."<br><br>
+          "I'm telling you now so you can leave it alone. If you take the job and the buyer changes the offer, talk it over or bring the box back to the contact. If somebody recognises it, you decide whether to finish."
+        <<case 'documents'>>
+          Landry sets an envelope on the table. "Application papers for the town hall. The person who filled them in can't get away from work. They want the envelope delivered to the front desk, with a receipt brought back."<br><br>
+          "The names are on the outside. Leave it sealed. You may have to wait your turn, like everybody else."
+        <<case 'uniforms'>>
+          "The pub's ordered a few shirts and aprons from the tailor," Landry says. "They've been paid for. Collect the wrapped bundle, bring it here, and have the bartender check it against the order."<br><br>
+          "If the name on the bundle is wrong, ask before taking it away. They're clothes for the staff, not something you need to try on."
+        <<case 'bankpapers'>>
+          Landry holds out a thick document envelope. "A customer's signed forms for the financial centre. Copies of some invoices as well. All they need is someone to put it in the right hands and bring back a receipt."<br><br>
+          "Show the name on the envelope at the counter. You aren't signing anything for them. If the staff can't accept it, bring it back unopened."
+        <<case 'drugs'>>
+          Landry keeps the parcel note flat beneath one hand. "A stolen consignment of illicit drugs. That's what you'd be carrying." <<He>> pauses to let you answer.<br><br>
+          "The parcel's in the industrial alleyways. The buyer is at the smuggler's pub. The fee's for taking it from one to the other. If they change the offer, or somebody takes an interest, you can leave with the parcel and return it to the sender. You don't have to take this one."
+      <</switch>>
+    <<option 'CN'>>
+      <<switch _streetContract.id>>
+        <<case 'supplies'>>
+          “有人要把一箱货送到康努达塔斯街酒吧楼上的赌馆。”兰德里说。“瓶装酒水，货钱已经付了。去这里的吧台取货，等赌馆开门后送上楼。让人签个收条，再拿回来给我。”<br><br>
+          “出发前点清。要是少了瓶酒，让他们在这里补上。否则收货的人可能扣你的报酬。谈不拢，你可以带回来。”
+        <<case 'recovery'>>
+          “一个联系人把灰色器材箱落在工业区巷道了。目前没人说它被拿走。”兰德里在桌上划了一小段。“装货门附近，路的这一侧。你得过去找找，找到就带给我。”<br><br>
+          “别往人家的车间里爬。他们要是正在搬托盘，就先等搬完，别钻到什么东西底下。”
+        <<case 'fence'>>
+          兰德里把手搭在一个小袋子上。“手表，偷来的。答应之前，你得先知道这点。”<<He>>观察着你的表情。<br><br>
+          “走私者酒馆有个买家，知道自己买的是什么。要是对方变卦压价，可以试着谈谈，也可以把表带回来。要是有人认出了货，你自己想清楚，报酬值不值得惹这个麻烦。买家确认交接之后，我付你那一份。”
+        <<case 'medical'>>
+          兰德里展开一张送货单。“有家供应商缺个司机。一箱送医院的药品，避孕药、驱虫乳膏，还有验孕棒。货是他们自己的，订单也有了。找个人送过去，把收条带回来。”<br><br>
+          “到工业区巷道的装货门边取货。去医院接待台出示送货单，他们会叫人来核对。里面的包装别拆。外头的标签要是对不上，出发前让发货的人弄清楚。”<br><br>
+          “这单得抓紧送。医院不收，就原封不动退给供应商，别把它留在我这里。”
+        <<case 'books'>>
+          兰德里从桌底下推出来一摞捆好的书。“有人清理柜子，翻出了这些。学校的书，想还回该在的地方。”最上面那本的封面内侧盖着图书馆的章。<br><br>
+          “学校图书馆有人在的时候送过去。先让图书管理员对照书单，再放进归还书篮，让对方写张收到的凭据。没人接就先带着。”
+        <<case 'cafe'>>
+          “供应商有一箱货要送海风咖啡馆。”兰德里说。“外带纸盒，还有封好的咖啡豆。去装货门边取，营业的时候送到柜台。”<br><br>
+          “跟发货的人核对标签。咖啡馆已经订了这批货，不用你垫货钱。对方收不了，就退给供应商。”
+        <<case 'parts'>>
+          兰德里展开一张写着船名的纸条。“有船员要换一批工具。供应商已经装好了，在工业区装货门边。去码头找管理员，出示这张纸，对方会找下单的人来。”<br><br>
+          “码头工人上班的时候去。工具箱上船之前，让人签字。箱号不对，就先找发货的人弄清楚。退货也交给供应商。”
+        <<case 'stolen_tools'>>
+          兰德里把纸条放在桌上。“工地来的工具。偷出来的，没付钱买。”<<He>>把纸留在你看得见的位置。“一个联系人在工业区巷道存着箱子，走私者酒馆有买家。”<br><br>
+          “现在说清楚，你可以不碰这单。接了之后，买家要是变卦，就谈谈，或者把箱子退给联系人。有人认出来的话，继续不继续，你自己决定。”
+        <<case 'documents'>>
+          兰德里把一个信封放在桌上。“交市政厅的申请材料。填表的人抽不开身，要找人送到前台，再把收到的凭据带回来。”<br><br>
+          “外头写了名字，封口留着。可能得跟别人一样，排队等叫到。”
+        <<case 'uniforms'>>
+          “酒馆在裁缝店订了几件衬衫和围裙。”兰德里说。“钱付过了。去取包好的那一捆，带回这里，让酒保对着订单看看。”<br><br>
+          “包裹上要是写错了名字，拿走之前先问清楚。员工的工作服，你不用试穿。”
+        <<case 'bankpapers'>>
+          兰德里递来一个厚厚的文件袋。“有位客户签好了表格，要交金融中心，还有一些发票复印件。找个人送到对的地方，把收条带回来就行。”<br><br>
+          “到柜台出示文件袋上写的名字。你不替人签文件，工作人员收不了，就原封带回来。”
+        <<case 'drugs'>>
+          兰德里用一只手按住取货的纸条。“一包偷来的违禁药物。你要送的是这个。”<<He>>停下来，等你回答。<br><br>
+          “包裹在工业区巷道，买家在走私者酒馆。把东西从一边送到另一边，就是你那份报酬。对方变卦，或者有人盯上这单，你可以带着包裹离开，退给发货的人。这单可以不接。”
+      <</switch>>
+  <</language>><br><br>
+<</widget>>
+
+<<widget 'deadwood-street-job-pickup'>>
+  <<language>>
+    <<option 'EN'>>
+      <<switch _streetContract.id>>
+        <<case 'recovery'>>
+          <<if _streetJob.issue is 'queue'>>
+            Two workers are moving a stack of pallets away from a loading door. One raises a hand when you approach. "Hang on. Give us a minute to clear this."
+          <<elseif _streetJob.searches gt 0>>
+            You have checked the open stretch of alley. Scrape marks beside a loading door lead behind a stack of empty pallets. Something grey shows through a gap near the wall.
+          <<else>>
+            The loading doors are shut. Empty pallets stand along the wall. There is plenty of room for a case to have slipped out of sight. <<if _streetJob.handled is 'waited'>>The workers have left a clear stretch for you to check.<</if>>
+          <</if>>
+        <<case 'supplies'>>
+          The bartender checks Landry's note and points to a crate beside the back door. "That one. The order's under the lid. Mind the bottles on the stairs."<br><br>
+          <<if _streetJob.issue is 'shortage'>>
+            One of the spaces beneath the lid is empty. The order lists a full crate. The bartender glances at the shelf behind the bar; you could ask to count it together before taking it away.
+          <<elseif _streetJob.handled is 'checked'>>
+            The bartender has fetched the missing bottle. The crate now matches the order.
+          <<else>>
+            The bottles sit snugly in their dividers. The order is folded beneath the lid.
+          <</if>>
+        <<case 'fence'>>
+          Landry slides the pouch across the table. "Count them when you hand them over. Bring the pouch back if you can't agree." The watches knock softly against one another. The clasp on one still bears a small jeweller's sticker.
+        <<case 'medical'>>
+          A worker brings a sealed carton out to the loading door. A second copy of the delivery slip is tucked into a plastic sleeve on its side.<br><br>
+          <<if _streetJob.issue is 'label'>>
+            The carton number on the exterior label differs from the one on your slip. The worker reaches for it, then hesitates. "Let me check with the office. Don't take that yet."
+          <<elseif _streetJob.handled is 'checked'>>
+            The worker has returned with the correct dispatch label and a matching slip. The inner packets remain sealed. "There. The office mixed up the labels, not the stock."
+          <<else>>
+            The carton number matches your slip. "Keep it sealed," the worker says. "Get the signature against that number. If they won't take it, bring it back here."
+          <</if>>
+        <<case 'books'>>
+          The books are tied together beside the bar, with a list tucked beneath the string. A few have worn corners; the library stamps are still legible. The bartender moves a drink away from the stack. "Those are the ones. Keep that list with them."
+        <<case 'cafe'>>
+          A worker sets a carton of flat takeaway boxes and sealed coffee bags on a dry pallet. The supplier's slip is attached to its side.<br><br>
+          <<if _streetJob.issue is 'label'>>
+            The recipient on the label is a different business. "That's not right," the worker says, comparing it with your note. "Give me a moment to check which dispatch slip belongs here."
+          <<elseif _streetJob.handled is 'checked'>>
+            The worker has checked the order and attached the correct dispatch slip. "Ocean Breeze. There we are."
+          <<else>>
+            "Ocean Breeze," the worker reads from the label. "They'll be glad to see the boxes. Bring this copy back signed."
+          <</if>>
+        <<case 'parts'>>
+          A tool box waits on the low step beside the loading door. The handle is tied down for transport; a delivery slip bears the name of a moored ship.<br><br>
+          <<if _streetJob.issue is 'label'>>
+            Your note names a different box number. The worker runs a thumb over the label. "Hold on. I'll check the packing list before you take that."
+          <<elseif _streetJob.handled is 'checked'>>
+            The worker returns with the dispatch record and a corrected label. Both now match the number on your note.
+          <<else>>
+            The number matches your note. "Take it to a manager, then get the crew's signature," the worker says.
+          <</if>>
+        <<case 'stolen_tools'>>
+          A contact waits beside the loading door with a closed tool box. There are old paint marks on its side, and a company name partly worn away. "That's the box Landry meant." The contact keeps a hand on the lid until you show the note.
+        <<case 'documents'>>
+          The bartender brings a sealed envelope from behind the bar. The recipient's name and the words "Town Hall" are written across the front. A blank receipt is clipped to the back. "That's everything they left. Don't lose the little bit of paper."
+        <<case 'uniforms'>>
+          A wrapped bundle sits beside the tailor's counter. Folded collars show through the clear wrapping; the aprons are underneath.<br><br>
+          <<if _streetJob.issue is 'label'>>
+            The name on the tag differs from the pub's order. A shop assistant compares the two slips. "Let me check that before you take it."
+          <<elseif _streetJob.handled is 'checked'>>
+            The shop assistant has checked the order and replaced the mistaken tag. The pub's name is now written beside the list of garments.
+          <<else>>
+            A shop assistant checks the pub's name against the tag. "All paid for. Have them sign for the bundle when it arrives."
+          <</if>>
+        <<case 'bankpapers'>>
+          Landry places the document envelope flat on the table. It is sealed, with a customer's name and a receipt clipped to the outside. "That goes to the counter. They know who sent it."
+        <<case 'drugs'>>
+          A contact hands you a closed parcel beside a loading door. A consignment seal remains on its side. "Landry told you what it is?" The contact waits for your answer before letting go. "If the buyer won't take it, bring it back here."
+      <</switch>>
+    <<option 'CN'>>
+      <<switch _streetContract.id>>
+        <<case 'recovery'>>
+          <<if _streetJob.issue is 'queue'>>
+            两名工人正在从装货门前移走一堆托盘。你靠近时，其中一人抬起手。“先等等，给我们点时间清开。”
+          <<elseif _streetJob.searches gt 0>>
+            你已经找过巷道里开阔的地方。装货门旁有一道拖擦痕迹，延伸到堆起的空托盘后面。墙边的一条缝里露出一点灰色。
+          <<else>>
+            装货门关着，空托盘沿墙堆放。手提箱可能滑到不少看不见的角落里。<<if _streetJob.handled is 'waited'>>工人已经清出一片地方，可以过去查看了。<</if>>
+          <</if>>
+        <<case 'supplies'>>
+          酒保核对兰德里的纸条，指向后门旁的一箱货。“就是那箱，订单在盖子底下。上楼的时候，小心瓶子。”<br><br>
+          <<if _streetJob.issue is 'shortage'>>
+            箱盖底下有一个空位，订单写的却是满箱。酒保往身后的酒架瞥了一眼；你可以在拿走之前，要求一起点清。
+          <<elseif _streetJob.handled is 'checked'>>
+            酒保已经取来缺少的那瓶酒。箱里的数量和订单对上了。
+          <<else>>
+            瓶子稳稳地卡在隔板之间，折好的订单夹在箱盖底下。
+          <</if>>
+        <<case 'fence'>>
+          兰德里把小袋子推过桌面。“交货时点清。谈不拢，就把袋子带回来。”里面的手表轻轻碰在一起，一块表的搭扣上还留着珠宝店的小标签。
+        <<case 'medical'>>
+          一名工人把封好的纸箱搬到装货门边。箱侧的塑料套里插着另一份送货单。<br><br>
+          <<if _streetJob.issue is 'label'>>
+            外箱标签上的箱号和你手里的单据对不上。工人伸手要递过来，又停住了。“我去办公室核对一下。先别拿走。”
+          <<elseif _streetJob.handled is 'checked'>>
+            工人带着正确的发货标签和对应的送货单回来了，里面的包装依然封着。“好了。办公室把标签弄混了，货没错。”
+          <<else>>
+            箱号和你手里的送货单一致。“别拆封，”工人说，“让他们核对这个号码，再签字。不收就送回这里。”
+          <</if>>
+        <<case 'books'>>
+          书已经捆好，放在吧台旁边，绳子下面夹着书单。几本书的角磨旧了，图书馆的印章还看得清。酒保挪开附近的酒杯。“就是这些，书单也一起带着。”
+        <<case 'cafe'>>
+          一名工人把装着折平外带纸盒和密封咖啡豆的箱子放在干燥的托盘上，供应商的单据贴在箱侧。<br><br>
+          <<if _streetJob.issue is 'label'>>
+            标签上写的收货方却是另一家店。“不对啊，”工人对照你手里的纸条，“等我看看，这里的发货单是哪张。”
+          <<elseif _streetJob.handled is 'checked'>>
+            工人核对过订单，贴好了正确的发货单。“海风咖啡馆，这就对了。”
+          <<else>>
+            “海风咖啡馆。”工人读出标签。“他们正缺纸盒呢。让人签好，再把这份带回来。”
+          <</if>>
+        <<case 'parts'>>
+          装货门边的低台阶上放着一个工具箱，把手为了运输已经绑好，送货单上写着一艘停泊船只的名字。<br><br>
+          <<if _streetJob.issue is 'label'>>
+            你的纸条写着另一个箱号。工人用拇指蹭了下标签。“等等，拿走之前，我去核对装箱单。”
+          <<elseif _streetJob.handled is 'checked'>>
+            工人带着发货记录和更正后的标签回来了，两边的箱号都和纸条一致。
+          <<else>>
+            箱号与纸条一致。“拿去找管理员，再让船员签收。”工人说。
+          <</if>>
+        <<case 'stolen_tools'>>
+          联系人带着合上的工具箱，等在装货门边。箱侧有旧油漆印，还有一个磨掉了一部分的公司名字。“就是兰德里说的那个箱子。”你出示纸条之前，对方一直把手按在箱盖上。
+        <<case 'documents'>>
+          酒保从吧台后取出封好的信封，正面写着收件人的名字和“市政厅”，背面夹着一张空白收条。“留下的都在这里。那张小纸别丢了。”
+        <<case 'uniforms'>>
+          包好的衣服放在裁缝店柜台旁，透明包装里露着折好的衣领，围裙垫在下面。<br><br>
+          <<if _streetJob.issue is 'label'>>
+            标签上的名字却和酒馆的订单对不上。店员对照两张单据。“拿走之前，我先核对一下。”
+          <<elseif _streetJob.handled is 'checked'>>
+            店员已经核对订单，换掉了写错的标签。酒馆的名字旁列着衣物数量。
+          <<else>>
+            店员核对标签上的酒馆名字。“钱付清了。送到的时候，让对方签收这捆衣服。”
+          <</if>>
+        <<case 'bankpapers'>>
+          兰德里把文件袋平放在桌上。封口还在，客户的名字和收条都夹在外侧。“送去柜台，对方知道是谁寄的。”
+        <<case 'drugs'>>
+          联系人在装货门边把封好的包裹递给你，侧面还留着货运封签。“兰德里告诉你是什么了？”对方等你回答之后，才松开手。“买家不收，就退回这里。”
+      <</switch>>
+  <</language>><br><br>
+<</widget>>
+
+<<widget 'deadwood-street-job-handover'>>
+  <<language>>
+    <<option 'EN'>>
+      <<switch _streetContract.id>>
+        <<case 'supplies'>>
+          <<if _streetJob.issue is 'queue'>>
+            The server looks at your delivery slip while balancing a tray on one arm. "Give me a moment to get these out. I'll clear a table for you." There is no space to check the order yet.
+          <<else>>
+            A server makes room on a side table and checks the order. <<if _streetJob.issue is 'shortage'>>"There's a bottle missing. I can sign for the rest, but the fee is a quarter less. Or you can take it back."<<else>>"This is the one. I'll count it with you, then sign."<</if>>
+          <</if>>
+        <<case 'recovery'>>
+          Landry checks the case's catches. "That's it. Let's make sure nothing's gone missing." The case fits neatly in the space beside the table, away from passing feet.
+        <<case 'fence'>>
+          <<if _streetJob.issue is 'queue'>>
+            The buyer is still examining something wrapped in cloth. They cover it as you approach. "Not yet. Wait over there. I'll call you." A chair stands empty beside the partition.
+          <<else>>
+            The buyer opens a space beside their drink. <<if _streetJob.issue is 'recognised'>>Someone at the next table points at a watch. "That one was taken from a car yesterday." The buyer looks at you. "You still want to finish this?"<<elseif _streetJob.issue is 'price'>>"I'll take them. But your fee's a quarter less. Tell Landry that's my offer." The buyer leaves the pouch in front of you.<<elseif _streetJob.handled is 'negotiated'>>"All right. What Landry agreed." The buyer pushes the empty glass aside. "Let's count them."<<else>>"Landry sent you? Let's see them."<</if>>
+          <</if>>
+        <<case 'medical'>>
+          <<if _streetJob.issue is 'queue'>>
+            The receptionist checks the delivery slip, then calls through a side door. A nurse looks out but is already pushing a trolley. "I have to finish this first. Keep the carton with you; I'll be back to check it."
+          <<else>>
+            The receptionist calls a nurse over to check the delivery slip. The nurse compares the carton number with a list and runs a finger along the sealed edge. "This is the one. Put it on the trolley, please. I'll sign your copy."<br><br>
+            The nurse rests the clipboard on the trolley, leaving the receipt facing you.
+          <</if>>
+        <<case 'books'>>
+          <<if _streetJob.issue is 'queue'>>
+            The librarian is helping someone find a book on the shelves. "Leave a moment for me to check your list, please. Keep the stack with you until then."
+          <<else>>
+            The librarian compares the list with the titles and opens the covers to check the stamps. "These belong here. Put them beside the returns basket; I'll make sure they're sorted." A pen waits beside the receipt.
+          <</if>>
+        <<case 'cafe'>>
+          <<if _streetJob.issue is 'queue'>>
+            A server reaches the counter with an armful of empty cups. "The delivery? Give me a moment to put these down and find the order." Another customer is already calling from a table.
+          <<else>>
+            A server reads the label, then calls to someone behind the counter. "Boxes and coffee. Here's the order." A dry space is cleared beneath the counter for the carton.
+          <</if>>
+        <<case 'parts'>>
+          <<if _streetJob.issue is 'queue'>>
+            The manager glances at the ship's name on your note and points along the quay. "They're finishing a load. Wait here and I'll send someone over to sign for it."
+          <<else>>
+            A manager checks the ship's name and calls a crew member over. The crew member compares the box number with the order. "That's ours. Set it here a moment, before it goes aboard."
+          <</if>>
+        <<case 'stolen_tools'>>
+          <<if _streetJob.issue is 'queue'>>
+            The buyer is speaking quietly to someone behind a partition. They glance at the tool box and hold up a hand. "In a moment. Keep it beside you."
+          <<elseif _streetJob.issue is 'recognised'>>
+            Someone passing the table stops at the name on the box. "Those went missing from our site." The buyer leaves the lid alone and looks at you. "Are we still doing this?"
+          <<elseif _streetJob.issue is 'price'>>
+            The buyer touches the worn name on the box. "More trouble than I was told. I'll take it, but your fee's a quarter less." The box remains on your side of the table.
+          <<elseif _streetJob.handled is 'negotiated'>>
+            "Fine. What we agreed," the buyer says, pulling a chair aside. "Let's check the tools before I sign."
+          <<else>>
+            The buyer looks from the box to your note. "Landry's contact? Put it here. I'll check the tools against the list."
+          <</if>>
+        <<case 'documents'>>
+          <<if _streetJob.issue is 'queue'>>
+            Someone at the front desk is spreading photographs across the counter. The receptionist holds up one finger when you show the envelope. You'll have to wait until the current visitor is finished.
+          <<else>>
+            The receptionist checks the name on the envelope against the intake list. "Application papers? I'll send these through to the right office. Your receipt is for delivery; they'll contact the applicant about the decision."
+          <</if>>
+        <<case 'uniforms'>>
+          The bartender dries both hands before taking the order slip. "Shirts and aprons. Good, we've been waiting for those." A clean patch of the bar is cleared to count the bundle.
+        <<case 'bankpapers'>>
+          <<if _streetJob.issue is 'queue'>>
+            The counter clerk is reading another customer's forms. A small stack of folders lies beside the pen. You are asked to wait until the clerk has finished with that customer.
+          <<else>>
+            The counter clerk compares the envelope's name with the expected deliveries. "We can take this. I'll give you a receipt for the envelope, and deal with the sender about the contents."
+          <</if>>
+        <<case 'drugs'>>
+          <<if _streetJob.issue is 'queue'>>
+            The buyer is occupied at another table. They look at the parcel, then point to an empty chair. "Wait. I haven't finished here."
+          <<elseif _streetJob.issue is 'recognised'>>
+            A customer notices the parcel as you bring it towards the table. "That's the seal from the consignment that went missing." The buyer falls quiet, then asks whether you still mean to hand it over.
+          <<elseif _streetJob.issue is 'price'>>
+            "I'll take the parcel," the buyer says. "But your share is a quarter less." The buyer has not reached for it. You still have the parcel and the original offer.
+          <<elseif _streetJob.handled is 'negotiated'>>
+            The buyer looks at the note again. "All right. Keep the fee Landry gave you." A space is cleared for the parcel.
+          <<else>>
+            "You brought Landry's parcel?" The buyer checks your note and clears a space away from the drink. "Put it here. I'll give you the receipt."
+          <</if>>
+      <</switch>>
+    <<option 'CN'>>
+      <<switch _streetContract.id>>
+        <<case 'supplies'>>
+          <<if _streetJob.issue is 'queue'>>
+            服务员托着一盘酒，看了眼你的送货单。“等我把这盘送过去，给你清张桌子。”眼下还没有地方清点货物。
+          <<else>>
+            一名服务员在边桌上腾出位置，核对订单。<<if _streetJob.issue is 'shortage'>>“少了一瓶。剩下的可以签收，不过报酬得少四分之一。或者，你把它带回去。”<<else>>“就是这箱。跟你一起点完，我就签字。”<</if>>
+          <</if>>
+        <<case 'recovery'>>
+          兰德里检查手提箱的锁扣。“就是它。看看里面有没有少东西。”桌边正好放得下这个箱子，不会挡住经过的人。
+        <<case 'fence'>>
+          <<if _streetJob.issue is 'queue'>>
+            买家还在查看一件用布包住的东西。见你靠近，对方把布盖了回去。“还没好。去那边等着，待会叫你。”隔板旁有一张空椅子。
+          <<else>>
+            买家在酒杯旁清出一块地方。<<if _streetJob.issue is 'recognised'>>邻桌有人指着一块手表。“这块表昨天刚从车里被偷走。”买家看着你。“还要继续交货吗？”<<elseif _streetJob.issue is 'price'>>“货我收。不过，你的报酬得少四分之一。就跟兰德里说，这是我的报价。”买家把小袋子留在你面前。<<elseif _streetJob.handled is 'negotiated'>>“行，就按跟兰德里约好的。”买家推开空酒杯。“点清吧。”<<else>>“兰德里让你来的？拿出来看看。”<</if>>
+          <</if>>
+        <<case 'medical'>>
+          <<if _streetJob.issue is 'queue'>>
+            接待员看过送货单，朝侧门里招呼了一声。一名护士探出头，却已经推着一辆小车。“我得先把这边忙完。箱子先留在你身边，我一会儿回来核对。”
+          <<else>>
+            接待员叫来一名护士核对送货单。护士对照清单查看箱号，又沿着封口摸了一遍。“是这一箱。请放到推车上，我给你这份单据签字。”<br><br>
+            护士把写字板放在推车上，收条朝向你这一侧。
+          <</if>>
+        <<case 'books'>>
+          <<if _streetJob.issue is 'queue'>>
+            图书管理员正在书架间帮人找书。“请等一下，我得先看看你的书单。先把那摞书留在身边。”
+          <<else>>
+            图书管理员对照书单查看书名，再翻开封面检查印章。“是这里的书。放在归还书篮旁边，我会整理上架。”收条旁已经摆好一支笔。
+          <</if>>
+        <<case 'cafe'>>
+          <<if _streetJob.issue is 'queue'>>
+            服务员抱着一摞空杯来到柜台。“送货的？等我放下这些，再找找订单。”另一张桌子的客人又开始招呼服务员了。
+          <<else>>
+            服务员读过标签，朝柜台后招呼一声。“纸盒和咖啡豆，订单在这里。”柜台下清出了一块干燥的地方，用来放货箱。
+          <</if>>
+        <<case 'parts'>>
+          <<if _streetJob.issue is 'queue'>>
+            管理员看了眼纸条上的船名，往码头另一头指了指。“那边还有一批货没装完。你在这里等着，我叫人过来签收。”
+          <<else>>
+            管理员核对船名，叫来一名船员。船员对照订单查看箱号。“是我们的。先放在这里，等会搬上船。”
+          <</if>>
+        <<case 'stolen_tools'>>
+          <<if _streetJob.issue is 'queue'>>
+            买家还在隔板后低声跟人说话，瞥见工具箱时，抬起一只手。“稍等，先留在你旁边。”
+          <<elseif _streetJob.issue is 'recognised'>>
+            经过桌边的人看见箱上的名字，停了下来。“这些工具是我们工地丢的。”买家没有碰箱盖，看向你。“这单还做吗？”
+          <<elseif _streetJob.issue is 'price'>>
+            买家摸了摸箱上磨损的名字。“比原先说的麻烦。箱子我收，不过你的报酬得少四分之一。”工具箱还留在桌子靠你这一侧。
+          <<elseif _streetJob.handled is 'negotiated'>>
+            “行，按约好的来。”买家挪开一张椅子。“签字之前，先点清工具。”
+          <<else>>
+            买家看了看工具箱和纸条。“兰德里那个联系人来的？放这里，我对着清单看看。”
+          <</if>>
+        <<case 'documents'>>
+          <<if _streetJob.issue is 'queue'>>
+            前台有人正在柜台上摊开照片。你出示信封时，接待员竖起一根手指，示意先等当前这位办完。
+          <<else>>
+            接待员对照收件清单查看信封上的名字。“申请材料？我会转交给对应的办公室。这张收条只确认送达，审批结果会通知申请人。”
+          <</if>>
+        <<case 'uniforms'>>
+          酒保擦干双手，接过订单。“衬衫和围裙，好，等这些等了好一阵。”吧台上清出一片干净的地方，准备清点衣物。
+        <<case 'bankpapers'>>
+          <<if _streetJob.issue is 'queue'>>
+            柜台工作人员还在看另一位客户的表格，笔旁边堆着几个文件夹。对方请你等当前这位客户办完。
+          <<else>>
+            柜台工作人员对照待收文件记录查看袋上的名字。“这份可以收。收条确认我们收到这个文件袋，里面的内容会跟寄件人联系。”
+          <</if>>
+        <<case 'drugs'>>
+          <<if _streetJob.issue is 'queue'>>
+            买家还在另一张桌子边忙着，看了眼包裹，指向一张空椅子。“等着，我这边还没完。”
+          <<elseif _streetJob.issue is 'recognised'>>
+            你带着包裹走向桌子时，一名客人注意到了它。“就是丢掉的那批货上的封签。”买家沉默片刻，又问你还要不要交货。
+          <<elseif _streetJob.issue is 'price'>>
+            “包裹我收。”买家说。“不过你那份得少四分之一。”对方还没有伸手，包裹和最初的报价都留在你这边。
+          <<elseif _streetJob.handled is 'negotiated'>>
+            买家又看了一遍纸条。“行，你那份就按兰德里说的。”对方清出一个放包裹的位置。
+          <<else>>
+            “兰德里那份货？”买家看过纸条，把酒杯挪远。“放这里，我给你收条。”
+          <</if>>
+      <</switch>>
+  <</language>><br><br>
+<</widget>>
+
+<!-- 已交接后的收尾只描述收货方和回执，报酬由兰德里的领取链接结算。 -->
+<<widget 'deadwood-street-job-receipt'>>
+  <<if _streetJob.stage is 'settlement'>>
+    <<language>>
+      <<option 'EN'>>
+        <<switch _streetContract.id>>
+          <<case 'supplies'>>
+            The server signs beside the bottles received and hands you the folded receipt. "Give that to Landry." The crate is carried behind the bar, and the side table is cleared for another tray.
+          <<case 'recovery'>>
+            Landry closes the catches and puts the case beside the table. "I'll tell them it's back." A mark goes beside your name on the collection note. "That's your part done."
+          <<case 'fence'>>
+            The buyer folds the watches into the pouch and keeps it on their side of the table. They hand you a short receipt. "Landry will know what it is." <<if _streetJob.issue is 'recognised'>>The person at the next table is still watching you.<</if>>
+          <<case 'medical'>>
+            The nurse signs your copy of the delivery slip and hands it back, then wheels the sealed carton through the side door. The receptionist is already listening to the next person in line. You have the supplier's signed receipt.
+          <<case 'books'>>
+            The librarian signs the list and slides your copy back across the desk. The books are stacked beside the basket, ready to be sorted. "Thank you for bringing them back."
+          <<case 'cafe'>>
+            The server signs the supplier's copy and hands it back. The coffee is taken behind the counter; another member of staff reaches for a stack of the takeaway boxes.
+          <<case 'parts'>>
+            The crew member signs the delivery slip and lifts the box towards the ship. "That's what we needed." The manager checks the name once more before giving you back your copy.
+          <<case 'stolen_tools'>>
+            The buyer checks the tools, shuts the box, and draws it towards their chair. A short receipt is pushed across the table. <<if _streetJob.issue is 'recognised'>>The person who recognised the box looks from the buyer back to you.<</if>>
+          <<case 'documents'>>
+            The receptionist stamps the receipt and gives it back. Your envelope is placed in an intake tray, beneath a small sign bearing the department's name. Another visitor steps forward with a folder.
+          <<case 'uniforms'>>
+            The bartender checks the garments against the order and signs for the bundle. A folded apron is set aside for the next shift. You have the tailor's receipt to take back to Landry.
+          <<case 'bankpapers'>>
+            The clerk records the sender's name and returns the signed receipt. The sealed envelope is placed with the incoming documents. "That confirms we've received it."
+          <<case 'drugs'>>
+            The buyer takes the parcel and hands you a receipt for Landry. The parcel disappears behind the partition. <<if _streetJob.issue is 'recognised'>>The customer who recognised the seal has watched the whole exchange.<</if>>
+        <</switch>>
+      <<option 'CN'>>
+        <<switch _streetContract.id>>
+          <<case 'supplies'>>
+            服务员在实收数量旁签下名字，把折好的收条递给你。“给兰德里就行。”货箱被搬到吧台后，边桌又空出来，准备接下一盘酒。
+          <<case 'recovery'>>
+            兰德里合上锁扣，把箱子放在桌边。“我会告诉他们，箱子拿回来了。”交接单上，你的名字旁多了一个勾。“你这边做完了。”
+          <<case 'fence'>>
+            买家把表收进袋子，放在桌子另一侧，然后递给你一张简短的收条。“兰德里知道这是哪笔。”<<if _streetJob.issue is 'recognised'>>邻桌那人还在盯着你。<</if>>
+          <<case 'medical'>>
+            护士在你这份送货单上签字，递还给你，接着把封好的药品箱推进侧门。接待员已经开始听下一位来访者说话。你拿到了供应商要的签收凭据。
+          <<case 'books'>>
+            图书管理员在书单上签字，把你这份推回桌子另一侧。书已经叠在篮子旁，准备整理。“谢谢你把它们送回来。”
+          <<case 'cafe'>>
+            服务员在供应商的单据上签好字，递还给你。咖啡豆被搬到柜台后，另一名工作人员已经伸手拿走一摞外带纸盒。
+          <<case 'parts'>>
+            船员在送货单上签字，提起工具箱往船边走。“正缺这些。”管理员又核对一遍名字，把你这份递回来。
+          <<case 'stolen_tools'>>
+            买家点过工具，合上箱子，拉到自己的椅子旁，再把简短的收条推过桌面。<<if _streetJob.issue is 'recognised'>>认出工具箱的那人看过买家，又转头看向你。<</if>>
+          <<case 'documents'>>
+            接待员在收条上盖章，递还给你。信封被放进收件托盘，小牌子上写着对应部门的名字。下一位来访者带着文件夹走上前。
+          <<case 'uniforms'>>
+            酒保对照订单点清衣物，签收这捆工作服。折好的围裙留在旁边，准备给下一班用。你拿着裁缝店的签收单，可以带回兰德里那里。
+          <<case 'bankpapers'>>
+            工作人员登记寄件人的名字，把签好的收条交回给你。封好的文件袋被放进待处理文件里。“这份证明我们收到东西了。”
+          <<case 'drugs'>>
+            买家接过包裹，递给你一张交给兰德里的收条。包裹被收进隔板后面。<<if _streetJob.issue is 'recognised'>>认出封签的客人看完了整场交接。<</if>>
+        <</switch>>
+    <</language>><br><br>
+  <</if>>
+<</widget>>
+
+<!-- 选择只在点击时结算；场景重绘不改变随机项，也不推进时间。 -->
+<<widget 'deadwood-street-job-resolution'>>
+  <<if _streetJobs.available and _streetJobs.receiving and _streetJobs.cargoHere and !_streetJobs.expired>>
+    <<if _streetJob.stage is 'pickup' and $StreetLife.jobs.site is _streetContract.source>>
+      <<if (_streetContract.id is 'supplies' and _streetJob.issue is 'shortage') or _streetJob.issue is 'label'>>
+        <<icon 'investigate.png'>><<lanLink [_streetJob.issue === 'label' ? 'Have the sender check and correct the label (0:10)' : 'Check the order with the bartender (0:10)', _streetJob.issue === 'label' ? '让发货人核对并更正标签 (0:10)' : '与酒保核对并补齐订单 (0:10)'] 'Deadwood Street Cargo'>>
+          <<if _streetJobs.act('check')>><<pass 10>><</if>>
+        <</lanLink>><br>
+      <<elseif _streetContract.id is 'recovery' and _streetJob.issue is 'queue'>>
+        <<loitericon>><<lanLink ['Wait for the loading area to clear (0:10)', '等装货区清开 (0:10)'] 'Deadwood Street Cargo'>>
+          <<if _streetJobs.act('wait')>><<pass 10>><</if>>
+        <</lanLink>><br>
+      <</if>>
+    <<elseif _streetJob.stage is 'carrying' and $StreetLife.jobs.site is _streetContract.target>>
+      <<if _streetJob.issue is 'queue'>>
+        <<loitericon>><<lanLink ['Wait to have the goods checked (0:15)', '等候核对货物 (0:15)'] 'Deadwood Street Cargo'>>
+          <<if _streetJobs.act('wait')>><<pass 15>><</if>>
+        <</lanLink>><br>
+      <<elseif ['fence', 'stolen_tools', 'drugs'].includes(_streetContract.id) and _streetJob.issue is 'price' and currentSkillValue('english') gte 400>>
+        <<socialiseicon 'ask'>><<lanLink ['Hold the buyer to the agreed fee (0:10)', '要求买家按约定报酬结算 (0:10)'] 'Deadwood Street Cargo'>>
+          <<if _streetJobs.act('negotiate')>><<pass 10>><</if>>
+        <</lanLink>><br>
+      <</if>>
+    <</if>>
+  <</if>>
+<</widget>>
