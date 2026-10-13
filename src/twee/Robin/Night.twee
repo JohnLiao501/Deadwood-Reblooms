@@ -38,7 +38,7 @@
   <<socialiseicon 'ask'>><<lanLink ['Listen to Robin (0:15)', '听罗宾说说心事 (0:15)'] 'Deadwood Robin Night Listen'>><</lanLink>>
   <br><<socialiseicon>><<lanLink ['Plan tomorrow with Robin (0:15)', '和罗宾商量明天 (0:15)'] 'Deadwood Robin Night Tomorrow'>><</lanLink>>
   <<if $robinromance is 1 and C.npc.Robin.love gte 50 and C.npc.Robin.trauma lt 50>>
-    <br><<loveicon>><<lanLink ['Ask to sit with Robin for a while (0:20)', '问罗宾能否陪坐一会 (0:20)'] 'Deadwood Robin Night Stay'>><</lanLink>>
+    <br><<loveicon>><<lanLink ['Ask to sit with Robin for a while (0:20)', '问罗宾能否陪坐一会儿 (0:20)'] 'Deadwood Robin Night Stay'>><</lanLink>>
     <<if !pcAreArmsBound('both')>><<handholdingvirginitywarning>><</if>>
   <</if>>
   <<if ($RobinExpansion.shop_stage isnot 'none' or $RobinExpansion.shop) and (!$RobinExpansion.rebellion or $RobinExpansion.bailey_defeated) and C.npc.Robin.trauma lt 50>>

@@ -104,7 +104,7 @@
     <<option 'CN'>>
       服务员把托盘换到一只手上。“歇一会儿，还是在等人？”问话时带着笑，托盘却仍隔在你们之间。“这里说话听得清些。别挡住过道就行。”
   <</language>><br><br>
-  <<socialiseicon>><<lanLink ['Compliment the uniform (0:05)', '夸赞对方的制服 (0:05)']>>
+  <<socialiseicon>><<lanLink ['Compliment the uniform (0:05)', '夸夸这身制服 (0:05)']>>
     <<pass 5>>
     <<if $passage is 'Deadwood Reblooms Casino Lounge Talk'>>
       <<goto 'Deadwood Reblooms Casino Lounge Compliment'>>

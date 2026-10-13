@@ -40,7 +40,7 @@
   <</if>>
   <br><br>
   <<if $RobinExpansion.asylum.visit_day isnot Time.days>>
-    <<socialiseicon>><<lanLink ['Spend time with Robin (0:30)', '陪罗宾待一会 (0:30)'] 'Deadwood Robin Asylum Visit'>><</lanLink>><br>
+    <<socialiseicon>><<lanLink ['Spend time with Robin (0:30)', '陪罗宾待一会儿 (0:30)'] 'Deadwood Robin Asylum Visit'>><</lanLink>><br>
   <</if>>
   <<if $RobinExpansion.asylum.plan lt 2 and $RobinExpansion.asylum.plan_day isnot Time.days>>
     <<socialiseicon>><<lanLink ['Plan an escape with Robin (0:20)', '和罗宾计划逃离 (0:20)'] 'Deadwood Robin Asylum Plan'>><</lanLink>>
