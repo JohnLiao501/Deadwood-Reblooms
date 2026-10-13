@@ -5,7 +5,9 @@ import { pubCardPassages } from '../../module/StreetLife/SmugglerCards';
 export default function SmugglerPub(maplebirch: typeof window.maplebirch): void {
   for (const game of ['blackjack', 'holdem'] as const) {
     maplebirch.tool.macro.defineS(`deadwood-pub-${game}-table`, () => {
-      const cards = maplebirch.get('StreetLife')!.smugglerPub.cards;
+      if (!V.StreetLife?.smuggler_pub?.cards) return;
+      const cards = maplebirch.get('StreetLife')?.smugglerPub.cards;
+      if (!cards) return;
       const revision = cards.state.revision;
       const action = (name: string, amount: number): boolean => {
         const accepted = cards.action(game, name, amount, revision);
@@ -20,6 +22,7 @@ export default function SmugglerPub(maplebirch: typeof window.maplebirch): void 
     });
   }
   maplebirch.on(':passagestart', passage => {
+    if (!V.StreetLife?.smuggler_pub?.cards) return;
     const cards = maplebirch.get('StreetLife')?.smugglerPub.cards;
     if (cards?.state.mode && passage.title !== pubCardPassages[cards.state.mode]) cards.close();
   });

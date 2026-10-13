@@ -266,7 +266,9 @@ class IncantationCheatCollection {
       const mm: string = String(now.getMinutes()).padStart(2, '0');
       const ss: string = String(now.getSeconds()).padStart(2, '0');
       const datestamp: string = `${now.getFullYear()}${MM}${DD}-${hh}${mm}${ss}`;
-      const data: string = window.LZString.compressToBase64(JSON.stringify(items));
+      const codec = window.LZString;
+      if (!codec) throw new Error('LZString is unavailable');
+      const data: string = codec.compressToBase64(JSON.stringify(items));
       const saveName: string = `IncantationCheatCollection-${datestamp}.cheat`;
       window.saveAs(new Blob([data], { type: 'text/plain;charset=UTF-8' }), saveName);
       this.showStatus(true, 'Export successful', '导出成功');
@@ -285,8 +287,11 @@ class IncantationCheatCollection {
     let importedItems: CheatItem[] = [];
     try {
       const text: string = await file.text();
-      const json: string | null = window.LZString.decompressFromBase64(text.trim());
-      if (!json) {
+      const codec = window.LZString;
+      const decompress = codec && Reflect.get(codec, 'decompressFromBase64');
+      if (typeof decompress !== 'function') throw new Error('LZString decompression is unavailable');
+      const json: unknown = decompress.call(codec, text.trim());
+      if (typeof json !== 'string' || !json) {
         this.showStatus(false, 'Invalid import file', '导入文件格式错误');
         return false;
       }

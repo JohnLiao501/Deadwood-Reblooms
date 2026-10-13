@@ -21,13 +21,13 @@
 ## 安装与前置
 
 1. 准备支持 SugarCube 2 ModLoader 的 **DoL 0.5.12.13**。
-2. 加载 [秋枫白桦框架](https://github.com/MaplebirchLeaf/SCML-DOL-maplebirchFramework)，版本须满足模组包声明的 `maplebirch >= 5.4.1`，并安装模组包所列的其他前置。
+2. 加载 [秋枫白桦框架](https://github.com/MaplebirchLeaf/SCML-DOL-maplebirchFramework)，版本须满足模组包声明的 `maplebirch >= 5.4.3`，并安装模组包所列的其他前置。
 3. 从 [Releases](https://github.com/MaplebirchLeaf/Deadwood-Reblooms/releases) 加载 `deadwood-reblooms-*.modpack`。需要动态音乐时，再加载对应的 `deadwood-reblooms-audio-*.modpack`。
 4. 需要调整模块时，在框架的模块管理中启用或关闭，并按提示重载。
 
 `DeadwoodReblooms` 是根模块，关闭它会停用所有子模块。检测到功能重叠的外部模组时，枯木逢春会关闭自身对应模块，保留外部模组。角色剧情仍遵循原版的人物关系、地点和日程条件。
 
-当前版本为 **1.4.4**，本次修复悉尼神殿宿舍与自购房亲密场景取回衣物时报错的问题，详见[更新说明](.github/release-notes/v1.4.4.md)。建议配合框架 **5.4.2** 使用。
+当前版本为 **2.0.1**，修复街头生活的旧存档初始化与页面事件问题，详见[更新说明](.github/release-notes/v2.0.1.md)。建议配合框架 **5.4.3** 使用。
 
 ## 模块与游戏指南
 

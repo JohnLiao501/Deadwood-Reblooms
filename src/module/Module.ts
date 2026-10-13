@@ -19,11 +19,13 @@ abstract class Module {
   }
 
   public preInit(): void {
-    this.core.on(':variable', () => {
-      V[this.name] ??= {};
-      this.migration.run(V[this.name], this.version);
-      this.migration.utils.fill(V[this.name], clone(this.defaults));
-    });
+    this.core.on(':variable', () => this.variable());
+  }
+
+  protected variable(): void {
+    V[this.name] ??= {};
+    this.migration.run(V[this.name], this.version);
+    this.migration.utils.fill(V[this.name], clone(this.defaults));
   }
 }
 

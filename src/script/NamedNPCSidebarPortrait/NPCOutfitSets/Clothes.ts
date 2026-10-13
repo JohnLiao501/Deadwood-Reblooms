@@ -35,10 +35,10 @@ function describe(item: Item, slot: 'upper' | 'lower', options: SetOptions) {
   };
 }
 
-export function addSet(core: MaplebirchCore, names: string[], name: string, clothes: Item, options: SetOptions = {}): void {
+export function addSet(maplebirch: MaplebirchCore, names: string[], name: string, clothes: Item, options: SetOptions = {}): void {
   if (names.includes(name)) return;
   const [upper, lower] = parts(clothes);
-  core.npc.addClothes({
+  maplebirch.npc.addClothes({
     name,
     type: options.type ?? (upper.type?.includes('school') || lower.type?.includes('school') ? 'school' : 'custom'),
     gender: options.gender ?? (upper.gender === lower.gender ? upper.gender : 'n'),

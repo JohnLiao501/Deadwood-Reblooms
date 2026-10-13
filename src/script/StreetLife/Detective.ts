@@ -1,5 +1,7 @@
 // ./src/script/StreetLife/Detective.ts
 
+import GrantPortrait from '../NamedNPCSidebarPortrait/Grant';
+
 /** 格兰特只负责案件合作；通缉、判刑与减刑仍使用原版警方规则。 */
 export default function Detective(maplebirch: typeof window.maplebirch): void {
   maplebirch.npc.add(
@@ -26,4 +28,5 @@ export default function Detective(maplebirch: typeof window.maplebirch): void {
     schedule.at(0, 'grant_home');
     schedule.when(date => date.hour >= 8 && date.hour < 18, 'police_station');
   });
+  GrantPortrait(maplebirch);
 }

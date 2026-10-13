@@ -30,19 +30,22 @@ export default function StreetLife(maplebirch: typeof window.maplebirch): void {
   maplebirch.tool.addTo('BeforeLinkZone', { widget: 'deadwood-street-bailey-link', passage: ["Bailey's Office", 'Flats'] });
   maplebirch.dynamic.regStateEvent('gate', 'deadwood-street-fight-interrupted', {
     cond: () => {
-      if (!V.StreetLife?.bounties) return false;
-      const work = maplebirch.get('StreetLife')!.bounties;
-      const heist = maplebirch.get('StreetLife')!.heist;
+      const street = maplebirch.get('StreetLife');
+      if (!street || !V.StreetLife?.bounties || !V.StreetLife.heist || !V.StreetLife.bailey) return false;
+      const work = street.bounties;
+      const heist = street.heist;
       return (
         (!!work.fight?.combatStarted && !V.combat) ||
         (maplebirch.passage.title === 'Police Cell' && (!!work.state.active || heist.inAction || (heist.state.stage === 'settlement' && heist.state.loot > 0)))
       );
     },
     action: () => {
-      const work = maplebirch.get('StreetLife')!.bounties;
-      const heist = maplebirch.get('StreetLife')!.heist.state;
+      const street = maplebirch.get('StreetLife');
+      if (!street || !V.StreetLife?.bounties || !V.StreetLife.heist || !V.StreetLife.bailey) return;
+      const work = street.bounties;
+      const heist = street.heist.state;
       // 原版逮捕或强制转场可能离开自有页面；在这里收束未结束的行动，保留原版判刑。
-      if ((maplebirch.passage.title === 'Police Cell' && (maplebirch.get('StreetLife')!.heist.inAction || (heist.stage === 'settlement' && heist.loot > 0))) || (work.fightingHeist && !V.combat)) {
+      if ((maplebirch.passage.title === 'Police Cell' && (street.heist.inAction || (heist.stage === 'settlement' && heist.loot > 0))) || (work.fightingHeist && !V.combat)) {
         const actor = heist.fight?.key ?? (heist.stage === 'challenge' ? 'deadwood_heist_guard' : undefined);
         if (actor && V.NPCList[0]?.per === actor) maplebirch.SugarCube.Wikifier.wikifyEval('<<endevent>>');
         if (actor && V.per_npc[actor]) maplebirch.SugarCube.Wikifier.wikifyEval(`<<clearNPC '${actor}'>>`);
@@ -64,7 +67,7 @@ export default function StreetLife(maplebirch: typeof window.maplebirch): void {
       if (work.fightingCargo) {
         if (V.NPCList[0]?.per === fight.key) maplebirch.SugarCube.Wikifier.wikifyEval('<<endevent>>');
         if (V.per_npc[fight.key]) maplebirch.SugarCube.Wikifier.wikifyEval(`<<clearNPC '${fight.key}'>>`);
-        const bailey = maplebirch.get('StreetLife')!.bailey.state;
+        const bailey = street.bailey.state;
         bailey.fight = null;
         bailey.resolution = 'failed';
       } else if (work.fightingHunter) {
@@ -81,7 +84,9 @@ export default function StreetLife(maplebirch: typeof window.maplebirch): void {
     extra: { match: / Street$/ },
     // 原文及普通街道菜单已完成，才能拦路；强制事件没有当页 Bus 链接。
     cond: () => {
-      const bounty = maplebirch.get('StreetLife')!.bounties;
+      const street = maplebirch.get('StreetLife');
+      if (!street || !V.StreetLife?.bounties || !V.StreetLife.heist || !V.StreetLife.bailey) return false;
+      const bounty = street.bounties;
       return (
         bounty.available &&
         Array.isArray(V.link_table) &&
@@ -89,7 +94,7 @@ export default function StreetLife(maplebirch: typeof window.maplebirch): void {
         (bounty.state.hunter ? bounty.state.hunter.stage === 'approach' && bounty.state.hunter.source === maplebirch.passage.title : bounty.state.hunterDay !== Math.floor(Time.days))
       );
     },
-    action: () => maplebirch.get('StreetLife')!.bounties.checkHunter(),
+    action: () => maplebirch.get('StreetLife')?.bounties.checkHunter(),
     output: 'deadwood-street-hunter-entry'
   });
   maplebirch.tool.addTo('Reputation', 'deadwood-street-reputation');
