@@ -2,7 +2,7 @@
 
 <!-- 模组统计只读取当前存档的 V。没有开启的模块不显示空栏目。 -->
 <<widget 'deadwood-reblooms-statistics'>>
-  <<if maplebirch.get('VanillaPlus') or maplebirch.get('MoreTransformations') or maplebirch.get('LifeSimulation')>>
+  <<if (maplebirch.get('VanillaPlus') and $VanillaPlus) or (maplebirch.get('MoreTransformations') and $maplebirch?.transformation) or (maplebirch.get('LifeSimulation') and $LifeSimulation?.school)>>
   <<foldout false '_deadwoodProgressFoldout'>>
     <span class='gold'><<lanSwitch 'Deadwood Reblooms: progress' '枯木逢春：进度'>></span>
     <<if maplebirch.get('VanillaPlus') and $VanillaPlus>>
@@ -11,15 +11,18 @@
       <<lanSwitch 'Breakthrough traits:' '突破特质：'>>
       <span class='green'><<= Object.values($VanillaPlus.traits ?? {}).filter(Boolean).length>> / 7</span><br>
     <</if>>
-    <<if maplebirch.get('MoreTransformations')>>
+    <<if maplebirch.get('MoreTransformations') and $maplebirch?.transformation>>
+      <<lanSwitch 'Raven transformation:' '渡鸦转化：'>>
+      <span class='purple'><<= $maplebirch.transformation.raven?.level ?? 0>> / 6</span>
+      (<span class='purple'><<= $maplebirch.transformation.raven?.build ?? 0>> / 100</span>)<br>
       <<lanSwitch 'Horse transformation:' '马转化：'>>
       <span class='softbrown'><<= $maplebirch?.transformation?.horse?.level ?? 0>> / 6</span>
-      (<span class='softbrown'><<= $maplebirch?.transformation?.horse?.build ?? 0>> / 30</span>)<br>
+      (<span class='softbrown'><<= $maplebirch?.transformation?.horse?.build ?? 0>> / 100</span>)<br>
       <<lanSwitch 'Whale transformation:' '鲸转化：'>>
       <span class='lblue'><<= $maplebirch?.transformation?.whale?.level ?? 0>> / 6</span>
-      (<span class='lblue'><<= $maplebirch?.transformation?.whale?.build ?? 0>> / 30</span>)<br>
+      (<span class='lblue'><<= $maplebirch?.transformation?.whale?.build ?? 0>> / 100</span>)<br>
     <</if>>
-    <<if maplebirch.get('LifeSimulation') and $LifeSimulation>>
+    <<if maplebirch.get('LifeSimulation') and $LifeSimulation?.school>>
       <<lanSwitch 'Attendance pass:' '免听凭证：'>>
       <<if $LifeSimulation.school.attendanceExempt>><span class='green'><<lanSwitch 'Obtained' '已取得'>></span>
       <<else>><<lanSwitch 'Not obtained' '未取得'>><</if>><br>
@@ -43,13 +46,6 @@
   <</foldout>>
   <</if>>
 
-  <<if maplebirch.get('LifeSimulation') and $LifeSimulation>>
-    <<foldout false '_deadwoodSchoolFoldout'>>
-      <span class='gold'><<lanSwitch 'School standing' '校园评价'>></span>
-      <<deadwood-reblooms-life-simulation-school-standing-list>><br>
-    <</foldout>>
-  <</if>>
-
   <<if maplebirch.get('Finance') and $Finance>>
     <<foldout false '_deadwoodFinanceFoldout'>>
       <span class='gold'><<lanSwitch 'Finance and property' '金融与房产'>></span>
@@ -57,9 +53,9 @@
         <<set _deadwoodBankBalance to $Finance.bank.balance ?? 0>>
         <<set _deadwoodCreditDebt to $Finance.bank.credit_debt ?? 0>>
         <<set _deadwoodLoanDebt to $Finance.bank.loan_debt ?? 0>>
-        <<lanSwitch 'Bank balance:' '银行余额：'>><<printmoney _deadwoodBankBalance>><br>
-        <<lanSwitch 'Credit card debt:' '信用卡欠款：'>><<printmoney _deadwoodCreditDebt>><br>
-        <<lanSwitch 'Personal loan debt:' '个人贷款余额：'>><<printmoney _deadwoodLoanDebt>><br>
+        <<lanSwitch 'Bank balance:' '银行余额：'>><span class='gold'><<= formatMoney(_deadwoodBankBalance)>></span><br>
+        <<lanSwitch 'Credit card debt:' '信用卡欠款：'>><span class='gold'><<= formatMoney(_deadwoodCreditDebt)>></span><br>
+        <<lanSwitch 'Personal loan debt:' '个人贷款余额：'>><span class='gold'><<= formatMoney(_deadwoodLoanDebt)>></span><br>
       <<else>>
         <<lanSwitch 'Bank account not opened' '尚未开立银行账户'>><br>
       <</if>>
@@ -69,23 +65,43 @@
       <span class='teal'><<= Object.values($Finance.real_estate?.residents ?? {}).flat().length>></span><br>
       <<if $Finance.brokerage?.opened>>
         <<lanSwitch "Realised share-trading profit / loss: " "普通股票已实现盈亏：">>
-        <span @class="$Finance.brokerage.realised < 0 ? 'red' : 'green'"><<printmoney $Finance.brokerage.realised>></span><br>
-        <<lanSwitch "Stock dividends: " "股票累计分红：">><<printmoney $Finance.brokerage.dividends>><br>
+        <span class='gold'><<= formatMoney($Finance.brokerage.realised)>></span><br>
+        <<lanSwitch "Stock dividends: " "股票累计分红：">><span class='gold'><<= formatMoney($Finance.brokerage.dividends)>></span><br>
         <<lanSwitch "Settled margin trades: " "保证金交易累计平仓：">><span class='teal'><<= $Finance.brokerage.margin.closed ?? 0>></span><br>
-        <<lanSwitch "Margin-trading profit / loss after fees: " "保证金交易累计扣费盈亏：">><<printmoney `$Finance.brokerage.margin.realised ?? 0`>><br>
+        <<lanSwitch "Margin-trading profit / loss after fees: " "保证金交易累计扣费盈亏：">><span class='gold'><<= formatMoney($Finance.brokerage.margin.realised ?? 0)>></span><br>
       <</if>>
       <<if maplebirch.get('Robin') and $RobinExpansion?.investment?.agreed>>
-        <<lanSwitch "Shop partnership contributions: " "店铺合伙累计出资：">><<printmoney $RobinExpansion.investment.invested_total>><br>
-        <<lanSwitch "Partnership dividends / buybacks: " "合伙累计分红／回购所得：">><<printmoney $RobinExpansion.investment.dividends_total>> / <<printmoney $RobinExpansion.investment.returned_total>><br>
+        <<lanSwitch "Shop partnership contributions: " "店铺合伙累计出资：">><span class='gold'><<= formatMoney($RobinExpansion.investment.invested_total)>></span><br>
+        <<lanSwitch "Partnership dividends / buybacks: " "合伙累计分红／回购所得：">><span class='gold'><<= formatMoney($RobinExpansion.investment.dividends_total)>></span> / <span class='gold'><<= formatMoney($RobinExpansion.investment.returned_total)>></span><br>
       <</if>><br>
     <</foldout>>
   <</if>>
 
-  <<if maplebirch.get('Finance') and $Finance.industry.factories.some(factory => factory.purchase_price > 0 || factory.earned > 0 || factory.spent > 0)>>
+  <<if maplebirch.get('Finance') and $Finance?.company and ($Finance.company.name or $Finance.company.completed or $Finance.company.shareholders?.board or $Finance.company.shareholders?.transferred or $Finance.company.shareholders?.funded_stages?.length)>>
+    <<set _deadwoodCompany to $Finance.company, _deadwoodGovernance to _deadwoodCompany.shareholders>>
+    <<foldout false '_deadwoodCompanyRecords'>>
+      <span class='gold'><<lanSwitch 'Company and governance records' '企业与治理记录'>></span>
+      <<lanSwitch 'Settled Avery company contracts: ' '已结清的艾弗里公司合同：'>><span class='teal'><<= _deadwoodCompany.completed ?? 0>></span><br>
+      <<if _deadwoodGovernance>>
+        <<lanSwitch 'Unlisted shares acquired by negotiation: ' '议价受让的未上市股数：'>><span class='teal'><<= _deadwoodGovernance.transferred ?? 0>></span><br>
+        <<lanSwitch 'Tower construction stages funded: ' '已出资的高塔工程阶段：'>><span class='teal'><<= _deadwoodGovernance.funded_stages?.length ?? 0>></span><br>
+        <<lanSwitch 'Company funds spent on tower construction: ' '公司资金已支付的高塔工程款：'>><span class='gold'><<= formatMoney(_deadwoodGovernance.project_spent ?? 0)>></span><br>
+      <</if>>
+      <span class='blue'><<lanSwitch 'Construction spending comes from the company treasury. Allocated funds still awaiting use are not spending.' '工程款来自公司资金池，已划拨但尚未使用的资金不计为支出。'>></span><br><br>
+    <</foldout>>
+  <</if>>
+
+  <<if maplebirch.get('Finance') and $Finance?.industry?.factories?.some(factory => factory.owned || factory.earned || factory.spent || factory.delivered || factory.defaults)>>
+    <<set _deadwoodFactories to $Finance.industry.factories, _deadwoodDistribution to $Finance.industry.distribution>>
     <<foldout false '_deadwoodFactoryAccounts'>>
       <span class='gold'><<lanSwitch "Factory accounts" "工厂账目">></span>
-      <<lanSwitch "Receipts / operating costs: " "累计经营收入／支出：">><<printmoney `$Finance.industry.factories.reduce((sum, factory) => sum + factory.earned, 0)`>> / <<printmoney `$Finance.industry.factories.reduce((sum, factory) => sum + factory.spent, 0)`>><br>
-      <<lanSwitch "Delivered orders / bad debts: " "交付订单／坏账：">><span class='teal'><<= $Finance.industry.factories.reduce((sum, factory) => sum + factory.delivered, 0)>> / <<= $Finance.industry.factories.reduce((sum, factory) => sum + factory.defaults, 0)>></span><br>
+      <<lanSwitch 'Factories currently owned: ' '当前持有工厂：'>><span class='teal'><<= _deadwoodFactories.filter(factory => factory.owned).length>></span><br>
+      <<lanSwitch "Receipts / operating costs: " "累计经营收入／支出：">><span class='gold'><<= formatMoney(_deadwoodFactories.reduce((sum, factory) => sum + (factory.earned ?? 0), 0))>></span> / <span class='gold'><<= formatMoney(_deadwoodFactories.reduce((sum, factory) => sum + (factory.spent ?? 0), 0))>></span><br>
+      <<lanSwitch "Delivered orders / bad debts: " "交付订单／坏账：">><span class='teal'><<= _deadwoodFactories.reduce((sum, factory) => sum + (factory.delivered ?? 0), 0)>> / <<= _deadwoodFactories.reduce((sum, factory) => sum + (factory.defaults ?? 0), 0)>></span><br>
+      <<if _deadwoodDistribution and (_deadwoodDistribution.compound_sales or _deadwoodDistribution.independent_sales or _deadwoodFactories.some(factory => factory.laboratory?.installed))>>
+        <<lanSwitch 'Medicine bottles dispatched to the compound / independent buyers: ' '向大院／独立渠道累计发运的药品瓶数：'>><span class='teal'><<= _deadwoodDistribution.compound_sales ?? 0>> / <<= _deadwoodDistribution.independent_sales ?? 0>></span><br>
+        <span class='blue'><<lanSwitch 'Dispatched bottles are recorded before invoice payment; their value is included in receipts only when paid.' '发运瓶数在账款支付前登记，收到货款后才计入经营收入。'>></span><br>
+      <</if>>
       <span class='blue'><<lanSwitch "Fund transfers and loans are not sales. Land and the initial factory purchase are outside operating costs." "资金转入与贷款不算销售收入。土地与初次购厂款不计入经营支出。">></span><br><br>
     <</foldout>>
   <</if>>
@@ -93,32 +109,101 @@
   <<if maplebirch.get('Orchard') and $Orchard>>
     <<foldout false '_deadwoodOrchardAccounts'>>
       <span class='gold'><<lanSwitch "Orchard accounts" "果园账目">></span>
-      <<lanSwitch "Sales income: " "累计销售收入：">><<printmoney `$Orchard.sales_income ?? 0`>><br>
-      <<lanSwitch "Staff wages: " "累计雇工工资：">><<printmoney `$Orchard.worker_expenses ?? 0`>><br>
-      <<lanSwitch "Seed purchases: " "累计种苗开销：">><<printmoney `$Orchard.seed_expenses ?? 0`>><br>
-      <<lanSwitch "Carrier fees: " "累计运输费：">><<printmoney `$Orchard.haul_expenses ?? 0`>><br><br>
+      <<lanSwitch "Sales income: " "累计销售收入：">><span class='gold'><<= formatMoney($Orchard.sales_income ?? 0)>></span><br>
+      <<lanSwitch "Orchard worker wages: " "累计果树雇工工资：">><span class='gold'><<= formatMoney($Orchard.worker_expenses ?? 0)>></span><br>
+      <<lanSwitch "Seed purchases: " "累计种苗开销：">><span class='gold'><<= formatMoney($Orchard.seed_expenses ?? 0)>></span><br>
+      <<lanSwitch "Carrier fees: " "累计运输费：">><span class='gold'><<= formatMoney($Orchard.haul_expenses ?? 0)>></span><br>
+      <<lanSwitch "Shop supply orders fulfilled: " "已履行的店铺供货单：">><span class='teal'><<= $Orchard.orders_completed ?? 0>></span><br>
+      <<lanSwitch "Farm supply contracts fulfilled: " "已履行的农场供货合同：">><span class='teal'><<= $Orchard.contracts_completed ?? 0>></span><br>
+      <<lanSwitch "Regular-customer sales: " "熟客成交次数：">><span class='teal'><<= $Orchard.regular_visits ?? 0>></span><br>
+      <<if $Orchard.staff?.spent>>
+        <<lanSwitch "Trapper recruitment, escort and search spending: " "捕手雇佣、护送与搜寻累计支出：">><span class='gold'><<= formatMoney($Orchard.staff.spent)>></span><br>
+      <</if>>
+      <span class='blue'><<lanSwitch 'Sales income includes fruit supplied from your existing inventory. Returned farm-contract deposits are excluded.' '销售收入包含从现有库存交付的果品，不包含退还的农场合同保证金。'>></span><br><br>
     <</foldout>>
   <</if>>
 
   <<if maplebirch.get('LifeSimulation') and $LifeSimulation?.casino?.statistics>>
     <<set _casinoStats to $LifeSimulation.casino.statistics>>
-    <<if _casinoStats.rounds or _casinoStats.exchanged>>
+    <<if _casinoStats.rounds or _casinoStats.exchanged or $LifeSimulation.casino.shifts or $LifeSimulation.casino.cheating_caught>>
       <<foldout false '_deadwoodCasinoAccounts'>>
-        <span class='gold'><<lanSwitch "Gambling records" "赌馆输赢记录">></span>
+        <span class='gold'><<lanSwitch "Casino records" "赌馆记录">></span>
+        <<if $LifeSimulation.casino.shifts>>
+          <<lanSwitch 'Work shifts completed / successful shifts: ' '已完成班次／表现良好的班次：'>><span class='teal'><<= $LifeSimulation.casino.shifts>> / <<= $LifeSimulation.casino.good_shifts ?? 0>></span><br>
+        <</if>>
+        <<if $LifeSimulation.casino.cheating_caught>>
+          <<lanSwitch 'Times caught cheating: ' '出千被发现次数：'>><span class='red'><<= $LifeSimulation.casino.cheating_caught>></span><br>
+        <</if>>
+        <<if _casinoStats.rounds or _casinoStats.exchanged>>
         <<lanSwitch "Completed hands and spins: " "已结算牌局与转轮：">><span class='teal'><<= _casinoStats.rounds>></span><br>
         <<lanSwitch "Blackjack / Zha Jin Hua / hold'em / slots / Sic Bo: " "二十一点／炸金花／德州扑克／老虎机／骰宝：">><span class='teal'><<= _casinoStats.games.blackjack ?? 0>> / <<= _casinoStats.games.three_card ?? 0>> / <<= _casinoStats.games.holdem ?? 0>> / <<= _casinoStats.games.slots ?? 0>> / <<= _casinoStats.games.sic_bo ?? 0>></span><br>
-        <<lanSwitch "Total staked / total paid, including returned stakes: " "累计下注／累计派彩（含取回的赌注）：">><<printmoney _casinoStats.staked>> / <<printmoney _casinoStats.paid>><br>
-        <<lanSwitch "Net profit / loss: " "累计净盈亏：">><span @class="_casinoStats.paid < _casinoStats.staked ? 'red' : 'green'"><<printmoney `_casinoStats.paid - _casinoStats.staked`>></span><br>
-        <<lanSwitch "Largest net win / loss in a hand or spin: " "单局最大净赢／净亏：">><<printmoney _casinoStats.biggest_win>> / <<printmoney _casinoStats.biggest_loss>><br>
+        <<lanSwitch "Total staked / total paid, including returned stakes: " "累计下注／累计派彩（含取回的赌注）：">><span class='gold'><<= formatMoney(_casinoStats.staked)>></span> / <span class='gold'><<= formatMoney(_casinoStats.paid)>></span><br>
+        <<lanSwitch "Net profit / loss: " "累计净盈亏：">><span class='gold'><<= formatMoney(_casinoStats.paid - _casinoStats.staked)>></span><br>
+        <<lanSwitch "Largest net win / loss in a hand or spin: " "单局最大净赢／净亏：">><span class='gold'><<= formatMoney(_casinoStats.biggest_win)>></span> / <span class='gold'><<= formatMoney(_casinoStats.biggest_loss)>></span><br>
         <<lanSwitch "Longest winning streak in one night: " "一晚最长连胜：">><span class='teal'><<= _casinoStats.best_streak>></span><br>
-        <<lanSwitch "Highest net profit reached in one night: " "一晚最高净赢：">><<printmoney _casinoStats.best_night_profit>><br>
-        <<lanSwitch "Chips purchased / redeemed: " "累计换入／兑回筹码：">><<printmoney _casinoStats.exchanged>> / <<printmoney _casinoStats.redeemed>><br>
+        <<lanSwitch "Highest net profit reached in one night: " "一晚最高净赢：">><span class='gold'><<= formatMoney(_casinoStats.best_night_profit)>></span><br>
+        <<lanSwitch "Chips purchased / redeemed: " "累计换入／兑回筹码：">><span class='gold'><<= formatMoney(_casinoStats.exchanged)>></span> / <span class='gold'><<= formatMoney(_casinoStats.redeemed)>></span><br>
         <span class='blue'><<language>>
           <<option 'EN'>>
             Exchanging chips and buying into a table do not count as winning or losing a hand. Records begin when this accounting is enabled.
           <<option 'CN'>>
             兑换筹码和买入牌桌不计入牌局输赢。记录从启用这项记账后开始累计。
         <</language>></span><br><br>
+        <</if>>
+      <</foldout>>
+    <</if>>
+  <</if>>
+
+  <<if maplebirch.get('Transport') and $Transport and ($Transport.vehicles?.length or $Transport.driving or $Transport.school?.motorcycle?.licensed or $Transport.school?.motor_vehicle?.licensed or $Transport.taxi?.registered or $Transport.taxi?.completed)>>
+    <<foldout false '_deadwoodTransportRecords'>>
+      <span class='gold'><<lanSwitch 'Transport records' '交通记录'>></span>
+      <<lanSwitch 'Vehicles currently owned: ' '当前持有车辆：'>><span class='teal'><<= $Transport.vehicles?.length ?? 0>></span><br>
+      <<lanSwitch 'Motorcycle / car driving licence: ' '摩托车／汽车驾驶资格：'>>
+      <<if $Transport.school?.motorcycle?.licensed>><span class='green'><<lanSwitch 'Obtained' '已取得'>></span><<else>><<lanSwitch 'Not obtained' '未取得'>><</if>> /
+      <<if $Transport.school?.motor_vehicle?.licensed>><span class='green'><<lanSwitch 'Obtained' '已取得'>></span><<else>><<lanSwitch 'Not obtained' '未取得'>><</if>><br>
+      <<lanSwitch 'Driving experience: ' '驾驶经验：'>><span class='teal'><<= $Transport.driving ?? 0>> / 1000</span><br>
+      <<if $Transport.taxi?.registered or $Transport.taxi?.completed>>
+        <<lanSwitch 'Taxi bookings completed: ' '已结算出租车订单：'>><span class='teal'><<= $Transport.taxi.completed ?? 0>></span><br>
+        <<lanSwitch 'Taxi earnings collected: ' '出租车累计实收：'>><span class='gold'><<= formatMoney($Transport.taxi.earnings ?? 0)>></span><br>
+        <span class='blue'><<lanSwitch 'Earnings include paid tips after commission and fleet recovery charges. Unpaid earnings from a fleet shift are excluded.' '实收包含已支付小费，并扣除分成与车队回收费。车队班次尚未支付的工资不计入。'>></span><br>
+      <</if>><br>
+    <</foldout>>
+  <</if>>
+
+  <<if maplebirch.get('StreetLife') and $StreetLife>>
+    <<set _deadwoodJobs to $StreetLife.jobs, _deadwoodBounties to $StreetLife.bounties, _deadwoodHeist to $StreetLife.heist>>
+    <<if _deadwoodJobs?.completed or _deadwoodJobs?.losses or _deadwoodBounties?.completed or _deadwoodBounties?.arrested or (_deadwoodHeist?.stage is 'closed' and _deadwoodHeist.settled) or $smuggler_pub_known is 1>>
+      <<foldout false '_deadwoodStreetRecords'>>
+        <span class='gold'><<lanSwitch 'Street work and cases' '街头差事与案件'>></span>
+        <<if $smuggler_pub_known is 1>><<lanSwitch 'Smugglers’ pub discovered' '已发现走私者酒馆'>><br><</if>>
+        <<if _deadwoodJobs>>
+          <<lanSwitch 'Street jobs paid: ' '已领款的街头委托：'>><span class='teal'><<= _deadwoodJobs.completed ?? 0>></span><br>
+          <<lanSwitch 'Street job rewards collected: ' '街头委托累计实收：'>><span class='gold'><<= formatMoney(_deadwoodJobs.earned ?? 0)>></span><br>
+          <<lanSwitch 'Cargo losses reported: ' '已结案的货物丢失：'>><span class='red'><<= _deadwoodJobs.losses ?? 0>></span><br>
+        <</if>>
+        <<if _deadwoodBounties>>
+          <<set _deadwoodBountyTypes to maplebirch.get('StreetLife').bounties.terms.cases>>
+          <<lanSwitch 'Verified bounties paid: ' '已领款的核验悬赏：'>><span class='teal'><<= _deadwoodBounties.completed ?? 0>></span><br>
+          <<lanSwitch 'Bounty rewards collected: ' '悬赏累计实收：'>><span class='gold'><<= formatMoney(_deadwoodBounties.earned ?? 0)>></span><br>
+          <<lanSwitch 'Paid bounty types: ' '已领款的悬赏类型：'>><span class='teal'><<= _deadwoodBountyTypes.filter(item => _deadwoodBounties.completedTypes?.includes(item.id)).length>> / <<= _deadwoodBountyTypes.length>></span><br>
+          <<lanSwitch 'Arrests by bounty hunters: ' '被赏金猎人移交拘捕次数：'>><span class='red'><<= _deadwoodBounties.arrested ?? 0>></span><br>
+        <</if>>
+        <<if _deadwoodHeist?.stage is 'closed' and _deadwoodHeist.settled>>
+          <<lanSwitch 'Bank operation outcome: ' '已结案的银行行动结果：'>>
+          <<switch _deadwoodHeist.outcome>>
+            <<case 'success'>><span class='green'><<lanSwitch 'Successful robbery' '豪劫成功'>></span>
+            <<case 'reported'>><span class='green'><<lanSwitch 'Evidence submitted to police' '已向警方提交线索'>></span>
+            <<case 'sting'>><span class='green'><<lanSwitch 'Police handover' '已完成警方交接'>></span>
+            <<case 'withdrawn'>><<lanSwitch 'Withdrawn' '主动撤退'>>
+            <<case 'arrested'>><span class='red'><<lanSwitch 'Arrested' '被捕'>></span>
+            <<default>><span class='red'><<lanSwitch 'Failed' '行动失败'>></span>
+          <</switch>><br>
+          <<if _deadwoodHeist.outcome is 'success' and _deadwoodHeist.shares>>
+            <<lanSwitch 'Bank operation share collected: ' '本次银行行动分账实收：'>><span class='gold'><<= formatMoney(Math.floor(_deadwoodHeist.loot * _deadwoodHeist.shares.pc / 100))>></span><br>
+            <span class='blue'><<lanSwitch 'This is your share after the agreed cuts, before your preparation costs and recruitment fees.' '这是按约定分成后领取的款项，尚未扣除你支付的筹备与招募费用。'>></span><br>
+          <</if>>
+        <</if>>
+        <span class='blue'><<lanSwitch 'Job rewards are recorded when paid. Bounty income includes paid bonuses; bank-operation shares and police statement rewards are separate.' '委托报酬在领款时登记。悬赏实收包含已支付奖金。银行行动分账与警方笔录奖励另计。'>></span><br><br>
       <</foldout>>
     <</if>>
   <</if>>
