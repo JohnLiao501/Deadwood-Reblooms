@@ -284,6 +284,9 @@ export default class PropertyBanquet {
 
   private willing(name: BanquetGuest, leaving = false): boolean {
     if (!this.known(name) || !this.present(name)) return false;
+    const outings = this.estate.outings;
+    const remaining = leaving ? 0 : this.state.stage === 'plan' ? 150 : 120;
+    if (outings.live && outings.plan?.name === name && (outings.travelling || (outings.plan.at < Time.date.timeStamp + remaining * 60 && outings.plan.at + 1800 > Time.date.timeStamp))) return false;
     if (V.englishPlay === 'ongoing' && V.englishPlayDays === 0 && Time.hour >= 17 && Time.hour < 21 && ['Robin', 'Sydney', 'Kylar', 'Avery', 'Leighton'].includes(name)) return false;
     const npc = C.npc[name];
     switch (name) {
@@ -295,7 +298,6 @@ export default class PropertyBanquet {
         return npc.love >= 60 && !Time.schoolTime;
       case 'Sydney': {
         // 晚祷在 21 点，邀请时按整场时长判断，布置后再次核对剩余时间。
-        const remaining = leaving ? 0 : this.state.stage === 'plan' ? 150 : 120;
         if (Time.hour < 18 || Time.hour * 60 + Time.minute + remaining >= 21 * 60 || ![2, 3, 4, 5].includes(Time.weekDay) || npc.love < 60) return false;
         if (V.adultshophelped === 1) return true;
         const corruption = npc.corruption;

@@ -202,6 +202,7 @@
         <<pass _return_minutes>>
       <</if>>
       <<if $passage is _return_source>>
+        <<if _return_source is 'Deadwood Transport Menu'>><<run maplebirch.get('Finance')?.realEstate.outings.abandon()>><</if>>
         <<if ['Forest', 'Moor'].includes(_return_passage)>>
           <<set $eventskip to 1>>
         <</if>>

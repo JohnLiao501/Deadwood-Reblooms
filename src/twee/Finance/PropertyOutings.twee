@@ -1,0 +1,298 @@
+:: Deadwood Reblooms Property Outing Widgets [widget]
+
+<<widget 'deadwood-home-outing-link'>>
+  <<if maplebirch.get('Transport') and maplebirch.get('Finance').realEstate.household.home.length>>
+    <<icon 'property/weekend-outing.png'>><<lanLink ['Arrange a weekend outing', '约好周末一起出门'] 'Deadwood Reblooms Property Outing Plan'>><</lanLink>><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-home-outing-departure'>>
+  <<set _outings to maplebirch.get('Finance')?.realEstate.outings>>
+  <<if _outings?.due and _outings.canLeave(_outings.plan.property) and maplebirch.get('Transport').nearby.some(car => maplebirch.get('Transport').catalog.models.some(model => model.id === car.model and model.kind === 'motor_vehicle' and model.seats > 0))>>
+    <<npc _outings.plan.name>><<person1>>
+    <<language>>
+      <<option 'EN'>>
+        <<if maplebirch.get('Transport').atGarage>><<personname>> waits by the garage door.<<else>><<personname>> waits outside your home, looking towards the parked cars.<</if>> You had agreed to leave around this time.
+      <<option 'CN'>>
+        <<if maplebirch.get('Transport').atGarage>><<personname>>在车库门旁等着。<<else>><<personname>>在家门外等着，望向路边停着的车。<</if>>你们约好了差不多这个时候出门。
+    <</language>><br>
+    <<for _outing_car range maplebirch.get('Transport').nearby>>
+      <<set _outing_model to maplebirch.get('Transport').catalog.models.find(model => model.id === _outing_car.model)>>
+      <<if _outing_model.kind is 'motor_vehicle' and _outing_model.seats gt 0>>
+        <<capture _outing_car>>
+          <<icon `'transport/' + _outing_model.id + '.png'`>><<lanLink `lanSwitch('Leave together in ', '一起出发：') + maplebirch.t(_outing_model.name) + ' (0:01)'`>>
+            <<set _outing_source to $passage>>
+            <<if maplebirch.get('Finance').realEstate.outings.begin(_outing_car.id)>>
+              <<pass 1>>
+              <<if $passage is _outing_source>>
+                <<if $passage is 'Deadwood Transport Menu'>><<run Dynamic.render('deadwood-transport-menu')>><<else>><<goto 'Deadwood Transport Menu'>><</if>>
+              <</if>>
+            <<else>>
+              <<replace '#deadwood-outing-departure-message'>>
+                <span class='purple'><<lanSwitch 'Check the car, your licence and the time left. Wet weather may also change your plans.' '检查车辆、驾驶资格和剩余时间。雨雪天气也可能影响原来的安排。'>></span><br>
+              <</replace>>
+            <</if>>
+          <</lanLink>><br>
+        <</capture>>
+      <</if>>
+    <</for>>
+    <span id='deadwood-outing-departure-message'></span><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-home-return-link'>>
+  <<if maplebirch.get('Finance').realEstate.outings.note>>
+    <<icon 'couch.png'>><<lanLink ['Settle back in together', '一起安顿下来'] 'Deadwood Reblooms Property Return'>><</lanLink>><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-outing-icon'>>
+  <<switch _args[0]>>
+    <<case 'meal'>><<icon 'property/outing-coffee.png'>>
+    <<case 'shopping'>><<icon 'property/outing-shopping.png'>>
+    <<case 'walk'>><<icon 'property/outing-seafront.png'>>
+    <<default>><<socialiseicon>>
+  <</switch>>
+<</widget>>
+
+<<widget 'deadwood-outing-activity'>>
+  <<switch _args[0]>>
+    <<case 'meal'>><<lanSwitch 'A bite to eat at the Ocean Breeze Cafe' '去海风咖啡馆吃点东西'>>
+    <<case 'shopping'>><<lanSwitch 'Browse the shopping centre' '一起逛购物中心'>>
+    <<case 'walk'>><<lanSwitch 'A walk along the seafront' '沿海滨散步'>>
+  <</switch>>
+<</widget>>
+
+<<widget 'deadwood-outing-arrival'>>
+  <<set _outings to maplebirch.get('Finance')?.realEstate.outings>>
+  <<if _outings?.travelling and _outings.plan.stage is 'visit'>>
+    <<deadwood-outing-icon _outings.plan.activity>><<lanLink ['Spend the time you planned together', '按约定一起逛逛'] 'Deadwood Reblooms Property Outing'>><</lanLink>><br>
+    <<getouticon>><<lanLink ['Head home together', '一起回家']>>
+      <<if maplebirch.get('Finance').realEstate.outings.back()>>
+        <<if $passage is 'Deadwood Transport Menu'>><<run Dynamic.render('deadwood-transport-menu')>><<else>><<goto 'Deadwood Transport Menu'>><</if>>
+      <</if>>
+    <</lanLink>><br>
+  <</if>>
+<</widget>>
+
+:: Deadwood Reblooms Property Outing Plan
+<<set _estate to maplebirch.get('Finance').realEstate>><<set _outings to _estate.outings>>
+<<if !_estate.current>>
+  <<getouticon>><<lanLink ['Return to High Street', '返回商业街'] 'High Street'>><</lanLink>><<exit>>
+<</if>>
+<<run _estate.enter()>><<effects>>
+<<deadwood-dynamicblock 'deadwood-home-outing-plan'>>
+<<set _outings to maplebirch.get('Finance').realEstate.outings>>
+<<if _outings.live>>
+  <<print maplebirch.auto(_outings.plan.name)>> · <span class='blue'><<print getFormattedDate(new DateTime(_outings.plan.at))>> <<print _outings.plan.hour>>:00</span><br>
+  <<deadwood-outing-activity _outings.plan.activity>><br><br>
+  <<if _outings.plan.stage is 'booked'>>
+    <<language>>
+      <<option 'EN'>>
+        You have agreed to meet at the home you share. Have a car ready in the garage or on the street outside.
+        <<if _outings.plan.name is 'Sydney'>>Sydney has set aside a short break between duties. You will need to be back before nine.<</if>>
+      <<option 'CN'>>
+        你们约好在共同居住的住宅碰面。把车准备在车库或门前的街道上，就能一起出发。
+        <<if _outings.plan.name is 'Sydney'>>悉尼在事务之间留出一小段空闲，你们得在九点前回来。<</if>>
+    <</language>><br><br>
+    <<icon 'company/minutes.png'>><<lanLink ['Leave a note cancelling the outing (0:02)', '留张纸条取消这次外出 (0:02)']>>
+      <<set _outing_source to $passage>>
+      <<if maplebirch.get('Finance').realEstate.outings.cancel()>><<pass 2>><<if $passage is _outing_source>><<run Dynamic.render('deadwood-home-outing-plan')>><</if>><</if>>
+    <</lanLink>><br><br>
+  <</if>>
+<<else>>
+  <<if _outings.plan?.stage is 'cancelled'>>
+    <<lanSwitch 'You have cancelled the arrangement. The note is left where your housemate will find it.' '这次约定已经取消。纸条留在同住恋人能看见的地方。'>><br><br>
+  <<elseif _outings.plan?.stage is 'missed'>>
+    <span class='purple'><<lanSwitch 'The agreed meeting time has passed. You will need to make a new arrangement.' '约好的碰面时间已经过去了。想一起出门，得重新约个时间。'>></span><br><br>
+  <</if>>
+  <<language>>
+    <<option 'EN'>>
+      You write down a few times over the coming weekend, leaving room beside each one for a place to go.
+    <<option 'CN'>>
+      你把周末的几个时段写下来，在旁边留出空白，好记下想一起去的地方。
+  <</language>><br><br>
+  <<for _outing_resident range maplebirch.get('Finance').realEstate.household.home>>
+    <span class='gold bold'><<print maplebirch.auto(_outing_resident.id)>></span><br>
+    <<for _outing_day range _outings.days>>
+      <<set _outing_hour to _outings.hour(_outing_resident.id, _outing_day)>>
+      <<if _outing_hour isnot null>>
+        <span class='blue'><<deadwood-journal-date _outing_day>> <<print _outing_hour>>:00</span><br>
+        <<for _outing_kind range (_outing_hour lt 20 ? ['meal', 'shopping', 'walk'] : _outing_hour lt 21 ? ['shopping', 'walk'] : ['walk'])>>
+          <<capture _outing_resident _outing_day _outing_kind>>
+            <<deadwood-outing-icon _outing_kind>>
+            <<lanLink `lanSwitch({meal: 'Have coffee and a snack together', shopping: 'Browse the shops together', walk: 'Walk along the seafront'}[_outing_kind], {meal: '一起喝咖啡、吃点心', shopping: '一起逛商店', walk: '沿海滨散步'}[_outing_kind])`>>
+              <<if maplebirch.get('Finance').realEstate.outings.book(_outing_resident.id, _outing_day, _outing_kind)>>
+                <<set _outing_source to $passage>><<pass 5>>
+                <<if $passage is _outing_source>><<goto 'Deadwood Reblooms Property Outing Agreed'>><</if>>
+              <</if>>
+            <</lanLink>><br>
+          <</capture>>
+        <</for>><br>
+      <</if>>
+    <</for>>
+  <</for>>
+<</if>>
+<<getouticon>><<lanLink ['Return to the sitting room', '返回起居室'] 'Deadwood Reblooms Property Home'>><</lanLink>>
+<</deadwood-dynamicblock>>
+
+:: Deadwood Reblooms Property Outing Agreed
+<<set _plan to maplebirch.get('Finance').realEstate.outings.plan>>
+<<if _plan?.stage is 'booked'>>
+  <<run maplebirch.get('Finance').realEstate.enter()>><<effects>><<npc _plan.name>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      <<switch _plan.name>>
+        <<case 'Robin'>>
+          <<if C.npc.Robin.trauma gte 40>>"Somewhere we can sit down?" Robin asks. You go over the route together before <<he>> writes the time down.<<else>>"<<if maplebirch.get('Robin') and $RobinExpansion?.shop>>After I've closed the shop?<<else>>After I've packed the stall away?<</if>> That'd be nice." Robin writes the time on a scrap of paper and leaves it beside the house key.<</if>>
+        <<case 'Whitney'>>
+          "You're driving." Whitney takes the pen from you and circles the time. "Don't make me stand around waiting like a fucking idiot." <<He>> returns the pen, keeping the paper.
+        <<case 'Kylar'>>
+          "Just you and me?" Kylar asks, even after you have said it once. <<if C.npc.Kylar.rage gte 40>><<He>> writes the time twice, then asks when you will be home afterwards.<<else>><<He>> smiles at the date on the paper. "I'll be ready."<</if>>
+        <<case 'Sydney'>>
+          Sydney checks the time against a note tucked inside <<his>> book. "I can spare that part of the evening. We'll have to keep an eye on the clock." <<He>> adds the date beneath it, then smiles at you.
+      <</switch>>
+    <<option 'CN'>>
+      <<switch _plan.name>>
+        <<case 'Robin'>>
+          <<if C.npc.Robin.trauma gte 40>>“找个能坐下来休息的地方，好吗？”罗宾问。你陪<<him>>把路线看过一遍，<<he>>才记下时间。<<else>>“<<if maplebirch.get('Robin') and $RobinExpansion?.shop>>等我把店关好以后？<<else>>等我把摊子收好以后？<</if>>那挺好啊。”罗宾把时间写在一张纸上，放到家门钥匙旁。<</if>>
+        <<case 'Whitney'>>
+          “你开车。”惠特尼从你手里拿过笔，圈住那个时间。“别让我像个傻子一样干等。”<<He>>把笔还给你，纸条自己留着。
+        <<case 'Kylar'>>
+          “就你和我？”即使你已经说过，凯拉尔还是又问了一遍。<<if C.npc.Kylar.rage gte 40>><<He>>把时间写了两遍，又问起之后几点回家。<<else>><<He>>望着纸上的日期笑起来。“我会准备好的。”<</if>>
+        <<case 'Sydney'>>
+          悉尼拿时间对照了一下书里夹着的便条。“晚上这段时间可以。得留意着钟，免得回来晚了。”<<He>>在下面添上日期，朝你笑了笑。
+      <</switch>>
+  <</language>><br><br>
+<</if>>
+<<getouticon>><<lanLink ['Return to the sitting room', '返回起居室'] 'Deadwood Reblooms Property Home'>><</lanLink>>
+
+:: Deadwood Reblooms Property Outing
+<<set _estate to maplebirch.get('Finance').realEstate>><<set _outings to _estate.outings>><<set _plan to _outings.plan>>
+<<if !_outings.travelling or _plan.stage isnot 'visit'>>
+  <<getouticon>><<lanLink ['Return to your vehicle', '返回载具旁'] 'Deadwood Transport Menu'>><</lanLink>><<exit>>
+<</if>>
+<<set $outside to _plan.activity is 'walk' ? 1 : 0>><<set $location to {meal: 'cafe', shopping: 'shopping_centre', walk: 'town'}[_plan.activity]>><<effects>><<npc _plan.name>><<person1>>
+<<set _outing_cost to {meal: 1400, shopping: 1200, walk: 0}[_plan.activity]>>
+<<language>>
+  <<option 'EN'>>
+    <<switch _plan.activity>>
+      <<case 'meal'>>
+        You find a table at the Ocean Breeze Cafe, away from the busiest aisle. You look over the drinks and snacks together.
+      <<case 'shopping'>>
+        <<if Time.hour gte 20>>Shoppers drift towards the exits. A shop assistant begins tidying the shelves, leaving the aisle clear.<<else>>You step aside to let a group of shoppers pass, then look through the shelves together.<</if>>
+      <<case 'walk'>>
+        You leave the car near the seafront. <<if Weather.lightsOn>>The lights of the amusement arcade shine across the pavement; beyond the railings, the waves are darker than the sky.<<else>>Gulls circle above the railings. Waves break along the beach below.<</if>>
+    <</switch>>
+    <br><br>
+    <<switch _plan.name>>
+      <<case 'Robin'>>
+        <<if C.npc.Robin.trauma gte 40>>
+          <<if _plan.activity is 'meal'>>Robin takes the chair beside you, away from the aisle. "This is a good spot."<<else>>Robin stays close to you. "Could we take it slowly?" You let <<him>> choose when to stop.<</if>>
+        <<else>>
+          <<if _plan.activity is 'meal'>>Robin leans over the menu. "Want to share something?" <<He>> points out a snack, then looks to you for an answer.<<else>>Robin points out something <<he>> noticed earlier in the week. "I kept thinking you'd like to see it." <<He>> looks pleased to have remembered.<</if>>
+        <</if>>
+      <<case 'Whitney'>>
+        Whitney nudges your elbow. "You picked the place. Impress me." <<if C.npc.Whitney.dom gte 10>><<He>> looks over your choice, then gives a short nod as if granting approval.<<else>><<He>> turns aside before you can catch the smile.<</if>>
+      <<case 'Kylar'>>
+        Kylar reaches for your hand. <<if C.npc.Kylar.rage gte 40>><<He>> keeps glancing at anyone who looks your way. "We're here together," <<he>> says quietly. You bring the conversation back to what you came to see.<<else>>"I've been looking forward to this." <<He>> squeezes your hand, then lets you set the pace.<</if>>
+      <<case 'Sydney'>>
+        <<run statusCheck('Sydney')>>
+        <<if _sydneyStatus.includes('corrupt')>>"We should do this more often." Sydney moves a little closer. "Though I suppose I can't forget about evening prayers."<<else>>Sydney looks up when you mention the time. "It's good to have something to look forward to between duties."<</if>>
+    <</switch>>
+  <<option 'CN'>>
+    <<switch _plan.activity>>
+      <<case 'meal'>>
+        你们在海风咖啡馆找了一张避开拥挤过道的桌子，一起看看饮品与点心。
+      <<case 'shopping'>>
+        <<if Time.hour gte 20>>购物的人渐渐朝出口走去。店员开始整理货架，过道空了下来。<<else>>你们让开一群经过的购物者，再一起看看货架上的东西。<</if>>
+      <<case 'walk'>>
+        你把车留在海滨附近。<<if Weather.lightsOn>>游戏厅的灯照亮人行道，栏杆外的海浪比天空还要暗。<<else>>海鸥在栏杆上方盘旋，海浪拍向下方的沙滩。<</if>>
+    <</switch>>
+    <br><br>
+    <<switch _plan.name>>
+      <<case 'Robin'>>
+        <<if C.npc.Robin.trauma gte 40>>
+          <<if _plan.activity is 'meal'>>罗宾在你旁边坐下，避开过道。“这儿挺好的。”<<else>>罗宾留在你身旁。“我们能慢慢来吗？”你让<<him>>决定什么时候停下来。<</if>>
+        <<else>>
+          <<if _plan.activity is 'meal'>>罗宾凑过来看菜单。“要一起分着吃点什么吗？”<<He>>指给你看一道点心，等你答复。<<else>>罗宾指给你看这周偶然发现的东西。“一直想着，你可能会想看看。”<<He>>为自己还记得这件事而高兴。<</if>>
+        <</if>>
+      <<case 'Whitney'>>
+        惠特尼碰了碰你的胳膊肘。“地方是你挑的。让我看看你的本事。”<<if C.npc.Whitney.dom gte 10>><<He>>把你的选择打量一番，短促地点了点头，像是在批准什么。<<else>><<He>>把脸转开，没让你看清那个笑。<</if>>
+      <<case 'Kylar'>>
+        凯拉尔伸手来牵你。<<if C.npc.Kylar.rage gte 40>><<He>>不断留意望向你的人。“我们是一起出来的。”<<he>>小声说。你把话题拉回这次想看的东西。<<else>>“我一直在等这一天。”<<He>>轻轻握紧你的手，又让你决定往哪边走。<</if>>
+      <<case 'Sydney'>>
+        <<run statusCheck('Sydney')>>
+        <<if _sydneyStatus.includes('corrupt')>>“以后该多出来几次。”悉尼又靠近了些。“不过，晚祷还是不能忘。”<<else>>你提起时间，悉尼才抬头。“事务之间有件盼着的事，感觉挺好。”<</if>>
+    <</switch>>
+<</language>><br><br>
+<<if _plan.activity is 'walk' and Weather.precipitation isnot 'none'>>
+  <span class='blue'><<lanSwitch 'The weather has turned. You can return to the car together.' '天气变了。你们可以一起返回车旁。'>></span><br>
+<<elseif (_plan.activity is 'meal' and !Time.openingHours(20)) or (_plan.activity is 'shopping' and Time.hour * 60 + Time.minute + 20 gt 21 * 60)>>
+  <span class='blue'><<lanSwitch 'There is no longer time to finish before closing. You will have to come back another evening.' '打烊之前已经来不及了，得换个晚上再来了。'>></span><br>
+<<elseif !_outings.canStay>>
+  <span class='blue'><<lanSwitch 'Sydney checks the time. You will need to leave now to get back before evening prayers.' '悉尼看了看时间。现在得回去了，才能赶上晚祷。'>></span><br>
+<<elseif maplebirch.get('Finance').canPay(_outing_cost, 'transport')>>
+  <<deadwood-outing-icon _plan.activity>><<lanLink `lanSwitch({meal: 'Order two coffees and two fruit salads', shopping: 'Choose a bookmark together', walk: "Walk at your lover's pace"}[_plan.activity], {meal: '点两杯咖啡与两份水果沙拉', shopping: '一起挑一张书签', walk: '陪恋人慢慢走一段'}[_plan.activity]) + ' (0:20)'`>>
+    <<set _outing_source to $passage>>
+    <<if maplebirch.get('Finance').canPay(_outing_cost, 'transport') and maplebirch.get('Finance').realEstate.outings.back(true)>>
+      <<if _outing_cost gt 0>><<money `-_outing_cost` 'transport'>><</if>>
+      <<if _plan.activity is 'walk'>><<athletics 1>><<elseif _plan.activity is 'meal'>><<set $daily.cafeEaten to 1>><<tiredness -4>><</if>>
+      <<npcincr _plan.name love 2>><<stress -2>><<pass 20>>
+      <<if $passage is _outing_source>><<goto 'Deadwood Transport Menu'>><</if>>
+    <</if>>
+  <</lanLink>><<glove>><<lstress>><<if _outing_cost gt 0>> · <<printmoney _outing_cost>><</if>><br>
+<<else>>
+  <span class='red'><<lanSwitch 'You cannot cover this bill.' '你现在付不起这笔账单。'>></span> <<printmoney _outing_cost>><br>
+<</if>>
+<br><<getouticon>><<lanLink ['Return to the car and head home', '回到车旁，一起回家']>>
+  <<if maplebirch.get('Finance').realEstate.outings.back()>><<goto 'Deadwood Transport Menu'>><</if>>
+<</lanLink>>
+
+:: Deadwood Reblooms Property Return
+<<set _estate to maplebirch.get('Finance').realEstate>><<set _return to _estate.outings.note>>
+<<if !_return>>
+  <<getouticon>><<lanLink ['Return to the sitting room', '返回起居室'] 'Deadwood Reblooms Property Home'>><</lanLink>><<exit>>
+<</if>>
+<<run _estate.enter()>><<effects>><<npc _return.name>><<person1>>
+<<language>>
+  <<option 'EN'>>
+    You put the car keys down inside the door. <<if _return.kind is 'ride'>>The journey is over. <<He>> sets <<his>> bag down near the door.<<elseif _return.short>>You came back sooner than planned. For a moment, you stand together in the quiet hall.<<else>>The noise of the town falls away when the door closes behind you.<</if>>
+    <br><br>
+    <<switch _return.name>>
+      <<case 'Robin'>>
+        <<if C.npc.Robin.trauma gte 40>>"<<if Weather.lightsOn>>Could we leave the light on a little longer?<<else>>Could we sit down for a bit?<</if>>" Robin checks the latch once, then looks back at you. You stay nearby while <<he>> settles.<<else>>Robin looks around the hall. "Home," <<he>> says, trying the word out with a small smile.<</if>>
+      <<case 'Whitney'>>
+        Whitney leans against the doorframe. "<<if C.npc.Whitney.dom gte 10>>I pick the music next time.<<else>>Maybe you can pick the music next time. Just nothing shit.<</if>>" <<He>> catches you looking and rolls <<his>> eyes, still lingering beside the door.
+      <<case 'Kylar'>>
+        <<if C.npc.Kylar.rage gte 40>>"Staying now?" Kylar asks. You tell <<him>> what you have planned next. <<He>> listens with the keys still in <<his>> hand.<<else>>Kylar puts your keys beside <<his>>, carefully lining them up. "I liked coming back with you."<</if>>
+      <<case 'Sydney'>>
+        Sydney checks the time again. "<<if Time.hour gte 20>>I'll need to head back for evening prayers soon.<<else>>I can stay a little longer, but I'll need to be back for evening prayers.<</if>>" <<He>> sits down for a moment. "Thank you for making time."
+    <</switch>>
+  <<option 'CN'>>
+    你进门放下车钥匙。<<if _return.kind is 'ride'>>这趟路已经走完，<<he>>把包放在门边。<<elseif _return.short>>你们比原计划回来得早，在安静的门厅里一起站了片刻。<<else>>家门在身后合上，小镇的喧闹也随之远了。<</if>>
+    <br><br>
+    <<switch _return.name>>
+      <<case 'Robin'>>
+        <<if C.npc.Robin.trauma gte 40>>“<<if Weather.lightsOn>>灯能再开一会儿吗？<<else>>能坐下歇一会儿吗？<</if>>”罗宾检查了一次门闩，回头望向你。你留在旁边，陪<<him>>安顿下来。<<else>>罗宾环顾门厅。“回家了。”<<he>>带着一点笑，像是在试着说这个词。<</if>>
+      <<case 'Whitney'>>
+        惠特尼靠着门框。“<<if C.npc.Whitney.dom gte 10>>下次我选歌。<<else>>下次也许让你选歌。别挑那些烂的就行。<</if>>”发现你看着<<him>>，<<he>>翻了个白眼，却还在门边磨蹭。
+      <<case 'Kylar'>>
+        <<if C.npc.Kylar.rage gte 40>>“接下来留在这儿吗？”凯拉尔问。你告诉<<him>>之后还有什么安排，<<he>>听着，钥匙仍攥在手里。<<else>>凯拉尔把你的钥匙放到自己的旁边，仔细摆齐。“我喜欢跟你一起回来。”<</if>>
+      <<case 'Sydney'>>
+        悉尼又看了看时间。“<<if Time.hour gte 20>>差不多该回去参加晚祷了。<<else>>还能留一会儿，不过晚祷之前得回去。<</if>>”<<He>>坐下歇了片刻。“谢谢你留出时间陪我。”
+    <</switch>>
+<</language>><br><br>
+<<if _return.name isnot 'Sydney' or Time.hour * 60 + Time.minute + 5 lt 21 * 60>>
+  <<socialiseicon>><<lanLink ['Sit together for a few minutes (0:05)', '一起坐一会儿 (0:05)']>>
+    <<set _return_source to $passage>>
+    <<if maplebirch.get('Finance').realEstate.outings.finish()>><<stress -1>><<pass 5>><<if $passage is _return_source>><<goto 'Deadwood Reblooms Property Home'>><</if>><</if>>
+  <</lanLink>><<lstress>><br>
+  <<icon 'broom-dustpan.png'>><<lanLink ['Put your things away together (0:05)', '一起收好带回来的东西 (0:05)']>>
+    <<set _return_source to $passage>>
+    <<if maplebirch.get('Finance').realEstate.outings.finish()>><<housekeeping 1>><<pass 5>><<if $passage is _return_source>><<goto 'Deadwood Reblooms Property Home'>><</if>><</if>>
+  <</lanLink>><<ghousekeeping>><br><br>
+<<else>>
+  <span class='blue'><<lanSwitch 'Sydney needs to head back for evening prayers.' '悉尼得赶回去参加晚祷。'>></span><br><br>
+<</if>>
+<<getouticon>><<lanLink ['Carry on with your day', '继续安排自己的时间'] 'Deadwood Reblooms Property Home'>><<run maplebirch.get('Finance').realEstate.outings.finish()>><</lanLink>>

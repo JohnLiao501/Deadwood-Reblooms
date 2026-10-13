@@ -5,12 +5,26 @@
   <<if _ride>>
     <<for _ride_car range maplebirch.get('Transport').commute.vehicles(_ride)>>
       <<set _ride_model to maplebirch.get('Transport').catalog.models.find(model => model.id === _ride_car.model)>>
-      <<set _ride_minutes to _ride.walk + maplebirch.get('Transport').journeyMinutes(_ride_model, maplebirch.get('Transport').catalog.distance(_ride.from, _ride.to))>>
+      <<set _ride_minutes to _ride.walk + maplebirch.get('Transport').journeyMinutes(_ride_model, maplebirch.get('Transport').commute.distance(_ride))>>
       <<capture _ride_car>>
         <<icon `'transport/' + _ride_model.id + '.png'`>><<lanLink `maplebirch.t('deadwood-reblooms:transport:commute:' + _ride.kind) + ' — ' + maplebirch.t(_ride_model.name) + ' (' + Math.floor(_ride_minutes / 60) + ':' + String(_ride_minutes % 60).padStart(2, '0') + ')'`>>
           <<if maplebirch.get('Transport').commute.prepare(_ride_car.id)>><<goto 'Deadwood Transport Boarding'>><</if>>
         <</lanLink>><<glove>><br>
       <</capture>>
+    <</for>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-home-rides'>>
+  <<if maplebirch.get('Transport').canDepart>>
+    <<for _home_ride range maplebirch.get('Transport').commute.homeOffers>>
+      <<if maplebirch.get('Transport').commute.vehicles(_home_ride).includes(maplebirch.get('Transport').vehicle)>>
+        <<capture _home_ride>>
+          <<icon `'transport/' + maplebirch.get('Transport').model.id + '.png'`>><<lanLink `lanSwitch('Drive ', '开车送') + maplebirch.auto(_home_ride.npc) + lanSwitch(_home_ride.kind === 'temple' ? ' to the temple' : ' to school', _home_ride.kind === 'temple' ? '去神殿' : '去学校')`>>
+            <<if maplebirch.get('Transport').commute.prepareHome(_home_ride.npc)>><<goto 'Deadwood Transport Boarding'>><</if>>
+          <</lanLink>><br>
+        <</capture>>
+      <</if>>
     <</for>>
   <</if>>
 <</widget>>
@@ -21,10 +35,10 @@
       <<option 'EN'>>
         <<switch $Transport.trip.commute>>
           <<case 'school'>>
-            You park outside the school. <<if $Transport.commute.npc is 'Sydney'>>Sydney thanks you before hurrying inside.<<elseif $Transport.commute.npc is 'Whitney'>>Whitney spots <<his>> friends by the gate. "See you around, slut." <<He>> joins them on the way inside.<<else>>Robin gathers <<his>> bag and waits for you by the gate.<</if>>
+            You park outside the school. <<if $Transport.commute.npc is 'Sydney'>>Sydney thanks you before hurrying inside.<<elseif $Transport.commute.npc is 'Whitney'>>Whitney spots <<his>> friends by the gate. "See you around, slut." <<He>> joins them on the way inside.<<elseif $Transport.commute.npc is 'Kylar'>>Kylar lingers by the passenger door. "Meet me after class?" <<He>> waits for your answer before heading for the gate.<<else>>Robin gathers <<his>> bag and waits for you by the gate.<</if>>
             <<if Time.hour gte 9>><span class='red'>The morning lessons have already started.</span><</if>>
           <<case 'home'>>
-            You stop near <<his>> home. <<He>> picks up <<his>> school bag before getting out.
+            <<if $Transport.commute.home>>You stop outside the home you share. <<He>> finds the house key while you turn off the engine.<<else>>You stop near <<his>> home. <<He>> picks up <<his>> school bag before getting out.<</if>>
           <<case 'farm'>>
             You stop where the track to the farm leaves the road. Alex gathers <<his>> bags, then checks the footwell for anything left behind.
             <<if $farm_stage gte 7>>
@@ -39,10 +53,10 @@
       <<option 'CN'>>
         <<switch $Transport.trip.commute>>
           <<case 'school'>>
-            你把车停在学校外。<<if $Transport.commute.npc is 'Sydney'>>悉尼向你道谢后，匆匆走进学校。<<elseif $Transport.commute.npc is 'Whitney'>>惠特尼看见了校门旁的朋友。“回头见，荡妇。”<<He>>跟他们一起走进学校。<<else>>罗宾拿好书包，在校门旁等你。<</if>>
+            你把车停在学校外。<<if $Transport.commute.npc is 'Sydney'>>悉尼向你道谢后，匆匆走进学校。<<elseif $Transport.commute.npc is 'Whitney'>>惠特尼看见了校门旁的朋友。“回头见，荡妇。”<<He>>跟他们一起走进学校。<<elseif $Transport.commute.npc is 'Kylar'>>凯拉尔在车门旁磨蹭了一会。“放学后见，好吗？”等你答复，<<he>>才朝校门走去。<<else>>罗宾拿好书包，在校门旁等你。<</if>>
             <<if Time.hour gte 9>><span class='red'>早上的课程已经开始了。</span><</if>>
           <<case 'home'>>
-            你在<<his>>住处附近停下。<<He>>拿好书包，才打开车门。
+            <<if $Transport.commute.home>>你在共同居住的住宅外停下。你熄火时，<<he>>已经找出了家门钥匙。<<else>>你在<<his>>住处附近停下。<<He>>拿好书包，才打开车门。<</if>>
           <<case 'farm'>>
             你把车停在通往农场的小路口。艾利克斯拿好购物袋，又看了看脚边，确认没落下东西。
             <<if $farm_stage gte 7>>
@@ -82,7 +96,7 @@
           <<else>>Robin smiles and shoulders <<his>> bag. "Sure. I'll go with you."<</if>>
         <<case 'Whitney'>>
           "Your car?" Whitney glances past you. "About fucking time." <<He>> picks up <<his>> bag. "And none of your shit music."
-          <<if _ride.kind is 'school'>>One of <<his>> friends calls from the stairs. "I'll catch up at school," Whitney shouts back.<</if>>
+          <<if _ride.kind is 'school' and !_ride.property>>One of <<his>> friends calls from the stairs. "I'll catch up at school," Whitney shouts back.<</if>>
         <<case 'Kylar'>>
           "Just us?" Kylar asks. When you nod, <<he>> hugs <<his>> bag to <<his>> chest. "I'd like that."
         <<case 'Sydney'>>
@@ -99,7 +113,7 @@
           <<else>>罗宾笑着背好书包。“好啊。我跟你一起去。”<</if>>
         <<case 'Whitney'>>
           “你的车？”惠特尼朝你身后看了一眼。“早该这样了。”<<He>>拿起书包。“别放你那些烂歌。”
-          <<if _ride.kind is 'school'>>楼梯上有人喊了<<him>>一声。“学校见。”惠特尼朝朋友喊回去。<</if>>
+          <<if _ride.kind is 'school' and !_ride.property>>楼梯上有人喊了<<him>>一声。“学校见。”惠特尼朝朋友喊回去。<</if>>
         <<case 'Kylar'>>
           “就我们两个？”凯拉尔问。你点头后，<<he>>抱紧书包。“我想去。”
         <<case 'Sydney'>>

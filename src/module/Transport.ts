@@ -309,10 +309,15 @@ class Transport extends Module {
       if (depth === 0) choices.push(...(forest ? ['nightingale', 'wolf', 'danube'] : ['farmland']).map(id => ({ id, distance: forest ? 10 : 5 })));
     } else {
       choices = Catalog.routes
-        .filter(route => route.id !== from && model.terrain.includes(route.terrain as 'road' | 'park'))
+        .filter(
+          route =>
+            (route.id !== from || this.state.commute?.to === route.id || this.core.get('Finance')?.realEstate.outings.target === route.id) && model.terrain.includes(route.terrain as 'road' | 'park')
+        )
         .flatMap(route => {
           const distance = Catalog.distance(from, route.id, model.kind === 'bicycle');
-          return distance == null ? [] : [{ id: route.id, distance }];
+          return distance == null
+            ? []
+            : [{ id: route.id, distance: distance + (this.atGarage || this.state.commute?.property || this.core.get('Finance')?.realEstate.outings.plan?.stage === 'out' ? 2 : 0) }];
         });
       if (model.kind === 'bicycle' && ['wolf', 'nightingale', 'danube'].includes(from)) choices.push({ id: 'forest:0', distance: 10 });
       if (model.terrain.includes('moor_track') && from === 'farmland' && !Weather.isSnow && Weather.precipitation !== 'rain') choices.push({ id: 'moor:0', distance: 5 });
@@ -470,6 +475,8 @@ class Transport extends Module {
       return false;
     const commute = this.state.commute;
     if (commute && (!this.commute.active || !commute.boarded || destination !== commute.to)) return false;
+    const outings = this.core.get('Finance')?.realEstate.outings;
+    if (outings?.travelling && (destination !== outings.target || outings.plan?.stage === 'visit' || this.vehicle?.id !== outings.plan?.vehicle)) return false;
     const passengers = this.state.passengers.filter(name => this.companions.available.includes(name)).slice(0, this.model!.seats);
     if (commute && !passengers.includes(commute.npc)) return false;
     this.state.trip = {
@@ -573,6 +580,7 @@ class Transport extends Module {
     else this.state.driving = Math.min(1000, this.state.driving + Math.min(10, Math.ceil(trip.minutes / 5)));
     this.companions.affection(model.id === 'convertible');
     this.commute.arrive();
+    this.core.get('Finance')?.realEstate.outings.arrive(trip.to);
     if (trip.taxi) this.taxi.arrive(trip.taxi);
     return true;
   }

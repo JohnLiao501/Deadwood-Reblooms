@@ -370,6 +370,7 @@
               <<lanSwitch ', next settlement: ' '，下次结算：'>>
               <<deadwood-reblooms-finance-date `_finance_property.tenure === 'company' ? $Finance.company.suite.next_upkeep_day : _finance_property_state.next_settlement_day`>><<lanSwitch '.' '。'>>
               <br><<lanSwitch 'Condition: ' '房屋状况：'>><<= _finance_property_state.condition>>/100
+              <<deadwood-outing-record _finance_property.id>>
               <<if maplebirch.get('Finance').realEstate.staff.weekly(_finance_property.id) gt 0>>
                 <br><<lanSwitch 'Household weekly wages: ' '住宅雇员周薪：'>><<printmoney `maplebirch.get('Finance').realEstate.staff.weekly(_finance_property.id)`>>
                 <<for _journal_role range maplebirch.get('Finance').realEstate.staff.roles>>
@@ -1205,4 +1206,17 @@
   <<deadwood-card _record_title _record_title>>
     <div class='dr-finance-summary'><<deadwood-transport-vehicle-status _record_model _record_vehicle>></div>
   <</deadwood-card>>
+<</widget>>
+
+<<widget 'deadwood-outing-record'>>
+  <<set _journal_outings to maplebirch.get('Finance').realEstate.outings>>
+  <<set _journal_outing to _journal_outings.plan>>
+  <<if _journal_outings.live and _journal_outing.property is _args[0]>>
+    <br><<socialiseicon 'ask'>><<print maplebirch.auto(_journal_outing.name)>> · <span class='blue'><<print getFormattedDate(new DateTime(_journal_outing.at))>> <<print _journal_outing.hour>>:00</span>
+    <br><<deadwood-outing-activity _journal_outing.activity>>
+    <<if _journal_outing.stage is 'booked'>> · <<lanSwitch 'Meet at your shared home.' '在共同居住的住宅碰面。'>>
+    <<elseif _journal_outing.stage is 'return'>> · <<lanSwitch 'On the way home.' '准备一起回家。'>>
+    <<else>> · <<lanSwitch 'Out together.' '正在一起外出。'>><</if>>
+    <<if _journal_outing.name is 'Sydney'>> <span class='purple'>| <<lanSwitch 'Return before 21:00.' '21:00 前回来。'>></span><</if>>
+  <</if>>
 <</widget>>

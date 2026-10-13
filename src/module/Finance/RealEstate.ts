@@ -8,6 +8,7 @@ import rentalTerms from '../../assets/finance/rentals.json';
 import PropertyLife, { type PropertyLifeState } from './PropertyLife';
 import PropertyStaff, { type PropertyStaffState, type StaffRole } from './PropertyStaff';
 import PropertyBanquet, { type PropertyBanquetState } from './PropertyBanquet';
+import PropertyOutings, { type PropertyOutingState } from './PropertyOutings';
 
 type PropertyId = string;
 type PropertyRoom = keyof Property['rooms'] | Property['extensions'][number]['id'];
@@ -47,6 +48,7 @@ export interface RealEstateState {
   life: PropertyLifeState;
   staff_role: StaffRole;
   banquet: PropertyBanquetState;
+  outings: PropertyOutingState;
 }
 
 interface PropertyManagement {
@@ -107,7 +109,8 @@ class RealEstate {
     pair_request: null,
     life: PropertyLife.defaults,
     staff_role: 'housekeeper',
-    banquet: PropertyBanquet.defaults
+    banquet: PropertyBanquet.defaults,
+    outings: PropertyOutings.defaults
   };
   private loadedProperties?: Property[];
   private loadedResidents?: ResidentProfile[];
@@ -115,6 +118,7 @@ class RealEstate {
   public readonly life: PropertyLife;
   public readonly staff: PropertyStaff;
   public readonly banquet: PropertyBanquet;
+  public readonly outings: PropertyOutings;
   public readonly rentalTerms = rentalTerms;
 
   public constructor(
@@ -125,6 +129,7 @@ class RealEstate {
     this.life = new PropertyLife(this, core);
     this.staff = new PropertyStaff(this, finance);
     this.banquet = new PropertyBanquet(core, finance, this);
+    this.outings = new PropertyOutings(this, core);
   }
 
   public get properties(): readonly Property[] {
@@ -138,6 +143,7 @@ class RealEstate {
   public preInit(): void {
     this.life.preInit();
     this.banquet.preInit();
+    this.outings.preInit();
     this.core.tool.onInit(() => {
       void this.properties;
       void this.residentProfiles;
@@ -234,6 +240,8 @@ class RealEstate {
     // 因此按原版夜间时段与剧情状态判断，悉尼的排除日来自 sydneySchedule。
     if (this.isFrozen(id)) return [];
     return this.residentsAt(id).filter(profile => {
+      const visit = this.outings.home(profile.id, id);
+      if (visit !== null) return visit;
       switch (profile.id) {
         case 'Robin':
           return window.getRobinLocation() === 'sleep';
@@ -714,6 +722,7 @@ class RealEstate {
     management.rented = true;
     this.staff.clear(id);
     this.life.clear(id);
+    this.outings.clear(id);
     this.banquet.cancel(id);
     management.vacancy_until = RealEstate.today + rentalTerms.vacancyDays;
     management.rental_issue = null;
@@ -813,6 +822,7 @@ class RealEstate {
     management.auction_day = RealEstate.today + this.mortgage.terms.voluntary_auction_days;
     this.staff.clear(id);
     this.life.clear(id);
+    this.outings.clear(id);
     this.banquet.cancel(id);
     return true;
   }
@@ -917,6 +927,7 @@ class RealEstate {
     if (!this.owns(id)) return;
     this.staff.clear(id);
     this.life.clear(id);
+    this.outings.clear(id);
     this.banquet.cancel(id);
     const management = this.managementFor(id);
     this.state.owned[id] = false;

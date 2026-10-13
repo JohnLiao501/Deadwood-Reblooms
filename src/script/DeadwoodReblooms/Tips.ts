@@ -17,6 +17,8 @@ export default function Tips(core: typeof maplebirch): void {
       ['A home comes with bills. Leave something in the bank for its upkeep.', '房子买下来，账单也跟着来了。银行里最好留些维护费。'],
       ['A spare bed can make room for someone you care about.', '多一张合适的床，也许就能让在意的人住下来。'],
       ['A housemate may still be at work, school or the temple when you get home.', '回到家时，同住的人可能还在工作、学校或神殿。'],
+      ['You can agree on a weekend outing at home. The journal keeps the date and meeting time.', '在家可以约好周末一起出门。日志会记下日期和碰面时间。'],
+      ['Your housemate still has a timetable. A lift from home can help with an early start.', '同住恋人仍有自己的日程。清晨从家里送一程，也许能让出门轻松些。'],
       ['Company accounts can tell you more than a rising share price.', '公司的账目，有时比上涨的股价更值得看。'],
       ['Avery keeps papers about the tower in the office. The construction site may answer other questions.', '艾弗里的办公室留着塔楼的文件。有些疑问，去工地看看或许能找到答案。'],
       ['High windows offer a view of the town, and a way down for those with suitable wings.', '高处的窗外是小镇。长着合适翅膀的人，也许能从那里滑翔出去。']

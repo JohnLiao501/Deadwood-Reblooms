@@ -872,6 +872,7 @@
   <</if>>
   <span class='green'><<lanSwitch 'This is one of your homes.' '这里也是你的住所。'>></span><br><br>
   <<deadwood-home-staff-presence>>
+  <<deadwood-home-return-link>>
   <<deadwood-home-daily-link>>
   <<for _resident range maplebirch.get("Finance").realEstate.household.common>>
     <<capture _resident>>
@@ -955,6 +956,7 @@
     <<socialiseicon>><<lanLink ['Invite both lovers to talk (0:20)', '请两位恋人一起聊聊 (0:20)'] 'Deadwood Reblooms Property Household'>><<pass 20>><</lanLink>><br><br>
   <</if>>
   <<deadwood-company-suite-home>>
+  <<deadwood-home-outing-link>>
   <<if !maplebirch.get('Finance').realEstate.facilities.some(room => room.id === 'lounge' and room.inline and room.floor === 1 and room.access === 'sitting')>>
     <<deadwood-home-life-menu 'sitting'>>
   <</if>>

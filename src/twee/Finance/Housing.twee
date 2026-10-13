@@ -437,6 +437,7 @@
     这里可停放<<if _facility.parking.motor_vehicle gt 0>><span class='teal'><<= _facility.parking.motor_vehicle>>辆机动车</span>、<</if>><<if _facility.parking.motorcycle gt 0>><span class='teal'><<= _facility.parking.motorcycle>>辆摩托车</span>和<</if>><span class='teal'><<= _facility.parking.bicycle>>辆自行车</span>。你没有在门前堆东西，备用钥匙挂在屋里。
 <</language>><br><br>
 <<if maplebirch.get('Transport')>>
+  <<deadwood-home-outing-departure>>
   <<deadwood-transport-garage>><br>
 <</if>>
 <<deadwood-home-exit 'garage'>>

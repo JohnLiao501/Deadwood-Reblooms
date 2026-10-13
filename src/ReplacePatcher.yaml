@@ -41,34 +41,43 @@
       else weekPassed();
     }
 
-- comment: '留院位置接入原版函数内部，避免 statusCheck 的内部调用绕过 window 上的日程扩展。'
-  fileName: 'ingame.js'
-  from: 'else if (V.robinlocationoverride && V.robinlocationoverride.during.includes(Time.hour)) {'
-  before: |
-    else if (maplebirch.get('Robin') && V.RobinExpansion?.asylum?.status === 'admitted') {
-      T.robin_location = 'asylum';
-    }
-
-- comment: '店铺、家教和雨天摊位接入原版日程返回点，内部与导出的地点查询使用同一结果。'
+- comment: '罗宾日程共用返回入口，统一处理留院、店铺、家教、雨天摊位和明确约好的出行。'
   fileName: 'ingame.js'
   from: |
     return T.robin_location;
     }
     window.getRobinLocation = getRobinLocation;
   to: |
-    T.robin_location = maplebirch.get('Robin')?.resolveLocation(T.robin_location) ?? T.robin_location;
+    T.robin_location = maplebirch.get('Robin')?.resolveLocation(T.robin_location)
+      ?? maplebirch.get('Finance')?.realEstate.outings.location('Robin', T.robin_location)
+      ?? T.robin_location;
       return T.robin_location;
     }
     window.getRobinLocation = getRobinLocation;
 
-- comment: '悉尼事先答应当晚回家时，将原版日程同步转为 home，直至次日清晨，避免半夜突然回到神殿。'
-  fileName: 'named-npc.js'
-  from: 'if (T.sydney_location === "temple") {'
-  before: |
-    if (maplebirch.get('Sydney') && ((V.SydneyExpansion?.estate?.visitDay === Time.days && Time.hour >= 21) || (V.SydneyExpansion?.estate?.visitDay === Time.days - 1 && Time.hour < 6)) && V.daily.sydney.punish !== 1 && !V.replayScene && C.npc.Sydney.init === 1 && !["prison", "dungeon"].includes(C.npc.Sydney.state)) {
-      T.sydney_location = "home";
-      T.sydney_location_message = "home";
+- comment: '已约好的短暂居家停留和驾车同行同步到凯拉尔的原版位置查询。'
+  fileName: 'kylar-functions.js'
+  from: |
+    return location;
     }
+    window.getKylarLocation = getKylarLocation;
+  to: |
+    const arranged = maplebirch.get('Finance')?.realEstate.outings.location('Kylar', location.area) ?? location.area;
+      if (arranged !== location.area) location = { area: arranged, state: 'visiting' };
+      return location;
+    }
+    window.getKylarLocation = getKylarLocation;
+
+- comment: '悉尼原版地点与事务先结算，再统一处理节庆、庄园留宿、短暂外出和接送。'
+  fileName: 'named-npc.js'
+  from: |
+    }
+    window.sydneySchedule = sydneySchedule;
+  to: |
+    if (maplebirch.get('Sydney')) maplebirch.get('Sydney').schedule();
+      else T.sydney_location = maplebirch.get('Finance')?.realEstate.outings.location('Sydney', T.sydney_location) ?? T.sydney_location;
+    }
+    window.sydneySchedule = sydneySchedule;
 
 - comment: '意志突破后允许正常增益继续填充扩展后的六级上限。'
   fileName: 'stat-changes.js'

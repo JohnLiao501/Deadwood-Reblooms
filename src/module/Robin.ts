@@ -178,38 +178,43 @@ class Robin extends Module implements RobinFacade {
 
   /** 原版函数内部和导出的查询共用扩展日程，剧情临时位置优先。 */
   public resolveLocation(location: string | undefined): string | undefined {
-    if (!V.RobinExpansion || !this.available || V.robinlocationoverride?.during?.includes(Time.hour)) return location;
-    if (
-      location === 'orphanage' &&
-      Weather.precipitation === 'rain' &&
-      Time.isWeekEnd() &&
-      Time.hour >= 9 &&
-      (Time.hour < 16 || (Time.hour === 16 && Time.minute >= 30)) &&
-      C.npc.Robin.init === 1 &&
-      !V.robinmissing &&
-      C.npc.Robin.trauma < 80 &&
-      (Time.season === 'winter' ? (V.RobinExpansion?.chocolate ?? 0) >= 1 : (V.RobinExpansion?.lemonade ?? 0) >= 1)
-    ) {
-      T.robin_location = Time.season === 'winter' ? 'park' : 'beach';
-      return T.robin_location;
+    if (V.RobinExpansion?.asylum?.status === 'admitted') return 'asylum';
+    if (V.robinlocationoverride?.during?.includes(Time.hour)) return location;
+    if (V.RobinExpansion && this.available) {
+      if (
+        location === 'orphanage' &&
+        Weather.precipitation === 'rain' &&
+        Time.isWeekEnd() &&
+        Time.hour >= 9 &&
+        (Time.hour < 16 || (Time.hour === 16 && Time.minute >= 30)) &&
+        C.npc.Robin.init === 1 &&
+        !V.robinmissing &&
+        C.npc.Robin.trauma < 80 &&
+        (Time.season === 'winter' ? (V.RobinExpansion?.chocolate ?? 0) >= 1 : (V.RobinExpansion?.lemonade ?? 0) >= 1)
+      ) {
+        location = Time.season === 'winter' ? 'park' : 'beach';
+      } else if (
+        V.RobinExpansion?.tutor &&
+        location === 'orphanage' &&
+        Time.schoolDay &&
+        this.tutoring.lessonDays.includes(Time.weekDay) &&
+        ((Time.hour === 17 && Time.minute >= 30) || (Time.hour === 18 && Time.minute < 30)) &&
+        V.robin.timer.hurt === 0 &&
+        C.npc.Robin.trauma < 80
+      ) {
+        location = 'tutor';
+      } else if (
+        V.RobinExpansion?.shop &&
+        location === 'orphanage' &&
+        (Time.hour > 18 || (Time.hour === 18 && Time.minute >= 30)) &&
+        Time.hour < 21 &&
+        V.robin.timer.hurt === 0 &&
+        C.npc.Robin.trauma < 80
+      ) {
+        location = 'shop';
+      }
     }
-    if (
-      V.RobinExpansion?.tutor &&
-      location === 'orphanage' &&
-      Time.schoolDay &&
-      this.tutoring.lessonDays.includes(Time.weekDay) &&
-      ((Time.hour === 17 && Time.minute >= 30) || (Time.hour === 18 && Time.minute < 30)) &&
-      V.robin.timer.hurt === 0 &&
-      C.npc.Robin.trauma < 80
-    ) {
-      T.robin_location = 'tutor';
-      return 'tutor';
-    }
-    if (V.RobinExpansion?.shop && location === 'orphanage' && (Time.hour > 18 || (Time.hour === 18 && Time.minute >= 30)) && Time.hour < 21 && V.robin.timer.hurt === 0 && C.npc.Robin.trauma < 80) {
-      T.robin_location = 'shop';
-      return 'shop';
-    }
-    return location;
+    return typeof location === 'string' ? (this.core.get('Finance')?.realEstate.outings.location('Robin', location) ?? location) : location;
   }
 
   public settleWeek(vanillaWeekPassed: () => void): void {

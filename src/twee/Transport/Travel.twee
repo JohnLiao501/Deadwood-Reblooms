@@ -28,7 +28,7 @@
         <i><<lanSwitch 'A repair kit and supplies would help you get moving again.' '备好维修工具和耗材，就能在途中应急修复。'>></i><br>
       <</if>><br>
     <</if>>
-    <<if _transport.companions.available.length and !$Transport.commute>>
+    <<if _transport.companions.available.length and !$Transport.commute and !maplebirch.get('Finance')?.realEstate.outings.travelling>>
       <<lanSwitch 'Invite someone along' '邀请同住恋人同行'>><br>
       <<for _passenger range _transport.companions.available>>
         <<capture _passenger>>
@@ -38,6 +38,9 @@
         <</capture>>
       <</for>><br>
     <</if>>
+    <<deadwood-home-outing-departure>>
+    <<deadwood-outing-arrival>>
+    <<deadwood-home-rides>>
     <<if _transport.garage>>
       <<lanSwitch 'Occupied spaces of this type: ' '此类车位已占用：'>><<print _transport.garage.used>> / <<print _transport.garage.capacity>><br>
       <<if _transport.vehicle.garage>>
@@ -59,7 +62,7 @@
       <<if _transport.fuel.refill_amount gt 0>>
         <<icon 'transport/fuel-can.png'>><<lanLink `lanSwitch('Refuel from a can', '用油桶补油') + ' (' + Math.floor(_transport.fuel.terms.refill_minutes / 60) + ':' + String(_transport.fuel.terms.refill_minutes % 60).padStart(2, '0') + ')'`>>
           <<if maplebirch.get('Transport').fuel.refill() and $passage is 'Deadwood Transport Menu'>>
-            <<goto 'Deadwood Transport Menu'>>
+            <<run Dynamic.render('deadwood-transport-status')>><<run Dynamic.render('deadwood-transport-menu')>>
           <</if>>
         <</lanLink>><br>
       <</if>><br>
@@ -98,7 +101,7 @@
         <<npc $Transport.commute.npc>><<person1>>
         <<lanSwitch 'You agreed to give <<him>> a lift.' '你答应了送<<him>>一程。'>><br><br>
       <</if>>
-      <<for _destination range _transport.destinations.filter(destination => !$Transport.commute || destination.id === $Transport.commute.to)>>
+      <<for _destination range _transport.destinations.filter(destination => (!$Transport.commute || destination.id === $Transport.commute.to) && (!maplebirch.get('Finance')?.realEstate.outings.travelling || destination.id === maplebirch.get('Finance').realEstate.outings.target))>>
         <<capture _destination>>
           <<switch _destination.id.split(':')[0]>>
             <<case 'farmland'>><<farmicon>>
@@ -153,6 +156,7 @@
       <<icon 'transport/dispatch-radio.png'>><<lanLink ['Contact dispatch', '联系调度'] 'Deadwood Transport Taxi Dispatch'>><</lanLink>><br>
     <</if>>
     <<getouticon>><<lanLink ['Return', '返回'] $Transport.return_passage>>
+      <<run maplebirch.get('Finance')?.realEstate.outings.abandon()>>
       <<set $Transport.trip to null>>
     <</lanLink>>
   <<else>>
@@ -253,23 +257,31 @@
           <<else>><<deadwood-transport-ride-options>><</if>>
         <</if>>
       <<else>>
-        <<if _transport.companions.canFoolAround>>
-          <<loveicon>><<lanLink ['Pull over somewhere quiet', '把车停到僻静处']>>
-            <<if maplebirch.get('Transport').companions.foolAround()>>
-              <<set $Transport.trip.pullstart to true>><<goto 'Deadwood Transport Pull Over'>>
-            <</if>>
-          <</lanLink>><<promiscuous2>><br>
+        <<if maplebirch.get('Finance')?.realEstate.outings.travelling>>
+          <<if maplebirch.get('Finance').realEstate.outings.plan.stage is 'visit'>>
+            <<deadwood-outing-arrival>>
+          <<else>>
+            <<getouticon>><<lanLink ['Continue', '继续'] _transport.arrival>><</lanLink>><br>
+          <</if>>
+        <<else>>
+          <<if _transport.companions.canFoolAround>>
+            <<loveicon>><<lanLink ['Pull over somewhere quiet', '把车停到僻静处']>>
+              <<if maplebirch.get('Transport').companions.foolAround()>>
+                <<set $Transport.trip.pullstart to true>><<goto 'Deadwood Transport Pull Over'>>
+              <</if>>
+            <</lanLink>><<promiscuous2>><br>
+          <</if>>
+          <<if _transport.companions.canDate>>
+            <<icon `'transport/' + _transport.model.id + '.png'`>><<lanLink ['Spend some time together (0:20)', '一起逛逛 (0:20)']>>
+              <<if maplebirch.get('Transport').companions.date()>><<goto 'Deadwood Transport Date'>><</if>>
+            <</lanLink>><<lstress>><br>
+          <</if>>
+          <<getouticon>><<lanLink ['Continue', '继续'] _transport.arrival>>
+            <<if $Transport.trip.event>><<set $Transport.trip.event.resolved to true>><</if>>
+            <<if $Transport.trip.commute>><<endevent>><<set $eventskip to 1>><<set $Transport.avery_reply to null>><</if>>
+            <<set $phase to 0>>
+          <</lanLink>><br>
         <</if>>
-        <<if _transport.companions.canDate>>
-          <<icon `'transport/' + _transport.model.id + '.png'`>><<lanLink ['Spend some time together (0:20)', '一起逛逛 (0:20)']>>
-            <<if maplebirch.get('Transport').companions.date()>><<goto 'Deadwood Transport Date'>><</if>>
-          <</lanLink>><<lstress>><br>
-        <</if>>
-        <<getouticon>><<lanLink ['Continue', '继续'] _transport.arrival>>
-          <<if $Transport.trip.event>><<set $Transport.trip.event.resolved to true>><</if>>
-          <<if $Transport.trip.commute>><<endevent>><<set $eventskip to 1>><<set $Transport.avery_reply to null>><</if>>
-          <<set $phase to 0>>
-        <</lanLink>><br>
       <</if>>
     <</if>>
   <</if>>

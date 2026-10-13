@@ -9,6 +9,7 @@ export default class Companions {
     if (this.transport.taxi.active) return [];
     if (this.transport.state.commute) return this.transport.commute.active && this.transport.state.commute.boarded ? [this.transport.state.commute.npc] : [];
     const estate = this.transport.core.get('Finance')?.realEstate;
+    if (estate?.outings.travelling) return this.transport.vehicle?.id === estate.outings.plan?.vehicle ? [estate.outings.plan!.name] : [];
     const property = estate?.current;
     return this.transport.atGarage && property && this.transport.model?.kind === 'motor_vehicle' && this.transport.model.seats ? estate.residentsHome(property.id).map(profile => profile.id) : [];
   }
@@ -33,6 +34,7 @@ export default class Companions {
       !trip.interrupted &&
       !trip.dated &&
       !trip.commute &&
+      !this.transport.core.get('Finance')?.realEstate.outings.travelling &&
       (trip.passengers?.length ?? 0) > 0 &&
       ['cliff', 'starfish', 'danube', 'high'].includes(trip.to) &&
       trip.passengers.some(name => this.transport.state.affection_days[name + ':date'] !== Time.days)
@@ -57,6 +59,7 @@ export default class Companions {
       !!trip?.settled &&
       !trip.interrupted &&
       !trip.commute &&
+      !this.transport.core.get('Finance')?.realEstate.outings.travelling &&
       !trip.fooled &&
       (trip.passengers?.length ?? 0) === 1 &&
       ['cliff', 'starfish', 'danube', 'farmland'].includes(trip.to) &&

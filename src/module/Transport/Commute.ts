@@ -13,6 +13,10 @@ export interface Ride {
   walk: number;
   day: number;
   boarded: boolean;
+  property?: string;
+  home?: string;
+  arrived?: boolean;
+  until?: number;
 }
 
 export interface AveryReply {
@@ -43,13 +47,70 @@ export default class Commute {
     return name !== 'Robin' || (!V.robinmissing && V.robin.timer.hurt === 0 && V.RobinExpansion?.asylum?.status !== 'admitted');
   }
 
+  public distance(plan: Ride): number {
+    const estate = this.transport.core.get('Finance')?.realEstate;
+    const home = plan.home ? estate?.properties.find(property => property.id === plan.home) : undefined;
+    const point = home ? (home.street === 'Office Lobby' ? 'high' : Catalog.point(home.street)) : plan.to;
+    return (point ? (Catalog.distance(plan.from, point) ?? Infinity) : Infinity) + (plan.property ? 2 : 0) + (home ? 2 : 0);
+  }
+
+  public get homeOffers(): Ride[] {
+    const estate = this.transport.core.get('Finance')?.realEstate;
+    const property = estate?.current;
+    if (!estate || !property || !estate.outings.canLeave(property.id) || this.transport.taxi.active || !this.transport.ready || this.transport.state.commute || estate.outings.travelling) return [];
+    const from = property.street === 'Office Lobby' ? 'high' : Catalog.point(property.street);
+    if (!from) return [];
+    return estate.residentsHome(property.id).flatMap(resident => {
+      if (!this.healthy(resident.id)) return [];
+      const temple = resident.id === 'Sydney' && Time.hour === 5;
+      const school = resident.id !== 'Sydney' && Time.schoolDay && Time.hour === 6;
+      if (!temple && !school) return [];
+      return [
+        {
+          npc: resident.id,
+          kind: temple ? 'temple' : 'school',
+          from,
+          to: temple ? 'wolf' : 'oxford',
+          arrival: temple ? 'Temple' : 'School Front Courtyard',
+          source: 'Deadwood Transport Menu',
+          walk: 1,
+          day: Math.floor(Time.days),
+          until: Time.date.timeStamp + (24 * 60 - Time.hour * 60 - Time.minute) * 60,
+          boarded: false,
+          property: property.id
+        }
+      ];
+    });
+  }
+
+  public prepareHome(name: string): boolean {
+    const plan = this.homeOffers.find(ride => ride.npc === name);
+    if (!plan || !this.transport.canDepart || !this.transport.vehicle || !this.vehicles(plan).includes(this.transport.vehicle)) return false;
+    this.transport.state.commute = plan;
+    return true;
+  }
+
   public get offer(): Ride | null {
     if (this.transport.taxi.active || !this.transport.ready || V.nextPassageCheck) return null;
     const source = this.transport.core.passage.title;
-    const plan = (npc: string, kind: Ride['kind'], from: string, to: string, arrival: string, walk: number): Ride | null =>
-      this.healthy(npc) && this.transport.state.affection_days[npc + ':' + kind] !== Time.days ? { npc, kind, from, to, arrival, source, walk, day: Math.floor(Time.days), boarded: false } : null;
+    const plan = (npc: string, kind: Ride['kind'], from: string, to: string, arrival: string, walk: number): Ride | null => {
+      if (!this.healthy(npc) || this.transport.state.affection_days[npc + ':' + kind] === Time.days) return null;
+      const home = kind === 'home' ? this.transport.core.get('Finance')?.realEstate.residenceOf(npc)?.id : undefined;
+      return { npc, kind, from, to: home ? 'home:' + home : to, arrival: home ? 'Deadwood Reblooms Property Home' : arrival, source, walk, day: Math.floor(Time.days), boarded: false, home };
+    };
     const from = Catalog.point(source);
     if (from && source.endsWith(' Street') && Time.hour >= 6 && Time.hour < 21 && this.linksTo('Street Alex Cafe')) return plan('Alex', 'farm', from, 'farmland', 'Farmland', 1);
+    if (
+      source === 'Temple Sydney' &&
+      Time.hour >= 17 &&
+      Time.hour < 20 &&
+      T.sydney_location === 'temple' &&
+      V.sydney_templeWork === 'quarters' &&
+      this.transport.core.get('Finance')?.realEstate.residenceOf('Sydney') &&
+      V.NPCList?.[0]?.fullDescription === 'Sydney' &&
+      this.linksTo('Temple')
+    )
+      return plan('Sydney', 'home', 'wolf', 'wolf', 'Temple', 1);
     if (!Time.schoolDay) return null;
     if (Time.hour >= 7 && Time.hour < 9 && this.linksTo('Robin Walk School')) return plan('Robin', 'school', 'domus', 'oxford', 'School Front Courtyard', 1);
     if (Time.hour >= 8 && Time.hour < 10 && this.linksTo('Whitney Home School Walk')) return plan('Whitney', 'school', 'barb', 'oxford', 'School Front Courtyard', 2);
@@ -71,15 +132,16 @@ export default class Commute {
       return [];
     return this.transport.state.vehicles.filter(vehicle => {
       const model = Catalog.models.find(model => model.id === vehicle.model);
-      const distance = Catalog.distance(plan.from, plan.to);
+      const distance = this.distance(plan);
       return (
         model?.kind === 'motor_vehicle' &&
         model.seats > 0 &&
+        !vehicle.stolen &&
         vehicle.point === plan.from &&
         vehicle.garage === null &&
         vehicle.condition > 0 &&
         !(vehicle.arrears ?? 0) &&
-        distance !== null &&
+        Number.isFinite(distance) &&
         vehicle.fuel >= Math.ceil(distance * model.fuel_use * 100) / 100
       );
     });
@@ -95,7 +157,14 @@ export default class Commute {
 
   public get active(): boolean {
     const plan = this.transport.state.commute;
-    if (!plan || plan.day !== Math.floor(Time.days) || !this.healthy(plan.npc)) return false;
+    if (!plan || (plan.until ? Time.date.timeStamp >= plan.until : plan.day !== Math.floor(Time.days)) || !this.healthy(plan.npc)) return false;
+    if (plan.home && this.transport.core.get('Finance')?.realEstate.residenceOf(plan.npc)?.id !== plan.home) return false;
+    if (plan.property)
+      return (
+        (plan.kind === 'temple' ? Time.hour >= 5 && Time.hour < 7 : Time.schoolDay && Time.hour >= 6 && Time.hour < 9) &&
+        this.transport.core.get('Finance')?.realEstate.residenceOf(plan.npc)?.id === plan.property
+      );
+    if (plan.source === 'Temple Sydney') return Time.hour >= 17 && Time.hour < 21;
     if (plan.kind === 'farm') return plan.npc === 'Alex' && Time.hour >= 6 && Time.hour < 21;
     return (
       Time.schoolDay &&
@@ -134,9 +203,13 @@ export default class Commute {
 
   public arrive(): void {
     const plan = this.transport.state.commute;
-    if (!plan?.boarded || this.transport.state.trip?.to !== plan.to) return;
+    if (!plan?.boarded || plan.arrived || this.transport.state.trip?.to !== plan.to) return;
+    plan.arrived = true;
     this.transport.state.return_passage = plan.arrival;
-    if (plan.npc === 'Robin') this.transport.core.SugarCube.Wikifier.wikifyEval(`<<run setRobinLocationOverride('${plan.kind === 'school' ? 'school' : 'orphanage'}', ${Time.hour})>>`);
+    const estate = this.transport.core.get('Finance')?.realEstate;
+    if (plan.home && estate?.current?.id === plan.home) estate.outings.receive(plan.npc, plan.home, 'ride');
+    else if (plan.property && estate) estate.outings.drop(plan.npc, plan.property, plan.kind === 'temple' ? 'temple' : 'school');
+    else if (plan.npc === 'Robin') this.transport.core.SugarCube.Wikifier.wikifyEval(`<<run setRobinLocationOverride('${plan.kind === 'school' ? 'school' : 'orphanage'}', ${Time.hour})>>`);
     if (plan.npc === 'Sydney' && plan.kind === 'temple') {
       V.daily.sydney.templeSkip = true;
       delete V.sydneyExit;
