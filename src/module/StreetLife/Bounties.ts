@@ -3,6 +3,7 @@ import Catalog from '../Transport/Catalog';
 import type StreetLife from '../StreetLife';
 import type { Vehicle } from '../Transport/Catalog';
 import type { CargoFight } from './Bailey';
+import type { HeistFight } from './Heist';
 
 type Site = keyof typeof terms.sites;
 type Case = (typeof terms.cases)[number];
@@ -102,18 +103,22 @@ export default class Bounties {
   public get busy(): boolean {
     return this.fightingCargo || (!!this.state.hunter && ['approach', 'confrontation', 'fight', 'caught'].includes(this.state.hunter.stage));
   }
+  public get fightingHeist(): boolean {
+    return !!this.street.heist.state.fight;
+  }
   public get fightingCargo(): boolean {
     return !!this.street.bailey.state.fight;
   }
   public get fightingHunter(): boolean {
     return this.state.hunter?.stage === 'fight';
   }
-  public get fight(): Bounty | Hunter | CargoFight | null {
+  public get fight(): Bounty | Hunter | CargoFight | HeistFight | null {
+    if (this.fightingHeist) return this.street.heist.state.fight;
     if (this.fightingCargo) return this.street.bailey.state.fight;
     return this.fightingHunter ? this.state.hunter : this.state.active?.stage === 'fight' ? this.state.active : null;
   }
   public get combatStats() {
-    return this.fightingCargo ? this.street.bailey.terms.combat : this.fightingHunter ? terms.hunter.combat : this.contract?.combat;
+    return this.fightingHeist ? this.street.heist.terms.combat : this.fightingCargo ? this.street.bailey.terms.combat : this.fightingHunter ? terms.hunter.combat : this.contract?.combat;
   }
   public get inCombat(): boolean {
     return !!this.fight?.combatStarted && V.combat === 1 && V.enemytype === 'man' && V.NPCList[0]?.per === this.fight.key;
@@ -136,13 +141,14 @@ export default class Bounties {
     return !!this.target?.deadwoodGunshot;
   }
   public get offers(): Case[] {
-    if (!this.state.cooperating || this.wanted || this.state.active) return [];
+    if (!this.state.cooperating || this.wanted || this.state.active || this.street.heist.inAction) return [];
     const order = this.state.board.length ? this.state.board : terms.cases.map(item => item.id);
     return order
       .map(id => terms.cases.find(item => item.id === id)!)
       .filter(
         item =>
           (this.state.cooldowns[item.id] ?? -1) <= Math.floor(Time.days) &&
+          this.trust >= item.required_trust &&
           (item.requires !== 'casino' || !!this.street.core.get('LifeSimulation')) &&
           (item.requires !== 'finance' || !!this.street.core.get('Finance')) &&
           (item.requires !== 'underground' || V.smuggler_pub_known === 1)
@@ -210,7 +216,7 @@ export default class Bounties {
 
   /** append 确认原版普通街道菜单后调用；先记日期，刷新及强制事件不会重抽。 */
   public checkHunter(): void {
-    if (this.state.hunter || this.state.hunterDay === Math.floor(Time.days) || !this.available || !this.point) return;
+    if (this.state.hunter || this.state.hunterDay === Math.floor(Time.days) || !this.available || !this.point || this.street.heist.inAction) return;
     const offence = window.crimeSumCurrent();
     if (offence < terms.hunter_evidence) return;
     this.state.hunterDay = Math.floor(Time.days);
@@ -239,12 +245,22 @@ export default class Bounties {
       if (title !== 'Deadwood Street Fight Finish' || !fight || !this.combatComplete || V.replayScene || V.statFreeze) return false;
       const hunter = this.fightingHunter;
       const cargo = this.fightingCargo;
+      const heist = this.fightingHeist;
       const won = V.enemyhealth <= 0;
       const escaped = won || (!(V.pain >= 100 && V.willpowerpain === 0) && (V.enemyarousal >= V.enemyarousalmax || (V.alarm === 1 && V.rescue >= 1) || V.finish === 1));
       if (V.enemyarousal >= V.enemyarousalmax) wiki('<<ejaculation "short">>');
       wiki(`<<saveNPC 0 '${fight.key}'>><<clotheson>><<endcombat>>`);
       fight.combatStarted = false;
-      if (cargo) {
+      if (heist) {
+        const state = this.street.heist.state;
+        state.stage = won ? (fight as HeistFight).resume : 'settlement';
+        if (!won) {
+          state.outcome = 'failed';
+          state.loot = 0;
+        }
+        state.fight = null;
+        if (V.per_npc[fight.key]) wiki(`<<clearNPC '${fight.key}'>>`);
+      } else if (cargo) {
         const job = this.street.jobs.state.active;
         if (job?.id === 'bailey_cargo' && job.stage === 'pickup' && job.issue === 'seized') {
           this.street.bailey.state.resolution = won ? 'fight' : 'failed';
@@ -301,7 +317,7 @@ export default class Bounties {
       }
       return true;
     }
-    if (this.busy) return false;
+    if (this.busy || this.street.heist.inAction) return false;
     if (action === 'cooperate' || action === 'quit') {
       if (title !== 'Deadwood Street Detective' || this.wanted || state.active || Time.hour < 8 || Time.hour >= 18) return false;
       state.cooperating = action === 'cooperate';

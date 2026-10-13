@@ -105,6 +105,7 @@
   "cases": [
     {
       "id": "theft",
+      "required_trust": 0,
       "name": ["The missing lockbox", "失窃的钱箱"],
       "brief": [
         "A warrant identifies a suspect in a shop burglary. The last sighting was near the industrial loading doors. Check the photograph and description before approaching anyone.",
@@ -138,6 +139,7 @@
     },
     {
       "id": "assault",
+      "required_trust": 0,
       "name": ["Trouble on the waterfront", "海滨的袭击案"],
       "brief": [
         "Witnesses identified a suspect after an assault near the docks. A warrant is on file. Ask about the sighting without accusing the first person you meet.",
@@ -171,6 +173,7 @@
     },
     {
       "id": "escape",
+      "required_trust": 0,
       "name": ["A missed court appearance", "未到庭的人"],
       "brief": [
         "A defendant failed to appear in court. A recent sighting places them at the Harvest Street pub. The warrant permits apprehension; it does not authorise you to punish them.",
@@ -204,6 +207,7 @@
     },
     {
       "id": "chips",
+      "required_trust": 0,
       "name": ["Chips that do not add up", "对不上的筹码"],
       "brief": [
         "The police have a warrant for a fraud suspect linked to counterfeit gambling chips. Staff recorded a recent visit to the Connudatus Street gambling room. Match the photograph before approaching a customer; losing money at a table is not a crime.",
@@ -212,7 +216,7 @@
       "site": "casino",
       "requires": "casino",
       "fee": 23000,
-      "icon": "street/lockbox-case.png",
+      "icon": "street/counterfeit-chips.png",
       "search": [
         "Chips click across the tables. You show the photograph away from a hand in progress, and a member of staff lowers their voice. \"The one who kept asking about changing chips? Still here a little while ago.\" They point towards a customer keeping watch on the cashier.",
         "桌上的筹码碰得轻响。你避开正在进行的牌局，把照片递给一位员工。对方压低声音：“一直问怎么兑筹码的那个人？刚才还在。”员工指向一名正留意柜台的客人。"
@@ -237,6 +241,7 @@
     },
     {
       "id": "pharmacy",
+      "required_trust": 20,
       "name": ["A missing pharmacy consignment", "失踪的药房补货"],
       "brief": [
         "A hospital consignment was stolen, and the named suspect has an outstanding burglary warrant. A delivery receipt places them in the hospital foyer. Check the recorded identity; a patient's medication is not evidence of this theft.",
@@ -270,6 +275,7 @@
     },
     {
       "id": "fraud",
+      "required_trust": 20,
       "name": ["A signature that was never given", "未曾签下的名字"],
       "brief": [
         "A fraud warrant names a suspect who used forged business documents. They were last seen asking about an appointment at the financial centre. The file concerns the forgery, not an unpaid loan; staff must confirm the photograph and description.",
@@ -278,7 +284,7 @@
       "site": "finance",
       "requires": "finance",
       "fee": 32000,
-      "icon": "street/document-envelope.png",
+      "icon": "street/forged-signature.png",
       "search": [
         "A printer feeds another page into the tray behind reception. The receptionist looks at the photograph, then at a visitor waiting with a folder across their knees. \"Claimed there'd been a mistake with the appointment. They've asked twice already.\"",
         "前台后的打印机又吐出一页纸。接待员看了看照片，再望向一名把文件夹横放在膝上的访客。“说预约出了差错。已经问过两回了。”"
@@ -303,6 +309,7 @@
     },
     {
       "id": "false_clerk",
+      "required_trust": 0,
       "name": ["The bogus clerk", "冒牌办事员"],
       "brief": [
         "The police have issued a fraud warrant after residents reported paying an impostor for council services. The suspect was seen waiting at Town Hall reception. Verify the identity in the file; helping someone with forms is not itself an offence.",
@@ -311,7 +318,7 @@
       "site": "townhall",
       "requires": "",
       "fee": 18000,
-      "icon": "street/document-envelope.png",
+      "icon": "street/false-clerk-pass.png",
       "search": [
         "People shift along the queue, clutching envelopes and crumpled forms. A clerk takes a careful look at the photograph. \"Keeps hanging around the waiting area. Doesn't work here.\" The person they indicate has a tidy stack of leaflets and no place behind the counter.",
         "队伍慢慢向前挪，人们攥着信封与折皱的表格。办事员仔细辨认照片。“总在等候区转悠。不是这里的员工。”被指出的那个人手边叠着整齐的传单，柜台后却没有其席位。"
@@ -336,6 +343,7 @@
     },
     {
       "id": "intimidation",
+      "required_trust": 0,
       "name": ["A customer nobody wants back", "不受欢迎的回头客"],
       "brief": [
         "An assault and intimidation complaint has led to a warrant for a named suspect. They have returned to the Ocean Breeze Cafe. Confirm the photograph with a witness before intervening; the cafe's ordinary arguments are not your assignment.",
@@ -369,6 +377,7 @@
     },
     {
       "id": "fence",
+      "required_trust": 20,
       "name": ["The buyer of stolen tools", "赃物的买家"],
       "brief": [
         "A handling-stolen-goods warrant identifies a suspect linked to stolen construction tools. A witness places them at the smuggler's pub. The warrant names one person; it is not permission to accuse everyone in the room.",
@@ -402,6 +411,7 @@
     },
     {
       "id": "uniforms",
+      "required_trust": 0,
       "name": ["The wrong garment bag", "拿错的衣物袋"],
       "brief": [
         "A burglary warrant names a suspect in the theft of a workplace's uniforms and wages. A garment receipt places them at the tailor shop. Match the named suspect; wearing the same uniform does not make another worker responsible.",
@@ -435,6 +445,7 @@
     },
     {
       "id": "equipment",
+      "required_trust": 0,
       "name": ["Equipment that never came back", "没能归还的器材"],
       "brief": [
         "An adult contractor is wanted under a burglary warrant for removing school equipment. A recent delivery places the named suspect near the school library. Check the photograph and employment record; pupils and ordinary overdue-book borrowers are not targets.",
@@ -468,6 +479,7 @@
     },
     {
       "id": "cargo_raid",
+      "required_trust": 60,
       "name": ["The loading-bay robber", "卸货口的劫货者"],
       "brief": [
         "A robbery warrant names a suspect who assaulted a driver and stole a consignment. Witnesses reported the same person near the industrial loading bays. Check the photograph against the witness description; carrying cargo is not evidence by itself.",
@@ -476,7 +488,7 @@
       "site": "alley",
       "requires": "",
       "fee": 40000,
-      "icon": "street/equipment-case.png",
+      "icon": "street/raided-cargo.png",
       "search": [
         "An engine idles at the mouth of the alley. A driver studies the photograph from behind the cab door. \"That's who pulled me out.\" They point past a stack of pallets, then draw back into the cab. You compare the person beyond the pallets with the details on the notice.",
         "巷口一辆货车怠速作响。司机隔着驾驶室的门辨认照片。“就是把我拽下车的那个人。”对方指了指一摞托盘后面，随即退回车内。你将托盘另一侧那人的特征，与告示逐项比对。"

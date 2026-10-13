@@ -6,7 +6,9 @@
   <<exit>>
 <</if>>
 
-<<if _bountyCombat.fightingCargo>>
+<<if _bountyCombat.fightingHeist>>
+  <<set $location to 'financial_centre', $outside to 0>>
+<<elseif _bountyCombat.fightingCargo>>
   <<set $location to 'alley', $outside to 1>>
 <<elseif _bountyCombat.fightingHunter>>
   <<set $location to 'town', $outside to 1>>
@@ -26,7 +28,9 @@
   <<npcidlegenitals>><<set _bountyFight.combatStarted to true>><<person1>>
   <<language>>
     <<option 'EN'>>
-      <<if _bountyCombat.fightingCargo>>
+      <<if _bountyCombat.fightingHeist>>
+        The guard blocks the way. A chair scrapes behind you as you pull your hand free and brace yourself.
+      <<elseif _bountyCombat.fightingCargo>>
         The guard steps between you and the crate. You brace yourself as a hand reaches for your jacket.
       <<elseif _bountyCombat.fightingHunter>>
         <<print $NPCList[0].name>> reaches for your wrist. You knock the hand aside and brace yourself on the pavement.
@@ -34,7 +38,9 @@
         <<print $NPCList[0].name>> raises an arm as you reach closer. You plant your feet and move to stop them getting past.
       <</if>>
     <<option 'CN'>>
-      <<if _bountyCombat.fightingCargo>>
+      <<if _bountyCombat.fightingHeist>>
+        保安挡住去路。你抽回手，站稳脚步，身后传来椅子拖过地面的声音。
+      <<elseif _bountyCombat.fightingCargo>>
         看门人挡在你和工具箱之间。一只手伸向你的外套，你站稳脚步。
       <<elseif _bountyCombat.fightingHunter>>
         <<print $NPCList[0].name>>伸手抓向你的手腕。你拨开那只手，在人行道上站稳脚步。
@@ -83,9 +89,14 @@
 
 <<set _bountyWasHunter to _bountyCombat.fightingHunter>>
 <<set _bountyWasCargo to _bountyCombat.fightingCargo>>
+<<set _bountyWasHeist to _bountyCombat.fightingHeist>>
 <!-- finish 先保存演员与结果，再调用原版 endcombat；此页不重复清理或发放奖励。 -->
 <<if _bountyCombat.act('finish')>>
   <<if $passage isnot 'Deadwood Street Fight Finish'>><<exit>><</if>>
+  <<if _bountyWasHeist>>
+    <<deadwood-street-heist-finish>>
+    <<exit>>
+  <</if>>
   <<if _bountyWasCargo>>
     <<language>>
       <<option 'EN'>>

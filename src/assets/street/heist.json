@@ -1,0 +1,213 @@
+{
+  "requiredReputation": 50,
+  "loot": 20000000,
+  "reward": 250000,
+  "escapeMinutes": 20,
+  "successReputation": 8,
+  "failurePenalty": -5,
+  "withdrawPenalty": 0,
+  "crime": {
+    "entry": 1500,
+    "vault": 2500,
+    "violence": 1000
+  },
+  "combat": {
+    "health": 400,
+    "strength": 30,
+    "anger": 60,
+    "trust": 0
+  },
+  "cuts": {
+    "landry": 20,
+    "wren": [30, 25, 20]
+  },
+  "favour": {
+    "landrySuccess": 8,
+    "wrenSuccess": 4,
+    "grantSuccess": 8,
+    "landryBetrayal": -30,
+    "wrenBetrayal": -15,
+    "grantBetrayal": -25
+  },
+  "preparations": [
+    {
+      "id": "briefing",
+      "icon": "street/source-check.png",
+      "name": ["Check the information at the bank", "到银行核对消息"],
+      "place": "bank",
+      "options": [
+        {
+          "id": "read",
+          "icon": "company/invoice.png",
+          "name": ["Read the public paperwork", "查阅公开材料"],
+          "skill": "maths",
+          "secondSkill": "",
+          "cost": 0,
+          "minutes": 20,
+          "qualityBase": 2,
+          "qualityMax": 10,
+          "requiresFactory": false,
+          "requiresCrew": false
+        },
+        {
+          "id": "ask",
+          "icon": "finance/bank-counter.png",
+          "name": ["Ask about ordinary banking business", "询问日常银行业务"],
+          "skill": "english",
+          "secondSkill": "",
+          "cost": 0,
+          "minutes": 20,
+          "qualityBase": 2,
+          "qualityMax": 10,
+          "requiresFactory": false,
+          "requiresCrew": false
+        },
+        {
+          "id": "observe",
+          "icon": "street/source-check.png",
+          "name": ["Compare the rumours with what you can see", "把传闻与眼前的情况核对"],
+          "skill": "skulduggery",
+          "secondSkill": "",
+          "cost": 0,
+          "minutes": 20,
+          "qualityBase": 2,
+          "qualityMax": 10,
+          "requiresFactory": false,
+          "requiresCrew": false
+        }
+      ]
+    },
+    {
+      "id": "equipment",
+      "icon": "street/supply-kit.png",
+      "name": ["Inspect and pack the supplies", "验收并整理用品"],
+      "place": "smuggler",
+      "options": [
+        {
+          "id": "check",
+          "icon": "medicine/equipment-check.png",
+          "name": ["Check the equipment yourself", "自己验收用品"],
+          "skill": "science",
+          "secondSkill": "",
+          "cost": 50000,
+          "minutes": 20,
+          "qualityBase": 2,
+          "qualityMax": 10,
+          "requiresFactory": false,
+          "requiresCrew": false
+        },
+        {
+          "id": "pack",
+          "icon": "street/supply-kit.png",
+          "name": ["Pack the supplies yourself", "亲自整理装袋"],
+          "skill": "housekeeping",
+          "secondSkill": "",
+          "cost": 50000,
+          "minutes": 20,
+          "qualityBase": 2,
+          "qualityMax": 10,
+          "requiresFactory": false,
+          "requiresCrew": false
+        },
+        {
+          "id": "factory",
+          "icon": "industry/packaging.png",
+          "name": ["Use packing supplies from your factory", "使用自家工厂的包装用品"],
+          "skill": "housekeeping",
+          "secondSkill": "",
+          "cost": 25000,
+          "minutes": 30,
+          "qualityBase": 2,
+          "qualityMax": 10,
+          "requiresFactory": true,
+          "requiresCrew": false
+        }
+      ]
+    },
+    {
+      "id": "rehearsal",
+      "icon": "street/crew-briefing.png",
+      "name": ["Rehearse with the hired crew", "与雇员排演分工"],
+      "place": "smuggler",
+      "options": [
+        {
+          "id": "lead",
+          "icon": "street/crew-briefing.png",
+          "name": ["Coordinate the rehearsal", "主持排演"],
+          "skill": "english",
+          "secondSkill": "willpower",
+          "cost": 10000,
+          "minutes": 30,
+          "qualityBase": 2,
+          "qualityMax": 10,
+          "requiresFactory": false,
+          "requiresCrew": true
+        },
+        {
+          "id": "carry",
+          "icon": "street/cargo-handover.png",
+          "name": ["Practise carrying with the crew", "与雇员练习搬运"],
+          "skill": "physique",
+          "secondSkill": "athletics",
+          "cost": 10000,
+          "minutes": 30,
+          "qualityBase": 2,
+          "qualityMax": 10,
+          "requiresFactory": false,
+          "requiresCrew": true
+        }
+      ]
+    }
+  ],
+  "recruits": [
+    {
+      "id": "rookie",
+      "name": ["A first-time hire", "初次接活的人"],
+      "skill": 200,
+      "cut": 3,
+      "fee": 10000
+    },
+    {
+      "id": "professional",
+      "name": ["A practiced hand", "有经验的熟手"],
+      "skill": 450,
+      "cut": 6,
+      "fee": 30000
+    },
+    {
+      "id": "veteran",
+      "name": ["An experienced specialist", "老练的行家"],
+      "skill": 650,
+      "cut": 9,
+      "fee": 60000
+    }
+  ],
+  "lightRatio": 0.65,
+  "loudLootRatio": 1.2,
+  "carefulRatio": 0.8,
+  "carefulBonus": 15,
+  "carefulMinutes": 10,
+  "bankClosureDays": 2,
+  "mickey": {
+    "cost": 30000,
+    "minutes": 10,
+    "bonus": 5,
+    "reviews": [
+      {
+        "id": "information",
+        "icon": "street/source-check.png",
+        "name": ["Check the sources", "复核消息来源"]
+      },
+      {
+        "id": "crew",
+        "icon": "street/crew-briefing.png",
+        "name": ["Check the division of work", "复核人员分工"]
+      },
+      {
+        "id": "risk",
+        "icon": "street/fallback-notes.png",
+        "name": ["Check the fallback arrangements", "复核撤回安排"]
+      }
+    ]
+  }
+}

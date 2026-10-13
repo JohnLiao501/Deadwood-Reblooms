@@ -12,7 +12,14 @@
 <</widget>>
 
 <<widget 'Adrianrelationshiptext'>>
-  <<if C.npc.Adrian.rage gt 0 and $Finance.adrian.last_offence is 'pressure'>>
+  <<if maplebirch.get('StreetLife')?.heist.state.identified>>
+    <<language>>
+      <<option 'EN'>>
+        <span class='red'>remembers seeing you during the bank robbery</span>, and keeps a firm distance.
+      <<option 'CN'>>
+        <span class='red'>记得在银行抢劫时认出过你</span>，与你保持着明确的距离。
+    <</language>>
+  <<elseif C.npc.Adrian.rage gt 0 and $Finance.adrian.last_offence is 'pressure'>>
     <<language>>
       <<option 'EN'>>
         is <span class='purple'>unimpressed by your demands</span> for special treatment.
@@ -152,7 +159,14 @@
       <<set _adrianContext.state.visits += 1>>
     <</if>>
     <<npc 'Adrian'>><<person1>>
-    <<if C.npc.Adrian.rage gte 5>>
+    <<if maplebirch.get('StreetLife')?.heist.state.identified>>
+      <<language>>
+        <<option 'EN'>>
+          Adrian notices you and stops sorting the forms. The greeting takes a moment. "Which service?" Your statement is placed beside the reader, but Adrian stays back from the glass. "We'll keep to the paperwork."
+        <<option 'CN'>>
+          阿德里安注意到你，整理表格的手停了下来。片刻后，才传来一声招呼。“办什么业务？”你的账单被放到读卡器旁，阿德里安仍与玻璃保持着距离。“按表上的业务办。”
+      <</language>>
+    <<elseif C.npc.Adrian.rage gte 5>>
       <<language>>
         <<option 'EN'>>
           Adrian places a form beside the card reader. The greeting is <span class='blue'>strictly professional</span>. "What service do you need today?"
@@ -255,7 +269,9 @@
       <<set _adrianConversation.ownsHome to true>><<break>>
     <</if>>
   <</for>>
-  <<if _adrianContext.bank.credit_missed_payments gt 0 or _adrianContext.bank.loan_missed_payments gt 0 or ($Finance.collection.amount gt 0 and $Finance.collection.source isnot 'margin')>>
+  <<if maplebirch.get('StreetLife')?.heist.state.identified>>
+    <<set _adrianConversation.topic to 'bank_incident'>>
+  <<elseif _adrianContext.bank.credit_missed_payments gt 0 or _adrianContext.bank.loan_missed_payments gt 0 or ($Finance.collection.amount gt 0 and $Finance.collection.source isnot 'margin')>>
     <<set _adrianConversation.topic to 'overdue'>>
   <<elseif $pain gte 50 or $stress gte 600>>
     <<set _adrianConversation.topic to 'concern'>>
@@ -287,6 +303,13 @@
   <<npc 'Adrian'>><<person1>>
   <<pass 5>>
   <<switch _adrianConversation.topic>>
+    <<case 'bank_incident'>>
+      <<language>>
+        <<option 'EN'>>
+          Adrian keeps the statement between you. "I recognised you that day." A finger rests on the edge of the paper. "I can explain an account entry. I can't tell the police I saw somebody else." The statement is turned so you can read it. "If you've come to make a payment, we can deal with that."
+        <<option 'CN'>>
+          阿德里安把账单留在你们之间。“那天我认出了你。”手指停在纸沿。“账户上的账目，我可以解释。可我没法跟警方说，看见的是另一个人。”账单被转到你这边。“如果你是来还款的，这笔业务可以办。”
+      <</language>>
     <<case 'margin_debt'>>
       <<language>>
         <<option 'EN'>>

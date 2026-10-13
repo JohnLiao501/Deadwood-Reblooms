@@ -760,8 +760,23 @@
 <<set $location to 'financial_centre'>>
 <<effects>>
 <<deadwood-finance-bank-notice>>
-<<if Time.weekDay gte 2 && Time.weekDay lte 6 && Time.hour gte 9 && Time.hour lt 17>>
+<<if maplebirch.get('StreetLife')?.heist.bankClosed>>
+  <<deadwood-street-heist-bank-closed>>
+  <<if $Finance.bank.opened>>
+    <<icon 'finance/bank-debit-card.png'>><<lanLink ['Account self-service', '账户自助服务'] 'Deadwood Reblooms Financial Centre Bank Debit'>><</lanLink>><br>
+    <<if $Finance.bank.credit_debt gt 0>><<icon 'finance/bank-credit-card.png'>><<lanLink ['Repay credit card', '偿还信用卡'] 'Deadwood Reblooms Financial Centre Bank Credit'>><</lanLink>><br><</if>>
+    <<if $Finance.bank.loan_debt gt 0>><<icon 'finance/bank-loan.png'>><<lanLink ['Repay personal loan', '偿还个人贷款'] 'Deadwood Reblooms Financial Centre Bank Loan'>><</lanLink>><br><</if>>
+  <</if>>
+<<elseif Time.weekDay gte 2 && Time.weekDay lte 6 && Time.hour gte 9 && Time.hour lt 17>>
   <strong><<lanSwitch 'Bank counter' '银行柜台'>></strong><br>
+  <<if maplebirch.get('StreetLife')?.heist.state.entered>>
+    <<language>>
+      <<option 'EN'>>
+        The notice suspending counter services has been taken down. Customers are queuing again. A clerk checks a cash drawer against a signed list before opening the service window.
+      <<option 'CN'>>
+        暂停接待的告示已经取下，顾客重新排起了队。一名柜员对照签过字的清单检查钱箱，然后打开接待窗口。
+    <</language>><br><br>
+  <</if>>
   <<deadwood-reblooms-adrian-greeting>>
   <<lanSwitch 'Clerks work behind thick glass, surrounded by forms, card readers and locked cash drawers.' '柜员们在厚玻璃后工作，身旁堆着表格、读卡器与上锁的钱箱。'>><br><br>
   <span><<icon 'finance/bank-debit-card.png'>><<lanLink ["Debit card and account", "借记卡与账户"] 'Deadwood Reblooms Financial Centre Bank Debit'>><</lanLink>></span><br>
@@ -772,13 +787,21 @@
 <<else>>
   <<deadwood-reblooms-finance-counter-closed>>
 <</if>>
+<<deadwood-street-heist-bank>>
 <span><<icon 'finance/financial-centre.png'>><<lanLink ["Return", "返回"] 'Deadwood Reblooms Financial Centre'>><</lanLink>></span><br>
 
 :: Deadwood Reblooms Financial Centre Bank Debit
 <<set $outside to 0>>
 <<set $location to 'financial_centre'>>
 <<effects>>
-<<if Time.weekDay gte 2 && Time.weekDay lte 6 && Time.hour gte 9 && Time.hour lt 17>>
+<<if maplebirch.get('StreetLife')?.heist.bankClosed>>
+  <<deadwood-street-heist-bank-closed>>
+  <<if $Finance.bank.opened>>
+    <div id='deadwood-reblooms-finance-result' role='status' aria-live='polite'></div>
+    <<deadwood-reblooms-finance-atm-panel>>
+  <</if>>
+  <<icon 'finance/bank-counter.png'>><<lanLink ['Return to bank counter', '返回银行柜台'] 'Deadwood Reblooms Financial Centre Bank'>><</lanLink>><br>
+<<elseif Time.weekDay gte 2 && Time.weekDay lte 6 && Time.hour gte 9 && Time.hour lt 17>>
   <strong><<lanSwitch 'Debit card and account' '借记卡与账户'>></strong><br>
   <<deadwood-reblooms-adrian-greeting>>
   <div id='deadwood-reblooms-finance-result' role='status' aria-live='polite'></div>
@@ -794,7 +817,12 @@
 <<set $location to 'financial_centre'>>
 <<effects>>
 <<deadwood-finance-bank-notice>>
-<<if Time.weekDay gte 2 && Time.weekDay lte 6 && Time.hour gte 9 && Time.hour lt 17>>
+<<if maplebirch.get('StreetLife')?.heist.bankClosed>>
+  <<deadwood-street-heist-bank-closed>>
+  <div id='deadwood-reblooms-finance-result' role='status' aria-live='polite'></div>
+  <<deadwood-street-heist-repayments 'credit'>>
+  <<icon 'finance/bank-counter.png'>><<lanLink ['Return to bank counter', '返回银行柜台'] 'Deadwood Reblooms Financial Centre Bank'>><</lanLink>><br>
+<<elseif Time.weekDay gte 2 && Time.weekDay lte 6 && Time.hour gte 9 && Time.hour lt 17>>
   <strong><<lanSwitch 'Credit card' '信用卡'>></strong><br>
   <<deadwood-reblooms-adrian-greeting>>
   <div id='deadwood-reblooms-finance-result' role='status' aria-live='polite'></div>
@@ -810,8 +838,15 @@
 <<set $location to 'financial_centre'>>
 <<effects>>
 <<deadwood-finance-bank-notice>>
-<<icon 'finance/business-loan.png'>><<lanLink ['Business-purpose loan', '经营用途贷款'] 'Deadwood Reblooms Business Loan'>><</lanLink>><br><br>
-<<if Time.weekDay gte 2 && Time.weekDay lte 6 && Time.hour gte 9 && Time.hour lt 17>>
+<<if !maplebirch.get('StreetLife')?.heist.bankClosed>>
+  <<icon 'finance/business-loan.png'>><<lanLink ['Business-purpose loan', '经营用途贷款'] 'Deadwood Reblooms Business Loan'>><</lanLink>><br><br>
+<</if>>
+<<if maplebirch.get('StreetLife')?.heist.bankClosed>>
+  <<deadwood-street-heist-bank-closed>>
+  <div id='deadwood-reblooms-finance-result' role='status' aria-live='polite'></div>
+  <<deadwood-street-heist-repayments 'loan'>>
+  <<icon 'finance/bank-counter.png'>><<lanLink ['Return to bank counter', '返回银行柜台'] 'Deadwood Reblooms Financial Centre Bank'>><</lanLink>><br>
+<<elseif Time.weekDay gte 2 && Time.weekDay lte 6 && Time.hour gte 9 && Time.hour lt 17>>
   <strong><<lanSwitch 'Personal loan' '个人贷款'>></strong><br>
   <<deadwood-reblooms-adrian-greeting>>
   <div id='deadwood-reblooms-finance-result' role='status' aria-live='polite'></div>

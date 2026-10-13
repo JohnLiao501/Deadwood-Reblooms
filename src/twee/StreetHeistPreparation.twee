@@ -1,0 +1,303 @@
+:: Deadwood Street Heist Preparation Widgets [widget]
+
+<!-- 柜台的信息准备从现场进入，酒馆不提供银行传送链接。 -->
+<<widget 'deadwood-street-heist-briefing-link'>>
+  <<set _streetHeist to maplebirch.get('StreetLife')?.heist>>
+  <<if $passage is 'Deadwood Reblooms Financial Centre Bank' and _streetHeist?.available and _streetHeist.state.stage is 'prep' and !_streetHeist.state.preparations.includes('briefing') and !_streetHeist.bankClosed and Time.weekDay gte 2 and Time.weekDay lte 6 and Time.hour gte 9 and Time.hour lt 17>>
+    <<icon 'street/source-check.png'>><<lanLink ['Take some time to understand the bank', '花些时间了解银行'] 'Deadwood Street Heist Preparation'>>
+      <<if _streetHeist.available and _streetHeist.meetingAvailable and _streetHeist.state.stage is 'prep' and !_streetHeist.state.preparations.includes('briefing') and !_streetHeist.bankClosed and Time.weekDay gte 2 and Time.weekDay lte 6 and Time.hour gte 9 and Time.hour lt 17>>
+        <<endevent>><<set _streetHeist.state.activity to 'briefing'>>
+      <</if>>
+    <</lanLink>><br>
+  <</if>>
+<</widget>>
+
+<!-- 每次点击重新读取有效选项；质量在动手时保存，增长仅在行动完成后结算。 -->
+<<widget 'deadwood-street-heist-prepare'>>
+  <<set _streetHeist to maplebirch.get('StreetLife')?.heist>>
+  <<if $passage isnot 'Deadwood Street Heist Preparation' or !_streetHeist?.available or _streetHeist.state.stage isnot 'prep' or _streetHeist.state.activity isnot _args[0] or _streetHeist.state.preparations.includes(_args[0])>><<exit>><</if>>
+  <<set _streetPrep to _streetHeist.preparations.find(item => item.id === _args[0])>>
+  <<set _streetOption to _streetPrep?.options.find(item => item.id === _args[1])>>
+  <<if !_streetOption?.available or $money lt _streetOption.cost or (_streetPrep.id is 'rehearsal' and !_streetHeist.crewReady)>><<exit>><</if>>
+  <<if _streetPrep.place is 'bank'>>
+    <<if $location isnot 'financial_centre' or _streetHeist.bankClosed or Time.weekDay lt 2 or Time.weekDay gt 6 or Time.hour lt 9 or Time.hour gte 17>><<exit>><</if>>
+  <<elseif !_streetHeist.atMeeting or !_streetHeist.meetingAvailable>>
+    <<exit>>
+  <</if>>
+  <<set _streetPreparationId to _streetPrep.id, _streetMethodId to _streetOption.id, _streetQuality to _streetOption.quality, _streetCost to _streetOption.cost, _streetMinutes to _streetOption.minutes>>
+  <<endevent>><<pass _streetMinutes>>
+  <<if !_streetHeist.available or _streetHeist.state.stage isnot 'prep' or _streetHeist.state.activity isnot _streetPreparationId or _streetHeist.state.preparations.includes(_streetPreparationId) or $money lt _streetCost>><<exit>><</if>>
+  <<if _streetPrep.place is 'bank' and (_streetHeist.bankClosed or Time.weekDay lt 2 or Time.weekDay gt 6 or Time.hour lt 9 or Time.hour gte 17)>><<exit>><</if>>
+  <<set _streetLiveOption to _streetHeist.preparations.find(item => item.id === _streetPreparationId)?.options.find(item => item.id === _streetMethodId)>>
+  <<if !_streetLiveOption?.available or (_streetPreparationId is 'rehearsal' and !_streetHeist.crewReady)>><<exit>><</if>>
+  <<if _streetCost gt 0>><<money `-_streetCost`>><</if>>
+  <<set _streetHeist.state.preparationChoices[_streetPreparationId] to {method: _streetMethodId, quality: _streetQuality}>>
+  <<set _streetHeist.state.preparations.push(_streetPreparationId)>>
+  <<switch _streetPreparationId + ':' + _streetMethodId>>
+    <<case 'briefing:read'>><<mathsskill 5 'no_star'>>
+    <<case 'briefing:ask'>><<englishskill 5 'no_star'>>
+    <<case 'briefing:observe'>><<skulduggery 2>>
+    <<case 'equipment:check'>><<scienceskill 5 'no_star'>>
+    <<case 'equipment:pack' 'equipment:factory'>><<housekeeping 1>>
+    <<case 'rehearsal:lead'>><<englishskill 5 'no_star'>><<willpower 1>>
+    <<case 'rehearsal:carry'>><<physique 1 'noMessage'>><<athletics 1>><<tiredness 2>>
+  <</switch>>
+  <<endevent>>
+<</widget>>
+
+:: Deadwood Street Heist Preparation
+<<set _streetHeist to maplebirch.get('StreetLife')?.heist>>
+<<set _streetPrep to _streetHeist?.preparations.find(item => item.id === _streetHeist.state.activity)>>
+<<set $outside to 0>>
+<<if _streetPrep?.place is 'bank' and $location isnot 'financial_centre'>>
+  <<lanSwitch 'Visit the bank counter at the financial centre to check the public information.' '请先到金融中心的银行柜台，再核对公开材料。'>><br>
+  <<getouticon>><<back `lanSwitch('Return', '返回')`>><<exit>>
+<<elseif _streetPrep?.place isnot 'bank' and !_streetHeist?.atMeeting>><<deadwood-street-heist-meeting-required>><<exit>><</if>>
+<<if _streetPrep?.place is 'bank'>><<set $location to 'financial_centre', $bus to 'high'>><<else>><<set $location to 'underground'>><<unset $bus>><</if>>
+<<effects>>
+<<if !_streetHeist or !_streetPrep or _streetHeist.state.stage isnot 'prep'>>
+  <<lanSwitch 'There is no preparation arranged here.' '这里没有安排中的准备事项。'>><br>
+<<elseif !_streetHeist.available>>
+  <span class='blue'><<lanSwitch 'You cannot work through this preparation just now.' '你现在无法落实这项准备。'>></span><br>
+<<elseif _streetPrep.place is 'smuggler' and !_streetHeist.meetingAvailable>>
+  <<language>>
+    <<option 'EN'>>
+      The crew has not arranged to work here tonight. Wren has other business, and the remaining preparations will wait until the daytime meeting. Come back between nine in the morning and six in the evening; completed work will still count.
+    <<option 'CN'>>
+      今晚没有约好在这里准备。伦恩另有自己的事，剩余安排得等白天碰面时再做。请在上午九点至下午六点之间回来，已经完成的准备仍然有效。
+  <</language>><br>
+<<elseif _streetPrep.place is 'bank' and (_streetHeist.bankClosed or Time.weekDay lt 2 or Time.weekDay gt 6 or Time.hour lt 9 or Time.hour gte 17)>>
+  <<lanSwitch 'The counter is closed. There is no clerk here to help, and your visit must wait for another opening day.' '柜台已经关闭，没有柜员能够接待你。这次查看得等到下次营业时。'>><br>
+<<elseif _streetHeist.state.preparations.includes(_streetPrep.id)>>
+  <<set _streetChoice to _streetHeist.state.preparationChoices[_streetPrep.id]>>
+  <<set _streetMethod to _streetPrep.options.find(item => item.id === _streetChoice?.method)>>
+  <<set _streetQualityRatio to _streetChoice?.quality / (_streetMethod?.qualityMax || 10)>>
+  <div class='gold bold'><<= lanSwitch(_streetPrep.name[0], _streetPrep.name[1])>></div>
+  <<switch _streetChoice?.method>>
+    <<case 'read'>>
+      <<language>>
+        <<option 'EN'>>
+          You return the public forms to their rack. The figures in your notes fit together now; some of Landry's guesses do not. You mark the uncertain parts instead of pretending they are facts.
+        <<option 'CN'>>
+          你把公开的表格放回架上。笔记里的数字已经能对得起来，兰德里的几项猜测却对不上。你圈出尚不确定的部分，没有把猜测当成事实。
+      <</language>>
+    <<case 'ask'>>
+      <<language>>
+        <<option 'EN'>>
+          The clerk turns back to the next customer. Your questions concerned ordinary banking business; the answers have given you a better idea of what belongs on Landry's page, and what does not.
+        <<option 'CN'>>
+          柜员转身接待下一位顾客。你问的都是普通银行业务，得到的回答让你更清楚，兰德里的纸上哪些说法靠得住，哪些还值得怀疑。
+      <</language>>
+    <<case 'observe'>>
+      <<language>>
+        <<option 'EN'>>
+          The counter carries on without paying you much attention. What looked simple from the pub is less simple in person. You leave with a few observations of your own, keeping them separate from the stories you were told.
+        <<option 'CN'>>
+          柜台照常忙碌，没有多少人留意你。在酒馆里听来简单的事，到了现场便不那么简单了。你记下自己的见闻，把它们与听来的说法分开。
+      <</language>>
+    <<case 'check'>>
+      <<language>>
+        <<option 'EN'>>
+          You close the case after working through its contents. Wren picks it up, gives it a small shake, and sets it down again. "Good. I'd rather find a problem here than while everyone's waiting for you."
+        <<option 'CN'>>
+          你逐件检查完箱里的用品，把箱盖合上。伦恩提起来轻轻晃了晃，又放回桌上。“不错。真有什么毛病，我宁愿在这里发现，别等所有人都在等你时才发现。”
+      <</language>>
+    <<case 'pack'>>
+      <<language>>
+        <<option 'EN'>>
+          The loose supplies have become a manageable kit. Landry checks the receipt, then pushes it back towards you. "That's yours. Keep it. I don't want an argument over who paid for what afterwards."
+        <<option 'CN'>>
+          零散的用品已经收拾成一套便于携带的行装。兰德里看了看收据，又把它推回来。“这是你的，留着。事后我可不想听谁付了哪笔钱的争吵。”
+      <</language>>
+    <<case 'factory'>>
+      <<language>>
+        <<option 'EN'>>
+          Your business supplies have covered part of the expense. The workers dealt with an ordinary packing order; none of this makes them part of your arrangement with Landry. Wren checks the finished kit rather than asking for their names.
+        <<option 'CN'>>
+          自家经营的物资替你省下了一部分开销。工人处理的只是普通包装订单，这不代表他们参与了你与兰德里的安排。伦恩检查的是收拾好的用品，没有追问工人的名字。
+      <</language>>
+    <<case 'lead'>>
+      <<language>>
+        <<option 'EN'>>
+          The two hires can repeat their parts without talking over each other. Wren waits until they have finished. "Better. But if something changes, I get a say as well. Don't mistake an agreement for an order."
+        <<option 'CN'>>
+          两名雇员已经能轮流复述各自的分工，不再抢着说话。伦恩等两人说完才开口。“好多了。不过真有变化，我也得有发言权。说好合作，可不等于我得听你的命令。”
+      <</language>>
+    <<case 'carry'>>
+      <<language>>
+        <<option 'EN'>>
+          You put the practice load down and catch your breath. The carrier does the same beside you. It has been useful to feel the weight together, instead of arguing over what you ought to be able to carry. Wren watches you both before giving a short nod.
+        <<option 'CN'>>
+          你把练习用的重物放下，缓了口气。搬运员也在旁边停下来休息。一起试过分量，胜过争论谁理应能搬多少。伦恩打量你们两人，简短地点了点头。
+      <</language>>
+  <</switch>><br><br>
+  <<if _streetQualityRatio gte 0.75>>
+    <span class='green'><<lanSwitch 'The work is thorough. You have answered the awkward questions, rather than leaving them for later.' '这项准备做得扎实。难处理的问题已经理清，没有留到以后再说。'>></span>
+  <<elseif _streetQualityRatio gte 0.4>>
+    <<lanSwitch 'The essentials are in place. You have a usable arrangement, though a few uncertainties remain.' '要紧的部分已经落实。安排能用，还有些不确定的地方。'>>
+  <<else>>
+    <span class='orange'><<lanSwitch 'You have done what you can, but the preparation is rough. Completing it has not removed all the risk.' '你已经尽了力，这项准备仍有些粗糙。做完了，不代表风险都已消失。'>></span>
+  <</if>><br>
+<<elseif _streetPrep.id is 'rehearsal' and !_streetHeist.crewReady>>
+  <<lanSwitch 'The full crew is not available. Settle the missing role or the person unable to attend before rehearsing.' '人手还没有到齐。先处理空缺的分工，或无法到场的人，再来排演。'>><br>
+<<else>>
+  <div class='gold bold'><<= lanSwitch(_streetPrep.name[0], _streetPrep.name[1])>></div>
+  <<switch _streetPrep.id>>
+    <<case 'briefing'>>
+      <<language>>
+        <<option 'EN'>>
+          Forms wait in their racks beside the counter. A clerk calls the next customer forward, and someone behind you folds a receipt into a coat pocket. The bank seems quite ordinary from here. Landry's notes are still only notes. You can spend a little time checking them against what is openly available.
+        <<option 'CN'>>
+          柜台旁的架上放着表格。柜员叫下一位顾客上前，身后有人把收据折好，塞进外套口袋。从这里看，银行再普通不过。兰德里的笔记毕竟还只是笔记，你可以花些时间，用公开的信息核对其中的说法。
+      <</language>><br><br>
+      <<language>>
+        <<option 'EN'>>
+          Reading the figures will call on your maths. Asking clear, ordinary questions will call on your English. You could also keep to yourself and compare your own observations with what you were told.
+        <<option 'CN'>>
+          核对数字需要数学本领，问清普通业务需要语文水平。你也可以不找人搭话，只用亲眼所见与听来的消息互相印证。
+      <</language>><br><br>
+    <<case 'equipment'>>
+      <<language>>
+        <<option 'EN'>>
+          A plain case sits between the drinks on Landry's table. Wren lifts the lid before you can. "These aren't weapons. Bring your own if you intend to carry any." The contents are ordinary supplies, with a price written beside them. Buying them, checking them, and packing them are different jobs.
+        <<option 'CN'>>
+          兰德里的桌上，酒杯之间放着一只普通箱子。你还没伸手，伦恩已经掀开箱盖。“这里可没有武器。想带什么，自己准备。”箱里都是普通用品，旁边写着价钱。买来、检查好、再收拾妥当，并不是同一回事。
+      <</language>><br><br>
+      <<language>>
+        <<option 'EN'>>
+          You can inspect the supplies with your knowledge of science, or make a practical kit with your housekeeping skills. An operating packaging factory of your own can cover part of the cost, if its workers have been paid and its supplies are available.
+        <<option 'CN'>>
+          你可以用科学知识检查用品，也可以凭家务本领把它们整理成实用的行装。如果自家的包装工厂正在运转，工资已经付清，物资也齐备，便能分担一部分开销。
+      <</language>><br><br>
+    <<case 'rehearsal'>>
+      <<set _streetScout to _streetHeist.crew.find(npc => npc.heist.role === 'scout'), _streetCarrier to _streetHeist.crew.find(npc => npc.heist.role === 'carrier')>>
+      <<language>>
+        <<option 'EN'>>
+          Landry has found a little space away from the busiest tables. Wren arrives with <<= _streetScout.name>> and <<= _streetCarrier.name>>, and waits for you to begin. "I'd like to find out what we've actually agreed to. Preferably before it matters."
+        <<option 'CN'>>
+          兰德里在最热闹的几张桌子外腾出了一点地方。伦恩与 <<= _streetScout.name>>、<<= _streetCarrier.name>> 一起过来，等你开口。“我想先弄清楚，我们到底说好了些什么。最好别等到了要紧时候才问。”
+      <</language>><br><br>
+      <<language>>
+        <<option 'EN'>>
+          You can talk through the roles, holding the discussion together when someone disagrees, or try a harmless practice load with the carrier. One tests your ability to explain yourself and remain composed; the other tests your strength and fitness. Neither guarantees how the real job will go.
+        <<option 'CN'>>
+          你可以带着大家理清分工，遇到分歧时把话谈下去；也可以与搬运员一起试搬练习用的重物。前者考验表达与意志，后者考验体能与运动本领。无论选哪一种，都不能保证真正行动时一切顺利。
+      <</language>><br><br>
+  <</switch>>
+  <<for _streetOption range _streetPrep.options>>
+    <<capture _streetHeist _streetPrep _streetOption>>
+      <<icon _streetOption.icon>>
+      <<if _streetOption.available and $money gte _streetOption.cost>>
+        <<lanLink _streetOption.name 'Deadwood Street Heist Preparation'>>
+          <<deadwood-street-heist-prepare _streetPrep.id _streetOption.id>>
+        <</lanLink>>
+      <<else>>
+        <span class='grey'><<= lanSwitch(_streetOption.name[0], _streetOption.name[1])>></span>
+      <</if>> · <span class='teal'><<= _streetOption.minutes>></span> <<lanSwitch 'minutes' '分钟'>><<if _streetOption.cost gt 0>> · <<printmoney _streetOption.cost>><</if>><br>
+    <</capture>>
+  <</for>>
+  <<if $worn.face.type.includes('gag')>>
+    <span class='blue'><<lanSwitch 'You cannot hold a conversation while gagged. Choose another kind of work, or deal with the gag first.' '口塞妨碍了交谈。先处理口塞，或选择其它方式。'>></span><br>
+  <</if>>
+<</if>><br>
+<<if _streetPrep?.place is 'bank'>>
+  <<getouticon>><<lanLink ['Return to the bank counter', '回到银行柜台'] 'Deadwood Reblooms Financial Centre Bank'>><<endevent>><<if _streetHeist>><<set _streetHeist.state.activity to ''>><</if>><</lanLink>><br>
+<<else>>
+  <<getouticon>><<lanLink ["Return to Landry's table", '回到兰德里的桌边'] 'Deadwood Street Heist Plan'>><<endevent>><<if _streetHeist>><<set _streetHeist.state.activity to ''>><</if>><</lanLink>><br>
+<</if>>
+
+:: Deadwood Street Heist Candidate
+<<set _streetHeist to maplebirch.get('StreetLife')?.heist>>
+<<if !_streetHeist?.atMeeting>><<deadwood-street-heist-meeting-required>><<exit>><</if>>
+<<set $location to 'underground', $outside to 0>><<unset $bus>><<effects>>
+<<set _streetCandidate to $per_npc[_streetHeist?.state.candidate]>>
+<<if !_streetHeist?.available or !_streetHeist.meetingAvailable or _streetHeist.state.stage isnot 'prep' or !_streetCandidate?.heist or !_streetHeist.state.candidates.includes(_streetHeist.state.candidate)>>
+  <<lanSwitch 'This meeting is not available. Return to Landry before making another arrangement.' '这次会面现在无法继续。重新安排前，先回到兰德里那里。'>><br>
+<<else>>
+  <<language>>
+    <<option 'EN'>>
+      Landry introduces <<= _streetCandidate.name>>, then turns back to the bar. Your visitor pulls out a chair without waiting to be told. "I heard you need two people. Tell me what you're asking of me, and we'll see about the price."
+    <<option 'CN'>>
+      兰德里介绍了 <<= _streetCandidate.name>>，便转身回到吧台。对方不等你招呼，就拉开椅子。“听说你缺两个人。先说说要我做什么，再谈价钱。”
+  <</language>><br><br>
+  <<if _streetCandidate.heist.skill gte 600>>
+    <<language>>
+      <<option 'EN'>>
+        The questions come steadily, without much encouragement from you. This is someone accustomed to deciding which offers are worth taking. "An advance for my time. A share for the risk. Don't mix them up."
+      <<option 'CN'>>
+        你还没说几句，对方已经连着问了几个问题，显然习惯了自己判断哪些活值得接。“定金付我的时间，抽成付我的风险。别把两笔混为一谈。”
+    <</language>>
+  <<elseif _streetCandidate.heist.skill gte 400>>
+    <<language>>
+      <<option 'EN'>>
+        Your visitor listens before asking about the other hire. "I've done work with people I didn't know before. It helps if they know which part is theirs."
+      <<option 'CN'>>
+        对方听你说了一会儿，才问起另一名人手。“我以前也跟不认识的人搭过伙。各自先弄明白自己该干什么，事情会好办些。”
+    <</language>>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        Your visitor rubs a thumb along the edge of the table. "I haven't done something this big. I'm not promising otherwise." After a pause, the question returns to the advance.
+      <<option 'CN'>>
+        对方用拇指摩挲着桌沿。“我没接过这么大的活，这点我不会骗你。”停顿了一会儿，话题又回到定金上。
+    <</language>>
+  <</if>><br><br>
+  <<lanSwitch 'Advance: ' '定金：'>><<printmoney _streetCandidate.heist.fee>> · <<lanSwitch 'Share: ' '抽成：'>><span class='gold'><<= _streetCandidate.heist.cut>>%</span><br>
+  <<if !_streetCandidate.heist.negotiateTried>>
+    <<if !$worn.face.type.includes('gag')>>
+      <<socialiseicon 'ask'>><<lanLink ['Discuss the advance (0:05)', '谈谈定金 (0:05)'] 'Deadwood Street Heist Candidate'>>
+        <<set _streetCandidate to $per_npc[_streetHeist.state.candidate]>>
+        <<if _streetHeist.available and _streetHeist.meetingAvailable and _streetHeist.state.stage is 'prep' and _streetHeist.state.candidates.includes(_streetHeist.state.candidate) and _streetCandidate?.heist and !_streetCandidate.heist.negotiateTried and !$worn.face.type.includes('gag')>>
+          <<set _streetNegotiated to _streetHeist.skills.english gte 400>>
+          <<endevent>><<pass 5>>
+          <<if _streetHeist.available and _streetHeist.meetingAvailable and _streetHeist.state.stage is 'prep' and _streetHeist.state.candidates.includes(_streetHeist.state.candidate) and !$per_npc[_streetHeist.state.candidate].heist.negotiateTried and !$worn.face.type.includes('gag')>>
+            <<loadNPC 0 _streetHeist.state.candidate>>
+            <<set $NPCList[0].heist.negotiateTried to true, $NPCList[0].heist.discounted to _streetNegotiated>>
+            <<if _streetNegotiated>><<set $NPCList[0].heist.fee to Math.floor($NPCList[0].heist.fee * 0.9)>><</if>>
+            <<saveNPC 0 _streetHeist.state.candidate>><<englishskill 5 'no_star'>><<endevent>>
+          <</if>>
+        <</if>>
+      <</lanLink>><br>
+    <<else>>
+      <span class='blue'><<lanSwitch 'You cannot negotiate while gagged.' '戴着口塞时无法议价。'>></span><br>
+    <</if>>
+  <<elseif _streetCandidate.heist.discounted>>
+    <<language>>
+      <<option 'EN'>>
+        "All right. I can take a little less up front." Your visitor touches the figure beside the share. "That stays. I'm still taking the same risk."
+      <<option 'CN'>>
+        “好吧，定金可以少一点。”对方点了点抽成旁的数字。“这个不变。我担的风险可没少。”
+    <</language>><br>
+  <<else>>
+    <<language>>
+      <<option 'EN'>>
+        "I heard you. The price is still the price." Your visitor leaves the choice with you, without lowering either figure.
+      <<option 'CN'>>
+        “你的意思我听明白了。价钱还是这个价钱。”对方把决定留给了你，没有降低任何一笔数字。
+    <</language>><br>
+  <</if>><br>
+  <<for _streetRole range ['scout', 'carrier']>>
+    <<capture _streetHeist _streetRole>>
+      <<set _streetCandidate to $per_npc[_streetHeist.state.candidate]>>
+      <<if _streetHeist.crew.length lt 2 and !_streetHeist.crew.some(npc => npc.heist.role === _streetRole)>>
+        <<icon `'street/' + _streetRole + '.png'`>>
+        <<if $money gte _streetCandidate.heist.fee>>
+          <<lanLink `_streetRole === 'scout' ? ['Agree on the scout role (0:05)', '约定侦察员的分工 (0:05)'] : ['Agree on the carrier role (0:05)', '约定搬运员的分工 (0:05)']` 'Deadwood Street Heist Plan'>>
+            <<set _streetKey to _streetHeist.state.candidate, _streetCandidate to $per_npc[_streetHeist.state.candidate]>>
+            <<if _streetHeist.available and _streetHeist.meetingAvailable and _streetHeist.state.stage is 'prep' and _streetHeist.state.candidates.includes(_streetKey) and _streetCandidate?.heist and _streetCandidate.health gt 0 and _streetCandidate.heist.status isnot 'arrested' and _streetHeist.crew.length lt 2 and !_streetHeist.crew.some(npc => npc.heist.role === _streetRole) and $money gte _streetCandidate.heist.fee>>
+              <<set _streetFee to _streetCandidate.heist.fee>>
+              <<endevent>><<pass 5>>
+              <<if _streetHeist.available and _streetHeist.meetingAvailable and _streetHeist.state.stage is 'prep' and _streetHeist.state.candidates.includes(_streetKey) and $per_npc[_streetKey]?.health gt 0 and $per_npc[_streetKey]?.heist.status isnot 'arrested' and _streetHeist.crew.length lt 2 and !_streetHeist.crew.some(npc => npc.heist.role === _streetRole) and $money gte _streetFee>>
+                <<endevent>><<loadNPC 0 _streetKey>><<set $NPCList[0].heist.role to _streetRole>><<saveNPC 0 _streetKey>>
+                <<money `-_streetFee`>><<set _streetHeist.state.candidates.delete(_streetKey)>><<set _streetHeist.state.crew.push(_streetKey), _streetHeist.state.candidate to ''>><<endevent>>
+              <</if>>
+            <</if>>
+          <</lanLink>><br>
+        <<else>>
+          <span class='grey'><<= _streetRole is 'scout' ? lanSwitch('Agree on the scout role', '约定侦察员的分工') : lanSwitch('Agree on the carrier role', '约定搬运员的分工')>></span><br>
+        <</if>>
+      <</if>>
+    <</capture>>
+  <</for>>
+<</if>><br>
+<<getouticon>><<lanLink ["Return to Landry's table", '回到兰德里的桌边'] 'Deadwood Street Heist Plan'>><<endevent>><<if _streetHeist>><<set _streetHeist.state.candidate to ''>><</if>><</lanLink>><br>

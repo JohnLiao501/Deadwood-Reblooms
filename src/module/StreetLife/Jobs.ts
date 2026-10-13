@@ -55,7 +55,7 @@ export default class Jobs {
   }
 
   public get available(): boolean {
-    return this.street.available && !this.street.bounties.busy && !window.pcAreArmsBound('both') && !V.nextPassageCheck;
+    return this.street.available && !this.street.heist.inAction && !this.street.bounties.busy && !window.pcAreArmsBound('both') && !V.nextPassageCheck;
   }
 
   public get offers(): Contract[] {
@@ -221,6 +221,8 @@ export default class Jobs {
         state.earned += job.fee;
         this.street.reputation += job.late ? 1 : contract.reputation;
         this.street.core.SugarCube.Wikifier.wikifyEval(`<<money ${job.fee} 'pub'>>`);
+        // 合法委托也建立业务关系；原版宏保留 Landry 的 −100～100 上限。
+        this.street.core.SugarCube.Wikifier.wikifyEval(`<<npcincr Landry love ${job.late ? 0 : contract.illegal ? 2 : 1}>>`);
       } else {
         const returnSite = job.stage === 'pickup' || this.lost ? 'pub' : contract.return_to;
         if (this.place !== returnSite) return false;
@@ -231,6 +233,7 @@ export default class Jobs {
         if (state.report.outcome === 'lost') {
           state.losses++;
           this.street.reputation -= contract.reputation;
+          this.street.core.SugarCube.Wikifier.wikifyEval('<<npcincr Landry love -3>>');
         }
       }
       if (job.id === 'bailey_cargo') {

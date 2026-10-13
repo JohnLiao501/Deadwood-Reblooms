@@ -1,0 +1,293 @@
+import terms from '../../assets/street/heist.json';
+import Catalog from '../Transport/Catalog';
+import type StreetLife from '../StreetLife';
+
+export interface HeistFight {
+  key: string;
+  combatStarted: boolean;
+  resume: 'vault' | 'escape';
+}
+interface HeistState {
+  stage: 'idle' | 'prep' | 'entry' | 'challenge' | 'vault' | 'escape' | 'settlement' | 'closed';
+  appointment: boolean;
+  approach: '' | 'quiet' | 'loud';
+  preparations: string[];
+  preparationChoices: Record<string, { method: string; quality: number }>;
+  activity: string;
+  candidate: string;
+  mickeyReview: '' | 'information' | 'crew' | 'risk';
+  crew: string[];
+  candidates: string[];
+  vehicle: number | null;
+  rolls: Record<'entry' | 'talk' | 'vault' | 'escape', number> | null;
+  shares: { landry: number; wren: number; crew: number; pc: number } | null;
+  loot: number;
+  informed: boolean;
+  policePlan: boolean;
+  raisedAlarm: boolean;
+  talked: boolean;
+  haul: '' | 'light' | 'full';
+  escapeMode: '' | 'normal' | 'careful';
+  bankClosedUntil: number;
+  identified: boolean;
+  bankReaction: boolean;
+  entered: boolean;
+  lateReport: boolean;
+  betrayed: boolean;
+  outcome: '' | 'success' | 'withdrawn' | 'failed' | 'reported' | 'sting' | 'arrested';
+  settled: boolean;
+  fight: HeistFight | null;
+}
+
+/** 单次银行豪劫；筹备、人员与判定存档，关系仍使用原版 NPC 数据。 */
+export default class Heist {
+  public static readonly defaults: HeistState = {
+    stage: 'idle',
+    appointment: false,
+    approach: '',
+    preparations: [],
+    preparationChoices: {},
+    activity: '',
+    candidate: '',
+    mickeyReview: '',
+    crew: [],
+    candidates: [],
+    vehicle: null,
+    rolls: null,
+    shares: null,
+    loot: 0,
+    informed: false,
+    policePlan: false,
+    raisedAlarm: false,
+    talked: false,
+    haul: '',
+    escapeMode: '',
+    bankClosedUntil: -1,
+    identified: false,
+    bankReaction: false,
+    entered: false,
+    lateReport: false,
+    betrayed: false,
+    outcome: '',
+    settled: false,
+    fight: null
+  };
+  public readonly terms = terms;
+  public readonly catalog = Catalog;
+  public constructor(private readonly street: StreetLife) {}
+
+  public get state(): HeistState {
+    return V.StreetLife.heist;
+  }
+  public get contacts() {
+    const landry = C.npc.Landry?.love ?? 0;
+    const earned = V.moneyStats?.pubStolenGoods?.earned ?? 0;
+    // 旧存档的销赃与黑箱成绩同样有效；已确认的背叛不能靠旧成绩抵消。
+    const landryTier = landry < 0 ? 0 : landry >= 60 || earned >= 800000 || V.pub_task_stat >= 25 ? 2 : landry >= 20 || earned >= 100000 ? 1 : 0;
+    const wren = C.npc.Wren?.love ?? 0;
+    const grant = C.npc.Grant?.love ?? 0;
+    return {
+      landryTier: this.state.betrayed ? Math.min(1, landryTier) : landryTier,
+      wrenTier: this.state.betrayed ? 0 : wren >= 40 ? 2 : wren >= 20 ? 1 : 0,
+      grantTier: grant >= 60 ? 2 : grant >= 20 ? 1 : 0
+    };
+  }
+  public get unlocked(): boolean {
+    return (
+      !!this.street.core.get('Finance') &&
+      V.smuggler_pub_known === 1 &&
+      this.street.reputation >= terms.requiredReputation &&
+      C.npc.Landry?.init === 1 &&
+      C.npc.Wren?.init === 1 &&
+      this.contacts.landryTier === 2 &&
+      this.contacts.wrenTier >= 1
+    );
+  }
+  public get inAction(): boolean {
+    return ['entry', 'challenge', 'vault', 'escape'].includes(this.state.stage);
+  }
+  public get available(): boolean {
+    return (
+      this.street.available &&
+      !V.nextPassageCheck &&
+      !V.nextPassage &&
+      !this.street.jobs.state.active &&
+      !this.street.bounties.state.active &&
+      !this.street.bounties.busy &&
+      !window.pcAreArmsBound('both')
+    );
+  }
+  public get crew() {
+    return this.state.crew.map(key => V.per_npc[key]).filter(npc => !!npc?.heist);
+  }
+  public get candidates() {
+    return this.state.candidates.map(key => V.per_npc[key]).filter(npc => !!npc?.heist);
+  }
+  public get crewReady(): boolean {
+    return this.crew.length === 2 && ['scout', 'carrier'].every(role => this.crew.some(npc => npc.heist.role === role && npc.health > 0 && npc.heist.status !== 'arrested'));
+  }
+  /** 原版体能上限随体型变化；其它技能使用原版有效值，统一成 0～1000 参与判定。 */
+  public get skills() {
+    return {
+      english: Math.clamp(window.currentSkillValue('english'), 0, 1000),
+      maths: Math.clamp(window.currentSkillValue('maths'), 0, 1000),
+      science: Math.clamp(window.currentSkillValue('science'), 0, 1000),
+      housekeeping: Math.clamp(window.currentSkillValue('housekeeping'), 0, 1000),
+      skulduggery: Math.clamp(window.currentSkillValue('skulduggery'), 0, 1000),
+      physique: Math.clamp(window.currentSkillValue('physique') / V.physiquesize, 0, 1) * 1000,
+      athletics: Math.clamp(window.currentSkillValue('athletics'), 0, 1000),
+      willpower: Math.clamp(window.currentSkillValue('willpower'), 0, 1000)
+    };
+  }
+  /** 意志只缓解压力，不抹去伤痛、疲劳或醉药状态。 */
+  public get conditionPenalty(): number {
+    return (
+      Math.clamp(V.tiredness / 2000, 0, 1) * 15 +
+      Math.clamp(V.stress / V.stressmax, 0, 1) * 10 * (1 - this.skills.willpower / 2000) +
+      Math.clamp(V.pain / 200, 0, 1) * 12 +
+      Math.clamp(V.drunk / V.drunkmax, 0, 1) * 12 +
+      Math.clamp(V.drugged / 1000, 0, 1) * 12
+    );
+  }
+  /** 正式会面沿用原版地下酒馆的发现标记，不搬动 NPC 的原有日程。 */
+  public get atMeeting(): boolean {
+    return V.smuggler_pub_known === 1 && V.location === 'underground';
+  }
+  /** 约好的筹备会面放在日间，不占用伦恩原版晚间行动。 */
+  public get meetingAvailable(): boolean {
+    return Time.hour >= 9 && Time.hour < 18;
+  }
+  public get preparations() {
+    const skills = this.skills;
+    const factory = this.street.core
+      .get('Finance')
+      ?.industry.owned.some(item => item.ready_day <= Math.floor(Time.days) && item.wage_arrears === 0 && item.overhead_arrears === 0 && item.lines.includes('packaging'));
+    return terms.preparations.map(preparation => ({
+      ...preparation,
+      options: preparation.options.map(option => {
+        const primary = skills[option.skill as keyof typeof skills];
+        const ability = option.secondSkill ? (primary + skills[option.secondSkill as keyof typeof skills]) / 2 : primary;
+        return {
+          ...option,
+          available:
+            (preparation.place !== 'smuggler' || (this.atMeeting && this.meetingAvailable)) &&
+            (!option.requiresFactory || !!factory) &&
+            (!option.requiresCrew || this.crewReady) &&
+            (option.skill !== 'english' || !V.worn.face.type.includes('gag')),
+          quality: Math.round(Math.clamp(option.qualityBase + ((option.qualityMax - option.qualityBase) * ability) / 1000 - this.conditionPenalty / 10, 0, option.qualityMax))
+        };
+      })
+    }));
+  }
+  public get bankClosed(): boolean {
+    return Math.floor(Time.days) < this.state.bankClosedUntil;
+  }
+  public get mickeyAvailable(): boolean {
+    return (
+      this.atMeeting &&
+      this.meetingAvailable &&
+      this.street.available &&
+      !this.inAction &&
+      !this.street.bounties.busy &&
+      !V.nextPassage &&
+      !V.nextPassageCheck &&
+      V.mickeyPub >= 2 &&
+      !['hiding', 'hidingKnown'].includes(V.pubfame?.status)
+    );
+  }
+  public get vehicle() {
+    return V.Transport?.vehicles.find(item => item.id === this.state.vehicle);
+  }
+  /** seats 为乘客位：Wren 与两名雇员占三席，Landry 留在酒馆协调。 */
+  public get vehicles() {
+    const transport = this.street.core.get('Transport');
+    if (
+      !transport?.ready ||
+      transport.taxi.active ||
+      (transport.state.trip && !transport.state.trip.settled) ||
+      transport.state.commute ||
+      transport.state.passengers.length ||
+      this.street.core.get('Finance')?.realEstate.outings.travelling ||
+      !transport.state.school.motor_vehicle.licensed ||
+      V.drunk > 0 ||
+      V.drugged > 0 ||
+      V.stress >= V.stressmax ||
+      V.worn.feet.type.includes('shackle')
+    )
+      return [];
+    return transport.state.vehicles.filter(item => {
+      const model = Catalog.models.find(model => model.id === item.model);
+      return (
+        model?.kind === 'motor_vehicle' &&
+        model.seats >= this.crew.length + 1 &&
+        item.point === 'high' &&
+        item.garage === null &&
+        !item.stolen &&
+        item.condition > 0 &&
+        (item.arrears ?? 0) <= 0 &&
+        item.fuel >= model.fuel_use * terms.escapeMinutes
+      );
+    });
+  }
+  public get vehicleReady(): boolean {
+    return this.state.vehicle !== null && this.vehicles.some(item => item.id === this.state.vehicle);
+  }
+  public get ready(): boolean {
+    return (
+      this.state.stage === 'prep' &&
+      ['quiet', 'loud'].includes(this.state.approach) &&
+      terms.preparations.every(prep => this.state.preparations.includes(prep.id)) &&
+      this.crewReady &&
+      !this.bankClosed &&
+      (this.state.vehicle === null || this.vehicleReady)
+    );
+  }
+  public get grantAvailable(): boolean {
+    return this.street.available && !V.nextPassageCheck && Time.hour >= 8 && Time.hour < 18 && this.street.bounties.state.cooperating && !this.street.bounties.wanted;
+  }
+  public get chances() {
+    const skills = this.skills;
+    const scout = this.crew.find(npc => npc.heist.role === 'scout');
+    const carrier = this.crew.find(npc => npc.heist.role === 'carrier');
+    const scoutSkill = scout ? Math.clamp(scout.heist.skill, 0, 1000) * Math.clamp(scout.health / scout.healthmax, 0, 1) : 0;
+    const carrierSkill = carrier ? Math.clamp(carrier.heist.skill, 0, 1000) * Math.clamp(carrier.health / carrier.healthmax, 0, 1) : 0;
+    const briefing = this.state.preparationChoices.briefing?.quality ?? 0;
+    const equipment = this.state.preparationChoices.equipment?.quality ?? 0;
+    const rehearsal = this.state.preparationChoices.rehearsal?.quality ?? 0;
+    const penalty = this.conditionPenalty;
+    const load = this.state.haul === 'full' ? (this.state.vehicle === null ? 10 : 3) : 0;
+    return {
+      entry: Math.round(
+        Math.clamp(25 + skills.skulduggery * 0.03 + skills.willpower * 0.01 + scoutSkill * 0.02 + briefing + (this.state.mickeyReview === 'information' ? terms.mickey.bonus : 0) - penalty, 5, 95)
+      ),
+      talk: V.worn.face.type.includes('gag') ? 0 : Math.round(Math.clamp(20 + skills.english * 0.04 + skills.willpower * 0.015 + briefing - penalty, 5, 95)),
+      vault: Math.round(Math.clamp(25 + skills.physique * 0.025 + carrierSkill * 0.025 + equipment + rehearsal * 0.5 + (this.state.mickeyReview === 'crew' ? terms.mickey.bonus : 0) - penalty, 5, 95)),
+      escape: Math.round(
+        Math.clamp(
+          25 +
+            (this.state.vehicle === null ? skills.athletics : Math.clamp(this.street.core.get('Transport')?.state.driving ?? 0, 0, 1000)) * 0.04 +
+            scoutSkill * 0.015 +
+            (this.state.mickeyReview === 'risk' ? terms.mickey.bonus : 0) +
+            rehearsal * 0.5 -
+            penalty -
+            load -
+            (this.state.policePlan ? 25 : 0) -
+            (this.state.raisedAlarm ? 10 : 0) -
+            (Weather.isSnow ? 15 : 0),
+          5,
+          95
+        )
+      )
+    };
+  }
+  public get split() {
+    if (this.state.shares) return this.state.shares;
+    const landry = terms.cuts.landry;
+    const wren = terms.cuts.wren[this.contacts.wrenTier];
+    const crew = this.crew.reduce((sum, npc) => sum + npc.heist.cut, 0);
+    return { landry, wren, crew, pc: Math.max(0, 100 - landry - wren - crew) };
+  }
+  public get payout(): number {
+    return Math.floor((this.state.loot * this.split.pc) / 100);
+  }
+}

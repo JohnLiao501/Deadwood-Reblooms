@@ -1,0 +1,143 @@
+:: Deadwood Street Mickey Widgets [widget]
+
+<!-- 沿用原版 generateMickey / per_npc.hacker；米奇的身份和原版名声委托保持同一份数据。 -->
+<<widget 'deadwood-street-mickey-link'>>
+  <<if $passage is 'Smuggler Pub' and maplebirch.get('StreetLife')?.heist.mickeyAvailable>>
+    <<icon 'street/source-check.png'>><<lanLink ['Ask Mickey to look over your street business (0:05)', '请米奇看看街头的事 (0:05)'] 'Deadwood Street Mickey'>>
+      <<endevent>><<pass 5>>
+    <</lanLink>><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-street-mickey-response'>>
+  <<switch _args[0]>>
+    <<case 'work'>>
+      <<language>>
+        <<option 'EN'>>
+          "Landry finds people who need things done. I find the parts of a story that don't fit." Mickey nudges a pile of printouts out of view. "Plenty of perfectly ordinary deliveries pass through here. Ordinary doesn't mean you can ignore the paperwork." The door opens a little farther. "And if someone won't tell you what you're carrying, decide whether you want the answer before you agree."
+        <<option 'CN'>>
+          “兰德里找需要办事的人，我找故事里对不上的地方。”米奇把一叠打印纸往看不见的地方推了推。“这里也有很多普通送货的活。普通，不等于可以不看单据。”门又开了一点。“有人不肯告诉你运的是什么，答应之前，先想清楚你到底要不要知道答案。”
+      <</language>><br><br>
+      <<if maplebirch.get('StreetLife').jobs.state.active>>
+        <<set _mickeyJob to maplebirch.get('StreetLife').jobs.contract>>
+        <<language>>
+          <<option 'EN'>>
+            You name your current delivery. "<<if _mickeyJob.illegal>>Then don't call it an ordinary parcel.<<else>>Keep the agreed fee and the receipt together.<</if>>" Mickey taps the edge of the door. "Bring Landry an accurate account. That's worth more than making up an impressive ending."
+          <<option 'CN'>>
+            你提到手头的委托。“<<if _mickeyJob.illegal>>那就别把它说成普通包裹。<<else>>把说好的报酬和收条放在一起。<</if>>”米奇敲了敲门沿。“回去跟兰德里说实话，总比编个漂亮的结局值钱。”
+        <</language>><br><br>
+      <</if>>
+    <<case 'police'>>
+      <<language>>
+        <<option 'EN'>>
+          You ask about taking work from a detective as well as Landry. Mickey stops moving the mouse. "Two people paying you doesn't mean they're paying for the same thing." A glance goes past you towards Landry's table. "If they ask for opposite things, you'll have to choose. Don't put my name in the middle of an agreement I never made." The screen turns away. "I can work on information. A witness and a signed statement are another matter."
+        <<option 'CN'>>
+          你问起一边给警探做事，一边接兰德里的活。米奇停下鼠标。“两个人给你钱，不等于他们要你做的是同一件事。”目光越过你，扫向兰德里的桌子。“要你做的事互相冲突时，你得自己选。别把我的名字塞进我从没答应过的约定里。”屏幕转了过去。“我能处理信息。证人和签过字的笔录，是另一回事。”
+      <</language>><br><br>
+    <<case 'crew'>>
+      <<language>>
+        <<option 'EN'>>
+          "Someone can know their job and still want to leave." Mickey folds a sheet without handing it over. "Ask what they agreed to do. Listen when they say what they won't do." A short pause follows. "Wren charges for a reason. Make sure you've agreed on the same reason. I'm staying here."
+        <<option 'CN'>>
+          “一个人可以很会干活，也可以照样想走。”米奇折起一张纸，没有递给你。“问清楚答应做什么，也听听不肯做什么。”停了片刻，又说：“伦恩收钱是有原因的。你们最好说的是同一个原因。至于我，我留在这里。”
+      <</language>><br><br>
+    <<case 'fame'>>
+      <<language>>
+        <<option 'EN'>>
+          "The usual arrangement still stands. Something for something." Mickey points past you towards Landry. "Tell me which part of your reputation you want to change. I tell you what I need." The latch shifts against the door. "I can't make everyone forget what they saw. Especially when you've given them something new to talk about."
+        <<option 'CN'>>
+          “还是老规矩，你帮我，我帮你。”米奇指了指你身后的兰德里。“想改哪方面的名声，先说清楚；我再告诉你需要什么。”门闩贴着门动了一下。“不是谁亲眼看见了什么，我都能让人忘掉。尤其是你还不断给他们添新谈资的时候。”
+      <</language>><br><br>
+    <<case 'information'>>
+      <<language>>
+        <<option 'EN'>>
+          Mickey separates two pages. "These repeat the same rumour. They aren't two sources." A pencil mark circles a contradiction in your notes. "Keep this as a question. Don't turn it into a fact because it fits the plan." The pages slide back beneath the door.
+        <<option 'CN'>>
+          米奇把两页纸分开。“这两份重复的是同一个传闻，不算两个来源。”铅笔圈出笔记里的一处矛盾。“先当成疑问留着，别因为符合计划，就把它当成事实。”纸从门缝下推了回来。
+      <</language>><br><br>
+    <<case 'division'>>
+      <<language>>
+        <<option 'EN'>>
+          "Two names aren't a division of work." Mickey points to the names you wrote down. "Make sure each knows what you've asked, and what the other has agreed to do." You go through the notes again, checking them against the agreements made at the pub.
+        <<option 'CN'>>
+          “写了两个名字，不等于分好了活。”米奇指向纸上的名字。“让各人弄清楚你要什么，也知道另一人答应做什么。”你重新核对笔记，将它们与酒馆里谈妥的条件一一对照。
+      <</language>><br><br>
+    <<case 'risk'>>
+      <<language>>
+        <<option 'EN'>>
+          "You've written what happens if it works." Mickey turns the last page over. "Write what happens if it doesn't." You go through the choices that would mean giving up money or stopping altogether. "Better to agree now than discover everyone's price at the same time."
+        <<option 'CN'>>
+          “你写了顺利的话会怎样。”米奇把最后一页翻过来。“再写写不顺利时会怎样。”你逐项商量哪些选择意味着少拿钱，哪些意味着彻底停下。“现在说好，总比到时候才一起发现，各人都有自己的价码强。”
+      <</language>><br><br>
+  <</switch>>
+<</widget>>
+
+:: Deadwood Street Mickey
+<<set _mickeyWork to maplebirch.get('StreetLife')?.heist>>
+<<if !_mickeyWork?.atMeeting>><<deadwood-street-heist-meeting-required>><<exit>><</if>>
+<<set $location to 'underground', $outside to 0>><<unset $bus>><<effects>>
+<<if !_mickeyWork?.mickeyAvailable>>
+  <<lanSwitch 'Landry has no meeting to arrange with Mickey here just now.' '兰德里现在无法安排你在这里见米奇。'>><br><br>
+<<else>>
+  <<endevent>><<npc 'Landry' 1>><<generateMickey 2>>
+  <<language>>
+    <<option 'EN'>>
+      Landry has arranged for Mickey to meet you behind the wooden partition in the underground pub. Landry waits until nobody is watching before nodding towards the side door. It opens only a little when you knock. Mickey looks over your shoulder before letting you speak. A screen lights the room behind them; the rest is difficult to make out.<br><br>
+      "Work?" Mickey asks. "Tell me which part. Landry handles the introductions. I don't need another copy of every promise made in the bar."
+    <<option 'CN'>>
+      兰德里约好让你与米奇在地下酒馆的木隔墙后碰面。等到没人留意，兰德里才朝侧门点了点头。你敲过门，门只开了一点。米奇先看向你肩膀后方，才让你开口。房间里有屏幕亮着，其余地方看不真切。<br><br>
+      “差事？”米奇问。“先说是哪一部分。兰德里负责牵线，酒馆里做过的每个承诺，我不需要再听一遍。”
+  <</language>><br><br>
+  <div id='deadwood-mickey-response'></div>
+  <<for _mickeyTopic range [{id:'work', name:['Ask about checking a delivery', '谈谈委托与货物']}, {id:'police', name:['Ask about working for both sides', '谈谈同时给两边做事']}, {id:'crew', name:['Ask about the people you hire', '谈谈雇来的同伙']}, {id:'fame', name:['Ask about changing your reputation', '谈谈处理名声']} ]>>
+    <<capture _mickeyTopic>>
+      <<socialiseicon 'ask'>><<lanLink _mickeyTopic.name>>
+        <<replace '#deadwood-mickey-response'>><<deadwood-street-mickey-response _mickeyTopic.id>><</replace>>
+      <</lanLink>><br>
+    <</capture>>
+  <</for>><br>
+  <div id='deadwood-mickey-plan'>
+  <<if _mickeyWork.state.betrayed>>
+    <<language>>
+      <<option 'EN'>>
+        "No bank notes." Mickey keeps a hand on the door. "That arrangement was exposed. I'm not opening another route for you to expose."
+      <<option 'CN'>>
+        “银行的纸，就免了。”米奇的手没有离开门。“那份安排已经暴露，我不会再给你留一条可以暴露的线。”
+    <</language>><br><br>
+  <<elseif _mickeyWork.state.stage is 'prep'>>
+    <<if _mickeyWork.state.mickeyReview>>
+      <<lanSwitch 'Mickey has already reviewed the agreed part of the plan.' '米奇已经复核过说好的那一部分计划。'>><br>
+    <<elseif _mickeyWork.ready>>
+      <<language>>
+        <<option 'EN'>>
+          Mickey glances over the material you've brought back. "I can go over one part. My time still costs money. I'm not coming with you, and I can't promise what someone at the bank will do."
+        <<option 'CN'>>
+          米奇看了看你带回的材料。“可以帮你核对一部分。我的时间也值钱。我不跟你去，也不能替银行里的人做保证。”
+      <</language>><br><br>
+      <<for _mickeyReview range _mickeyWork.terms.mickey.reviews>>
+        <<capture _mickeyWork _mickeyReview>>
+          <<icon _mickeyReview.icon>>
+          <<if $money gte _mickeyWork.terms.mickey.cost>>
+            <<lanLink _mickeyReview.name>>
+              <<if _mickeyWork.mickeyAvailable and _mickeyWork.ready and !_mickeyWork.state.mickeyReview and $money gte _mickeyWork.terms.mickey.cost>>
+                <<money `-_mickeyWork.terms.mickey.cost`>><<set _mickeyWork.state.mickeyReview to _mickeyReview.id>><<pass _mickeyWork.terms.mickey.minutes>>
+                <<if $passage is 'Deadwood Street Mickey' and !$nextPassage and !$nextPassageCheck>>
+                  <<replace '#deadwood-mickey-response'>><<deadwood-street-mickey-response `_mickeyReview.id === 'crew' ? 'division' : _mickeyReview.id`>><</replace>>
+                  <<replace '#deadwood-mickey-plan'>><<lanSwitch 'Mickey has reviewed the agreed part of the plan.' '米奇已经复核过说好的那一部分计划。'>><</replace>>
+                <</if>>
+              <</if>>
+            <</lanLink>>
+          <<else>>
+            <span class='grey'><<= lanSwitch(_mickeyReview.name[0], _mickeyReview.name[1])>></span>
+          <</if>> · <<printmoney _mickeyWork.terms.mickey.cost>> · <span class='teal'><<= _mickeyWork.terms.mickey.minutes>></span> <<lanSwitch 'minutes' '分钟'>><br>
+        <</capture>>
+      <</for>>
+    <<else>>
+      <<lanSwitch 'Bring the checked material and agreed crew arrangements before asking for a review.' '先把核对过的材料和说好的人员安排带来，再请米奇复核。'>><br>
+    <</if>>
+  <</if>></div><br>
+  <<if ['ready', 'accepted', 'done'].includes($pubfame?.status)>>
+    <span class='blue'><<lanSwitch 'Mickey’s other favour still goes through Landry at the Harvest Street pub.' '米奇原有的委托仍需回丰收街酒馆，通过兰德里办理。'>></span><br>
+  <</if>>
+<</if>>
+<<getouticon>><<lanLink ['Return to the smugglers’ pub', '回到走私者酒馆'] 'Smuggler Pub'>><<endevent>><</lanLink>><br>

@@ -6,6 +6,7 @@
     <<socialiseicon 'ask'>><<lanLink ['Ask Landry about work', '向兰德里打听差事'] 'Deadwood Street Jobs'>><<endevent>><</lanLink>><br>
   <</if>>
   <<deadwood-street-bailey-landry-link>>
+  <<deadwood-street-heist-invitation>>
 <</widget>>
 
 <<widget 'deadwood-street-cargo-link'>>
@@ -124,6 +125,7 @@
   <</if>>
   <<deadwood-street-job-status>>
   <<deadwood-street-bailey-landry-response>>
+  <<deadwood-street-contact-status>>
   <<if _streetJobs.available>>
     <<if _streetJobs.state.active>>
       <<deadwood-street-cargo-link 'pub'>>

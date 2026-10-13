@@ -13,7 +13,6 @@
   <<else>>
     <<set $_streetDescription to lanSwitch('On the town’s streets, <span class="blue">your name means little.</span>', '镇上的街头<span class="blue">还没多少人听过你的名字。</span>')>>
   <</if>>
-  <!-- 原版 EN 使用 name，中文翻译使用 cn_name；两个字段都提供明确文本。 -->
   <<set $_streetBox to {name: 'Street', cn_name: '街头', icon: 'img/misc/icon/street-life.png', description: $_streetDescription}>>
   <<relation-box-simple $_streetBox>>
 <</widget>>
@@ -105,7 +104,6 @@
 </div>
 
 :: Deadwood Street Shop Widgets [widget]
-<!-- 原版 updateclothingshop 按 $shopName + Shop-main 回到此处。 -->
 <<widget 'deadwoodStreetShop-main'>>
   <<set $location to 'underground'>><<set $outside to 0>><<effects>>
   <<if $tryOn.autoReset isnot false>>
@@ -191,7 +189,6 @@
       <<set $enemyhealth -= _thedamage>><<set $enemyanger += 5>><<attackstat>>
     <<case 'street_handgun' 'street_shotgun' 'street_smg' 'street_rifle'>>
       <<set _streetFirearm to _streetWeapon.streetWeapon>>
-      <!-- 每发固定值 + 目标最大生命百分比；shots 为计划弹数，余弹不足按实数结算。 -->
       <<set _streetShots to Math.min(_streetFirearm.shots, $StreetLife.ammo[_streetFirearm.ammo])>>
       <<set $StreetLife.ammo[_streetFirearm.ammo] -= _streetShots>>
       <<language>>
@@ -201,8 +198,8 @@
           你用<<= _streetWeapon.cn_name_cap>>开火。<<if _streetShots gt 1>>枪声接连响起，打断了拉扯。<<else>>枪声骤然响起，打断了拉扯。<</if>>袭击者踉跄了一下，捂住伤处。
       <</language>>
       <<set _streetHealthMax to $enemyno gte 2 ? $NPCList[_streetTarget].healthmax : $enemyhealthmax>>
-      <!-- 原版练枪统计以 1000 为熟练门槛；有效伤害系数为 90%–100%，疼痛至多再减 10 个百分点。 -->
-      <<set _streetAim to 0.9 + Math.clamp($stat_shoot / 1000, 0, 1) * 0.1 - Math.clamp($pain / 100, 0, 1) * 0.1>>
+      <!-- 练枪统计达到 1000 时熟练；伤害系数保持 60%–100%，疼痛最多扣 10 个百分点。 -->
+      <<set _streetAim to Math.clamp(0.6 + Math.clamp($stat_shoot / 1000, 0, 1) * 0.4 - Math.clamp($pain / 100, 0, 1) * 0.1, 0.6, 1)>>
       <<set _thedamage to Math.min((_streetFirearm.damage + _streetHealthMax * _streetFirearm.damage_percent / 100) * _streetShots * _streetAim, $enemyno gte 2 ? $NPCList[_streetTarget].health : $enemyhealth)>>
       <<if $enemyno gte 2>><<npcdamage _streetTarget>><</if>>
       <<set $enemyhealth -= _thedamage, $enemyanger += 30>><<attackstat>>

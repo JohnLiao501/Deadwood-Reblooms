@@ -1,10 +1,13 @@
 :: Deadwood Reblooms Business Loan
 <<set $outside to 0>><<set $location to 'financial_centre'>><<effects>>
-<<deadwood-reblooms-adrian-greeting 'financial_centre_bank'>>
-<<if Time.weekDay lt 2 or Time.weekDay gt 6 or Time.hour lt 9 or Time.hour gte 17>>
+<<if maplebirch.get('StreetLife')?.heist.bankClosed>>
+  <<deadwood-street-heist-bank-closed>>
+  <<getouticon>><<lanLink ['Return to the bank', '返回银行柜台'] 'Deadwood Reblooms Financial Centre Bank'>><</lanLink>><<exit>>
+<<elseif Time.weekDay lt 2 or Time.weekDay gt 6 or Time.hour lt 9 or Time.hour gte 17>>
   <<deadwood-reblooms-finance-counter-closed>>
   <<getouticon>><<lanLink ['Return to the bank', '返回银行柜台'] 'Deadwood Reblooms Financial Centre Bank'>><</lanLink>><<exit>>
 <</if>>
+<<deadwood-reblooms-adrian-greeting 'financial_centre_bank'>>
 <<language>>
   <<option 'EN'>>
     The clerk asks for the shop plans, delivery records or factory deeds. "This is a personal loan for business expenses. Your name goes on it, even if someone else runs the place. Thirty days. The instalments come from your account."

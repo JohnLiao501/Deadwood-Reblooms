@@ -1,0 +1,617 @@
+:: Deadwood Street Heist Operation Widgets [widget]
+
+<!-- 只在明确点击时推进阶段；正文、日志和战斗返回文字不结算金钱或关系。 -->
+<<widget 'deadwood-street-heist-clear-guard'>>
+  <<endevent>>
+  <<if $per_npc.deadwood_heist_guard>><<clearNPC 'deadwood_heist_guard'>><</if>>
+<</widget>>
+
+<<widget 'deadwood-street-heist-action'>>
+  <<set _heistWork to maplebirch.get('StreetLife')?.heist, _heistAction to _args[0]>>
+  <<if !_heistWork?.available or $passage isnot 'Deadwood Street Heist' or !_heistWork.state.rolls or _heistWork.state.fight>><<exit>><</if>>
+  <<set _heistState to _heistWork.state>>
+  <<switch _heistAction>>
+    <<case 'enter'>>
+      <<if _heistState.stage isnot 'entry' or _heistState.entered>><<exit>><</if>>
+      <<if _heistState.approach is 'quiet' and _heistState.rolls.entry lte _heistWork.chances.entry>>
+        <<set _heistState.stage to 'vault'>>
+      <<else>>
+        <!-- 察觉到 PC 后仍可交涉或撤回；生成一次守卫并保存，抵抗才进入原版战斗。 -->
+        <<endevent>><<generateNPC 1 'a'>><<set $NPCList[0].per to 'deadwood_heist_guard'>><<saveNPC 0 'deadwood_heist_guard'>><<endevent>>
+        <<if !$per_npc.deadwood_heist_guard>><<exit>><</if>>
+        <<set _heistState.raisedAlarm to true, _heistState.stage to 'challenge'>>
+        <<if _heistState.approach is 'loud'>>
+          <<set _heistState.fight to {key: 'deadwood_heist_guard', combatStarted: false, resume: 'vault'}>>
+        <</if>>
+      <</if>>
+      <!-- 实际实施抢劫后才记罪证与停业；柜台接待仍由金融模块处理。 -->
+      <<set _heistState.entered to true>>
+      <<set _heistState.bankClosedUntil to Math.max(_heistState.bankClosedUntil, Math.floor(Time.days) + _heistWork.terms.bankClosureDays)>>
+      <<crimeUp _heistWork.terms.crime.entry 'trespassing'>>
+      <<deadwood-street-heist-bank-incident>>
+      <<if _heistState.fight>>
+        <<crimeUp _heistWork.terms.crime.violence 'assault'>><<goto 'Deadwood Street Fight'>>
+      <<else>>
+        <<pass 5>>
+        <<if _heistWork.available>><<goto 'Deadwood Street Heist'>><</if>>
+      <</if>>
+    <<case 'talk'>>
+      <<if _heistState.stage isnot 'challenge' or _heistState.talked or $worn.face.type.includes('gag') or !$per_npc.deadwood_heist_guard>><<exit>><</if>>
+      <<set _heistState.talked to true>>
+      <<if _heistState.rolls.talk lte _heistWork.chances.talk>>
+        <<set _heistState.stage to 'vault'>><<deadwood-street-heist-clear-guard>>
+      <</if>>
+      <<pass 5>>
+      <<if _heistWork.available>><<goto 'Deadwood Street Heist'>><</if>>
+    <<case 'resist'>>
+      <<if _heistState.stage isnot 'challenge' or !$per_npc.deadwood_heist_guard>><<exit>><</if>>
+      <<set _heistState.approach to 'loud', _heistState.raisedAlarm to true>>
+      <<set _heistState.fight to {key: 'deadwood_heist_guard', combatStarted: false, resume: 'vault'}>>
+      <<deadwood-street-heist-bank-incident>>
+      <<crimeUp _heistWork.terms.crime.violence 'assault'>><<endevent>><<goto 'Deadwood Street Fight'>>
+    <<case 'take-light' 'take-full'>>
+      <<if _heistState.stage isnot 'vault'>><<exit>><</if>>
+      <<set _heistPotential to _heistWork.terms.loot * (_heistState.approach is 'loud' ? _heistWork.terms.loudLootRatio : 1)>>
+      <<set _heistFull to _heistAction is 'take-full' and _heistState.rolls.vault lte _heistWork.chances.vault>>
+      <<set _heistState.haul to _heistFull ? 'full' : 'light'>>
+      <<set _heistState.loot to Math.floor(_heistPotential * (_heistFull ? 1 : _heistWork.terms.lightRatio)), _heistState.stage to 'escape'>>
+      <<crimeUp _heistWork.terms.crime.vault 'thievery'>>
+      <<if _heistAction is 'take-full'>><<physique 1 'noMessage'>><<tiredness 4>><<else>><<tiredness 1>><</if>>
+      <<pass `_heistState.approach is 'loud' ? 5 : 10`>>
+      <<if _heistWork.available>><<goto 'Deadwood Street Heist'>><</if>>
+    <<case 'withdraw'>>
+      <<if !_heistWork.inAction>><<exit>><</if>>
+      <<set _heistState.loot to 0, _heistState.outcome to 'withdrawn', _heistState.stage to 'settlement'>>
+      <<deadwood-street-heist-clear-guard>><<pass _heistWork.terms.escapeMinutes>><<tiredness 4>>
+      <<if _heistWork.available>><<goto 'Deadwood Street Heist Return'>><</if>>
+    <<case 'run' 'drive' 'run-careful' 'drive-careful'>>
+      <<if _heistState.stage isnot 'escape'>><<exit>><</if>>
+      <<set _heistDriving to _heistAction.startsWith('drive'), _heistCareful to _heistAction.endsWith('-careful')>>
+      <<set _heistEscapeMinutes to _heistWork.terms.escapeMinutes + (_heistCareful ? _heistWork.terms.carefulMinutes : 0)>>
+      <<if _heistDriving>>
+        <<if !_heistWork.vehicleReady>><<exit>><</if>>
+        <<set _heistTransport to maplebirch.get('Transport'), _heistVehicle to _heistWork.vehicle>>
+        <<set _heistModel to _heistTransport.catalog.models.find(item => item.id === _heistVehicle.model)>>
+        <!-- 谨慎撤离多用十分钟，实际燃油也必须足够；不能截到零当成已经付清。 -->
+        <<if _heistVehicle.fuel lt _heistModel.fuel_use * _heistEscapeMinutes>><<exit>><</if>>
+      <<else>>
+        <<if $worn.feet.type.includes('shackle')>><<exit>><</if>>
+        <<set _heistState.vehicle to null>>
+      <</if>>
+      <<set _heistState.escapeMode to _heistCareful ? 'careful' : 'normal'>>
+      <<set _heistEscapeChance to Math.min(95, _heistWork.chances.escape + (_heistCareful ? _heistWork.terms.carefulBonus : 0))>>
+      <<if _heistCareful>><<set _heistState.loot to Math.floor(_heistState.loot * _heistWork.terms.carefulRatio)>><</if>>
+      <<if _heistDriving>>
+        <<set _heistVehicle.fuel to Math.max(0, _heistVehicle.fuel - _heistModel.fuel_use * _heistEscapeMinutes)>>
+        <<set _heistVehicle.condition to Math.max(0, _heistVehicle.condition - _heistTransport.journeyWear(_heistModel, _heistEscapeMinutes))>>
+        <<set _heistVehicle.point to 'harvest', _heistTransport.state.driving to Math.min(1000, _heistTransport.state.driving + 4)>>
+      <</if>>
+      <<set _heistState.outcome to _heistState.rolls.escape lte _heistEscapeChance ? 'success' : 'failed'>>
+      <<if _heistState.outcome is 'failed'>><<set _heistState.loot to 0>><</if>>
+      <!-- 先离开可重复点击的阶段，再结算时间；原版强制事件优先。 -->
+      <<set _heistState.stage to 'settlement'>><<endevent>><<pass _heistEscapeMinutes>>
+      <<if !_heistDriving>>
+        <<tiredness 8>>
+        <<if _heistState.outcome is 'success'>><<athletics 1>><</if>>
+      <</if>>
+      <<if _heistWork.available>><<goto 'Deadwood Street Heist Return'>><</if>>
+    <<case 'sting' 'contact'>>
+      <<if !_heistWork.inAction>><<exit>><</if>>
+      <<if !_heistState.entered>>
+        <!-- 尚未实施抢劫：交线索并退出，不凭同伙出现在街上就宣称现场抓获。 -->
+        <<set _heistState.informed to true, _heistState.loot to 0, _heistState.outcome to 'reported', _heistState.stage to 'settlement'>>
+        <<deadwood-street-heist-clear-guard>><<pass 20>>
+        <<if _heistWork.available>><<goto 'Deadwood Street Heist Debrief'>><</if>>
+      <<else>>
+        <<if _heistAction is 'sting' ? !_heistState.policePlan : _heistState.policePlan>><<exit>><</if>>
+        <<set _heistState.lateReport to _heistAction is 'contact', _heistState.informed to true>>
+        <<set _heistState.loot to 0, _heistState.outcome to 'sting', _heistState.stage to 'settlement'>>
+        <<for _heistCrewKey range _heistState.crew>>
+          <<if $per_npc[_heistCrewKey]?.heist>><<set $per_npc[_heistCrewKey].heist.status to 'arrested'>><</if>>
+        <</for>>
+        <<if !_heistState.betrayed>>
+          <<set _heistState.betrayed to true>>
+          <<npcincr Landry love _heistWork.terms.favour.landryBetrayal>>
+          <<npcincr Wren love _heistWork.terms.favour.wrenBetrayal>>
+        <</if>>
+        <<deadwood-street-heist-clear-guard>><<pass 10>>
+        <<if _heistWork.available>><<goto 'Deadwood Street Heist Handover'>><</if>>
+      <</if>>
+  <</switch>>
+<</widget>>
+
+<!-- 秘密提供消息与经过核验、主动同意的警方安排分开保存。 -->
+<<widget 'deadwood-street-heist-grant'>>
+  <<set _heistWork to maplebirch.get('StreetLife')?.heist>>
+  <<if !_heistWork or $passage isnot 'Deadwood Street Detective'>><<exit>><</if>>
+  <<if _heistWork.state.stage is 'prep' and _heistWork.grantAvailable and maplebirch.npc.Schedule.get('Grant').location is 'police_station'>>
+    <<if !_heistWork.state.informed>>
+      <<icon 'street/detective-notebook.png'>><<lanLink ['Tell Grant about the proposed bank job (0:10)', '告诉格兰特有人在筹划银行豪劫 (0:10)'] 'Deadwood Street Detective'>>
+        <<if _heistWork.state.stage is 'prep' and !_heistWork.state.informed and _heistWork.grantAvailable and maplebirch.npc.Schedule.get('Grant').location is 'police_station'>>
+          <<set _heistWork.state.informed to true>><<pass 10>>
+        <</if>>
+      <</lanLink>><br>
+    <<else>>
+      <<language>>
+        <<option 'EN'>>
+          <<if _heistWork.state.policePlan>>
+            Grant taps the account you agreed on. "If you change your mind, tell me. Don't go in there and decide afterwards that you were doing me a favour." The notebook stays on the desk. "Your own record is still your own record."
+          <<else>>
+            Grant keeps the conversation low. "I've recorded what you told me. I still need to check it." The notebook stays on the desk. "If you want to help further, we agree on that separately."
+          <</if>>
+        <<option 'CN'>>
+          <<if _heistWork.state.policePlan>>
+            格兰特点了点你们说好的安排。“改主意就告诉我。别等进了银行，才决定自己是在帮我的忙。”记事簿留在桌上。“你自己的记录，还是你自己的记录。”
+          <<else>>
+            格兰特压低声音。“你说的这些，我记下了，还得核验。”记事簿留在桌上。“如果还想继续帮忙，就另把事情说清楚。”
+          <</if>>
+      <</language>><br><br>
+    <</if>>
+    <<if _heistWork.ready>>
+      <<if !_heistWork.state.policePlan>>
+        <<policeicon>><<lanLink ['Agree to the verified handover with Grant (0:10)', '与格兰特明确约定核验后的交接 (0:10)'] 'Deadwood Street Detective'>>
+          <<if _heistWork.state.stage is 'prep' and _heistWork.ready and !_heistWork.state.policePlan and _heistWork.grantAvailable and maplebirch.npc.Schedule.get('Grant').location is 'police_station'>>
+            <<set _heistWork.state.informed to true, _heistWork.state.policePlan to true>><<pass 10>>
+          <</if>>
+        <</lanLink>><br>
+      <<else>>
+        <<refuseicon>><<lanLink ['Tell Grant you will not join the police operation', '告诉格兰特，你不再参与警方行动'] 'Deadwood Street Detective'>>
+          <<if _heistWork.state.stage is 'prep' and _heistWork.state.policePlan and _heistWork.grantAvailable and maplebirch.npc.Schedule.get('Grant').location is 'police_station'>>
+            <<set _heistWork.state.policePlan to false>>
+          <</if>>
+        <</lanLink>><br>
+      <</if>>
+      <<icon 'street/witness-statement.png'>><<lanLink ['Submit the preparations and withdraw from the plan (0:10)', '交出筹备线索并退出计划 (0:10)']>>
+        <<if _heistWork.state.stage is 'prep' and _heistWork.ready and _heistWork.grantAvailable and maplebirch.npc.Schedule.get('Grant').location is 'police_station'>>
+          <<set _heistWork.state.informed to true, _heistWork.state.outcome to 'reported', _heistWork.state.stage to 'settlement', _heistWork.state.loot to 0>>
+          <<endevent>><<pass 10>>
+          <<if _heistWork.available>><<goto 'Deadwood Street Heist Debrief'>><</if>>
+        <</if>>
+      <</lanLink>><br>
+    <<elseif _heistWork.state.informed>>
+      <<language>>
+        <<option 'EN'>>
+          "Bring me something I can check," Grant says. "Who agreed to take part, and what has actually been arranged. An invitation isn't a completed case."
+        <<option 'CN'>>
+          “带点能核验的东西来。”格兰特说，“谁答应参加，实际安排过什么。听到一份邀请，可不算办完了案子。”
+      <</language>><br><br>
+    <</if>>
+  <<elseif _heistWork.state.stage is 'settlement' and ['reported', 'sting'].includes(_heistWork.state.outcome) and _heistWork.grantAvailable and maplebirch.npc.Schedule.get('Grant').location is 'police_station'>>
+    <<icon 'street/witness-statement.png'>><<lanLink ['Review the bank operation statement', '核对银行行动的笔录'] 'Deadwood Street Heist Debrief'>><<endevent>><</lanLink>><br>
+  <<elseif _heistWork.state.informed and _heistWork.inAction>>
+    <<language>>
+      <<option 'EN'>>
+        <<if _heistWork.state.policePlan>>
+          Grant has the verified account and your agreement to help. What you do next will still need to be explained.
+        <<else>>
+          Grant has your earlier information. You have not agreed to a police operation; the station still needs to establish what happened.
+        <</if>>
+      <<option 'CN'>>
+        <<if _heistWork.state.policePlan>>
+          格兰特留着核验过的材料，也记着你答应协助的安排。接下来做了什么，仍得交代清楚。
+        <<else>>
+          格兰特留着你先前提供的消息，你并未答应参加警方行动。警局还需要核实后来发生了什么。
+        <</if>>
+    <</language>><br><br>
+  <</if>>
+<</widget>>
+
+<!-- 已确认的分成先读取；领取后才变更关系，避免好感变化反过来改写本单报价。 -->
+<<widget 'deadwood-street-heist-settle'>>
+  <<set _heistWork to maplebirch.get('StreetLife')?.heist>>
+  <<if !_heistWork?.available or $passage isnot 'Deadwood Street Heist Debrief' or _heistWork.state.stage isnot 'settlement' or _heistWork.state.settled>><<exit>><</if>>
+  <<set _heistOutcome to _heistWork.state.outcome, _heistPayout to _heistOutcome is 'success' ? _heistWork.payout : 0>>
+  <<if ['reported', 'sting'].includes(_heistOutcome)>>
+    <<if !_heistWork.grantAvailable or maplebirch.npc.Schedule.get('Grant').location isnot 'police_station'>><<exit>><</if>>
+    <<set _heistPayout to _heistWork.terms.reward>>
+  <<elseif !_heistWork.atMeeting or !_heistWork.meetingAvailable>>
+    <<exit>>
+  <</if>>
+  <<if !_heistOutcome>><<exit>><</if>>
+  <<set _heistWork.state.settled to true, _heistWork.state.stage to 'closed'>>
+  <<switch _heistOutcome>>
+    <<case 'success'>>
+      <<money _heistPayout 'pubStolenGoods'>>
+      <<npcincr Landry love _heistWork.terms.favour.landrySuccess>>
+      <<npcincr Wren love _heistWork.terms.favour.wrenSuccess>>
+      <<set maplebirch.get('StreetLife').reputation += _heistWork.terms.successReputation>>
+      <<for _heistCrewKey range _heistWork.state.crew>>
+        <<if $per_npc[_heistCrewKey]?.heist>>
+          <<set $per_npc[_heistCrewKey].heist.skill to Math.min(1000, $per_npc[_heistCrewKey].heist.skill + 50)>>
+          <<set $per_npc[_heistCrewKey].skills.security to $per_npc[_heistCrewKey].heist.skill, $per_npc[_heistCrewKey].skills.athletics to $per_npc[_heistCrewKey].heist.skill>>
+        <</if>>
+      <</for>>
+    <<case 'reported' 'sting'>>
+      <<money _heistPayout 'police'>>
+      <<set C.npc.Grant.love to Math.clamp(C.npc.Grant.love + _heistWork.terms.favour.grantSuccess, 0, 100)>>
+    <<case 'failed' 'arrested'>>
+      <<set maplebirch.get('StreetLife').reputation += _heistWork.terms.failurePenalty>>
+    <<case 'withdrawn'>>
+      <<set maplebirch.get('StreetLife').reputation += _heistWork.terms.withdrawPenalty>>
+  <</switch>>
+  <!-- 已实际参与犯罪又放弃约定，也会失去信任；仅会面、入场前退出不视为背叛。 -->
+  <<if _heistWork.state.policePlan and _heistWork.state.entered and !['reported', 'sting'].includes(_heistOutcome)>>
+    <<set C.npc.Grant.love to Math.clamp(C.npc.Grant.love + _heistWork.terms.favour.grantBetrayal, 0, 100)>>
+  <</if>>
+<</widget>>
+
+<!-- 供共享战斗结束页调用；这里只显示结果，战斗状态由 Bounties 的原有终局结算。 -->
+<<widget 'deadwood-street-heist-finish'>>
+  <<set _heistWork to maplebirch.get('StreetLife')?.heist>>
+  <<if !_heistWork>><<exit>><</if>>
+  <<language>>
+    <<option 'EN'>>
+      <<if ['vault', 'escape'].includes(_heistWork.state.stage)>>
+        The guard draws back. Wren doesn't linger. <<if C.npc.Wren.love gte 40>>"You've made your point. Can we get moving?"<<else>>"Still here? Good. Don't forget what we came for."<</if>> The hired pair look towards the empty bags; the noise outside hasn't stopped.
+      <<else>>
+        You get clear without the money. Wren has already found a way out, and a glance back doesn't slow the retreat. You must make your own way back. The plan has come apart.
+      <</if>>
+    <<option 'CN'>>
+      <<if ['vault', 'escape'].includes(_heistWork.state.stage)>>
+        守卫退开了，伦恩没有留下多看。<<if C.npc.Wren.love gte 40>>“已经让人见识过了，能继续了吗？”<<else>>“还在？不错。别忘了我们来干什么。”<</if>>两名雇员看向空袋子，外面的动静没有停下。
+      <<else>>
+        你脱身时没有带走钱。伦恩已经找到了自己的退路，回头的一眼也没让撤离的脚步慢下来。你还得自己走回去，计划已经乱了套。
+      <</if>>
+  <</language>><br><br>
+  <<if _heistWork.state.stage is 'settlement'>>
+    <<getouticon>><<lanLink ['Get clear of the bank (0:20)', '离开银行附近 (0:20)']>>
+      <<if _heistWork.available and _heistWork.state.stage is 'settlement'>>
+        <<endevent>><<pass _heistWork.terms.escapeMinutes>><<tiredness 4>>
+        <<if _heistWork.available>><<goto 'Deadwood Street Heist Return'>><</if>>
+      <</if>>
+    <</lanLink>><br>
+  <<else>>
+    <<getouticon>><<lanLink ['Continue', '继续'] 'Deadwood Street Heist'>><</lanLink>><br>
+  <</if>>
+<</widget>>
+
+:: Deadwood Street Heist Start
+<<set $location to 'financial_centre', $outside to 1, $bus to 'high'>><<effects>>
+<<set _heistWork to maplebirch.get('StreetLife')?.heist>>
+<<if _heistWork?.available and _heistWork.unlocked and _heistWork.ready>>
+  <<language>>
+    <<option 'EN'>>
+      The financial centre's bronze lettering catches the light above the doors. People pass you carrying shopping bags and folded newspapers. Wren stands a little way off with the two people you hired. Landry has stayed at the pub; the agreement is already made.<br><br>
+      Wren glances at the entrance.
+      <<if C.npc.Wren.love gte 40>>
+        "A good offer," Wren says. "Try to remember who helped when we're counting it." The grin doesn't make a promise to wait if things go wrong.
+      <<else>>
+        "I agreed to a job, not to stand here all day." Wren is already watching the others. "If you're walking away, say so."
+      <</if>> There is still time to stop.
+    <<option 'CN'>>
+      金融中心门上的青铜字映着光。路人提着购物袋、拿着折好的报纸，从你身旁经过。伦恩与两名雇员站在不远处。兰德里留在酒馆，条件已经谈妥。<br><br>
+      伦恩瞥了眼入口。
+      <<if C.npc.Wren.love gte 40>>
+        “这笔开价不错。”伦恩说，“分钱的时候，可别忘了谁帮过忙。”那抹笑容不等于答应出事后也会留下等你。
+      <<else>>
+        “我答应接活，可没答应在这里站一天。”伦恩已经在看其余人。“要走就说一声。”
+      <</if>>现在还来得及停下。
+  <</language>><br><br>
+  <<icon 'street/heist-plan.png'>><<lanLink ['Commit to the operation (0:05)', '确认开始行动 (0:05)']>>
+    <<if _heistWork.available and _heistWork.unlocked and _heistWork.ready and _heistWork.state.stage is 'prep'>>
+      <<set _heistWork.state.shares to clone(_heistWork.split)>>
+      <<set _heistWork.state.rolls to {entry: random(1, 100), vault: random(1, 100), escape: random(1, 100), talk: random(1, 100)}, _heistWork.state.stage to 'entry'>>
+      <<endevent>><<pass 5>>
+      <<if _heistWork.available>><<goto 'Deadwood Street Heist'>><</if>>
+    <</if>>
+  <</lanLink>><<dangerousText>><br>
+<<else>>
+  <<lanSwitch 'The agreed preparations are not ready, or you cannot begin the operation now.' '约定的筹备尚未完成，或你现在无法开始行动。'>><br><br>
+<</if>>
+<<highicon>><<lanLink ['Return to High Street', '返回商业街'] 'High Street'>><<endevent>><</lanLink>><br>
+
+:: Deadwood Street Heist
+<<set _heistWork to maplebirch.get('StreetLife')?.heist>>
+<<if !_heistWork>>
+  <<lanSwitch 'There is no bank operation to continue.' '当前没有待继续的银行行动。'>><br><br>
+  <<highicon>><<lanLink ['Return to High Street', '返回商业街'] 'High Street'>><</lanLink>><br>
+  <<exit>>
+<</if>>
+<<if _heistWork.state.fight>>
+  <<lanSwitch 'The confrontation is still in progress.' '冲突尚未结束。'>><br><br>
+  <span id='next'><<lanLink ['Continue the confrontation', '继续应对冲突'] 'Deadwood Street Fight'>><</lanLink>></span><br>
+  <<exit>>
+<</if>>
+<<set $location to _heistWork.state.stage is 'escape' ? 'town' : 'financial_centre', $outside to _heistWork.state.stage is 'escape' ? 1 : 0, $bus to 'high'>><<effects>>
+<<if !_heistWork.available>>
+  <<lanSwitch 'You cannot continue the operation in your current circumstances.' '你现在无法继续这次行动。'>><br><br>
+  <<highicon>><<lanLink ['Return to High Street', '返回商业街'] 'High Street'>><</lanLink>><br>
+  <<exit>>
+<</if>>
+<<set _heistScout to _heistWork.crew.find(npc => npc.heist.role === 'scout'), _heistCarrier to _heistWork.crew.find(npc => npc.heist.role === 'carrier')>>
+<<switch _heistWork.state.stage>>
+  <<case 'entry'>>
+    <<language>>
+      <<option 'EN'>>
+        People still cross the public banking hall on ordinary business. Your agreement calls for something different. The hired pair have joined you; Wren checks that each knows the part agreed at the pub.<br><br>
+        <<if _heistWork.state.approach is 'quiet'>>
+          <<if (_heistScout?.heist.skill ?? 0) gte 600>>
+            <<= _heistScout.name>> points out a detail that didn't match the earlier account. You take a moment to compare it with what you learned during the preparations.
+          <<else>>
+            The scout looks to you before committing to the next move. You will have to judge the earlier information for yourself.
+          <</if>>
+        <<else>>
+          You agreed to force the job through openly. It may leave time to bring out more money, but the resistance starts with you; nobody has promised to face it in your place.
+        <</if>>
+      <<option 'CN'>>
+        大厅里仍有人在办理普通业务，你们谈好的却是另一回事。两名雇员已经跟上，伦恩确认各人还记得在酒馆分好的活。<br><br>
+        <<if _heistWork.state.approach is 'quiet'>>
+          <<if (_heistScout?.heist.skill ?? 0) gte 600>>
+            <<= _heistScout.name>>指出一处与先前说法不符的细节。你停了片刻，将它与筹备时核对过的消息进行比较。
+          <<else>>
+            侦察员先看向你，才准备跟上下一步。先前的消息是否可信，还得由你自己判断。
+          <</if>>
+        <<else>>
+          你们说好了公开强行推进。也许能多带出一些钱，但抵抗首先落到你身上，没人答应替你面对。
+        <</if>>
+    <</language>><br><br>
+    <<icon 'street/bank-vault.png'>><<lanLink ['Begin the robbery with the crew', '与同伙开始实施抢劫']>><<deadwood-street-heist-action 'enter'>><</lanLink>><<dangerousText>><br>
+  <<case 'challenge'>>
+    <<if $per_npc.deadwood_heist_guard>><<endevent>><<loadNPC 0 'deadwood_heist_guard'>><<person1>><</if>>
+    <<language>>
+      <<option 'EN'>>
+        <<if _heistWork.state.talked>>
+          Your answer hasn't persuaded the guard. "That's enough. Stay where you are." The hired pair stop talking. Wren has moved away from the centre of the commotion; the next decision is yours.
+        <<else>>
+          "Hold on. What's happening here?" The guard stops you before the group can go further. The earlier quiet has broken. Wren glances at you. "You wanted to do the talking." The others wait within earshot.
+        <</if>>
+        <<if _heistWork.conditionPenalty gt 20>>
+          <br><br>Your present condition makes it harder to keep your answer steady.
+        <<elseif _heistWork.skills.english gte 600>>
+          <br><br>You can put an answer together without stumbling over it. Whether the guard will accept it is another matter.
+        <</if>>
+      <<option 'CN'>>
+        <<if _heistWork.state.talked>>
+          你的回答没能说服守卫。“够了，待在原地。”两名雇员不再说话。伦恩已经离开动静最大的地方，接下来仍得由你作决定。
+        <<else>>
+          “等等，你们在做什么？”一行人还没能继续，守卫就拦住了你，先前的安静已经被打破。伦恩瞥了你一眼。“你不是要负责说话吗？”其余人就在旁边听着。
+        <</if>>
+        <<if _heistWork.conditionPenalty gt 20>>
+          <br><br>你现在的身体与精神状态，让平稳地作答也困难了些。
+        <<elseif _heistWork.skills.english gte 600>>
+          <br><br>你能把话组织清楚，不至于磕磕绊绊。守卫是否会接受，就是另一回事了。
+        <</if>>
+    <</language>><br><br>
+    <<if !_heistWork.state.talked and !$worn.face.type.includes('gag') and $per_npc.deadwood_heist_guard>>
+      <<socialiseicon 'ask'>><<lanLink ['Try to talk the guard down (0:05)', '试着与守卫交涉 (0:05)']>><<deadwood-street-heist-action 'talk'>><</lanLink>><br>
+    <<elseif $worn.face.type.includes('gag')>>
+      <span class='grey'><<lanSwitch 'You cannot give a clear answer with your mouth obstructed.' '嘴被堵住，你无法清楚地作答。'>></span><br>
+    <</if>>
+    <<if $per_npc.deadwood_heist_guard>>
+      <<lanLink ['Resist and force the job through', '反抗，强行继续行动']>><<deadwood-street-heist-action 'resist'>><</lanLink>><<dangerousText>><br>
+    <</if>>
+  <<case 'vault'>>
+    <<set _heistPotential to _heistWork.terms.loot * (_heistWork.state.approach is 'loud' ? _heistWork.terms.loudLootRatio : 1)>>
+    <<set _heistVaultDuration to _heistWork.state.approach is 'loud' ? '(0:05)' : '(0:10)'>>
+    <<language>>
+      <<option 'EN'>>
+        The bustle of the hall sounds distant from the back room. The bags are still empty. You must decide how much to have carried out.<br><br>
+        <<if (_heistCarrier?.heist.skill ?? 0) gte 600>>
+          <<= _heistCarrier.name>> checks the handles without being prompted. "Give me something I can keep hold of. More isn't better if it ends up on the floor."
+        <<else>>
+          The carrier shifts an empty bag between hands. "I can do my part. Just don't expect me to carry everything." You will have to help judge the load.
+        <</if>>
+        <<if _heistWork.skills.physique gte 600>>
+          <br><br>Your own strength gives you a better chance of helping with a full load.
+        <</if>>
+        <<if _heistWork.state.talked>>
+          <br><br>You kept the earlier confrontation from becoming a fight. That hasn't restored the quiet outside.
+        <</if>>
+        <br><br>Wren has a bag ready. <<if C.npc.Wren.love gte 40>>"It's our money to count afterwards. Let's get it there first."<<else>>"My share is still my share. Decide before it gets too heavy to argue about."<</if>>
+      <<option 'CN'>>
+        大厅的动静从后面的工作间传来，钱袋仍是空的。现在得决定让人带走多少。<br><br>
+        <<if (_heistCarrier?.heist.skill ?? 0) gte 600>>
+          不用催促，<<= _heistCarrier.name>>便检查了提手。“给我能拿稳的。掉到地上，再多也没用。”
+        <<else>>
+          搬运员把空袋子换了只手。“我能做自己的那一份，别指望我把所有东西都搬走。”你还得帮着掂量负担。
+        <</if>>
+        <<if _heistWork.skills.physique gte 600>>
+          <br><br>你自己的力气，让帮忙带走满载的一份也多了些把握。
+        <</if>>
+        <<if _heistWork.state.talked>>
+          <br><br>你没让先前的交涉变成打斗，但外面并没有因此重新安静下来。
+        <</if>>
+        <br><br>伦恩已经拿好了袋子。<<if C.npc.Wren.love gte 40>>“出去再数我们的钱，先把它带出去。”<<else>>“我的那一份还是我的。趁还没重得让人吵起来，赶紧决定。”<</if>>
+    <</language>><br><br>
+    <<icon 'street/cash-bundle.png'>><<lanLink `['Take a manageable share ' + _heistVaultDuration, '带走能稳稳拿住的一份 ' + _heistVaultDuration]`>><<deadwood-street-heist-action 'take-light'>><</lanLink>> · <<printmoney `Math.floor(_heistPotential * _heistWork.terms.lightRatio)`>><br>
+    <<icon 'street/money-holdall.png'>><<lanLink `['Try to carry the full haul ' + _heistVaultDuration, '试着满载带走 ' + _heistVaultDuration]`>><<deadwood-street-heist-action 'take-full'>><</lanLink>> · <<printmoney _heistPotential>><<dangerousText>><br>
+    <span class='blue'><<lanSwitch 'A full load takes more effort and is harder to get away with. If it proves too much, you will leave part behind.' '满载更费力，撤离时也更吃力。带不动时，会留下其中一部分。'>></span><br>
+  <<case 'escape'>>
+    <<language>>
+      <<option 'EN'>>
+        The group has reached the street. The scout watches the others as you lift the bag again.
+        <<if _heistWork.state.haul is 'full'>>
+          The full load drags at your arm. Keeping hold of all of it will slow you down.
+        <<else>>
+          You have left part of the money behind. The bags are easier to carry, though nobody looks relaxed.
+        <</if>>
+        <br><br>Wren is already moving. <<if C.npc.Wren.love gte 40>>"Stay with it. I'm not counting an empty bag."<<else>>"I'm not waiting for anyone who stops to count it here."<</if>>
+      <<option 'CN'>>
+        一行人到了街上。你再次提起袋子时，侦察员看着其余人。
+        <<if _heistWork.state.haul is 'full'>>
+          满载的钱袋坠着你的手臂，要全部拿稳会拖慢动作。
+        <<else>>
+          你们留下了一部分钱。袋子轻了些，但没人显得放松。
+        <</if>>
+        <br><br>伦恩已经动身。<<if C.npc.Wren.love gte 40>>“拿稳了。我可不想最后数个空袋子。”<<else>>“谁在这里停下来数钱，我可不会等。”<</if>>
+    <</language>><br><br>
+    <<if _heistWork.vehicleReady>>
+      <<icon `'transport/' + _heistWork.vehicle.model + '.png'`>><<lanLink ['Leave in the agreed vehicle (0:20)', '乘约定的车撤离 (0:20)']>><<deadwood-street-heist-action 'drive'>><</lanLink>><br>
+      <<set _heistTransport to maplebirch.get('Transport'), _heistVehicle to _heistWork.vehicle>>
+      <<set _heistModel to _heistTransport.catalog.models.find(item => item.id === _heistVehicle.model)>>
+      <<if _heistVehicle.fuel gte _heistModel.fuel_use * (_heistWork.terms.escapeMinutes + _heistWork.terms.carefulMinutes)>>
+        <<icon `'transport/' + _heistWork.vehicle.model + '.png'`>><<lanLink ['Leave part behind and depart more carefully by car (0:30)', '留下部分钱，乘车谨慎撤离 (0:30)']>><<deadwood-street-heist-action 'drive-careful'>><</lanLink>><br>
+      <<else>>
+        <span class='grey'><<lanSwitch 'There is not enough fuel for the longer, careful departure.' '车辆的燃油不足以支持更久的谨慎撤离。'>></span><br>
+      <</if>>
+    <<elseif _heistWork.state.vehicle isnot null>>
+      <span class='grey'><<lanSwitch 'The agreed vehicle cannot be used here now.' '约定的车辆现在无法从这里出发。'>></span><br>
+    <</if>>
+    <<if !$worn.feet.type.includes('shackle')>>
+      <<getouticon>><<lanLink ['Try to get away on foot (0:20)', '试着步行脱身 (0:20)']>><<deadwood-street-heist-action 'run'>><</lanLink>><br>
+      <<getouticon>><<lanLink ['Leave part behind and withdraw more carefully on foot (0:30)', '留下部分钱，步行谨慎撤离 (0:30)']>><<deadwood-street-heist-action 'run-careful'>><</lanLink>><br>
+    <</if>>
+    <span class='blue'><<lanSwitch 'A careful departure leaves a fifth of the money behind and takes ten minutes longer.' '谨慎撤离会留下五分之一的钱，并多花十分钟。'>></span><br>
+  <<case 'settlement' 'closed'>>
+    <<getouticon>><<lanLink ['Review the outcome', '核对结果'] 'Deadwood Street Heist Debrief'>><</lanLink>><br>
+    <<exit>>
+  <<default>>
+    <<lanSwitch 'The operation has not begun.' '行动尚未开始。'>><br><br>
+    <<highicon>><<lanLink ['Return to High Street', '返回商业街'] 'High Street'>><</lanLink>><br>
+    <<exit>>
+<</switch>>
+<<if !_heistWork.state.entered>>
+  <<policeicon>><<lanLink ['Leave the plan and submit the information at the station (0:20)', '退出计划，去警局提交线索 (0:20)']>><<deadwood-street-heist-action 'contact'>><</lanLink>><br>
+<<elseif _heistWork.state.policePlan>>
+  <<policeicon>><<lanLink ['Follow the handover agreed with Grant (0:10)', '执行与格兰特约定的交接 (0:10)']>><<deadwood-street-heist-action 'sting'>><</lanLink>><br>
+  <span class='blue'><<lanSwitch 'This openly exposes the arrangement. The hired crew may be taken into custody, and the others will know your part in it.' '这会公开暴露安排。雇员可能被带走，其余人也会知道你参与了交接。'>></span><br>
+<<else>>
+  <<policeicon>><<lanLink ['Stop the job and ask the police to contact Grant (0:10)', '中止行动，请警方联系格兰特 (0:10)']>><<deadwood-street-heist-action 'contact'>><</lanLink>><br>
+  <span class='red'><<lanSwitch 'There is no prior police arrangement. You will have to explain your own part, and may be detained along with the crew.' '你没有事先与警方约定，需要交代自己参与了什么，也可能与同伙一同被扣留。'>></span><br>
+<</if>>
+<<refuseicon>><<lanLink ['Leave the money and withdraw (0:20)', '放下钱并撤回 (0:20)']>><<deadwood-street-heist-action 'withdraw'>><</lanLink>><br>
+
+:: Deadwood Street Heist Handover
+<<set _heistWork to maplebirch.get('StreetLife')?.heist>>
+<<if !_heistWork or _heistWork.state.stage isnot 'settlement' or _heistWork.state.outcome isnot 'sting'>>
+  <<lanSwitch 'There is no police handover waiting here.' '这里没有待办理的警方移交。'>><br><br>
+  <<highicon>><<lanLink ['Return to High Street', '返回商业街'] 'High Street'>><</lanLink>><br>
+  <<exit>>
+<</if>>
+<<set $location to 'town', $outside to 1, $bus to 'high'>><<effects>>
+<<language>>
+  <<option 'EN'>>
+    <<if _heistWork.state.lateReport>>
+      You step away from the others and ask to speak to the police. There is no arranged signal and no one waiting to vouch for you. An officer listens, then calls the station when you mention Grant.
+    <<else>>
+      You step out at the agreed handover. Officers separate you from the two people you hired. One calls the station to confirm your account with Grant.
+    <</if>><br><br>
+    Wren has slipped away in the confusion. Landry stayed at the pub, but this will reach Landry soon enough. The officer keeps a hand near your arm. "We'll hear your statement at the station. That includes what you did."
+  <<option 'CN'>>
+    <<if _heistWork.state.lateReport>>
+      你离开同伙，主动要求与警方交谈。没有约好的信号，也没人等着替你担保。一名警员听着你的话，在听到格兰特的名字后联系了警局。
+    <<else>>
+      你按约定出面交接。警员把你与两名雇员分开，其中一人联系警局，请格兰特核对你的说法。
+    <</if>><br><br>
+    伦恩已经趁乱溜走。兰德里留在酒馆，但消息迟早会传到那里。警员的手停在你的胳膊旁。“去警局做笔录。也包括你自己做过的事。”
+<</language>><br><br>
+<<if _heistWork.available>>
+  <<policeicon>><<lanLink ['Accompany the officers (1:00)', '跟警员走 (1:00)']>>
+    <<if _heistWork.available and _heistWork.state.stage is 'settlement' and _heistWork.state.outcome is 'sting'>>
+      <<set _heistDetained to maplebirch.get('StreetLife').bounties.wanted>>
+      <<endevent>><<pass 60>>
+      <<if !$nextPassage and !$nextPassageCheck>>
+        <<set $bus to 'barb'>>
+        <<if _heistDetained>>
+          <<set $leftarm to 'bound', $rightarm to 'bound'>><<unbind>><<goto 'Police Cell'>>
+        <<else>>
+          <<goto 'Deadwood Street Detective'>>
+        <</if>>
+      <</if>>
+    <</if>>
+  <</lanLink>><br>
+<</if>>
+
+:: Deadwood Street Heist Return
+<<set _heistWork to maplebirch.get('StreetLife')?.heist>>
+<<set $location to 'town', $outside to 1, $bus to 'harvest'>><<effects>>
+<<if _heistWork?.state.stage is 'settlement' and !['reported', 'sting'].includes(_heistWork.state.outcome)>>
+  <<language>>
+    <<option 'EN'>>
+      You have left the financial centre behind and reached Harvest Street. <<if _heistWork.state.vehicle isnot null>>The car is parked on the street; it cannot follow you into the underground passages.<</if>><br><br>
+      Landry will hear the account at the smugglers’ pub. Reach it by the usual route, and meet between nine in the morning and six in the evening to settle the outcome. Nothing has been divided here.
+    <<option 'CN'>>
+      你已经离开金融中心，来到了丰收街。<<if _heistWork.state.vehicle isnot null>>车停在地面街道，不能跟着你进入地下通道。<</if>><br><br>
+      兰德里会在走私者酒馆听你说明结果。请沿熟悉的路线过去，在上午九点至下午六点之间碰面结算。这里还没有分账。
+  <</language>><br><br>
+<</if>>
+<<getouticon>><<lanLink ['Continue along Harvest Street', '回到丰收街'] 'Harvest Street'>><<endevent>><</lanLink>><br>
+
+:: Deadwood Street Heist Debrief
+<<set _heistWork to maplebirch.get('StreetLife')?.heist>>
+<<if !_heistWork or !['settlement', 'closed'].includes(_heistWork.state.stage)>>
+  <<lanSwitch 'There is no completed operation to settle here.' '这里没有待结算的行动。'>><br><br>
+  <<highicon>><<lanLink ['Return to High Street', '返回商业街'] 'High Street'>><</lanLink>><br>
+  <<exit>>
+<</if>>
+<<set _heistPolice to ['reported', 'sting'].includes(_heistWork.state.outcome)>>
+<<if !_heistPolice and (!_heistWork.atMeeting or !_heistWork.meetingAvailable)>><<deadwood-street-heist-meeting-required>><<exit>><</if>>
+<<set $location to _heistPolice ? 'police_station' : 'underground', $outside to 0>>
+<<if _heistPolice>><<set $bus to 'barb'>><<else>><<unset $bus>><</if>><<effects>>
+<<language>>
+  <<option 'EN'>>
+    <<switch _heistWork.state.outcome>>
+      <<case 'success'>>
+        Landry moves a glass aside for the bags. "First we count. Then everyone gets what we agreed." Wren rests against the back of a chair, keeping an eye on the door. The hired pair wait at the other end of the table.<br><br>
+        The money brought back amounts to <<printmoney _heistWork.state.loot>>. Your agreed share is <span class='gold'><<= _heistWork.split.pc>>%</span>: <<printmoney _heistWork.payout>>.
+        <<if _heistWork.state.policePlan>>
+          <br><br>You didn't follow the arrangement with Grant. The station has checked your earlier account against what happened at the bank; the agreed handover never happened.
+        <</if>>
+      <<case 'reported'>>
+        <<if maplebirch.npc.Schedule.get('Grant').location is 'police_station'>>
+          Grant places your account beside the material from the preparations. "Enough to follow up. Don't go back to make it more convincing."
+        <<else>>
+          The duty officer files your statement with the preparatory material. Grant is away from the desk; the payment must wait.
+        <</if>> The station will check the people and arrangements you named. Landry has received no account of this conversation.
+      <<case 'sting'>>
+        The two people you hired have been taken into custody. Wren got clear during the confusion; Landry was never at the bank. Your part in the handover is no longer a private matter.<br><br>
+        <<if maplebirch.npc.Schedule.get('Grant').location is 'police_station'>>
+          Grant turns a page in the notebook. "Now tell me what you actually did. Helping at the end doesn't erase what happened before it."
+        <<else>>
+          A duty officer takes your statement for Grant to check on returning. Your own record is kept beside it.
+        <</if>>
+      <<case 'withdrawn'>>
+        You have made your way back to the pub. "Then we stop," Landry says after hearing you out. Wren puts an empty bag beneath the table. No one is being paid a share of money you didn't bring back.
+      <<case 'failed'>>
+        Landry hears the account without interrupting. "No money, then." Wren leaves a bag beside the chair. "And no second try tonight," Landry adds. There is nothing to divide.
+      <<case 'arrested'>>
+        The operation has ended with you in custody. The station has its own record to deal with; there is no money waiting to be divided at the pub.
+    <</switch>>
+  <<option 'CN'>>
+    <<switch _heistWork.state.outcome>>
+      <<case 'success'>>
+        兰德里把杯子挪到一旁，给钱袋腾出地方。“先数清楚，再按说好的分。”伦恩靠着椅背，仍留意着门口，两名雇员在桌子的另一头等着。<br><br>
+        带回的钱一共是<<printmoney _heistWork.state.loot>>。按约定，你拿<span class='gold'><<= _heistWork.split.pc>>%</span>，也就是<<printmoney _heistWork.payout>>。
+        <<if _heistWork.state.policePlan>>
+          <br><br>你没有执行与格兰特的约定。警局已经把你先前的陈述与现场记录核对过，说好的交接没有发生。
+        <</if>>
+      <<case 'reported'>>
+        <<if maplebirch.npc.Schedule.get('Grant').location is 'police_station'>>
+          格兰特把你的陈述与筹备材料放在一起。“足够往下查了，别再回去给它添分量。”
+        <<else>>
+          值班警员把你的笔录与筹备材料归到一起。格兰特不在桌前，领款还得等等。
+        <</if>>警局会核验你说的人员与安排，兰德里尚不知道这次谈话的经过。
+      <<case 'sting'>>
+        两名雇员已经被带走。伦恩趁乱脱身了，兰德里则从未到过银行。你参与交接的事，已不再是秘密。<br><br>
+        <<if maplebirch.npc.Schedule.get('Grant').location is 'police_station'>>
+          格兰特翻过记事簿的一页。“现在，说说你实际上做过什么。最后帮了忙，不等于前面的事就没发生。”
+        <<else>>
+          值班警员记下你的陈述，留给格兰特回来核验。你自己的犯罪记录也放在旁边。
+        <</if>>
+      <<case 'withdrawn'>>
+        你一路回到了酒馆。听你说完，兰德里回答：“那就停下。”伦恩把空袋子塞到桌下。没有带回来的钱，自然也没法分给任何人。
+      <<case 'failed'>>
+        兰德里听完，没有打断。“所以没有钱。”伦恩把袋子留在椅子旁。“今晚别再试第二次了。”兰德里又补了一句。没什么可分的。
+      <<case 'arrested'>>
+        行动以你被捕告终。警局还有你自己的记录要处理，酒馆里没有等着分给你的钱。
+    <</switch>>
+<</language>><br><br>
+<<if _heistWork.state.settled>>
+  <span class='green'><<lanSwitch 'This operation has been settled.' '这次行动已经结清。'>></span><br><br>
+<<elseif _heistWork.available>>
+  <<if _heistPolice>>
+    <<if _heistWork.grantAvailable and maplebirch.npc.Schedule.get('Grant').location is 'police_station'>>
+      <<icon 'street/job-payment.png'>><<lanLink ['Collect the verified payment and close the operation', '领取核验后的报酬并结案'] 'Deadwood Street Heist Debrief'>><<deadwood-street-heist-settle>><</lanLink>> · <<printmoney _heistWork.terms.reward>><br>
+    <<else>>
+      <span class='blue'><<lanSwitch 'Return while Grant is at the station and your own outstanding record allows payment.' '等格兰特在警局、且你自己的待处理记录允许领款时再来。'>></span><br>
+    <</if>>
+  <<else>>
+    <<icon 'street/job-payment.png'>><<lanLink ['Settle the agreed outcome', '结清这次行动'] 'Deadwood Street Heist Debrief'>><<deadwood-street-heist-settle>><</lanLink>><br>
+  <</if>>
+<</if>>
+<br>
+<<if _heistPolice>>
+  <<getouticon>><<lanLink ['Return to reception', '返回前台'] 'Police Station'>><<endevent>><</lanLink>><br>
+<<else>>
+  <<getouticon>><<lanLink ['Return to the smugglers’ pub', '返回走私者酒馆'] 'Smuggler Pub'>><<endevent>><</lanLink>><br>
+<</if>>

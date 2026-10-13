@@ -1,0 +1,64 @@
+:: Deadwood Street Heist Finance Widgets [widget]
+
+<!-- 仅实际公开入场或抵抗时调用；停业日期由行动结算，柜员认脸不能重复扣关系。 -->
+<<widget 'deadwood-street-heist-bank-incident'>>
+  <<set _heistBankWork to maplebirch.get('StreetLife')?.heist>>
+  <<if _heistBankWork and _heistBankWork.state.entered and !_heistBankWork.state.bankReaction and _heistBankWork.state.approach is 'loud' and maplebirch.get('Finance')>>
+    <<if maplebirch.npc.Schedule.get('Adrian').location is 'financial_centre' and C.npc.Adrian?.init is 1 and (C.npc.Adrian.love gte 10 or $Finance.adrian.visits gte 3) and $face isnot 'covered' and !$worn.face.type.includes('mask')>>
+      <<set _heistBankWork.state.identified to true, _heistBankWork.state.bankReaction to true>>
+      <<set C.npc.Adrian.love to Math.clamp((C.npc.Adrian.love ?? 0) - 15, 0, 50)>>
+      <<set C.npc.Adrian.rage to Math.clamp((C.npc.Adrian.rage ?? 0) + 10, 0, 30)>>
+      <<language>>
+        <<option 'EN'>>
+          Adrian looks up from behind the counter. Recognition cuts through the surprise. "You?" The papers are left where they fall as Adrian steps back from the glass. <span class='red'>The clerk has recognised a familiar customer.</span>
+        <<option 'CN'>>
+          阿德里安从柜台后抬起头，惊愕的目光里忽然多了认出的神色。“是你？”阿德里安退离玻璃，任由手边的文书散落。<span class='red'>柜员已经认出了这位熟客。</span>
+      <</language>><br><br>
+    <</if>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-street-heist-bank-closed'>>
+  <<set _heistBankWork to maplebirch.get('StreetLife')?.heist>>
+  <<if _heistBankWork?.bankClosed>>
+    <<icon 'finance/bank-closure.png'>><strong><<lanSwitch 'Counter services suspended' '柜台暂停接待'>></strong><br>
+    <<language>>
+      <<option 'EN'>>
+        A notice is fixed to the glass: <span class='red'>counter services are suspended following an incident</span>. Staff are checking the cash drawers and counter fittings. Counter service is expected to resume on <<deadwood-reblooms-finance-date _heistBankWork.state.bankClosedUntil>>, during normal opening hours.
+      <<option 'CN'>>
+        玻璃上贴着告示：<span class='red'>柜台因突发事件暂停接待</span>。职员正在清点钱箱，检查柜台设施。预计于<<deadwood-reblooms-finance-date _heistBankWork.state.bankClosedUntil>>恢复柜台业务，仍按平日营业时间接待。
+    <</language>><br><br>
+    <span class='blue'><<lanSwitch 'The ATM, card payments and scheduled repayments remain available. Existing repayment dates have not changed.' 'ATM、刷卡支付和自动还款仍照常运作，已有合同的还款日期不变。'>></span><br>
+    <<icon 'finance/atm.png'>><<lanLink ['Use the ATM', '使用自助取款机'] 'Deadwood Reblooms Financial Centre ATM'>><</lanLink>><br>
+  <</if>>
+<</widget>>
+
+<!-- 封闭柜台只保留已有欠款的自助还款；复用财务结算，不申请新卡、贷款或取现。 -->
+<<widget 'deadwood-street-heist-repayments'>>
+  <<set _heistRepaymentMode to _args[0]>>
+  <div id='deadwood-street-heist-repayments'>
+    <<if _heistRepaymentAmount is undefined>><<set _heistRepaymentAmount to ''>><</if>>
+    <<set _heistRepaymentDue to _heistRepaymentMode is 'credit' ? $Finance.bank.credit_debt : maplebirch.get('Finance').loanPayoff>>
+    <<if $Finance.bank.opened and _heistRepaymentDue gt 0>>
+      <<lanSwitch 'Repayment in full: ' '结清金额：'>><<deadwood-reblooms-finance-money _heistRepaymentDue>><br>
+      <span class='blue'><<lanSwitch 'Self-service repayments use your existing bank balance. Pay cash into the ATM first if necessary.' '自助还款从现有银行余额扣除。如需使用现金，请先存入 ATM。'>></span><br><br>
+      <label><<lanSwitch 'Amount (£)' '金额（£）'>>：<<textbox '_heistRepaymentAmount' _heistRepaymentAmount>></label><br>
+      <<capture _heistRepaymentMode>>
+        <<icon 'finance/repayment.png'>><<lanLink ['Make a repayment', '偿还欠款']>>
+          <<set _financeResult to _heistRepaymentMode is 'credit' ? maplebirch.get('Finance').repayCredit(_heistRepaymentAmount) : maplebirch.get('Finance').repayLoan(_heistRepaymentAmount)>>
+          <<updatesidebarmoney>>
+          <<replace '#deadwood-street-heist-repayments'>><<deadwood-street-heist-repayments _heistRepaymentMode>><</replace>>
+          <<replace '#deadwood-reblooms-finance-result'>><<deadwood-reblooms-finance-result _financeResult>><</replace>>
+        <</lanLink>><br>
+        <<icon 'finance/repayment.png'>><<lanLink ['Repay in full', '还清欠款']>>
+          <<set _financeResult to _heistRepaymentMode is 'credit' ? maplebirch.get('Finance').repayCredit($Finance.bank.credit_debt / 100) : maplebirch.get('Finance').repayLoan(maplebirch.get('Finance').loanPayoff / 100)>>
+          <<updatesidebarmoney>>
+          <<replace '#deadwood-street-heist-repayments'>><<deadwood-street-heist-repayments _heistRepaymentMode>><</replace>>
+          <<replace '#deadwood-reblooms-finance-result'>><<deadwood-reblooms-finance-result _financeResult>><</replace>>
+        <</lanLink>><br>
+      <</capture>>
+    <<else>>
+      <<lanSwitch 'There is no outstanding balance to repay.' '没有待还欠款。'>><br>
+    <</if>>
+  </div>
+<</widget>>

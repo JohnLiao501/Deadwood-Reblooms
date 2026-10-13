@@ -23,10 +23,25 @@ export default function StreetLife(maplebirch: typeof window.maplebirch): void {
     cond: () => {
       if (!V.StreetLife?.bounties) return false;
       const work = maplebirch.get('StreetLife')!.bounties;
-      return (!!work.fight?.combatStarted && !V.combat) || (maplebirch.passage.title === 'Police Cell' && !!work.state.active);
+      const heist = maplebirch.get('StreetLife')!.heist;
+      return (
+        (!!work.fight?.combatStarted && !V.combat) ||
+        (maplebirch.passage.title === 'Police Cell' && (!!work.state.active || heist.inAction || (heist.state.stage === 'settlement' && heist.state.loot > 0)))
+      );
     },
     action: () => {
       const work = maplebirch.get('StreetLife')!.bounties;
+      const heist = maplebirch.get('StreetLife')!.heist.state;
+      // 原版逮捕或强制转场可能离开自有页面；在这里收束未结束的行动，保留原版判刑。
+      if ((maplebirch.passage.title === 'Police Cell' && (maplebirch.get('StreetLife')!.heist.inAction || (heist.stage === 'settlement' && heist.loot > 0))) || (work.fightingHeist && !V.combat)) {
+        const actor = heist.fight?.key ?? (heist.stage === 'challenge' ? 'deadwood_heist_guard' : undefined);
+        if (actor && V.NPCList[0]?.per === actor) maplebirch.SugarCube.Wikifier.wikifyEval('<<endevent>>');
+        if (actor && V.per_npc[actor]) maplebirch.SugarCube.Wikifier.wikifyEval(`<<clearNPC '${actor}'>>`);
+        heist.fight = null;
+        heist.loot = 0;
+        heist.outcome = maplebirch.passage.title === 'Police Cell' ? 'arrested' : 'failed';
+        heist.stage = 'settlement';
+      }
       if (maplebirch.passage.title === 'Police Cell' && work.state.active) {
         const job = work.state.active;
         if (V.NPCList[0]?.per === job.key) maplebirch.SugarCube.Wikifier.wikifyEval('<<endevent>>');
@@ -74,6 +89,14 @@ export default function StreetLife(maplebirch: typeof window.maplebirch): void {
   maplebirch.tool.addTo('BeforeLinkZone', { widget: 'deadwood-street-unload', match: / Street$/ });
   maplebirch.tool.inject({
     locationPassage: {
+      'Smuggler Pub': [
+        {
+          // 原版正常菜单的下水道出口前；不插入 Zephyr 强制事件或 Wren 初遇。
+          src: '<<sewericon>>',
+          applybefore: '<<deadwood-street-heist-link>>\n<<deadwood-street-mickey-link>>\n',
+          expected: 1
+        }
+      ],
       'Ocean Breeze': [
         {
           // 普通咖啡馆菜单的离店选项前，避开 Sam 剧情及昏倒；营业状态由货物入口重验。
