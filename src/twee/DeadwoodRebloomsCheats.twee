@@ -1,0 +1,146 @@
+:: Deadwood Reblooms Cheat Widgets [widget]
+
+<<widget 'deadwood-reblooms-cheats'>>
+  <<if (maplebirch.get('Finance') and $Finance?.bank) or (maplebirch.get('Transport') and $Transport) or (maplebirch.get('StreetLife') and $StreetLife) or (maplebirch.get('Orchard') and $Orchard) or (maplebirch.get('LifeSimulation') and $LifeSimulation?.school)>>
+    <div class='settingsGrid'>
+      <div class='settingsHeader options'><<lanSwitch 'Deadwood Reblooms' '枯木逢春'>></div>
+      <<if maplebirch.get('Finance') and $Finance?.bank>>
+        <div class='settingsToggleItemWide'><<deadwood-finance-cheats>></div>
+      <</if>>
+      <<if maplebirch.get('Transport') and $Transport>>
+        <div class='settingsToggleItemWide'><<deadwood-transport-cheats>></div>
+      <</if>>
+      <<if maplebirch.get('StreetLife') and $StreetLife>>
+        <div class='settingsToggleItemWide'><<deadwood-street-cheats>></div>
+      <</if>>
+      <<if maplebirch.get('Orchard') and $Orchard>>
+        <div class='settingsToggleItemWide'><<deadwood-orchard-cheats>></div>
+      <</if>>
+      <<if maplebirch.get('LifeSimulation') and $LifeSimulation?.school>>
+        <div class='settingsToggleItemWide'><<deadwood-school-cheats>></div>
+      <</if>>
+    </div>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-transport-cheats'>>
+  <<if !maplebirch.get('Transport') or !$Transport?.vehicles>><<exit>><</if>>
+  <span class='gold'><<lanSwitch 'Transport' '交通'>></span><br>
+  <<numberStepper `lanSwitch('Driving proficiency', '驾驶熟练度')` $Transport.driving {
+    min:0, max:1000, step:10,
+    callback:value => {
+      if (maplebirch.get('Transport') && V.Transport && Number.isFinite(value)) V.Transport.driving = Math.clamp(value, 0, 1000);
+    }
+  }>>
+  <<if $Transport.trip or $Transport.commute or $Transport.taxi?.job>>
+    <span class='blue'><<lanSwitch 'Finish the journey or passenger arrangement before adjusting a vehicle.' '请先结束行程或载客安排，再调整车辆。'>></span><br>
+  <<elseif !$Transport.vehicles.length>>
+    <<lanSwitch 'You do not own a vehicle.' '你还没有车辆。'>><br>
+  <<else>>
+    <<for _cheatVehicle range $Transport.vehicles>>
+      <<set _cheatModel to maplebirch.get('Transport').catalog.models.find(model => model.id is _cheatVehicle.model)>>
+      <<if _cheatModel>>
+        <b><<= maplebirch.t(_cheatModel.name)>> #<<= _cheatVehicle.id>></b><br>
+        <<numberStepper `lanSwitch('Condition', '车况')` _cheatVehicle.condition {
+          min:0, max:100, step:1, values:[_cheatVehicle.id],
+          callback:(value, arr) => {
+            if (!maplebirch.get('Transport') || !V.Transport || V.Transport.trip || V.Transport.commute || V.Transport.taxi?.job || !Number.isFinite(value)) return;
+            const vehicle = V.Transport.vehicles.find(item => item.id === arr[0]);
+            if (vehicle) vehicle.condition = Math.clamp(value, 0, 100);
+          }
+        }>>
+        <<if _cheatModel.tank gt 0>>
+          <<numberStepper `lanSwitch('Fuel (litres)', '燃油（升）')` _cheatVehicle.fuel {
+            min:0, max:_cheatModel.tank, step:1, percentage:false, values:[_cheatVehicle.id],
+            callback:(value, arr) => {
+              if (!maplebirch.get('Transport') || !V.Transport || V.Transport.trip || V.Transport.commute || V.Transport.taxi?.job || !Number.isFinite(value)) return;
+              const vehicle = V.Transport.vehicles.find(item => item.id === arr[0]);
+              const model = vehicle && maplebirch.get('Transport').catalog.models.find(item => item.id === vehicle.model);
+              if (model) vehicle.fuel = Math.clamp(value, 0, model.tank);
+            }
+          }>>
+        <</if>>
+      <</if>>
+    <</for>>
+  <</if>>
+  <span class='blue'><<lanSwitch 'Vehicle location, upkeep arrears and driving qualifications are unchanged.' '车辆位置、保养欠款与驾驶资质另按实际状态处理。'>></span><br>
+<</widget>>
+
+<<widget 'deadwood-street-cheats'>>
+  <<if !maplebirch.get('StreetLife') or !$StreetLife?.ammo>><<exit>><</if>>
+  <span class='gold'><<lanSwitch 'Street life' '街头'>></span><br>
+  <<numberStepper `lanSwitch('Street reputation', '街头声誉')` `maplebirch.get('StreetLife').reputation` {
+    min:0, max:100, step:1,
+    callback:value => {
+      if (maplebirch.get('StreetLife') && V.StreetLife && Number.isFinite(value)) maplebirch.get('StreetLife').reputation = Math.clamp(value, 0, 100);
+    }
+  }>>
+  <<for _cheatAmmoId, _cheatAmmo range maplebirch.get('StreetLife').ammunition>>
+    <<numberStepper `lanSwitch(_cheatAmmo.name[0], _cheatAmmo.name[1])` $StreetLife.ammo[_cheatAmmoId] {
+      min:0, max:Math.max(10000, $StreetLife.ammo[_cheatAmmoId]), step:1,
+      activeButtons:['single', 'double', 'triple'], percentage:false, values:[_cheatAmmoId],
+      callback:(value, arr) => {
+        if (!maplebirch.get('StreetLife') || !V.StreetLife?.ammo || !Object.hasOwn(V.StreetLife.ammo, arr[0]) || !Number.isSafeInteger(value) || value < 0) return;
+        V.StreetLife.ammo[arr[0]] = value;
+      }
+    }>>
+  <</for>>
+  <span class='blue'><<lanSwitch 'Reputation includes the native pub-job contribution. These controls do not alter police evidence, job records or bounty payments.' '声誉包含原版酒馆委托的贡献。这里不改警方证据、任务履历或悬赏结算。'>></span><br>
+<</widget>>
+
+<<widget 'deadwood-orchard-cheats'>>
+  <<if !maplebirch.get('Orchard') or !$Orchard?.reserve or !$foodstuff>><<exit>><</if>>
+  <span class='gold'><<lanSwitch 'Orchard supplies' '果园物资'>></span><br>
+  <<for _cheatFruitId, _cheatFruit range maplebirch.get('Orchard').species>>
+    <<if $foodstuff[_cheatFruitId]>>
+      <<numberStepper `lanSwitch(_cheatFruit.name[0], _cheatFruit.name[1])` $foodstuff[_cheatFruitId].amount {
+        min:Math.max(0, $Orchard.reserve[_cheatFruitId] ?? 0), max:Math.max(10000, $foodstuff[_cheatFruitId].amount, $Orchard.reserve[_cheatFruitId] ?? 0), step:1,
+        activeButtons:['single', 'double', 'triple'], percentage:false, values:[_cheatFruitId],
+        callback:(value, arr) => {
+          if (!maplebirch.get('Orchard') || !V.Orchard?.reserve || !V.foodstuff?.[arr[0]] || !Number.isSafeInteger(value) || value < Math.max(0, V.Orchard.reserve[arr[0]] ?? 0)) return;
+          V.foodstuff[arr[0]].amount = value;
+        }
+      }>>
+    <</if>>
+  <</for>>
+  <<if $foodstuff.blood_lemon>>
+    <<numberStepper `lanSwitch('Blood lemon', '血柠')` $foodstuff.blood_lemon.amount {
+      min:Math.max(0, $Orchard.reserve.blood_lemon ?? 0), max:Math.max(10000, $foodstuff.blood_lemon.amount, $Orchard.reserve.blood_lemon ?? 0), step:1,
+      activeButtons:['single', 'double', 'triple'], percentage:false,
+      callback:value => {
+        if (!maplebirch.get('Orchard') || !V.Orchard?.reserve || !V.foodstuff?.blood_lemon || !Number.isSafeInteger(value) || value < Math.max(0, V.Orchard.reserve.blood_lemon ?? 0)) return;
+        V.foodstuff.blood_lemon.amount = value;
+      }
+    }>>
+  <</if>>
+  <<if $fertiliser>>
+    <<numberStepper `lanSwitch('Fertiliser', '肥料')` $fertiliser.current {
+      min:0, max:Math.max(10000, $fertiliser.current), step:1,
+      activeButtons:['single', 'double', 'triple'], percentage:false,
+      callback:value => {
+        if (maplebirch.get('Orchard') && V.Orchard && V.fertiliser && Number.isSafeInteger(value) && value >= 0) V.fertiliser.current = value;
+      }
+    }>>
+  <</if>>
+  <span class='blue'><<lanSwitch 'Fruit uses the native food inventory and cannot be reduced below the reserved amount. This does not grow trees, finish orders or add sales income.' '果实使用原版食品库存，不能减到预留量以下。这里不催熟果树、不完成订单，也不增加销售收入。'>></span><br>
+<</widget>>
+
+<<widget 'deadwood-school-cheats'>>
+  <<if !maplebirch.get('LifeSimulation') or !$LifeSimulation?.school>><<exit>><</if>>
+  <span class='gold'><<lanSwitch 'School affairs' '校园事务'>></span><br>
+  <<for _cheatSchoolField range [
+    {id:'order', name:['School order', '校园秩序']},
+    {id:'studentSupport', name:['Student support', '学生声望']},
+    {id:'staffSupport', name:['Staff support', '教职工信任']},
+    {id:'corruption', name:['School corruption', '校内堕落']}
+  ]>>
+    <<numberStepper `lanSwitch(_cheatSchoolField.name[0], _cheatSchoolField.name[1])` $LifeSimulation.school[_cheatSchoolField.id] {
+      min:0, max:100, step:1, values:[_cheatSchoolField.id],
+      callback:(value, arr) => {
+        if (!maplebirch.get('LifeSimulation') || !V.LifeSimulation?.school || !['order', 'studentSupport', 'staffSupport', 'corruption'].includes(arr[0]) || !Number.isFinite(value)) return;
+        V.LifeSimulation.school[arr[0]] = Math.clamp(value, 0, 100);
+      }
+    }>>
+  <</for>>
+  <span class='blue'><<lanSwitch 'Appointments, attendance permission and dress-policy approvals still use their own story conditions.' '职务任命、免听许可与着装政策审批仍按各自剧情条件办理。'>></span><br>
+<</widget>>

@@ -1,0 +1,54 @@
+:: Deadwood Reblooms Finance Cheat Widgets [widget]
+
+<<widget 'deadwood-finance-cheats'>>
+  <div id='deadwood-bank-cheats'><<deadwood-finance-cheats-content>></div>
+<</widget>>
+
+<<widget 'deadwood-finance-cheats-content'>>
+  <<if !maplebirch.get('Finance') or !$Finance?.bank>><<exit>><</if>>
+  <span class='gold'><<lanSwitch 'Finance' '金融'>></span><br>
+  <<if !$Finance.bank.opened>>
+    <<lanSwitch 'Bank account: Not opened' '银行账户：未开户'>> |
+    <<lanLink ['Open an account', '开立账户']>>
+      <<if maplebirch.get('Finance') and $Finance?.bank and !$Finance.bank.opened>>
+        <<run maplebirch.get('Finance').openBankAccount()>>
+      <</if>>
+      <<replace '#deadwood-bank-cheats'>><<deadwood-finance-cheats-content>><</replace>>
+    <</lanLink>><br>
+  <<else>>
+    <<lanSwitch 'Bank account: Open' '银行账户：已开户'>><br>
+    <<numberStepper `lanSwitch('Bank balance', '银行存款')` $Finance.bank.balance {
+      activeButtons:['single', 'double', 'triple'], step:1000, min:0, max:10000000000,
+      colorArr:['--yellow'], percentage:false,
+      valueFormat:value => `<b class='gold'>${formatMoney(value)}</b>`,
+      callback:value => {
+        if (!maplebirch.get('Finance') || !V.Finance?.bank?.opened || !Number.isSafeInteger(value) || value < 0 || value > 10000000000) return;
+        const difference = value - V.Finance.bank.balance;
+        V.moneyStats.cheats.earned += difference;
+        V.Finance.bank.balance = value;
+      }
+    }>>
+    <<for _cheatCard range [
+      {id:'debit_card', name:['Debit card', '借记卡'], method:'issueDebitCard'},
+      {id:'credit_card', name:['Credit card', '信用卡'], method:'issueCreditCard'}
+    ]>>
+      <<capture _cheatCard>>
+        <<= lanSwitch(_cheatCard.name[0], _cheatCard.name[1])>>:
+        <<if $Finance.bank[_cheatCard.id]>>
+          <span class='green'><<lanSwitch 'Unlocked' '已解锁'>></span>
+        <<elseif _cheatCard.id is 'credit_card' and $Finance.collection.amount gt 0>>
+          <span class='grey'><<lanSwitch 'Collection debt must be settled first' '须先结清追偿欠款'>></span>
+        <<else>>
+          <<lanLink ['Unlock', '解锁']>>
+            <<if maplebirch.get('Finance') and $Finance?.bank?.opened and !$Finance.bank[_cheatCard.id]>>
+              <<run maplebirch.get('Finance')[_cheatCard.method]()>>
+            <</if>>
+            <<replace '#deadwood-bank-cheats'>><<deadwood-finance-cheats-content>><</replace>>
+          <</lanLink>>
+        <</if>>
+        <<if _cheatCard.id is 'debit_card'>> | <<else>><br><</if>>
+      <</capture>>
+    <</for>>
+  <</if>>
+  <span class='blue'><<lanSwitch 'Bank balance changes are recorded as cheats. They do not count as business income or pay off debts.' '银行存款变更记入作弊统计，不计为经营收入，也不代你结清债务。'>></span><br>
+<</widget>>
