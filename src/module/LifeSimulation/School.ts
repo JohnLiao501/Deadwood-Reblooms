@@ -23,6 +23,10 @@ export interface SchoolState {
     work: 'records' | 'mediate' | 'enforce' | 'delegate' | null;
     rest_day: number;
     study_day: number;
+    /** 上次在学生会室里私会某个同学的游戏日。 */
+    private_day: number;
+    /** 上次私会的对象，用于后续文案。 */
+    private_with: SchoolStudent | null;
   };
   leightonApprovalDay: number;
   baileySigned: boolean;
@@ -61,7 +65,7 @@ export const DEFAULT_SCHOOL_STATE: SchoolState = {
   attendanceExempt: false,
   attendanceDay: -1,
   study_session_day: -1,
-  council: { work_day: -1, work: null, rest_day: -1, study_day: -1 },
+  council: { work_day: -1, work: null, rest_day: -1, study_day: -1, private_day: -1, private_with: null },
   leightonApprovalDay: -1,
   baileySigned: false,
   order: 20,
@@ -216,6 +220,25 @@ class School {
     if (!this.councilOpen || (Time.hour >= 9 && Time.hour !== 12 && Time.hour < 15)) return null;
     const students = SCHOOL_STUDENT_ROSTER.filter(student => this.isStudentAvailable(student));
     return students.length ? students[Time.days % students.length] : null;
+  }
+
+  public get canPrivateMeeting(): boolean {
+    const guest = this.councilGuest;
+    if (!guest || !this.councilOpen || this.state.role === 'student') return false;
+    if (V.combat === 1 || V.statFreeze) return false;
+    if (this.state.council.private_day === Time.days) return false;
+    return C.npc[guest]?.init === 1 && (C.npc[guest].love ?? 0) >= 30 && (C.npc[guest].trauma ?? 0) < 60 && window.isLoveInterest(guest);
+  }
+
+  public get councilPrivatePartner(): SchoolStudent | null {
+    return this.state.council.private_with;
+  }
+
+  public recordPrivateMeeting(guest: SchoolStudent): boolean {
+    if (!this.canPrivateMeeting || this.councilGuest !== guest) return false;
+    this.state.council.private_day = Time.days;
+    this.state.council.private_with = guest;
+    return true;
   }
 
   public get canDelegate(): boolean {

@@ -98,6 +98,10 @@
         <</language>>
     <</switch>><br><br>
   <</if>>
+  <<if maplebirch.get('LifeSimulation').school.canPrivateMeeting>>
+    <<loveicon>><<lanLink ['Ask the visitor to stay (0:20)', '请对方留一会儿 (0:20)'] 'Deadwood Reblooms School Council Private'>><</lanLink>><br>
+    <span class='blue'><i><<lanSwitch 'The door has a lock and you are the one holding the key.' '门上有锁，钥匙在你手里。'>></i></span><br><br>
+  <</if>>
   <<if _council.work_day isnot Time.days>>
     <<if $LifeSimulation.school.role is 'student'>>
       <<language>>
@@ -314,4 +318,184 @@
         你把年表和下一页的记述对照着看。日期都对得上，记述却漏掉了一次败仗。你在自己的本子里添了笔记，又拿课本核对余下的内容，才把资料放回去。
     <</language>><<ghistory>>
 <</switch>><br><br>
+<<getouticon>><<lanLink ['Return to the student council room', '返回学生会室'] 'Deadwood Reblooms School Council'>><</lanLink>>
+
+:: Deadwood Reblooms School Council Private
+<<set $outside to 0, $location to 'school'>><<schooleffects>><<effects>>
+<<set _school to maplebirch.get('LifeSimulation').school>>
+<<set _guest to _school.councilGuest>>
+<<set _room to $LifeSimulation.school.council>>
+<<if !_school.canPrivateMeeting or !_guest>>
+  <span class='blue'><i><<lanSwitch 'There is no chance for that just now.' '现在没有这样的机会。'>></i></span>
+<<elseif !_school.recordPrivateMeeting(_guest)>>
+  <span class='blue'><i><<lanSwitch 'The room is not yours to close today.' '今天这间屋子还轮不到你来关门。'>></i></span>
+<<else>>
+  <<run statusCheck(_guest)>>
+  <<npc _guest>><<person1>>
+  <<if _room.work_day isnot Time.days>>
+    <<language>>
+      <<option 'EN'>>
+        The tray still holds today's paperwork. You set it on the shelf, out of the way, and the room finally stops being a room you work in.
+      <<option 'CN'>>
+        托盘里还是今天那叠文件。你把它放到架子上，让出桌面——这间屋子总算不再是你干活的地方了。
+    <</language>><br><br>
+  <</if>>
+  <<switch _guest>>
+    <<case 'Robin'>>
+      <<language>>
+        <<option 'EN'>>
+          Robin stops in the doorway with the exercise book <<he>> came to return. "<span class='teal'>You're still here,</span>" <<he>> says — and then takes in the closed door, and the desk with nothing on it, and stops mid-step.
+          <br><br>
+          <<He>> sets the book down on the nearest desk instead of on the lost-property shelf, which stands closer. "<span class='pink'>I didn't come up here for that,</span>" <<he>> says, hears how it sounds, and does not take it back.
+        <<option 'CN'>>
+          罗宾拿着要还的练习册停在门口。“<span class='teal'>你还在啊。</span>”<<he>>说——随即看见门是关着的、桌面是空的，脚步就停在半路。
+          <br><br>
+          <<He>>把册子放在最近的课桌上，没放失物架——尽管失物架还近些。“<span class='pink'>我不是来送这个的。</span>”<<he>>说，说完自己也听出这话是什么意思，却没有改口。
+      <</language>>
+    <<case 'Sydney'>>
+      <<language>>
+        <<option 'EN'>>
+          Sydney has the library slips in one hand and stops when <<he>> sees the door shut. "<span class='teal'>The request is dated today,</span>" <<he>> says, as though the date were the part that needed explaining.
+          <br><br>
+          Then, quieter: "<span class='pink'>The library closes at five. I've been standing in this corridor for twenty minutes.</span>" <<He>> looks at the shelf where the council files go, then at you. The slips stay in <<his>> hand.
+        <<option 'CN'>>
+          悉尼一手拿着图书馆的申请单，看见门关着就停住了。“<span class='teal'>这份申请是今天的日期。</span>”<<he>>说——仿佛需要解释的是日期。
+          <br><br>
+          随后压低了声音：“<span class='pink'>图书馆五点关门。我在这条走廊上站了二十分钟了。</span>”<<He>>看了看放学生会档案的架子，又看了看你。申请单还在<<his>>手里。
+      <</language>>
+    <<case 'Kylar'>>
+      <<language>>
+        <<option 'EN'>>
+          Kylar is already inside before you decide anything — slipped through the door the way <<he>> does everywhere. "<span class='teal'>Third period is maths for everyone but us,</span>" <<he>> says. "<span class='teal'>I checked.</span>"
+          <br><br>
+          <<He>> stands close enough to read your notes upside down, and keeps <<his>> hands off the desk, watching to see whether you will send <<him>> out. "<span class='pink'>The key is yours. Nobody comes in unless you say so.</span>"
+        <<option 'CN'>>
+          凯拉尔在你决定任何事之前就已经进来了——<<he>>到哪里都是这么从门缝溜进来的。“<span class='teal'>第三节是数学课，除了我们两个。</span>”<<he>>说。“<span class='teal'>我核对过。</span>”
+          <br><br>
+          <<He>>站得近到能把你的笔记倒着读出来，手却一直没碰桌子，看着你会不会把<<him>>赶出去。“<span class='pink'>钥匙在你手里。你不让人进来，就没人会进来。</span>”
+      <</language>>
+    <<case 'Whitney'>>
+      <<language>>
+        <<option 'EN'>>
+          Whitney leans in the doorway for a moment, checking the corridor both ways, then shuts the door without being asked. "<span class='pink'>Half these complaints are about me,</span>" <<he>> says, tapping the box.
+          <br><br>
+          "<span class='pink'>Go on then, president. Deal with me.</span>"
+        <<option 'CN'>>
+          惠特尼靠在门框上停了一会儿，往走廊两头各扫了一眼，没等你说就把门关上了。“<span class='pink'>这箱子里一半是告我的。</span>”<<he>>敲了敲申诉箱说。
+          <br><br>
+          “<span class='pink'>来吧会长，处理一下我啊。</span>”
+      <</language>>
+  <</switch>>
+  <br><br>
+  <<loveicon>><<lanLink ['Let it stop being council business', '不当公事了'] 'Deadwood Reblooms School Council Private Sex'>>
+    <<set $sexstart to 1>>
+  <</lanLink>><<promiscuous2>><br>
+  <<lanLink ['Let it stay as work for today', '今天还是当工作吧'] 'Deadwood Reblooms School Council'>>
+    <<set $LifeSimulation.school.council.private_day to Time.days>><<set $LifeSimulation.school.council.private_with to null>>
+  <</lanLink>><br><br>
+<</if>>
+<br><<getouticon>><<lanLink ['Return to the student council room', '返回学生会室'] 'Deadwood Reblooms School Council'>><</lanLink>>
+
+:: Deadwood Reblooms School Council Private Sex
+<<set $outside to 0, $location to 'school'>><<schooleffects>><<effects>>
+<<set _guest to $LifeSimulation.school.council.private_with>>
+<<if !_guest>>
+  <span class='blue'><<lanSwitch 'There is nobody here.' '这里没有人。'>></span><br><br>
+  <<getouticon>><<lanLink ['Return to the student council room', '返回学生会室'] 'Deadwood Reblooms School Council'>><</lanLink>>
+<<else>>
+<<npc _guest>><<person1>>
+<<if $sexstart is 1>>
+  <<set $sexstart to 0>>
+  <<clearnpc>><<npc _guest>><<person1>>
+  <<run statusCheck(_guest)>>
+  <<consensual>><<set $consensual to 1>><<neutral 1>>
+  <<maninit>><<set $enemytrust += 500>>
+  <<set $enemyarousalmax to 600>>
+  <<strip>><<npcexpose>>
+  <span class='lewd'><<lanSwitch 'The door has a lock and you use it. Everything else on the table can wait until after.' '门上有锁，你把它锁上了。桌上其它东西可以先放着。'>></span>
+  <br><br>
+  <<if $LifeSimulation.school.role is 'president'>>
+    <<lanSwitch 'The armchairs are worn and close together, and neither of you makes it that far once the decision is made.' '两张旧扶手椅又旧又近。可既然已经决定了，你们谁也没走到那边。'>>
+    <br><br>
+  <</if>>
+  <<switch _guest>>
+    <<case 'Robin'>>
+      <<lanSwitch '<span class="pink">"This isn't what the rota is for,"</span> Robin says, and then stops talking for a long while.' '<span class="pink">“值勤表不是干这个用的。”</span>罗宾说，之后好一阵子没再开口。'>>
+    <<case 'Sydney'>>
+      <<lanSwitch 'The library slips end up under your elbow and stay there. <span class="pink">"I'll say it went in on time,"</span> Sydney murmurs, which is a lie <<he>> has clearly decided to live with.' '图书馆的申请单被压在胳膊底下，就那么放着。<span class="pink">“我就说按时交上去了。”</span>悉尼低声说——这个谎<<he>>显然打算认了。'>>
+    <<case 'Kylar'>>
+      <<lanSwitch 'Kylar keeps one hand flat on the desk the whole time, as though the room might take this away if <<he>> forgets which way the door is.' '凯拉尔一只手始终平按在桌上，像是怕一忘了门在哪儿，这间屋子就会把此刻收回去。'>>
+    <<case 'Whitney'>>
+      <<lanSwitch '<span class="pink">"Took you long enough,"</span> Whitney says, and then there is no more talking out of <<him>> for a while.' '<span class="pink">“可算等到你了。”</span>惠特尼说，随后好一阵子没再出声。'>>
+  <</switch>>
+  <br><br>
+  <<promiscuous3>>
+  <br><br>
+<<elseif $combat isnot 1>>
+  <<lanSwitch 'There is nothing left to continue here.' '这里已经没有可继续的事了。'>>
+<</if>>
+<<set $enemyanger to 0>>
+<<effects>><<effectsman>><<man>><<stateman>>
+<br><br><<actionsman>>
+<<if _combatend or $consensual isnot 1>>
+  <span id='next'><<lanLink ["Next","继续"] 'Deadwood Reblooms School Council Private Finish'>><</lanLink>></span><<nexttext>>
+<<else>>
+  <span id='next'><<lanLink ["Next","继续"] 'Deadwood Reblooms School Council Private Sex'>><</lanLink>></span><<nexttext>>
+<</if>>
+<</if>>
+
+:: Deadwood Reblooms School Council Private Finish
+<<set $outside to 0, $location to 'school'>><<schooleffects>><<effects>>
+<<set _guest to $LifeSimulation.school.council.private_with>>
+<<if _guest>>
+  <<npc _guest>><<person1>>
+  <<if $enemyarousal gte $enemyarousalmax>>
+    <<ejaculation>><<npcincr _guest lust -20>><<npcincr _guest love 1>><<glove>>
+  <<elseif $enemyhealth lte 0>>
+    <<npcincr _guest love -1>><<glove>>
+  <<else>>
+    <<npcincr _guest love 1>><<glove>>
+  <</if>>
+  <<if $consensual isnot 1>>
+    <<lanSwitch 'You both step back. The paperwork is still on the shelf, and neither of you reaches for it.' '你们各自退开。文件还在架子上，谁也没去拿。'>>
+  <<else>>
+    <<switch _guest>>
+      <<case 'Robin'>>
+        <<language>>
+          <<option 'EN'>>
+            Robin is the one who checks the corridor first, opening the door a hand's width before letting <<himself>> look relieved. "<span class='pink'>The bell goes in ten minutes,</span>" <<he>> says.
+            <br><br>
+            <<He>> picks the exercise book back up from the desk, and then does not leave, standing in the doorway with it while <<he>> works out what to say. "<span class='pink'>Same time tomorrow?</span>"
+          <<option 'CN'>>
+            是罗宾先去查看走廊的，把门开了一条缝确认过，才敢露出松了口气的样子。“<span class='pink'>还有十分钟就打铃了。</span>”<<he>>说。
+            <br><br>
+            <<He>>把桌上的练习册拿回来，却没有走，就站在门口拿着它，想了很久才开口。“<span class='pink'>明天还是这个点？</span>”
+        <</language>>
+      <<case 'Sydney'>>
+        <<language>>
+          <<option 'EN'>>
+            Sydney finds <<his>> slips where they fell, blows the dust off them, and checks the date is still legible. "<span class='teal'>It went in on time,</span>" <<he>> says again, and this time it sounds almost like a promise rather than a lie.
+          <<option 'CN'>>
+            悉尼把掉在地上的申请单捡起来，吹掉灰，确认日期还看得清。“<span class='teal'>是按时交上去的。</span>”<<he>>又说了一遍——这一次听起来几乎像承诺，而不像谎话。
+        <</language>>
+      <<case 'Kylar'>>
+        <<language>>
+          <<option 'EN'>>
+            Kylar takes <<his>> hand off the desk only when the door is shut again. "<span class='pink'>I like this room,</span>" <<he>> says, and waits to be told whether that is allowed.
+          <<option 'CN'>>
+            直到门重新关上，凯拉尔才把手从桌上移开。“<span class='pink'>我喜欢这间屋子。</span>”<<he>>说，然后等着你告诉他这句话能不能说。
+        <</language>>
+      <<case 'Whitney'>>
+        <<language>>
+          <<option 'EN'>>
+            Whitney is already up and adjusting <<his>> collar in the noticeboard glass. "<span class='pink'>Next time, file it as a complaint,</span>" <<he>> says, and is out of the door before you can answer.
+          <<option 'CN'>>
+            惠特尼已经站起来，对着公告板玻璃整理领子。“<span class='pink'>下回记得把它记成申诉。</span>”<<he>>说，你还没来得及答话，人已经出了门。
+        <</language>>
+    <</switch>>
+  <</if>>
+<</if>>
+<br><br>
+<<clotheson>><<endcombat>>
+<<set $LifeSimulation.school.council.private_with to null>>
 <<getouticon>><<lanLink ['Return to the student council room', '返回学生会室'] 'Deadwood Reblooms School Council'>><</lanLink>>
