@@ -1302,7 +1302,7 @@
       <ul class='journal'>
         <<for _donation_receipt range $Finance.donations.receipts.slice(-4).reverse()>>
           <li>
-            <<print maplebirch.t('deadwood-reblooms:donations:' + _donation_receipt.fund)>>:
+            <<print maplebirch.t('deadwood-reblooms:donations:' + _donation_receipt.fund)>><<if _donation_receipt.purpose>> · <<print lanSwitch(_donation_receipt.purpose.EN, _donation_receipt.purpose.CN)>><</if>>:
             <<deadwood-reblooms-finance-money _donation_receipt.amount>>
             <<if _donation_receipt.anonymous>><i><<lanSwitch ' (anonymous)' '（匿名）'>></i><</if>>
           </li>

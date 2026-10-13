@@ -18,7 +18,7 @@ const rewards: Rewards = { named: 0, signed: false, followed: false };
 export interface DonationsState {
   total: Record<Fund, number>;
   named: Record<Fund, number>;
-  receipts: { fund: Fund; amount: number; anonymous: boolean; day: number }[];
+  receipts: { fund: Fund; amount: number; anonymous: boolean; day: number; purpose?: { EN: string; CN: string } }[];
   school: SchoolDonationState;
   aid: Record<AidFund, AidState>;
   rewards: Record<Fund, Rewards>;
@@ -106,11 +106,7 @@ export default class Donations {
     const amount = Math.round(pounds * 100);
     if (!this.available || !projects.some(project => project.id === fund) || !Number.isFinite(pounds) || !Number.isSafeInteger(amount) || amount <= 0 || typeof anonymous !== 'boolean') return false;
     if (!Number.isSafeInteger(this.state.total[fund] + amount) || !Number.isSafeInteger(this.state.named[fund] + amount)) return false;
-    const cash = Math.min(V.money, amount);
-    const bank = amount - cash;
-    if (bank > 0 && this.finance.payFromBankPennies(bank) !== 'ok') return false;
-    V.money -= cash;
-    this.finance.core.SugarCube.Wikifier.wikifyEval(`<<money ${-amount} 'deadwoodDonation' \`{recordOnly: true}\`>>`);
+    if (!this.pay(amount)) return false;
     const beforeTotal = this.state.total[fund];
     this.state.total[fund] += amount;
     const goal = projects.find(project => project.id === fund)!.goal;
@@ -124,6 +120,40 @@ export default class Donations {
     }
     this.state.receipts.push({ fund, amount, anonymous, day: Math.floor(Time.days) });
     if (this.state.receipts.length > 12) this.state.receipts.shift();
+    return true;
+  }
+
+  /** 专项捐赠复用付款与收据；救济采购的累计款项仍按原项目结算。 */
+  public sponsor(fund: Fund, pounds: number, purpose: { EN: string; CN: string }): boolean {
+    const amount = Math.round(pounds * 100);
+    if (
+      V.combat ||
+      V.possessed ||
+      V.replayScene ||
+      V.statFreeze ||
+      V.nextPassageCheck ||
+      V.exposed > 0 ||
+      V.stress >= V.stressmax ||
+      !projects.some(project => project.id === fund) ||
+      !Number.isFinite(pounds) ||
+      !Number.isSafeInteger(amount) ||
+      amount <= 0 ||
+      !purpose?.EN ||
+      !purpose.CN ||
+      !this.pay(amount)
+    )
+      return false;
+    this.state.receipts.push({ fund, amount, anonymous: false, day: Math.floor(Time.days), purpose: { EN: purpose.EN, CN: purpose.CN } });
+    if (this.state.receipts.length > 12) this.state.receipts.shift();
+    return true;
+  }
+
+  private pay(amount: number): boolean {
+    const cash = Math.min(V.money, amount);
+    const bank = amount - cash;
+    if (bank > 0 && this.finance.payFromBankPennies(bank) !== 'ok') return false;
+    V.money -= cash;
+    this.finance.core.SugarCube.Wikifier.wikifyEval(`<<money ${-amount} 'deadwoodDonation' \`{recordOnly: true}\`>>`);
     return true;
   }
 }
