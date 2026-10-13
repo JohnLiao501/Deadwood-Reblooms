@@ -79,7 +79,7 @@
 <<endevent>>
 <<childSelect $BirdTower.hunt.leader>>
 <<if !$daily.emptyCampFox and $rng gte 80>>
-  <<beastNEWinit 1 fox>><<earnFeat "Wild Animals">>
+  <<beastNEWinit 1 fox>>
   <<set $daily.emptyCampFox to true>>
   <<if maplebirch.get('BirdTower').leaderTrait is "dominant">>
     <<language>>
@@ -242,6 +242,7 @@
     <</lanLink>>
     <br>
   <</if>>
+  <<earnFeat "Wild Animals">>
 <<else>>
   <<set $daily.emptyCampLoot-->>
   <<language>>

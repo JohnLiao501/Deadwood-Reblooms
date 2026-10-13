@@ -1,12 +1,6 @@
 // ./src/script/Sydney/Festivals.ts
 
 export default function (maplebirch: typeof window.maplebirch) {
-  maplebirch.tool.inject({
-    locationPassage: {
-      'Whitney Trick 1': [{ src: '<<set $location to "home">>', applyafter: '<<set $SydneyExpansion.whitneyHalloweenYear to Time.year>>', expected: 1 }]
-    }
-  });
-
   // 只在当前剧情的收尾页提供下一站入口，错过后不另设补看入口。
   maplebirch.tool.addTo('CustomLinkZone', { widget: [-1, 'deadwood-reblooms-sydney-christmas-link'], passage: 'Temple' });
   maplebirch.tool.addTo(
