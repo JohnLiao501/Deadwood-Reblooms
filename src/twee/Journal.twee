@@ -1004,7 +1004,7 @@
 <!-- 街头委托：只读当前货物、期限和回执；交接与报酬在委托页面结算。 -->
 
 <<widget 'deadwood-street-job-journal'>>
-  <<if $StreetLife.jobs.active or $StreetLife.jobs.report or $StreetLife.jobs.completed or $StreetLife.jobs.losses>>
+  <<if $StreetLife.jobs.active or $StreetLife.jobs.report or $StreetLife.jobs.completed or $StreetLife.jobs.losses or $StreetLife.bailey.finished>>
     <<deadwood-card 'Street work' '街头委托'>>
       <div class='dr-finance-summary'>
         <span><<lanSwitch 'Completed deliveries' '完成委托'>></span><span class='teal'><<= $StreetLife.jobs.completed>></span>
@@ -1025,6 +1025,7 @@
           <</if>>
         </li></ul>
       <</if>>
+      <<deadwood-street-bailey-journal>>
     <</deadwood-card>>
     <hr>
   <</if>>

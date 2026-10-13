@@ -424,7 +424,7 @@
           <<else>>
             A server reads the label, then calls to someone behind the counter. "Boxes and coffee. Here's the order." A dry space is cleared beneath the counter for the carton.
           <</if>>
-        <<case 'parts'>>
+        <<case 'parts' 'bailey_cargo'>>
           <<if _streetJob.issue is 'queue'>>
             The manager glances at the ship's name on your note and points along the quay. "They're finishing a load. Wait here and I'll send someone over to sign for it."
           <<else>>
@@ -504,7 +504,7 @@
           <<else>>
             服务员读过标签，朝柜台后招呼一声。“纸盒和咖啡豆，订单在这里。”柜台下清出了一块干燥的地方，用来放货箱。
           <</if>>
-        <<case 'parts'>>
+        <<case 'parts' 'bailey_cargo'>>
           <<if _streetJob.issue is 'queue'>>
             管理员看了眼纸条上的船名，往码头另一头指了指。“那边还有一批货没装完。你在这里等着，我叫人过来签收。”
           <<else>>
@@ -570,7 +570,7 @@
             The librarian signs the list and slides your copy back across the desk. The books are stacked beside the basket, ready to be sorted. "Thank you for bringing them back."
           <<case 'cafe'>>
             The server signs the supplier's copy and hands it back. The coffee is taken behind the counter; another member of staff reaches for a stack of the takeaway boxes.
-          <<case 'parts'>>
+          <<case 'parts' 'bailey_cargo'>>
             The crew member signs the delivery slip and lifts the box towards the ship. "That's what we needed." The manager checks the name once more before giving you back your copy.
           <<case 'stolen_tools'>>
             The buyer checks the tools, shuts the box, and draws it towards their chair. A short receipt is pushed across the table. <<if _streetJob.issue is 'recognised'>>The person who recognised the box looks from the buyer back to you.<</if>>
@@ -597,7 +597,7 @@
             图书管理员在书单上签字，把你这份推回桌子另一侧。书已经叠在篮子旁，准备整理。“谢谢你把它们送回来。”
           <<case 'cafe'>>
             服务员在供应商的单据上签好字，递还给你。咖啡豆被搬到柜台后，另一名工作人员已经伸手拿走一摞外带纸盒。
-          <<case 'parts'>>
+          <<case 'parts' 'bailey_cargo'>>
             船员在送货单上签字，提起工具箱往船边走。“正缺这些。”管理员又核对一遍名字，把你这份递回来。
           <<case 'stolen_tools'>>
             买家点过工具，合上箱子，拉到自己的椅子旁，再把简短的收条推过桌面。<<if _streetJob.issue is 'recognised'>>认出工具箱的那人看过买家，又转头看向你。<</if>>

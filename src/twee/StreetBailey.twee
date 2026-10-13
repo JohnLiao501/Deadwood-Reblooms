@@ -1,0 +1,349 @@
+:: Deadwood Street Bailey Widgets [widget]
+
+<<widget 'deadwood-street-bailey-landry-link'>>
+  <<set _baileyWork to maplebirch.get('StreetLife')?.bailey>>
+  <<if _baileyWork?.available and _baileyWork.offer>>
+    <<icon 'street/tools-case.png'>><<lanLink ['Ask about the delivery being held up', '问问被扣下的货物'] 'Deadwood Street Bailey Job'>><<endevent>><</lanLink>><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-street-bailey-link'>>
+  <<set _baileyWork to maplebirch.get('StreetLife')?.bailey>>
+  <<if _baileyWork?.available and _baileyWork.atHome and _baileyWork.state.finished>>
+    <<if ($passage is "Bailey's Office" and _options is 1 and !_baileyWork.defeated) or ($passage is 'Flats' and _baileyWork.defeated and Array.isArray($link_table) and $link_table.some(entry => typeof entry === 'string' && entry.includes('|Barb Street]]')))>>
+      <<if !_baileyWork.state.discussed or (!_baileyWork.state.invitation and ['negotiated', 'paid', 'fight'].includes(_baileyWork.state.resolution))>>
+        <<socialiseicon 'ask'>><<lanLink ['Speak to Bailey about the held delivery (0:05)', '和贝利谈谈那批被扣的货 (0:05)'] 'Deadwood Street Bailey'>>
+          <<if _baileyWork.available and _baileyWork.atHome>>
+            <<endevent>><<pass 5>>
+            <<if _baileyWork.available and _baileyWork.atHome and !$nextPassage and !$nextPassageCheck>><<set _baileyWork.state.discussed to true>><</if>>
+          <</if>>
+        <</lanLink>><br>
+      <</if>>
+    <</if>>
+  <</if>>
+<</widget>>
+
+<!-- 本单的现场选择均重验批次与地点；放行不等于取货，交付和报酬仍由原委托结算。 -->
+<<widget 'deadwood-street-bailey-resolve'>>
+  <<set _baileyWork to maplebirch.get('StreetLife')?.bailey, _baileyAction to _args[0]>>
+  <<if _baileyWork?.available and _baileyWork.seized and !_baileyWork.jobs.expired and !_baileyWork.state.finished>>
+    <<if _baileyAction is 'reported'>>
+      <<if _baileyWork.state.witnessed and $passage is 'Deadwood Street Detective' and Time.hour gte 8 and Time.hour lt 18 and !_baileyWork.jobs.contract.illegal and !maplebirch.get('StreetLife').bounties.wanted and maplebirch.npc.Schedule.get('Grant').location is 'police_station'>>
+        <<set _baileyWork.jobs.state.report to {id: 'bailey_cargo', outcome: 'cancelled', fee: 0, late: false}>>
+        <<set _baileyWork.jobs.state.active to null, _baileyWork.state.resolution to 'reported', _baileyWork.state.finished to true>>
+        <!-- Grant 的信任上限沿用注册数据；原版 npcincr 仅允许原版 NPC 名单。 -->
+        <<set C.npc.Grant.love to Math.clamp(C.npc.Grant.love + 2, 0, 100)>><<pass 10>>
+      <</if>>
+    <<elseif $passage is 'Deadwood Street Cargo' and _baileyWork.jobs.state.site is 'alley' and _baileyWork.jobs.receiving>>
+      <<if _baileyAction is 'negotiated' and _baileyWork.canNegotiate>>
+        <<set _baileyWork.jobs.state.active.issue to 'none', _baileyWork.state.resolution to 'negotiated'>><<pass 5>>
+      <<elseif _baileyAction is 'paid' and (maplebirch.get('Finance')?.canPay(_baileyWork.terms.fee, 'pub') ?? $money gte _baileyWork.terms.fee)>>
+        <<money `-_baileyWork.terms.fee` 'pub'>>
+        <<set _baileyWork.jobs.state.active.issue to 'none', _baileyWork.state.resolution to 'paid'>><<pass 5>>
+      <<elseif _baileyAction is 'fight' and !pcAreArmsBound('both')>>
+        <<endevent>><<generateNPC 1 'a'>><<saveNPC 0 'deadwood_bailey_guard'>><<endevent>>
+        <<if $per_npc.deadwood_bailey_guard>>
+          <<set _baileyWork.state.fight to {key: 'deadwood_bailey_guard', combatStarted: false}>>
+          <<goto 'Deadwood Street Fight'>>
+        <</if>>
+      <</if>>
+    <</if>>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-street-bailey-seizure'>>
+  <<set _baileyWork to maplebirch.get('StreetLife').bailey>>
+  <<if !_baileyWork.seized>>
+    <<language>>
+      <<option 'EN'>>
+        <<switch _baileyWork.state.resolution>>
+          <<case 'negotiated'>>
+            You lay the delivery note beside the crate. "You can read who paid for it. If you want another payment, put your name beside the amount." The person looks at the company stamp, then back at you. Finally the chair is moved aside. "Take it, then. I'll tell Bailey you had something to say."
+          <<case 'paid'>>
+            The payment is counted before the chair is moved. "There. Nothing to get upset about." The person takes a hand off the lid. The crate is yours to collect; nobody offers to help carry it.
+          <<case 'fight'>>
+            The way to the crate is clear. You check its markings against the delivery note once more before reaching for the handles.
+          <<case 'failed'>>
+            The crate remains behind the loading door. You have not recovered it. Landry needs to know the delivery cannot be completed.
+        <</switch>>
+      <<option 'CN'>>
+        <<switch _baileyWork.state.resolution>>
+          <<case 'negotiated'>>
+            你把送货单摊在箱子旁。“谁付过钱，上面都能看清楚。还要收一笔，就把你的名字签在数目旁边。”那人看过公司印章，又看向你。最后，椅子被挪到了一旁。“那就拿走。我会告诉贝利，你有话要说。”
+          <<case 'paid'>>
+            对方先数了钱，才挪开椅子。“这不就好了，有什么好生气的。”按在箱盖上的手松开了。木箱可以取走，但没人打算帮你搬。
+          <<case 'fight'>>
+            通往木箱的路已经让开。你又核对了一遍箱上的标记与送货单，才伸手抓住把手。
+          <<case 'failed'>>
+            木箱仍留在装卸门后。你没能取回货物，需要告诉兰德里，这份差事无法完成了。
+        <</switch>>
+    <</language>><br><br>
+    <<exit>>
+  <</if>>
+  <!-- 只有实际看到当前批次的扣货现场，才能向警探提交亲眼所见的经过。 -->
+  <<if !_baileyWork.state.witnessed and _baileyWork.available and _baileyWork.seized and $passage is 'Deadwood Street Cargo' and _baileyWork.jobs.state.site is 'alley'>>
+    <<set _baileyWork.state.witnessed to true>>
+  <</if>>
+  <<language>>
+    <<option 'EN'>>
+      The loading door is open just wide enough to see a crate behind it. The marks on the wood match your delivery note. Someone has set a chair across the doorway, and the person sitting in it makes no effort to move.<br><br>
+      "Already paid for? Good." The note is turned over, then pushed back into your hand. "Storage hasn't been. A hundred. Then you take it."<br><br>
+      You ask who decided that. "Bailey," comes the answer. The name is offered without explanation. A hand stays on the crate's lid.
+    <<option 'CN'>>
+      装卸门开着一条缝，能看见后面的一只木箱。箱上的标记与你的送货单一致。有人横了把椅子坐在门口，丝毫没有让开的意思。<br><br>
+      “货款付过了？那就好。”那人翻了翻单子，又塞回你手里。“保管费还没付。一百。交了就能拿走。”<br><br>
+      你问是谁定的价。“贝利。”回答只有一个名字，没作解释。那只手仍按着箱盖。
+  <</language>><br><br>
+  <<if _baileyWork.peer>>
+    <<language>>
+      <<option 'EN'>>
+        The person looks at you again, more carefully this time. The hand comes off the crate. "You can take it up with Bailey. I don't set the prices."
+      <<option 'CN'>>
+        那人又看了你一眼，这次仔细了些，按在箱盖上的手也松开了。“有意见找贝利。我不定价。”
+    <</language>><br><br>
+  <<elseif _baileyWork.free>>
+    <<language>>
+      <<option 'EN'>>
+        "This has nothing to do with the orphanage," the person adds when you challenge the name. "It's the crate we're keeping here."
+      <<option 'CN'>>
+        你质问起那个名字，那人又补了一句：“这跟孤儿院没关系。说的是我们替人放在这里的这只箱子。”
+    <</language>><br><br>
+  <</if>>
+  <<if _baileyWork.available and _baileyWork.seized and !_baileyWork.jobs.expired>>
+    <<if _baileyWork.canNegotiate>>
+      <<socialiseicon 'angry'>><<lanLink ['Challenge the charge using the delivery note (0:05)', '拿送货单据理力争 (0:05)'] 'Deadwood Street Cargo'>>
+        <<deadwood-street-bailey-resolve 'negotiated'>>
+      <</lanLink>><br>
+    <<else>>
+      <span class='grey'><<lanSwitch 'You cannot yet make a convincing case for releasing the crate.' '你暂时还没有足够的说服力，让对方放行这只箱子。'>></span><br>
+    <</if>>
+    <<if maplebirch.get('Finance')?.canPay(_baileyWork.terms.fee, 'pub') ?? $money gte _baileyWork.terms.fee>>
+      <<highicon>><<lanLink ['Pay the storage charge (0:05)', '付清所谓的保管费 (0:05)'] 'Deadwood Street Cargo'>>
+        <<deadwood-street-bailey-resolve 'paid'>>
+      <</lanLink>> · <<printmoney _baileyWork.terms.fee>><br>
+    <<else>>
+      <span class='grey'><<lanSwitch 'Pay the storage charge' '付清所谓的保管费'>> · <<printmoney _baileyWork.terms.fee>></span><br>
+    <</if>>
+    <<lanLink ['Force your way to the crate', '强行取回木箱']>><<deadwood-street-bailey-resolve 'fight'>><</lanLink>><<dangerousText>><br>
+    <<language>>
+      <<option 'EN'>>
+        <span class='blue'>Landry will not reimburse this charge. You can take the note to Detective Grant at the station during the day, or tell Landry you cannot finish. Neither choice delivers the goods.</span>
+      <<option 'CN'>>
+        <span class='blue'>兰德里不会报销这笔费用。你也可以白天带单据去警局找格兰特，或告诉兰德里无法完成。这两种选择都不算交付货物。</span>
+    <</language>><br><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-street-bailey-police-link'>>
+  <<set _baileyWork to maplebirch.get('StreetLife')?.bailey>>
+  <<if _baileyWork?.available and _baileyWork.seized and _baileyWork.state.witnessed and !_baileyWork.jobs.expired and !maplebirch.get('StreetLife').bounties.wanted and Time.hour gte 8 and Time.hour lt 18 and maplebirch.npc.Schedule.get('Grant').location is 'police_station'>>
+    <<icon 'street/detective-notebook.png'>><<lanLink ['Submit the held delivery note (0:10)', '提交被扣货物的送货单 (0:10)'] 'Deadwood Street Detective'>>
+      <<deadwood-street-bailey-resolve 'reported'>>
+    <</lanLink>><br>
+    <<language>>
+      <<option 'EN'>>
+        <span class='blue'>This ends your delivery assignment without a fee. Grant will record what you witnessed; the crate will remain where it is.</span>
+      <<option 'CN'>>
+        <span class='blue'>提交后会结束这份运送委托，没有报酬。格兰特会记录你亲眼所见的经过，木箱仍留在原处。</span>
+    <</language>><br><br>
+  <<elseif _baileyWork?.state.finished and _baileyWork.state.resolution is 'reported'>>
+    <<language>>
+      <<option 'EN'>>
+        Grant keeps your note with the statement. "A name isn't proof of who gave an order. I'll check the delivery and speak to the people involved." The notebook is closed. "Don't go back claiming I sent you."
+      <<option 'CN'>>
+        格兰特把送货单与笔录放在一起。“报个名字，不等于证明是谁下的令。我会核对这批货，再找当事人问话。”记事簿合了起来。“别回去说是我派你去的。”
+    <</language>><br><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-street-bailey-landry-response'>>
+  <<set _baileyWork to maplebirch.get('StreetLife')?.bailey>>
+  <<if _baileyWork?.state.finished and _baileyWork.state.resolution>>
+    <<language>>
+      <<option 'EN'>>
+        <<switch _baileyWork.state.resolution>>
+          <<case 'negotiated'>>
+            Landry looks over the signed note. "Good. No extra payment, and the right people got their crate." <<He>> folds it along the old crease. "Bailey might ask how you managed that. Let me know if there's anything I need to hear."
+          <<case 'paid'>>
+            "I said what the fee was," Landry says when you mention the charge. "That's what the customer agreed to. I'm not adding another hundred." The receipt goes beneath <<his>> glass. "At least it's delivered. I'd ask Bailey who decided to keep it in the first place."
+          <<case 'fight'>>
+            Landry glances at your hands before reading the receipt. "So it's delivered. And someone knows exactly who took it." <<He>> sets the paper down. "I wanted the crate moved, not a war. If Bailey asks, you and I should have the same facts."
+          <<case 'reported'>>
+            Landry listens without interrupting. "Then I'll tell the customer to make other arrangements." <<He>> keeps <<his>> voice low. "You told them what you saw? Good. Don't fill in the rest for them."
+          <<case 'failed'>>
+            "That's enough," Landry says when you finish describing the fight. "I'm not sending you back there to prove a point." <<He>> puts the delivery aside. "There's no fee for an unfinished job. I'll speak to the customer."
+          <<case 'withdrawn'>>
+            Landry sets the note beside <<his>> drink. "Better to tell me. I'll find another way." <<He>> glances towards the door. "If Bailey wants something from you, make <<nnpc_him 'Bailey'>> say what it is."
+        <</switch>>
+      <<option 'CN'>>
+        <<switch _baileyWork.state.resolution>>
+          <<case 'negotiated'>>
+            兰德里看过签好的单子。“不错。没额外掏钱，箱子也到了该到的人手里。”<<He>>沿着旧折痕把单子折好。“贝利可能会问你怎么做到的。要是有我该知道的事，记得说。”
+          <<case 'paid'>>
+            你提起那笔费用，兰德里回答：“报酬我已经说过了，客户也就答应了那些。我不会再添一百。”收条被压在<<his>>的杯子下面。“至少货送到了。我会问问贝利，是谁先把箱子扣下的。”
+          <<case 'fight'>>
+            兰德里先看了眼你的手，再读收条。“所以货送到了，也有人清清楚楚知道是谁拿走的。”<<He>>放下纸。“我只是要人搬只箱子，不是开战。贝利要是问起来，你我最好把事实说得一样。”
+          <<case 'reported'>>
+            兰德里听完，没有打断。“那我会让客户另作安排。”<<He>>的声音压得很低。“你说的是亲眼所见？那就好。剩下的别替他们补。”
+          <<case 'failed'>>
+            你讲完打斗的经过，兰德里说：“够了。我不会再让你回去争口气。”<<He>>把这份运送单放到一旁。“没做完的差事没有报酬。我去跟客户说。”
+          <<case 'withdrawn'>>
+            兰德里把单子放在酒杯旁。“告诉我就好。我再找别的办法。”<<He>>朝门口看了一眼。“贝利要你做什么，就让贝利自己把话说清楚。”
+        <</switch>>
+    <</language>><br><br>
+  <</if>>
+<</widget>>
+
+<<widget 'deadwood-street-bailey-journal'>>
+  <<set _baileyWork to maplebirch.get('StreetLife')?.bailey>>
+  <<if _baileyWork and (_baileyWork.seized or _baileyWork.state.finished)>>
+    <div class='gold bold'><<icon 'street/tools-case.png'>><<lanSwitch 'A held delivery' '被扣下的货物'>></div>
+    <ul class='journal'>
+      <<if _baileyWork.seized>>
+        <li><<lanSwitch 'The crate is held by the loading doors in the industrial alleyways. Take the delivery note with you.' '木箱被扣在工业区巷道的装卸门旁，记得带上送货单。'>></li>
+        <li><<lanSwitch 'The demanded charge is ' '对方索要的费用为 '>> <<printmoney _baileyWork.terms.fee>><<lanSwitch '. Landry will not reimburse it.' '，兰德里不会报销。'>></li>
+        <li><<lanSwitch 'You can resolve the dispute there, submit the note to Grant at the station, or close the unfinished job with Landry.' '可以去现场解决争议，带单据去警局找格兰特，或向兰德里交代并结束这份差事。'>></li>
+      <<else>>
+        <li><<switch _baileyWork.state.resolution>>
+          <<case 'negotiated' 'paid' 'fight'>><<lanSwitch 'The delivery has been settled with Landry.' '这份运送委托已与兰德里结清。'>>
+          <<case 'reported'>><<lanSwitch 'Grant has your statement and the delivery note. The crate has not been returned.' '格兰特收下了笔录和送货单，货物尚未取回。'>>
+          <<case 'failed' 'withdrawn'>><<lanSwitch 'The unfinished delivery has been closed without a fee.' '这份未完成的运送委托已结束，没有报酬。'>>
+        <</switch>></li>
+        <<if !_baileyWork.state.discussed>>
+          <li><<lanSwitch 'You can ask Bailey about the people who held the crate.' '可以找贝利问问扣下货物的那些人。'>> <<if _baileyWork.defeated>><<lanSwitch 'Visit the Barb Street flat, 07:00–21:00.' '去倒钩街的公寓，07:00–21:00。'>><<else>><<lanSwitch 'Visit the orphanage office, 07:00–10:00.' '去孤儿院办公室，07:00–10:00。'>><</if>></li>
+        <<elseif _baileyWork.state.invitation is 'interested'>>
+          <li><<lanSwitch 'You are willing to hear Bailey’s terms for another delivery. No further job has been agreed.' '你愿意听听贝利下一笔运送差事的条件，尚未接下新的委托。'>></li>
+        <<elseif _baileyWork.state.invitation is 'declined'>>
+          <li><<lanSwitch 'You declined Bailey’s offer to discuss further deliveries.' '你拒绝与贝利商谈后续运送差事。'>></li>
+        <</if>>
+      <</if>>
+    </ul>
+  <</if>>
+<</widget>>
+
+:: Deadwood Street Bailey Job
+<<set $location to 'pub', $outside to 0>><<effects>><<npc 'Landry'>><<person1>>
+<<set _baileyWork to maplebirch.get('StreetLife')?.bailey>>
+<<if _baileyWork?.offer and _baileyWork.available>>
+  <<set _baileyOffer to _baileyWork.jobs.terms.jobs.find(item => item.id === 'bailey_cargo')>>
+  <<set _baileyWork.jobs.state.offer to 'bailey_cargo'>>
+  <<language>>
+    <<option 'EN'>>
+      Landry moves a delivery note out from under <<his>> glass. A company stamp covers one corner. "Tools for a crew at the docks. Bought and paid for. They've been sitting by the industrial loading doors instead of getting where they're wanted."<br><br>
+      <<He>> points to a pencil mark beside the collection address. "The person collecting them got turned away. Someone there wants another hundred before they'll release the crate. Said they were working for Bailey."<br><br>
+      "Two hundred if you get it delivered, with the receipt brought back to me. If you pay their hundred, it's your hundred. I won't reimburse it." Landry waits while you read the note. "Don't go in thinking you need to fight for me. If you can't finish it, come back and tell me."
+    <<option 'CN'>>
+      兰德里从酒杯下抽出一张送货单，一角盖着公司的印章。“码头一支船员要的工具，买过，也付过钱。一直搁在工业区的装卸门旁，没送到该去的地方。”<br><br>
+      <<He>>指着取货地址旁的铅笔记号。“先前去取货的人被赶回来了。那边有人要再收一百，才肯放行木箱，说是替贝利办事。”<br><br>
+      “货送到了，拿签收单回来，我付两百。那一百要是你交，就是你自己出，我不报销。”兰德里等你看完单子。“别以为非得替我打一架。办不完就回来告诉我。”
+  <</language>><br><br>
+  <<lanSwitch 'Fee: ' '报酬：'>><<printmoney _baileyOffer.fee>> · <<lanSwitch 'Delivery deadline: ' '交货时限：'>><span class='teal'><<= _baileyOffer.deadline_hours>></span> <<lanSwitch 'hours' '小时'>><br>
+  <<language>>
+    <<option 'EN'>>
+      <span class='blue'>Paying the <span class='gold'>£100</span> charge leaves <span class='gold'>£100</span> from an on-time <span class='gold'>£200</span> fee. Late delivery reduces the fee by a quarter; after a further 24 hours, the receiver will not take the crate. Reporting the matter or abandoning the delivery pays nothing.</span>
+    <<option 'CN'>>
+      <span class='blue'>按时完成可得 <span class='gold'>£200</span>；若支付 <span class='gold'>£100</span> 费用，最后剩下 <span class='gold'>£100</span>。迟到交货扣四分之一报酬，再过 24 小时收货方将不收货。提交线索或放弃运送都没有报酬。</span>
+  <</language>><br><br>
+  <<icon _baileyOffer.icon>><<lanLink ['Take the delivery note (0:05)', '接下差事，拿上送货单 (0:05)'] 'Deadwood Street Jobs'>>
+    <<if _baileyWork.available and _baileyWork.offer and _baileyWork.jobs.act('accept', 'bailey_cargo')>><<pass 5>><</if>>
+  <</lanLink>><br>
+<<else>>
+  <<lanSwitch 'Landry has put that delivery aside for now.' '兰德里暂时把那份运送单放到了一旁。'>><br><br>
+<</if>>
+<<refuseicon>><<lanLink ['Leave it for now', '暂时不接'] 'Pub Landry'>><<endevent>><<set $phase to 1>><</lanLink>><br>
+
+:: Deadwood Street Bailey
+<<set _baileyWork to maplebirch.get('StreetLife')?.bailey>>
+<<if !_baileyWork>><<getouticon>><<lanLink ['Return to the pub', '返回酒馆'] 'Pub'>><</lanLink>><<exit>><</if>>
+<<set $location to _baileyWork.defeated ? 'flats' : 'home', $outside to 0>><<effects>>
+<<if !_baileyWork.available or !_baileyWork.atHome or !_baileyWork.state.finished or !_baileyWork.state.discussed>>
+  <<language>>
+    <<option 'EN'>>
+      There is no chance to discuss the delivery here just now.
+    <<option 'CN'>>
+      现在没有机会在这里谈那批货的事。
+  <</language>><br><br>
+<<else>>
+  <<npc 'Bailey'>><<person1>>
+  <<language>>
+    <<option 'EN'>>
+      <<if _baileyWork.defeated>>
+        Bailey opens the flat's door, then looks past you into the corridor. "What?" You hold out the delivery note. <<He>> reads the collection address before opening the door a little further. "Still finding things to bring me."
+      <<else>>
+        Bailey looks up from <<his>> desk as you mention the crate. "That took you long enough." <<He>> holds out a hand for the note, then checks the address.
+      <</if>><br><br>
+      "I didn't tell them to keep it," Bailey says. "They were meant to make sure it reached the right people. Apparently they found another way to make money." The note is pushed back towards you. Whatever else Bailey knows, <<he>> offers no further explanation.<br><br>
+      <<switch _baileyWork.state.resolution>>
+        <<case 'negotiated'>>"You talked them round?" <<He>> studies you. "Good. I'd rather someone delivered the goods than invented reasons to sit on them."
+        <<case 'paid'>>"And you paid?" A brief smile crosses <<his>> face. "Convenient for them. Next time, ask whose money you're spending."
+        <<case 'fight'>>"You hit one of them." Bailey leaves the words hanging. "I'm not thanking you for that. But the crate was delivered."
+        <<case 'reported'>>"If you have something to say, say it." You describe the demand without claiming to know who ordered it. "They used my name," Bailey says. "That doesn't tell you everything."
+        <<case 'failed'>>"I heard there was a fight." <<His>> eyes move over you. "Didn't get you very far, did it?"
+        <<case 'withdrawn'>>"Then the delivery wasn't finished." Bailey folds <<his>> arms. "Why come to me?" You explain that Landry's contact was given <<his>> name.
+      <</switch>><br><br>
+      <<if _baileyWork.free>>
+        You tell Bailey the rent agreement is settled. "I know what was settled," <<he>> says sharply. "We're talking about a delivery."
+      <</if>>
+      <<if _baileyWork.peer>>
+        "You have people coming to you with money now," Bailey says. "That doesn't mean you know what everyone around you is doing."
+      <<elseif !_baileyWork.free>>
+        "Keep this separate from what you owe me," Bailey says. <<He>> taps the note once. "I don't want to hear that someone at a loading door took your rent."
+      <</if>>
+    <<option 'CN'>>
+      <<if _baileyWork.defeated>>
+        贝利开了公寓门，越过你朝走廊看了一眼。“什么事？”你递出送货单。<<He>>看过取货地址，才把门稍微开大了些。“还真能找事情拿来烦我。”
+      <<else>>
+        你提起木箱，贝利从桌前抬起头。“现在才来。”<<He>>伸手要了单子，核对上面的地址。
+      <</if>><br><br>
+      “我没叫他们扣着货。”贝利说，“他们本来该确保东西送到该到的人手里。看来又找到了别的挣钱办法。”单子被推回你面前。不管贝利还知道多少，<<he>>都没有再解释。<br><br>
+      <<switch _baileyWork.state.resolution>>
+        <<case 'negotiated'>>“你把他们说服了？”<<He>>打量着你。“好。比起编借口守着货不动，我更想要能把货送到的人。”
+        <<case 'paid'>>“你付了？”<<His>>的脸上掠过一丝笑意。“倒是省了他们的事。下次先问清楚，花的是谁的钱。”
+        <<case 'fight'>>“你打了其中一个。”贝利停了停，等这句话落稳。“我不会为这个谢你。不过箱子确实送到了。”
+        <<case 'reported'>>“有话就说。”你讲了索要费用的经过，没有声称知道是谁下的令。“他们报了我的名字，”贝利说，“这可不能说明一切。”
+        <<case 'failed'>>“我听说打起来了。”<<His>>的目光扫过你。“也没帮上什么忙，是不是？”
+        <<case 'withdrawn'>>“所以货没送到。”贝利抱起手臂。“那还来找我干什么？”你解释，兰德里的接货人听到了贝利的名字。
+      <</switch>><br><br>
+      <<if _baileyWork.free>>
+        你提醒贝利，房租的事早已结清。“我知道什么已经结清了。”<<He>>的声音锐了些，“现在说的是运货。”
+      <</if>>
+      <<if _baileyWork.peer>>
+        “现在也有人拿着钱来找你了。”贝利说，“这不代表你知道身边每个人都在做什么。”
+      <<elseif !_baileyWork.free>>
+        “别跟你欠我的混在一起。”贝利点了点送货单。“我可不想听你说，有人在装卸门边收走了你的房租。”
+      <</if>>
+  <</language>><br><br>
+  <<if ['negotiated', 'paid', 'fight'].includes(_baileyWork.state.resolution)>>
+    <<language>>
+      <<option 'EN'>>
+        <<if _baileyWork.peer>>
+          Bailey pulls a chair out from the table. "There are people who need things moved. You have the means. I know some of them." <<He>> leaves the chair where it is. "We could discuss a price."
+        <<elseif _baileyWork.free>>
+          "I have deliveries that need someone reliable," Bailey says. "A separate arrangement. Price first, then the job. You can say no."
+        <<else>>
+          "If you can finish Landry's deliveries, perhaps you can finish one of mine." Bailey watches you. "For a fee. Don't look so pleased. You'd hear the conditions first."
+        <</if>>
+      <<option 'CN'>>
+        <<if _baileyWork.peer>>
+          贝利从桌边拉出一把椅子。“有人要运东西。你有那个条件，我认识其中一些人。”<<He>>把椅子留在那里。“价钱可以谈。”
+        <<elseif _baileyWork.free>>
+          “我也有货要找可靠的人运。”贝利说，“另算一笔。先谈价，再谈差事。你可以不接。”
+        <<else>>
+          “能做完兰德里的运货差事，也许就能做完我的。”贝利看着你。“有报酬。别这么高兴，条件还得先听清楚。”
+        <</if>>
+    <</language>><br><br>
+    <<if !_baileyWork.state.invitation>>
+      <<socialiseicon 'ask'>><<lanLink ['Agree to hear the terms before deciding', '愿意先听条件，再决定接不接'] 'Deadwood Street Bailey'>>
+        <<if _baileyWork.available and _baileyWork.atHome and _baileyWork.state.finished and !_baileyWork.state.invitation>><<set _baileyWork.state.invitation to 'interested'>><</if>>
+      <</lanLink>><br>
+      <<refuseicon>><<lanLink ['Decline further deliveries', '拒绝后续运送差事'] 'Deadwood Street Bailey'>>
+        <<if _baileyWork.available and _baileyWork.atHome and _baileyWork.state.finished and !_baileyWork.state.invitation>><<set _baileyWork.state.invitation to 'declined'>><</if>>
+      <</lanLink>><br>
+    <<elseif _baileyWork.state.invitation is 'interested'>>
+      <<lanSwitch '"Then we will talk when there is something to discuss." Bailey puts the note aside. Nothing has been agreed beyond another conversation.' '“有事情可谈的时候，再谈。”贝利把单子搁在一旁。除了愿意再听一听，你们还没有约定别的事。'>><br><br>
+    <<else>>
+      <<lanSwitch 'Bailey folds the note. "Suit yourself." There is no further offer.' '贝利折起单子。“随你。”没有再提别的差事。'>><br><br>
+    <</if>>
+  <</if>>
+<</if>>
+<<getouticon>><<lanLink ['Leave', '离开'] `_baileyWork.home`>><<endevent>><</lanLink>><br>

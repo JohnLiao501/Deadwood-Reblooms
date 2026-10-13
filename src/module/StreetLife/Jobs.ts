@@ -10,7 +10,7 @@ interface Job {
   due: number;
   vehicle: number | null;
   searches: number;
-  issue: 'none' | 'shortage' | 'price' | 'recognised' | 'queue' | 'label';
+  issue: 'none' | 'shortage' | 'price' | 'recognised' | 'queue' | 'label' | 'seized';
   handled: '' | 'checked' | 'waited' | 'negotiated';
   fee: number;
   late: boolean;
@@ -45,7 +45,7 @@ export default class Jobs {
 
   public get place(): Site | null {
     const title = this.street.core.passage.title;
-    if (['Deadwood Street Jobs', 'Deadwood Street Job Offer'].includes(title)) return 'pub';
+    if (['Deadwood Street Jobs', 'Deadwood Street Job Offer', 'Deadwood Street Bailey Job'].includes(title)) return 'pub';
     if (title === 'Deadwood Street Cargo') return this.state.site;
     return (Object.keys(terms.sites) as Site[]).find(site => terms.sites[site].passage === title) ?? null;
   }
@@ -68,7 +68,8 @@ export default class Jobs {
           this.street.reputation >= item.required_reputation &&
           (item.requires !== 'casino' || (!!this.street.core.get('LifeSimulation') && V.id > 0)) &&
           (item.requires !== 'finance' || !!this.street.core.get('Finance')) &&
-          (item.requires !== 'underground' || V.smuggler_pub_known === 1)
+          (item.requires !== 'underground' || V.smuggler_pub_known === 1) &&
+          item.requires !== 'bailey'
       );
     // 当前条件过滤之后取三项合法、一项非法；当天随机顺序由委托页面保存。
     return [...candidates.filter(item => !item.illegal).slice(0, 3), ...candidates.filter(item => item.illegal).slice(0, 1)];
@@ -143,8 +144,8 @@ export default class Jobs {
     const state = this.state;
     const title = this.street.core.passage.title;
     if (action === 'accept') {
-      const offer = this.offers.find(item => item.id === value);
-      if (title !== 'Deadwood Street Job Offer' || !offer || state.offer !== value) return false;
+      const offer = this.offers.find(item => item.id === value) ?? (value === 'bailey_cargo' ? this.street.bailey.offer : undefined);
+      if (!['Deadwood Street Job Offer', 'Deadwood Street Bailey Job'].includes(title) || !offer || state.offer !== value) return false;
       // 货物问题只在接单时抽取一次；种类与概率留在目录中维护。
       const issue = offer.issues[random(1, offer.issues.length) - 1] as Job['issue'];
       state.active = { id: offer.id, stage: 'pickup', due: Time.date.timeStamp + offer.deadline_hours * 3600, vehicle: null, searches: 0, issue, handled: '', fee: offer.fee, late: false };
@@ -178,7 +179,7 @@ export default class Jobs {
         job.stage !== 'pickup' ||
         this.expired ||
         !this.receiving ||
-        job.issue === 'label' ||
+        ['label', 'seized'].includes(job.issue) ||
         (job.id === 'recovery' && job.issue === 'queue')
       )
         return false;
@@ -199,7 +200,7 @@ export default class Jobs {
         job.vehicle = null;
       }
     } else if (action === 'deliver') {
-      if (title !== 'Deadwood Street Cargo' || this.place !== contract.target || job.stage !== 'carrying' || !this.cargoHere || this.expired || job.issue === 'queue' || job.issue === 'label')
+      if (title !== 'Deadwood Street Cargo' || this.place !== contract.target || job.stage !== 'carrying' || !this.cargoHere || this.expired || ['queue', 'label', 'seized'].includes(job.issue))
         return false;
       if (!this.receiving) return false;
       job.late = Time.date.timeStamp > job.due;
@@ -231,6 +232,11 @@ export default class Jobs {
           state.losses++;
           this.street.reputation -= contract.reputation;
         }
+      }
+      if (job.id === 'bailey_cargo') {
+        const bailey = this.street.bailey.state;
+        bailey.finished = true;
+        if (action !== 'pay' && bailey.resolution !== 'failed') bailey.resolution = 'withdrawn';
       }
     }
     return true;

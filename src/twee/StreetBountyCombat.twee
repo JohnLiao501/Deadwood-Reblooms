@@ -6,7 +6,9 @@
   <<exit>>
 <</if>>
 
-<<if _bountyCombat.fightingHunter>>
+<<if _bountyCombat.fightingCargo>>
+  <<set $location to 'alley', $outside to 1>>
+<<elseif _bountyCombat.fightingHunter>>
   <<set $location to 'town', $outside to 1>>
 <<else>>
   <<set _bountyFightPlace to _bountyCombat.terms.sites[_bountyCombat.state.site]>>
@@ -16,7 +18,7 @@
 
 <!-- 身份来自本案保存的成人 NPC；只在首次进入初始化，重绘与读档不重置生命。 -->
 <<if !_bountyFight.combatStarted and _bountyCombat.available and !$nextPassage>>
-  <<set _bountyFightStats to _bountyCombat.fightingHunter ? _bountyCombat.terms.hunter.combat : _bountyCombat.contract.combat>>
+  <<set _bountyFightStats to _bountyCombat.combatStats>>
   <<endevent>><<loadNPC 0 _bountyFight.key>>
   <<set $NPCList[0].health to _bountyFightStats.health, $NPCList[0].healthmax to _bountyFightStats.health>>
   <<neutral 1>><<set $consensual to 0>><<maninit>>
@@ -24,13 +26,17 @@
   <<npcidlegenitals>><<set _bountyFight.combatStarted to true>><<person1>>
   <<language>>
     <<option 'EN'>>
-      <<if _bountyCombat.fightingHunter>>
+      <<if _bountyCombat.fightingCargo>>
+        The guard steps between you and the crate. You brace yourself as a hand reaches for your jacket.
+      <<elseif _bountyCombat.fightingHunter>>
         <<print $NPCList[0].name>> reaches for your wrist. You knock the hand aside and brace yourself on the pavement.
       <<else>>
         <<print $NPCList[0].name>> raises an arm as you reach closer. You plant your feet and move to stop them getting past.
       <</if>>
     <<option 'CN'>>
-      <<if _bountyCombat.fightingHunter>>
+      <<if _bountyCombat.fightingCargo>>
+        看门人挡在你和工具箱之间。一只手伸向你的外套，你站稳脚步。
+      <<elseif _bountyCombat.fightingHunter>>
         <<print $NPCList[0].name>>伸手抓向你的手腕。你拨开那只手，在人行道上站稳脚步。
       <<else>>
         你靠近时，<<print $NPCList[0].name>>抬起一条手臂。你站稳脚步，试着拦住对方的去路。
@@ -76,9 +82,29 @@
 <</if>>
 
 <<set _bountyWasHunter to _bountyCombat.fightingHunter>>
+<<set _bountyWasCargo to _bountyCombat.fightingCargo>>
 <!-- finish 先保存演员与结果，再调用原版 endcombat；此页不重复清理或发放奖励。 -->
 <<if _bountyCombat.act('finish')>>
   <<if $passage isnot 'Deadwood Street Fight Finish'>><<exit>><</if>>
+  <<if _bountyWasCargo>>
+    <<language>>
+      <<option 'EN'>>
+        <<if $StreetLife.bailey.resolution is 'fight'>>
+          The guard backs away from the crate. You catch your breath beside the loading door. The tools are still here; you can collect them once you are ready.
+        <<else>>
+          You get clear of the loading door. The crate remains with the guard. Landry still needs to know what happened.
+        <</if>>
+      <<option 'CN'>>
+        <<if $StreetLife.bailey.resolution is 'fight'>>
+          看门人退开，不再挡着工具箱。你在装卸门边缓了口气。工具还在这里，准备好后便可以取走。
+        <<else>>
+          你离开装卸门，工具箱仍在看门人手里。还得回去向兰德里交代经过。
+        <</if>>
+    <</language>><br><br>
+    <<getouticon>><<lanLink ['Return to the loading door', '返回装卸门'] 'Deadwood Street Cargo'>><</lanLink>><br>
+    <<getouticon>><<lanLink ['Report back to Landry', '回去向兰德里交代'] 'Deadwood Street Jobs'>><</lanLink>><br>
+    <<exit>>
+  <</if>>
   <<language>>
     <<option 'EN'>>
       <<if _bountyWasHunter>>

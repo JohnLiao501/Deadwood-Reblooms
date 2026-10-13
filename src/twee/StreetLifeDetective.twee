@@ -168,6 +168,7 @@
   <</if>>
 
   <div id='deadwood-detective-response'></div>
+  <<deadwood-street-bailey-police-link>>
   <<socialiseicon 'ask'>><<lanLink ['Ask what the work involves', '询问差事要做些什么']>>
     <<replace '#deadwood-detective-response'>><<deadwood-street-detective-response 'work'>><</replace>>
   <</lanLink>><br>

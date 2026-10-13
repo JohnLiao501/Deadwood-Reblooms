@@ -2,9 +2,94 @@
 
 <<widget 'deadwood-street-reputation'>>
   <<set $_streetRep to maplebirch.get('StreetLife').reputation>>
-  <<set $_streetDescription to $_streetRep gte 80 ? ['On the streets, your name is associated with getting difficult jobs done.', '在镇上的街头，你已经有了能办成棘手差事的名声。'] : $_streetRep gte 50 ? ['Your name is familiar in conversations around town.', '镇上街头的闲谈里，越来越多人认得你的名字。'] : $_streetRep gte 20 ? ['Word on the street is that you deliver what you promise.', '你说到做到的名声，正在镇上的街头传开。'] : $_streetRep gt 0 ? ['A few people around town remember you getting a job done.', '镇上有几个人记得，你替人办成过事。'] : ['Your name means little on the town’s streets.', '镇上的街头还没多少人听过你的名字。']>>
-  <<set $_streetBox to {name: lanSwitch('Street', '街头'), icon: 'img/misc/icon/street-life.png', description: lanSwitch($_streetDescription[0], $_streetDescription[1])}>>
+  <<if $_streetRep gte 80>>
+    <<set $_streetDescription to lanSwitch('On the town’s streets, you are known for <span class="gold">getting difficult jobs done.</span>', '在镇上的街头，你已经有了<span class="gold">能办成棘手差事的名声。</span>')>>
+  <<elseif $_streetRep gte 50>>
+    <<set $_streetDescription to lanSwitch('<span class="green">Your name is familiar</span> in conversations around town.', '镇上街头的闲谈里，<span class="green">越来越多人认得你的名字。</span>')>>
+  <<elseif $_streetRep gte 20>>
+    <<set $_streetDescription to lanSwitch('Word on the street is that <span class="teal">you deliver what you promise.</span>', '你<span class="teal">说到做到的名声</span>，正在镇上的街头传开。')>>
+  <<elseif $_streetRep gt 0>>
+    <<set $_streetDescription to lanSwitch('<span class="lblue">A few people around town remember you</span> getting a job done.', '镇上<span class="lblue">有几个人记得你</span>替人办成过事。')>>
+  <<else>>
+    <<set $_streetDescription to lanSwitch('On the town’s streets, <span class="blue">your name means little.</span>', '镇上的街头<span class="blue">还没多少人听过你的名字。</span>')>>
+  <</if>>
+  <!-- 原版 EN 使用 name，中文翻译使用 cn_name；两个字段都提供明确文本。 -->
+  <<set $_streetBox to {name: 'Street', cn_name: '街头', icon: 'img/misc/icon/street-life.png', description: $_streetDescription}>>
   <<relation-box-simple $_streetBox>>
+<</widget>>
+
+<!-- ReputationModify 在原版警局卡片绘制前运行，只扩充原卡片的说明。 -->
+<<widget 'deadwood-street-police-reputation'>>
+  <<if _policeBoxConfig and maplebirch.get('StreetLife')>>
+    <<set _policeBoxConfig.description += '<br><<deadwood-street-police-reputation-text>>'>>
+  <</if>>
+<</widget>>
+
+<!-- 罪证与历史仍由原版两段 relation-text 显示；查案记录不抵消犯罪记录。 -->
+<<widget 'deadwood-street-police-reputation-text'>>
+  <<set _streetPolice to maplebirch.get('StreetLife').bounties>>
+  <<if _streetPolice.wanted>>
+    <<language>>
+      <<option 'EN'>>
+        <span class='red'>You cannot take new cases or collect rewards while the police have enough evidence for an arrest.</span>
+      <<option 'CN'>>
+        <span class='red'>警方已有足够的逮捕证据，你暂时不能接取新案或领取赏金。</span>
+    <</language>><br>
+  <</if>>
+  <<language>>
+    <<option 'EN'>>
+      <<if _streetPolice.state.cooperating>>
+        You have agreed to assist Grant with enquiries.
+      <<elseif _streetPolice.state.completed gt 0>>
+        You are no longer taking cases from Grant.
+      <<else>>
+        You have not agreed to assist Grant with enquiries.
+      <</if>>
+      <<if _streetPolice.state.completed gt 0>>
+        The station has verified <span class='teal'><<= _streetPolice.state.completed>></span> of your completed cases.
+      <</if>>
+    <<option 'CN'>>
+      <<if _streetPolice.state.cooperating>>
+        你已同意协助格兰特查案。
+      <<elseif _streetPolice.state.completed gt 0>>
+        你已停止接取格兰特的案件。
+      <<else>>
+        你尚未同意协助格兰特查案。
+      <</if>>
+      <<if _streetPolice.state.completed gt 0>>
+        警局已核验你完成的<span class='teal'><<= _streetPolice.state.completed>></span>件案件。
+      <</if>>
+  <</language>>
+  <<if $StreetLife.bailey?.resolution is 'reported'>>
+    <br>
+    <<language>>
+      <<option 'EN'>>
+        The station has recorded your report about the disputed shipment. <span class='blue'>The information is awaiting verification.</span>
+      <<option 'CN'>>
+        警局已登记你报告的货物纠纷线索，<span class='blue'>仍待核验。</span>
+    <</language>>
+  <</if>>
+  <<if _streetPolice.state.cooperating or _streetPolice.state.completed gt 0>>
+    <br>
+    <<language>>
+      <<option 'EN'>>
+        <<if _streetPolice.trust gte 60>>
+          Grant <span @class="_streetPolice.wanted ? 'blue' : 'green'">treats your reports as reliable</span>, while still checking the details.
+        <<elseif _streetPolice.trust gte 20>>
+          Grant <span @class="_streetPolice.wanted ? 'blue' : 'teal'">recognises your ability</span> to follow a lead through town.
+        <<else>>
+          Grant <span class='blue'>expects an accurate account</span> before accepting your work.
+        <</if>>
+      <<option 'CN'>>
+        <<if _streetPolice.trust gte 60>>
+          格兰特<span @class="_streetPolice.wanted ? 'blue' : 'green'">认为你的报告可靠</span>，仍会逐项核实细节。
+        <<elseif _streetPolice.trust gte 20>>
+          格兰特<span @class="_streetPolice.wanted ? 'blue' : 'teal'">认可你追查线索的本事</span>。
+        <<else>>
+          格兰特等着你<span class='blue'>如实说明差事的经过</span>，再核验你的工作。
+        <</if>>
+    <</language>>
+  <</if>>
 <</widget>>
 
 <<widget 'deadwood-street-shop-link'>>

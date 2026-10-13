@@ -2,6 +2,7 @@ import terms from '../../assets/street/bounties.json';
 import Catalog from '../Transport/Catalog';
 import type StreetLife from '../StreetLife';
 import type { Vehicle } from '../Transport/Catalog';
+import type { CargoFight } from './Bailey';
 
 type Site = keyof typeof terms.sites;
 type Case = (typeof terms.cases)[number];
@@ -99,13 +100,20 @@ export default class Bounties {
     return this.street.available && !V.nextPassageCheck;
   }
   public get busy(): boolean {
-    return !!this.state.hunter && ['approach', 'confrontation', 'fight', 'caught'].includes(this.state.hunter.stage);
+    return this.fightingCargo || (!!this.state.hunter && ['approach', 'confrontation', 'fight', 'caught'].includes(this.state.hunter.stage));
+  }
+  public get fightingCargo(): boolean {
+    return !!this.street.bailey.state.fight;
   }
   public get fightingHunter(): boolean {
     return this.state.hunter?.stage === 'fight';
   }
-  public get fight(): Bounty | Hunter | null {
+  public get fight(): Bounty | Hunter | CargoFight | null {
+    if (this.fightingCargo) return this.street.bailey.state.fight;
     return this.fightingHunter ? this.state.hunter : this.state.active?.stage === 'fight' ? this.state.active : null;
+  }
+  public get combatStats() {
+    return this.fightingCargo ? this.street.bailey.terms.combat : this.fightingHunter ? terms.hunter.combat : this.contract?.combat;
   }
   public get inCombat(): boolean {
     return !!this.fight?.combatStarted && V.combat === 1 && V.enemytype === 'man' && V.NPCList[0]?.per === this.fight.key;
@@ -230,13 +238,22 @@ export default class Bounties {
       const fight = this.fight;
       if (title !== 'Deadwood Street Fight Finish' || !fight || !this.combatComplete || V.replayScene || V.statFreeze) return false;
       const hunter = this.fightingHunter;
+      const cargo = this.fightingCargo;
       const won = V.enemyhealth <= 0;
       const escaped = won || (!(V.pain >= 100 && V.willpowerpain === 0) && (V.enemyarousal >= V.enemyarousalmax || (V.alarm === 1 && V.rescue >= 1) || V.finish === 1));
       if (V.enemyarousal >= V.enemyarousalmax) wiki('<<ejaculation "short">>');
       wiki(`<<saveNPC 0 '${fight.key}'>><<clotheson>><<endcombat>>`);
       fight.combatStarted = false;
-      if (hunter) {
-        fight.outcome = 'fight';
+      if (cargo) {
+        const job = this.street.jobs.state.active;
+        if (job?.id === 'bailey_cargo' && job.stage === 'pickup' && job.issue === 'seized') {
+          this.street.bailey.state.resolution = won ? 'fight' : 'failed';
+          if (won) job.issue = 'none';
+        }
+        this.street.bailey.state.fight = null;
+        if (V.per_npc[fight.key]) wiki(`<<clearNPC '${fight.key}'>>`);
+      } else if (hunter) {
+        (fight as Hunter).outcome = 'fight';
         (fight as Hunter).stage = escaped ? 'escaped' : 'caught';
       } else {
         (fight as Bounty).stage = won ? 'escort' : 'failed';

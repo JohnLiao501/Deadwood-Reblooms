@@ -5,6 +5,7 @@
   <<if maplebirch.get('StreetLife')?.jobs.available>>
     <<socialiseicon 'ask'>><<lanLink ['Ask Landry about work', '向兰德里打听差事'] 'Deadwood Street Jobs'>><<endevent>><</lanLink>><br>
   <</if>>
+  <<deadwood-street-bailey-landry-link>>
 <</widget>>
 
 <<widget 'deadwood-street-cargo-link'>>
@@ -92,7 +93,7 @@
 <<if !_streetJobs>><<lanSwitch 'No work is available.' '暂时没有差事。'>><br><<else>>
   <<if _streetJobs.available and _streetJobs.state.day isnot Math.floor(Time.days)>>
     <<set _streetJobs.state.day to Math.floor(Time.days)>>
-    <<set _streetJobs.state.board to _streetJobs.terms.jobs.map(item => item.id).shuffle()>>
+    <<set _streetJobs.state.board to _streetJobs.terms.jobs.filter(item => item.requires !== 'bailey').map(item => item.id).shuffle()>>
   <</if>>
   <<language>>
     <<option 'EN'>>
@@ -122,6 +123,7 @@
     <</language>><br><br>
   <</if>>
   <<deadwood-street-job-status>>
+  <<deadwood-street-bailey-landry-response>>
   <<if _streetJobs.available>>
     <<if _streetJobs.state.active>>
       <<deadwood-street-cargo-link 'pub'>>
@@ -188,9 +190,13 @@
   <<if _streetJob.stage is 'settlement' and $StreetLife.jobs.site is _streetContract.target>><<deadwood-street-job-receipt>><</if>>
   <<if _streetJobs.available and _streetJobs.cargoHere>>
     <<if _streetJob.stage is 'pickup' and $StreetLife.jobs.site is _streetContract.source and !_streetJobs.expired and _streetJobs.receiving>>
-      <<deadwood-street-job-pickup>>
-      <<deadwood-street-job-resolution>>
-      <<if _streetJob.issue isnot 'label' and (_streetContract.id isnot 'recovery' or _streetJob.issue isnot 'queue')>>
+      <<if _streetJob.id is 'bailey_cargo'>>
+        <<deadwood-street-bailey-seizure>>
+      <<else>>
+        <<deadwood-street-job-pickup>>
+        <<deadwood-street-job-resolution>>
+      <</if>>
+      <<if !['label', 'seized'].includes(_streetJob.issue) and (_streetContract.id isnot 'recovery' or _streetJob.issue isnot 'queue')>>
         <<icon _streetContract.icon>><<lanLink [_streetContract.id === 'recovery' ? 'Search for the case (0:15)' : 'Collect the goods (0:05)', _streetContract.id === 'recovery' ? '寻找手提箱 (0:15)' : '取走货物 (0:05)'] 'Deadwood Street Cargo'>>
           <<if _streetJobs.act('collect')>><<set _streetMinutes to _streetContract.id is 'recovery' ? 15 : 5>><<pass _streetMinutes>><<tiredness 2>><</if>>
         <</lanLink>><br>

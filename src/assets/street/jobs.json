@@ -282,6 +282,24 @@
       "requires": "finance"
     },
     {
+      "id": "bailey_cargo",
+      "name": ["A crate held back", "被扣下的工具箱"],
+      "goods": ["A sealed crate of paid-for replacement tools", "一箱已经付清货款的替换工具"],
+      "source": "alley",
+      "target": "docks",
+      "return_to": "pub",
+      "deadline_hours": 72,
+      "grace_hours": 24,
+      "cargo": 6,
+      "fee": 20000,
+      "reputation": 5,
+      "required_reputation": 10,
+      "icon": "street/tools-case.png",
+      "issues": ["seized"],
+      "illegal": false,
+      "requires": "bailey"
+    },
+    {
       "id": "drugs",
       "name": ["A parcel off the books", "账簿之外的药包"],
       "goods": ["A sealed parcel of stolen illicit drugs", "一包偷来的违禁药物"],
@@ -302,5 +320,9 @@
   ],
   "search_chance_base": 35,
   "search_skill_divisor": 25,
-  "search_chance_max": 90
+  "search_chance_max": 90,
+  "seizure": {
+    "fee": 10000,
+    "combat": { "health": 300, "anger": 200, "trust": -100, "strength": 18000 }
+  }
 }

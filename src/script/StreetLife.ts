@@ -17,6 +17,8 @@ export default function StreetLife(maplebirch: typeof window.maplebirch): void {
   maplebirch.tool.addTo('BeforeLinkZone', { widget: 'deadwood-street-detective-link', passage: 'Police Station' });
   maplebirch.tool.addTo('Journal', 'deadwood-street-bounty-journal');
   maplebirch.tool.addTo('Journal', 'deadwood-street-ammunition-journal');
+  maplebirch.tool.addTo('ReputationModify', 'deadwood-street-police-reputation');
+  maplebirch.tool.addTo('BeforeLinkZone', { widget: 'deadwood-street-bailey-link', passage: ["Bailey's Office", 'Flats'] });
   maplebirch.dynamic.regStateEvent('gate', 'deadwood-street-fight-interrupted', {
     cond: () => {
       if (!V.StreetLife?.bounties) return false;
@@ -35,7 +37,13 @@ export default function StreetLife(maplebirch: typeof window.maplebirch): void {
       const fight = work.fight!;
       if (!fight) return;
       fight.combatStarted = false;
-      if (work.fightingHunter) {
+      if (work.fightingCargo) {
+        if (V.NPCList[0]?.per === fight.key) maplebirch.SugarCube.Wikifier.wikifyEval('<<endevent>>');
+        if (V.per_npc[fight.key]) maplebirch.SugarCube.Wikifier.wikifyEval(`<<clearNPC '${fight.key}'>>`);
+        const bailey = maplebirch.get('StreetLife')!.bailey.state;
+        bailey.fight = null;
+        bailey.resolution = 'failed';
+      } else if (work.fightingHunter) {
         if (V.NPCList[0]?.per === fight.key) maplebirch.SugarCube.Wikifier.wikifyEval('<<endevent>>');
         if (V.per_npc[fight.key]) maplebirch.SugarCube.Wikifier.wikifyEval(`<<clearNPC '${fight.key}'>>`);
         work.state.hunter = null;

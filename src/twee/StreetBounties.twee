@@ -43,14 +43,14 @@
             <<if _bountyWork.wounded>>
               <li class='red'><<lanSwitch 'The target has a gunshot wound. Arrange medical assistance before handing them over.' '目标受了枪伤。先安排医护接收，再办理移交。'>></li>
             <<else>>
-              <li><<lanSwitch 'Bring the target to the police station on Barb Street.' '把目标带到巴布街的警察局。'>></li>
+              <li><<lanSwitch 'Bring the target to the police station on Barb Street.' '把目标带到倒钩街的警察局。'>></li>
             <</if>>
             <<if _bountyWork.lost>>
               <li class='red'><<lanSwitch 'The escort vehicle is missing. Report the loss at the station.' '押送车辆失踪了，请回警局报告。'>></li>
             <<elseif _bountyWork.wounded and _bountyCase.vehicle isnot null>>
               <li class='blue'><<lanSwitch 'The injured target is still in the assigned vehicle. Return to it before arranging medical assistance.' '伤者仍在押送车辆中。回到那辆车旁，再安排医护接收。'>></li>
             <<elseif _bountyCase.vehicle isnot null>>
-              <li class='blue'><<lanSwitch 'The target remains in the assigned vehicle. Bring that vehicle to Barb Street before handing them over.' '目标仍在押送车辆中。先把那辆车开到巴布街，再办理移交。'>></li>
+              <li class='blue'><<lanSwitch 'The target remains in the assigned vehicle. Bring that vehicle to Barb Street before handing them over.' '目标仍在押送车辆中。先把那辆车开到倒钩街，再办理移交。'>></li>
             <</if>>
           <<case 'failed'>>
             <li class='blue'><<lanSwitch 'The target got away. Report the failed pursuit before taking another case.' '目标已经逃脱。接新案前，先回报这次追缉失败。'>></li>
@@ -507,6 +507,6 @@
 <<widget 'deadwood-street-bounty-transit'>>
   <<set _transit_bounties to maplebirch.get('StreetLife')?.bounties, _transit_bounty to _transit_bounties?.state.active>>
   <<if _transit_bounty?.stage is 'escort' and _transit_bounty.vehicle is _args[0] and !_transit_bounties.lost and _transit_bounties.vehicle.garage is null>>
-    <span class='blue'> · <<lanSwitch 'Target aboard · Barb Street police station' '目标在车内 · 巴布街警察局'>></span>
+    <span class='blue'> · <<lanSwitch 'Target aboard · Barb Street police station' '目标在车内 · 倒钩街警察局'>></span>
   <</if>>
 <</widget>>
