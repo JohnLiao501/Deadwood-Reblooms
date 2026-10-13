@@ -416,6 +416,13 @@
     <<option 'CN'>>
       艾弗里公司的采购部门给订单盖了章，没有私人签名。你打电话问付款，对方给了另一个号码。交货日期还是原来那天。
   <</language>><br><br>
+<<elseif _factory_state.order and ['orphanage', 'temple', 'school', 'hospital'].includes(_factory_state.order.customer)>>
+  <<language>>
+    <<option 'EN'>>
+      A purchasing clerk has left a delivery address beside your name in the supplier book. The order covers ordinary crates or storage fittings. Your earlier contribution got you the introduction; this invoice belongs to the factory.
+    <<option 'CN'>>
+      采购人员在供应商名册里记下了你的名字，旁边附着送货地址。这次订的是日常使用的货箱或储物配件。先前的资助让你有了接洽的机会，这笔货款则记在工厂的账上。
+  <</language>><br><br>
 <<elseif _factory_state.order>>
   <<language>>
     <<option 'EN'>>
@@ -430,11 +437,18 @@
   <<option 'CN'>>
     电话旁放着订单簿。纸杯与食品包装送往饮品柜台，货箱卖给农场和航运公司。货架与储物柜需要更重的材料，也占用更多资金。<span class='blue'>这些只是询价，不是已经到账的钱。</span>
 <</language>><br><br>
+<<if _factory.reputation gt 0>>
+  <span class='green'><<lanSwitch 'Your business reputation brings better enquiries and more reliable buyers.' '你的商业名声带来了更好的询价与更可靠的客户。'>></span><br>
+<</if>>
+<<if maplebirch.get('Finance').donations.customers.length gt 0>>
+  <span class='blue'><<lanSwitch 'Institutions you have supported may send routine purchase enquiries to a factory with the right production line.' '你资助过的机构会向具备相应生产线的工厂发出日常采购询价。'>></span><br>
+<</if>>
+<br>
 <<deadwood-industry-result>>
 <<if _factory_state.order>>
   <<set _factory_order to _factory_state.order>>
   <<deadwood-card 'Current job' '当前生产'>>
-    <<icon `'industry/' + _factory_order.product + '.png'`>><<print maplebirch.t('deadwood-reblooms:industry:' + _factory_order.product)>> · <<print maplebirch.t('deadwood-reblooms:finance:security:' + _factory_order.customer)>><br>
+    <<icon `'industry/' + _factory_order.product + '.png'`>><<print maplebirch.t('deadwood-reblooms:industry:' + _factory_order.product)>> · <<print maplebirch.get('Finance').donations.customer(_factory_order.customer)>><br>
     <span class='teal'><<= _factory_order.progress>> / <<= _factory_order.batches>></span> <<lanSwitch "batches completed" "批已完成">><br>
     <<deadwood-reblooms-finance-date _factory_order.deadline>><br>
     <<if _factory_order.progress gte _factory_order.batches and _factory.open>>
@@ -455,7 +469,7 @@
     <<capture _factory_order>>
       <<if _factory_order.deadline gt Time.days>>
         <<deadwood-card `maplebirch.t('deadwood-reblooms:industry:' + _factory_order.product)` `maplebirch.t('deadwood-reblooms:industry:' + _factory_order.product)`>>
-          <<print maplebirch.t('deadwood-reblooms:finance:security:' + _factory_order.customer)>> · <span class='teal'><<= _factory_order.batches>></span> <<lanSwitch "batches" "批">><br>
+          <<print maplebirch.get('Finance').donations.customer(_factory_order.customer)>> · <span class='teal'><<= _factory_order.batches>></span> <<lanSwitch "batches" "批">><br>
           <div class='dr-finance-summary'>
             <span><<lanSwitch "Materials paid up front" "预付原料款">></span><span><<deadwood-reblooms-finance-money _factory_order.materials>></span>
             <span><<lanSwitch "Invoice before deductions" "扣款前货款">></span><span><<deadwood-reblooms-finance-money _factory_order.total>></span>
@@ -482,7 +496,7 @@
 <<if _factory_state.invoices.length>>
   <span class='gold'><<lanSwitch "Awaiting payment" "等待付款">></span><br>
   <<for _factory_invoice range _factory_state.invoices>>
-    <<print maplebirch.t('deadwood-reblooms:finance:security:' + _factory_invoice.order.customer)>> · <<deadwood-reblooms-finance-money _factory_invoice.order.total>> · <<deadwood-reblooms-finance-date _factory_invoice.pay_day>><br>
+    <<print maplebirch.get('Finance').donations.customer(_factory_invoice.order.customer)>> · <<deadwood-reblooms-finance-money _factory_invoice.order.total>> · <<deadwood-reblooms-finance-date _factory_invoice.pay_day>><br>
   <</for>>
 <</if>>
 <<deadwood-industry-return>>

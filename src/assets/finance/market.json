@@ -1,19 +1,21 @@
 {
-  "shockChance": 0.04,
-  "shockMinPercent": 20,
-  "shockMaxPercent": 40,
-  "extremeChance": 0.006,
-  "extremeMinPercent": 45,
-  "extremeMaxPercent": 70,
-  "businessChance": 0.1,
-  "capitalChance": 0.015,
+  "volatilityBasisPoints": 25,
+  "growthBasisPoints": 1,
+  "shockChance": 0.012,
+  "shockMinPercent": 5,
+  "shockMaxPercent": 9,
+  "extremeChance": 0.001,
+  "extremeMinPercent": 12,
+  "extremeMaxPercent": 18,
+  "businessChance": 0.05,
+  "capitalChance": 0.01,
   "capitalMinPercent": 1,
   "capitalMaxPercent": 5,
   "capitalMoves": {
-    "share_issue": -3,
-    "share_buyback": 3,
-    "share_release": -1,
-    "share_lockup": 1
+    "share_issue": -2,
+    "share_buyback": 2,
+    "share_release": -0.5,
+    "share_lockup": 0.5
   },
   "investigationPercent": -25
 }

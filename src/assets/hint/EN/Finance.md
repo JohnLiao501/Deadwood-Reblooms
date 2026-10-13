@@ -45,6 +45,8 @@ Markets respond to farm progress and raids, Ocean Breeze Cafe prices, adverts, e
 
 Companies can also receive trading-day reports about orders, customers, costs, equipment and delays. These can be positive or negative. Current reports appear at the securities desk, and a read copy of the Financial Daily preserves its printed reports. Routine trading reports pause while the cafe is closed for construction or Robin’s shop is shut.
 
+Ordinary quotes include expected business growth of **0.02%–0.08% per trading day**, depending on risk, with two-way moves of **0.5%–2%** around that expectation. Routine business reports move quotes by **1%–4%**. Larger market shocks occur occasionally, while major story reports follow the actual events. Weekly distributions use current market value: **0.14%** for Mer Shipping, **0.10%** for Elk Industries and the shopping centre, **0.08%** for Avery's company, and **0.03%–0.07%** for the other businesses. Avery's actual payout also follows the shareholder resolution. The orphanage's donated supplies produce their favourable operating report once, after delivery.
+
 ### Your business and the office building
 
 At **Town hall front desk → Ask about registering a business**, register with identification for **£1,000**, paid from bank deposits using a debit card. Enquiries are taken on weekdays, **09:00–17:00**. Names must be 2–40 characters.
@@ -91,7 +93,7 @@ With **settled AVY shares representing at least 5% of the current total**, enter
 
 **Skyscraper financing:** once the vanilla project exists, directors or controlling shareholders may review its budget at reception. Allocations use company funds from subscriptions and retained profits, without a second charge to personal deposits. Foundation, structure and finishing reserve **£100,000, £150,000 and £200,000**. Each following working day pays for one extra point of construction, up to ten per stage. The native story milestones at 25%, 60% and 100% still apply. Unspent money returns to company funds when a stage ends or the project closes. The same stage cannot be funded twice.
 
-**Identity and fame:** the first Attributes sentence reflects factory ownership, a trading business, shareholding, board membership or control while preserving the native gender and transformation description. Factory deliveries, orchard contracts, subscriptions and share transfers raise business fame. Cancelling factory orders lowers it. Shareholder meetings raise social fame. Named donations can raise good-deed fame when the cumulative amount crosses each £1,000 threshold. Anonymous donations do not. Each activity can change fame once every seven days, preventing repeated visits from farming it.
+**Identity and fame:** the first Attributes sentence reflects factory ownership, a trading business, shareholding, board membership or control while preserving the native gender and transformation description. Factory deliveries, orchard contracts, subscriptions and share transfers raise business fame. Cancelling factory orders lowers it. Shareholder meetings raise social fame. Routine activities such as deliveries use their own intervals; donations reward cumulative contributions and project outcomes, as shown at the donations desk.
 
 <span class="blue">Company votes affect accounts, financing and construction. Avery's love, rage, dominance, romantic requirements and ascension story retain their native rules.</span>
 
@@ -220,6 +222,15 @@ Each contract costs at least **£250,000**, or **260 weeks** of that person's cu
 **MSO: Mansion Street Orphanage** is also listed at the securities desk. Large rent settlements, collection disputes, donations and repair bills affect its quotes. Share ownership is an investment and does not alter living arrangements.
 
 The **donations desk** is beside the town-hall front desk. Ask after waiting in line, on weekdays between **8:00 and 18:00**. Choose the orphanage, hospital, school or temple and donate with your name or anonymously. Each project displays its target and cumulative contributions. Recent receipts remain at the desk. Cash and debit-card bank funds pay into the selected project, with that record retained for future purchasing and related content.
+
+Named contributions earn **5 kindness per accumulated £1,000**, up to each funding target. Signing for the delivery earns another **25 kindness**, and the follow-up meeting earns **10 social fame**. Once you have agreed arrangements with the recipient, the corresponding benefits become available:
+
+- **School:** one minor detention review, equipment use after lessons, and one donor audience each week to discuss equipment arrangements again.
+- **Temple:** one quiet-room rest per day, one private audience with Jordan each week, and a say in relief priorities. Members with the exhibitionism trait can separately request permission to go unclothed in the residential areas.
+- **Hospital:** private parasite treatment has a **25% fee reduction**, with one health consultation each week.
+- **Orphanage:** one **seven-day rent extension** and one scheduled private appointment each week.
+
+After signing and following up, the four institutions take turns sending routine purchase enquiries to suitable factories. The orphanage and temple buy crates; the school and hospital buy shelving and lockers. At most one enquiry is issued across your factories each week, giving each institution a turn in a four-week cycle. Materials, wages, production, late delivery and invoices follow the existing factory accounts. Actual delivery earns **15 business fame**, with at least 28 days between awards from the same institution. Every **400 business fame** improves ordinary quote quality and reduces default risk, up to five tiers.
 
 ### Property running costs and steps
 

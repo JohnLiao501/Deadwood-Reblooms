@@ -26,7 +26,7 @@ export default class CompanyEvents {
       truth: Number(V.chef_speech === 'truth'),
       model: V.photo_known >= 2 && V.nikiSeen?.includes('photo') ? Number(V.fame?.model) || 0 : 0,
       orphanage_buyout: Number(V.Finance?.orphanage?.pc_bought_out === true || V.Finance?.orphanage?.robin_bought_out === true),
-      orphanage_donation: V.Finance?.donations?.total.orphanage ?? 0,
+      orphanage_supplies: Number(maplebirch.get('Finance')?.donations.aid.ready('orphanage') ?? false),
       orphanage_dispute: Number(V.RobinExpansion?.bailey_defeated === true)
     };
   }

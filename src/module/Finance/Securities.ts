@@ -58,11 +58,12 @@ export default class Securities {
       const magnitude = terms.extremeMinPercent + (value % (terms.extremeMaxPercent - terms.extremeMinPercent + 1));
       return roll < 0.5 ? -magnitude : magnitude;
     }
-    if (roll < terms.shockChance / 2 || roll >= 1 - terms.shockChance / 2) {
+    if (roll < (terms.extremeChance + terms.shockChance) / 2 || roll >= 1 - (terms.extremeChance + terms.shockChance) / 2) {
       const magnitude = terms.shockMinPercent + (value % (terms.shockMaxPercent - terms.shockMinPercent + 1));
       return roll < 0.5 ? -magnitude : magnitude;
     }
-    return (value % (item.volatility * 2 + 1)) - item.volatility;
+    const limit = item.volatility * terms.volatilityBasisPoints;
+    return ((value % (limit * 2 + 1)) - limit + item.volatility * terms.growthBasisPoints) / 100;
   }
 
   public static nextPrice(item: Security, price: number, day: number, seed: number): number {

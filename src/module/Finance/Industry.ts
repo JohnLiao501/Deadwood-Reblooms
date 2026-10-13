@@ -59,6 +59,7 @@ export interface FactoryState {
 
 export interface IndustryState {
   selected: number;
+  purchase_week: number;
   distribution: DistributionState;
   factories: FactoryState[];
   talk_day: number;
@@ -108,6 +109,7 @@ export default class Industry {
 
   public static readonly defaults: IndustryState = {
     selected: 0,
+    purchase_week: -1,
     distribution: structuredClone(Laboratory.distribution),
     factories: terms.sites.map(site => ({ ...structuredClone(Industry.factory), site: site.id })),
     talk_day: -1,
@@ -169,6 +171,10 @@ export default class Industry {
 
   public get capacity(): number {
     return Industry.capacity(this.state);
+  }
+
+  public get reputation(): number {
+    return Math.clamp(Math.floor((Number(V.fame?.business) || 0) / 400), 0, 5);
   }
 
   private static dailyCost(state: FactoryState): number {
@@ -311,7 +317,8 @@ export default class Industry {
     const payDay = contract?.site === state.site && contract.id === order.id ? contract.pay_day : day + (order.outcome === 'late' ? 7 : 2);
     state.invoices.push({ order, pay_day: payDay });
     state.delivered++;
-    this.finance.recognition.award('business', 'factory-delivery', 5);
+    const publicOrder = this.finance.donations.projects.some(project => project.id === order.customer);
+    this.finance.recognition.award('business', publicOrder ? `public-delivery-${order.customer}` : 'factory-delivery', publicOrder ? 15 : 5, publicOrder ? 28 : 7);
     state.report = { day, event: 'delivered', seen: false, amount: order.total, customer: order.customer };
     state.order = null;
   }
@@ -550,7 +557,8 @@ export default class Industry {
         customer === 'RDS' ? 5 : Math.round(24 * terms.sites[state.site].multiplier)
       );
       const roll = random(1, 100);
-      const multiplier = random(1, 100) > 94 ? random(150, 220) : random(80, 120);
+      const reputation = this.reputation;
+      const multiplier = random(1, 100) > 94 - reputation * 2 ? random(150, 220) : random(80, 120) + reputation * 2;
       return [
         {
           id: state.next_id++,
@@ -560,11 +568,36 @@ export default class Industry {
           materials: product.materials * batches,
           total: Math.round((product.price * batches * multiplier) / 100),
           deadline: day + random(5, 10),
-          outcome: roll <= 8 && customer !== 'RDS' ? ('default' as const) : roll <= 25 ? ('late' as const) : ('paid' as const),
+          outcome: roll <= 8 - reputation && customer !== 'RDS' ? ('default' as const) : roll <= 25 - reputation ? ('late' as const) : ('paid' as const),
           progress: 0
         }
       ];
     });
+    // 四处机构轮流发出日常采购询价；每周只交给一处具备相应生产线的工厂。
+    const week = Math.floor(day / 7);
+    const fund = (['orphanage', 'temple', 'school', 'hospital'] as const)[((week % 4) + 4) % 4];
+    const product = terms.products.find(item => item.id === (fund === 'orphanage' || fund === 'temple' ? 'crates' : 'metalwork'))!;
+    const suppliers = this.owned.filter(factory => factory.ready_day <= day && factory.lines.includes(product.id as Product));
+    if (
+      (V.Finance.industry.purchase_week ?? -1) !== week &&
+      this.finance.donations.customers.includes(fund) &&
+      suppliers.length &&
+      suppliers[((week % suppliers.length) + suppliers.length) % suppliers.length] === state
+    ) {
+      V.Finance.industry.purchase_week = week;
+      const batches = 3;
+      state.offers.push({
+        id: state.next_id++,
+        product: product.id as Product,
+        customer: fund,
+        batches,
+        materials: product.materials * batches,
+        total: product.price * batches,
+        deadline: day + 10,
+        outcome: random(1, 100) <= (fund === 'orphanage' ? 20 : 8) ? 'late' : 'paid',
+        progress: 0
+      });
+    }
     state.offer_week = Math.floor(day / 7);
   }
 }
