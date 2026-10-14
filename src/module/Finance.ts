@@ -14,6 +14,7 @@ import Recognition, { type RecognitionState } from './Finance/Recognition';
 import Company, { type CompanyState } from './Finance/Company';
 import tradingTerms from '../assets/finance/trading.json';
 import bankingTerms from '../assets/finance/banking.json';
+import migrateLegacyFinance from './Finance/Legacy';
 import securitiesSource from '@/assets/finance/securities.yaml';
 import type { MacroDefinition } from 'twine-sugarcube';
 import type Robin from './Robin';
@@ -108,6 +109,7 @@ interface MarketState {
 }
 
 export interface FinanceState {
+  legacy_vanilla_plus_migrated?: boolean;
   real_estate: RealEstateState;
   adrian: {
     service_location: string;
@@ -258,6 +260,11 @@ class Finance extends Module {
   public constructor(core: typeof maplebirch) {
     super(core, 'Finance', DEFAULT_FINANCE_STATE);
     this.realEstate = new RealEstate(core, this);
+  }
+
+  protected override variable(): void {
+    super.variable();
+    V.Finance = migrateLegacyFinance(V.Finance, V.VanillaPlus, Finance.currentDay);
   }
 
   public get loanProducts(): readonly { days: number; baseWeeklyRate: number; weeklyRate: number }[] {
