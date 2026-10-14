@@ -25,6 +25,21 @@ export default class Hands {
     this.refresh();
   }
 
+  public snapshot(): void {
+    const tryOn = V.tryOn as Record<string, any> | undefined;
+    if (!tryOn) return;
+    const stored = (tryOn.ownedStored ??= {}) as Record<string, any>;
+    const trying = (tryOn.tryingOn ??= {}) as Record<string, any>;
+    for (const slot of setup.clothingLayer?.all ?? []) {
+      if (trying[slot] === undefined) trying[slot] = null;
+      if (stored[slot] !== undefined) continue;
+      // 正在试穿的槽位里 $worn 已是新物品，此时只能记空物品，否则新买的会被当成旧的送进衣柜。
+      const held = trying[slot] ? undefined : V.worn?.[slot];
+      const item = held ?? setup.clothes?.[slot]?.[0];
+      if (item !== undefined) stored[slot] = this.core.utils.clone(item);
+    }
+  }
+
   /** 只扩展原版的能力查询；索引、迭代、深拷贝和存档仍得到物品自己的类型。 */
   public refresh(): void {
     // 副手只提供持物功能；从原版暂存流程取回后也不改变模型姿势。

@@ -27,7 +27,7 @@
 
 `DeadwoodReblooms` is the root module. Turning it off stops every Deadwood Reblooms module. When an installed external mod provides overlapping functionality, Deadwood Reblooms turns off its corresponding module and retains the external mod. Character stories still follow vanilla relationships, locations, and schedules.
 
-The current version is **2.0.2**, fixing dynamic music passage events on the start menu and without the optional audio pack. See the [release notes](.github/release-notes/v2.0.2.md). Use framework **5.4.3**.
+The current version is **2.0.3**, fixing the missing off-hand try-on record that broke checkout in the vanilla clothing shops, and the bilingual option syntax of the loan-type and bodywriting-gender listboxes. See the [release notes](.github/release-notes/v2.0.3.md). Use framework **5.4.3**.
 
 ## Modules and game guide
 

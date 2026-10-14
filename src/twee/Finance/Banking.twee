@@ -451,9 +451,9 @@
           <label><<lanSwitch 'Amount (£)' '金额（£）'>>：<<textbox '_financeLoanAmount' _financeLoanAmount>></label><br>
           <label><<lanSwitch 'Loan type' '贷款类型'>>：
           <<lanListbox '_financeLoanTerm' autoselect>>
-            <<option ['7-day bridge loan', '7 天周转贷款'] 7>>
-            <<option ['14-day short-term loan', '14 天短期贷款'] 14>>
-            <<option ['30-day personal loan', '30 天个人贷款'] 30>>
+            <<option `['7-day bridge loan', '7 天周转贷款']` 7>>
+            <<option `['14-day short-term loan', '14 天短期贷款']` 14>>
+            <<option `['30-day personal loan', '30 天个人贷款']` 30>>
           <</lanListbox>>
           </label>
         </div>

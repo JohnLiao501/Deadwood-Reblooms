@@ -209,5 +209,15 @@ export default function Hands(maplebirch: typeof window.maplebirch): void {
       maplebirch.get('LifeSimulation')?.hands.refresh();
       return result;
     });
+
+    extend('tryOnReset', function (original) {
+      const result = original();
+      maplebirch.get('LifeSimulation')?.hands.snapshot();
+      return result;
+    });
+    extend('buyTryOnClothes', function (original) {
+      maplebirch.get('LifeSimulation')?.hands.snapshot();
+      return original();
+    });
   });
 }

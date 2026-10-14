@@ -297,7 +297,7 @@
     <<lanSwitch 'The characteristics of this bodywriting are' '这幅涂鸦的所具有的特定'>>：
     <br><<lanSwitch 'Color: ' '颜色：'>><br><<radiobuttonsfrom '_bodywriting.color' _textColorNames>><</radiobuttonsfrom>>
     <div id='DeadwoodRebloomsBodyWriting' style='display:inline'></div><br><<lanSwitch 'Gender: ' '性别：'>>
-    <<lanListbox '_bodywriting.gender'>><<option ['Asexual', '无性'] 'n'>><<option ['Male', '男性'] 'm'>><<option ['Female', '女性'] 'f'>><<option ['Hermaphrodite', '双性'] 'h'>><</lanListbox>>
+    <<lanListbox '_bodywriting.gender'>><<option `['Asexual', '无性']` 'n'>><<option `['Male', '男性']` 'm'>><<option `['Female', '女性']` 'f'>><<option `['Hermaphrodite', '双性']` 'h'>><</lanListbox>>
     <br><<lanSwitch 'Category: ' '类别：'>><<lanListbox '_bodywriting.special' autoselect>><<optionsfrom _bodywritingSpecialNames>><</lanListbox>>
     <br><<lanSwitch 'Related to the Love Interest?' '与恋爱对象有关?'>>
     <<set $_bodywritingloveInterestNames = ['None', ...setup.loveInterestNpc.filter(name => isPossibleLoveInterest(name))]>>
